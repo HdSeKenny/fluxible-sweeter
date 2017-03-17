@@ -1,0 +1,133 @@
+
+body {
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  background: #ffffff;
+  font-weight: 300;
+  .text-shadow(0 0 0 #888);
+  -webkit-print-color-adjust:exact;
+}
+
+.w75{
+  width:75%!important;
+}
+
+.w70{
+  width:70%!important;
+}
+
+.w35{
+  width:35%!important;
+}
+
+.w50{
+  width:50%!important;
+}
+
+.text-overflow{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.panel {
+  .panel-search {
+    margin-bottom: -10px;
+    width: 300px;
+    float: right;
+    margin-top: -36px;
+  }
+}
+
+@tap-highlight-color: rgb(255, 0, 0, 0);
+
+.position {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.box-sizing(@sizing) {
+  -webkit-box-sizing: @sizing;
+  -moz-box-sizing: @sizing;
+  box-sizing: @sizing;
+}
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow;
+  -moz-box-shadow: @shadow;
+  box-shadow: @shadow;
+}
+
+.box-shadow(@shadow,@shadow2) {
+  -webkit-box-shadow: @shadow,@shadow2;
+  -moz-box-shadow: @shadow,@shadow2;
+  box-shadow: @shadow,@shadow2;
+}
+
+.text-shadow(@shadow) {
+  -webkit-text-shadow: @shadow;
+  -moz-text-shadow: @shadow;
+  text-shadow: @shadow;
+}
+
+.transition(@transition) {
+  -webkit-transition: @transition;
+  -moz-transition: @transition;
+  -o-transition: @transition;
+  transition: @transition;
+}
+
+.transition(@transition,@transition2) {
+  -webkit-transition: @transition,@transition2;
+  -moz-transition: @transition,@transition2;
+  -o-transition: @transition,@transition2;
+  transition: @transition,@transition2;
+}
+
+.user-select(@select) {
+  -webkit-user-select: @select;
+  -moz-user-select: @select;
+  -ms-user-select: @select;
+  user-select: @select;
+}
+
+.background-clip(@clip) {
+  -webkit-background-clip: @clip;
+  -moz-background-clip: @clip;
+  background-clip: @clip;
+}
+
+.overflow-scrolling(@touch) {
+  -webkit-overflow-scrolling: @touch;
+  -moz-overflow-scrolling: @touch;
+  overflow-scrolling: @touch;
+}
+
+.tap-highlight-color(@color) {
+  -webkit-tap-highlight-color: @color;
+  -moz-tap-highlight-color: @color;
+  tap-highlight-color: @color;
+}
+
+@media print{
+  @page {
+    margin: 0.5in;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

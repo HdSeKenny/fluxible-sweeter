@@ -1,0 +1,5 @@
+{
+    "mongo_kenny_url": "mongodb://localhost/kblog",
+    "apiService": "http://localhost:3000/api/",
+    "server_port": 3000
+}

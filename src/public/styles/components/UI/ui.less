@@ -1,0 +1,130 @@
+.fullscreen {
+  .position()
+}
+
+.fullscreen-scroll {
+  overflow: auto;
+}
+
+.overlay {
+  .position();
+  position: fixed;
+  z-index: 10000;
+  background-color: #000000;
+  opacity: 0;
+  .transition(opacity 0.55s linear);
+  display: none;
+}
+
+.overlay-show {
+  display: block;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+.messagebox {
+  display: none;
+  .position();
+  .messagebox-body {
+    z-index: 10001;
+    width: 310px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -155px;
+    background-color: #ffffff;
+    .border-radius(6px);
+    outline: none;
+    .box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
+    .background-clip(padding-box);
+    .messagebox-status {
+      height: 50px;
+      width: 64px;
+      margin: 25px 10px;
+      &.forbidden {
+        background: url(../images/icon/icon-forbidden.png) 50% 50% no-repeat;
+      }
+      &.loading {
+        margin-top: 18px;
+        background: url(../images/loading.gif) 50% 50% no-repeat;
+      }
+      &.error{
+        background: url(../images/icon/icon-error.png) 50% 50% no-repeat;
+      }
+    }
+    .messagebox-close {
+      background: url(../images/di-sprites.png) no-repeat;
+      background-position: -17px -84px;
+      color: #FFF;
+      display: none;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      .border-radius(50px);
+      font-weight: 800;
+      line-height: 30px;
+      text-align: center;
+      text-transform: uppercase;
+      vertical-align: middle;
+      cursor: pointer;
+      &.messagebox-close-show {
+        display: block;
+      }
+    }
+  }
+  &.messagebox-show {
+    display: block;
+  }
+  &.loading {
+    .messagebox-body {
+      width: 86px;
+      height: 86px;
+      margin-left: -43px;
+      td:last-child {
+        display: none;
+      }
+    }
+  }
+}
+
+.checklist {
+  padding: 10px 0 10px 120px;
+  line-height: 30px;
+  border-bottom: 1px solid #d9d9d9;
+  overflow: hidden;
+  margin-bottom: 10px;
+  .tap-highlight-color(rgba(255, 0, 0, 0));
+  .checklist-title {
+    float: left;
+    width: 100px;
+    margin-left: -100px;
+    display: block;
+    overflow: hidden;
+    font-weight: bold;
+    line-height: 30px;
+    text-transform: capitalize;
+  }
+  .checklist-item {
+    display: block;
+    min-width: 120px;
+    float: left;
+    margin-right: 20px;
+    input {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    label {
+      display: inline-block;
+      line-height: 30px;
+      margin-bottom: 5px;
+    }
+  }
+  &.checklist-hidden {
+    display: none;
+  }
+}
+
