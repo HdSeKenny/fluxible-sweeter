@@ -7,7 +7,7 @@ import {
   BlogStore,
   UserStore,
   ErrorStore
-} from './stores'
+} from './stores';
 
 // init namespace for current App
 // sessionStorage.setNamespace('di_quattro_metadata_explorer');

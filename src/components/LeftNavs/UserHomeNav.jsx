@@ -6,7 +6,7 @@ const UserHomeNav = React.createClass({
   displayName: 'UserHomeNav',
 
   propTypes: {
-    path: React.PropTypes.object,
+    path: React.PropTypes.string,
     isCurrentUser: React.PropTypes.bool,
     user: React.PropTypes.object,
     displayBlogs: React.PropTypes.array,

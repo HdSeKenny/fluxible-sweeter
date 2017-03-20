@@ -1,0 +1,316 @@
+
+/* desktop layout */
+@media (min-width: 768px) {
+
+	/* a horizontal aligned box */
+	
+	.hbox{	
+		display: table;
+		table-layout: fixed;
+		border-spacing: 0;
+		width: 100%;
+		> aside,
+		> section{
+			display: table-cell;
+			vertical-align: top;
+			height: 100%;
+			padding: 0;
+			float: none;
+			&.show, 
+			&.hidden-sm	{
+				display: table-cell !important;
+			}
+		}
+	}
+
+	/* a vertically aligned box */
+	.vbox{
+		display: table;
+		border-spacing:0;
+		position: relative;
+		height: 100%;
+		width: 100%;
+		> section, 
+		> footer {
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+		> header{
+			~ section {
+				top: 50px;
+			}
+		}
+		> section{
+			&.w-f{
+				top:100px;
+				bottom: 50px;
+				    padding-top: 20px;
+			}
+		}
+		> footer {
+			top: auto;
+			z-index: 1000;
+			~ section {
+				bottom: 50px;
+			}
+		}
+		&.flex{
+			> header,
+			> section,
+			> footer {
+				position: inherit;
+			}
+			> section{
+				display: table-row;
+				height: 100%;
+				> section {
+					position: relative;
+					height: 100%;
+					-webkit-overflow-scrolling:touch;
+					.ie & {
+						display: table-cell;
+					}
+					> section {
+						position: absolute;
+						top: 0;
+						bottom: 0;
+						left: 0;
+						right: 0;
+					}
+				}
+			}
+		}
+	}
+	
+	/* a horizontal aligned aside */
+
+	.aside-xs{
+		width: 48px;
+	}
+	.aside{
+		width: 180px;
+	}
+	.aside-sm{
+		width: 150px;
+	}
+	.aside-md{
+		width: 220px;
+	}
+	.aside-lg{
+		width: 250px;
+	}
+	.aside-xl{
+		width: 300px;
+	}
+	.aside-xxl{
+		width: 450px;
+	}
+
+	.scrollable{
+		-webkit-overflow-scrolling:touch;
+	}
+}
+
+/* Layout composition for apps */
+
+.hbox > aside, 
+.hbox > section{
+	padding: 0 !important;
+}
+.header, 
+.footer{
+	min-height: 50px;
+	padding: 0 15px;
+	> p{
+		margin-top: 15px;
+		display: inline-block;
+	}
+	> .btn,
+	> .btn-group,
+	> .btn-toolbar,
+	{
+		margin-top: 10px;
+	}
+	> .btn-lg{
+		margin-top: 0;
+	}
+	.nav-tabs {
+		border: none;
+		margin-left: -15px;
+		margin-right: -15px;	
+		> li {
+			a{
+				border: none !important;
+				border-radius: 0;
+				padding-top: 15px;
+				padding-bottom: 15px;
+				line-height: 20px;
+				&:hover, 
+				&:focus
+				{
+					background-color: transparent;
+				}
+			}
+			&.active a{
+				color: @text-color;
+				&,
+				&:hover{
+					background-color: @body-bg;
+				}
+			}
+		}
+		&.nav-white{
+			> li.active a{
+				&,
+				&:hover{
+					background-color: #fff;
+				}
+			}
+		}
+	}
+	&.navbar{
+		min-height: 0;
+		border-radius: 0;
+		border: none;
+		margin-bottom: 0;
+		padding:0;
+	}
+}
+
+.scrollable{
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.no-touch {
+	.scrollable.hover {
+		overflow-y: hidden;
+		&:hover
+		{
+			overflow: visible;
+			overflow-y: auto;
+		}
+	}
+}
+
+
+@media print {
+  html, body, .hbox, .vbox{
+    height: auto;
+  }
+  .vbox{
+		> section,
+		> footer{
+			position: relative;
+		}
+	}
+}
+
+/* Scrollbar hack */
+
+.slimScrollBar{
+	border-radius: 0 !important;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+	height: 7px;
+}
+::-webkit-scrollbar-thumb {	
+	background-color:rgba(241,242,244,1.0);
+}
+::-webkit-scrollbar-thumb:hover{
+	background-color:rgba(50,50,50,0.6);
+}
+::-webkit-scrollbar-track {
+	background-color:rgba(251,251,253,1.0);
+}
+::-webkit-scrollbar-track:hover{
+	background-color:rgba(50,50,50,0.2);
+}
+
+/* Masonry layout for containers */
+
+.mason_row {
+  
+  -moz-column-width: 18em;
+  -webkit-column-width: 18em;
+  -moz-column-gap: 1em;
+  -webkit-column-gap:1em;
+
+
+  .pin {
+    display: inline-block;
+    width:  100%; 
+    padding: 1rem;
+  }
+}
+
+/* double width component */
+.mason_row_2 {
+  -moz-column-width: 36em;
+  -webkit-column-width: 36em;
+  -moz-column-gap: 1em;
+  -webkit-column-gap:1em;
+
+  .pin {
+    display: inline-block;
+    width:  100%; 
+    padding: 1rem;
+        float: none;
+  }
+}
+
+/* third width component */
+.mason_row_3 {
+  -moz-column-width: 24em;
+  -webkit-column-width: 24em;
+  -moz-column-gap: 1em;
+  -webkit-column-gap:1em;
+
+  >div {
+    display: inline-block;
+    width:  100%; 
+    padding: 1rem;
+    float: none;
+  }
+}
+
+/* responsive polyfills for Applications*/
+
+@media (min-width: 768px) {
+  .tophead {
+    margin-top: 30px
+  }
+}
+
+.lock-header {
+  // width:100%;
+  z-index: 9000;
+	height: 100px;
+  // position: fixed;
+
+  .btn {
+    top: 0px;
+    position: absolute;
+    font-size: 1.3em;
+    padding: 9px 16px;
+    line-height: 60px;
+    left: 0;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .modal-sm {
+      width: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-lg {
+      width: 900px;
+  }
+}
+

@@ -56,6 +56,11 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin('common.js', undefined, 2),
     // new webpack.NormalModuleReplacementPlugin(/^react(\/addons)?$/, require.resolve('react/addons'))
 
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
+
     function webpackStatsPlugin() {
       this.plugin('done', (stats) => {
         var data = stats.toJson();

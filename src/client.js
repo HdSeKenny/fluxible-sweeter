@@ -2,6 +2,7 @@ import 'babel-polyfill'
 import './polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/js/bootstrap';
 import {Router, browserHistory} from 'react-router';
 import CustomFluxibleComponent from'./components/CustomFluxibleComponent';
 // import createBrowserHistory from 'history/lib/createBrowserHistory'

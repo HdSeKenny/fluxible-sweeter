@@ -4,13 +4,15 @@
   "private": true,
   "author": "Kenny",
   "scripts": {
-    "start": "grunt prod && node ./src/bin/www",
+    "prod": "grunt prod && node ./src/bin/www",
+    "start": "node ./src/bin/www",
     "dev": "nodemon ./src/bin/www",
     "hot": "grunt serve"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
     "body-parser": "~1.12.4",
+    "bootstrap": "^3.3.7",
     "cache-manager": "^1.0.0",
     "classnames": "^2.1.2",
     "colors": "^1.1.2",
@@ -39,6 +41,7 @@
     "intl": "^1.0.0",
     "intl-locales-supported": "^1.0.0",
     "jade": "~1.9.2",
+    "jquery": "^3.2.0",
     "json-loader": "^0.5.2",
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.2.1",
@@ -52,6 +55,7 @@
     "q": "^1.4.1",
     "querystring": "^0.2.0",
     "react": "^0.14.0",
+    "react-addons-shallow-compare": "^15.4.2",
     "react-bootstrap": "^0.28.1",
     "react-color": "^2.0.0",
     "react-dom": "^0.14.0",

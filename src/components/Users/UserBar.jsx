@@ -1,5 +1,4 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
@@ -17,8 +16,8 @@ const UserBar = React.createClass({
   },
 
   propTypes: {
-    path: React.PropTypes.object,
-    isCurrentUser: React.PropTypes.object,
+    path: React.PropTypes.string,
+    isCurrentUser: React.PropTypes.bool,
     user: React.PropTypes.object
   },
 

@@ -1,0 +1,31 @@
+.compositePoster {
+  width: 100%;
+
+  .cover {
+    background-position: 50% 50%;
+    border-radius: 5px;
+    background-color: #eee;
+    width: 100%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.33) inset;
+    height: 150px;
+    background-size: cover;
+  }
+
+  .thumbholder {
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .thumbs {
+    background-position: 50% 50%;
+    border-radius: 5px;
+    width: 33.3333333%;
+    margin-top: 10px;
+    height: 100px;
+    background-color: #eee;
+    box-shadow: 0 0 2px rgba(0,0,0,0.33) inset;
+    background-size: cover;
+    display: inline-block;
+  }
+}

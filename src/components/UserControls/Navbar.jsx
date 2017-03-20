@@ -1,87 +1,117 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import sweetAlert from '../../utils/sweetAlert';
 import { Link, routerShape } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
+import $ from 'jquery';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
+import sweetAlert from '../../utils/sweetAlert';
+import menuzord from '../../utils/menuzord';
+import { Modals } from '../UI';
 
 const Navbar = React.createClass({
 
-    displayName: 'Navbar',
+  displayName: 'Navbar',
 
-    contextTypes: {
-      router: routerShape.isRequired,
-      config: PropTypes.object,
-      executeAction: React.PropTypes.func.isRequired
-    },
+  contextTypes: {
+    router: routerShape.isRequired,
+    config: PropTypes.object,
+    executeAction: PropTypes.func
+  },
 
-    mixins: [FluxibleMixin],
+  propTypes: {
+    route: PropTypes.string
+  },
 
-    statics: {
-      storeListeners: [UserStore]
-    },
+  mixins: [FluxibleMixin],
 
-    getInitialState() {
-      return this.getStateFromStores();
-    },
+  statics: {
+    storeListeners: [UserStore]
+  },
 
-    getStateFromStores() {
-      return {
-        currentUser: this.getStore(UserStore).getCurrentUser(),
-        authenticated: this.getStore(UserStore).isAuthenticated()
-      };
-    },
+  getInitialState() {
+    return this.getStateFromStores();
+  },
 
-    onChange(res) {
-      if (res.resMsg === 'LOGOUT_SUCCESS') {
-        sweetAlert.alertSuccessMessage(res.resMsg);
-        this.setState(this.getStateFromStores());
-        this.context.router.push('/login');
-      }
+  getStateFromStores() {
+    return {
+      currentUser: this.getStore(UserStore).getCurrentUser(),
+      authenticated: this.getStore(UserStore).isAuthenticated()
+    };
+  },
 
-      if (res.resMsg === 'USER_LOGIN_SUCCESS') {
-        this.setState(this.getStateFromStores());
-      }
-    },
-
-    isActive(route) {
-      return (route === this.props.route) ? 'active' : '';
-    },
-
-    handleLogout(e) {
-      e.preventDefault();
-      this.executeAction(UserActions.Logout);
-    },
-
-    render() {
-      const { authenticated, currentUser } = this.state;
-      return (
-        <div className="fixed-top-menuzord">
-          <div id="menuzord" className="menuzord">
-             <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>Kenny's Blog</Link>
-             <ul className="menuzord-menu menuzord-right">
-                {!authenticated && <li className={this.isActive('/login')}><Link to="/login">Login</Link></li>}
-                {!authenticated && <li className={this.isActive('/register')}><Link to="/register">Register</Link></li>}
-                {authenticated &&
-                  <li className="user-img">
-                    <Link to=''><img src={currentUser.image_url} /></Link>
-                    <ul className="dropdown">
-                      <li>
-                        <Link to={`/user-home/${currentUser.strId}/home`}>
-                          <span className="user-span">{currentUser.username}</span>
-                          <br />{currentUser.email}
-                        </Link>
-                      </li>
-                      <li onClick={this.handleLogout} ><Link to="" onClick={e => e.preventDefault()}>Logout</Link></li>
-                    </ul>
-                  </li>
-                }
-             </ul>
-          </div>
-        </div>
-      );
+  onChange(res) {
+    if (['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'].includes(res.resMsg)) {
+      sweetAlert.alertSuccessMessage(res.resMsg);
+      this.setState(this.getStateFromStores());
     }
+  },
+
+  isActive(route) {
+    return (route === this.props.route) ? 'active' : '';
+  },
+
+  handleLogout(e) {
+    e.preventDefault();
+    this.executeAction(UserActions.Logout);
+  },
+
+  componentDidMount() {
+    menuzord($('#menuzord'), {});
+  },
+
+  componentDidUpdate() {
+    menuzord($('#menuzord'), {});
+  },
+
+  componentWillUnmount() {
+    Modals.hide('loginModal');
+  },
+
+  openLoginModal() {
+    Modals.show('loginModal');
+  },
+
+  openSignupModal() {
+
+  },
+
+  GoToUserCenter(currentUser) {
+    this.context.router.push(`/user-home/${currentUser.strId}/home`);
+  },
+
+  render() {
+    const { authenticated, currentUser } = this.state;
+    return (
+      <section className="menuzord-section">
+        <header id="menuzord" className="menuzord blue">
+          <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>K.Blog</Link>
+          <ul className="menuzord-menu menuzord-right">
+            {!authenticated &&
+              <li className={`${this.isActive('/signup')}`}>
+                <span onClick={this.openSignupModal}>Sign up</span>
+              </li>
+            }
+            {!authenticated &&
+              <li className={`${this.isActive('/login')}`}>
+                <span onClick={this.openLoginModal}>Log in</span>
+              </li>
+            }
+            {authenticated &&
+              <li onClick={this.GoToUserCenter.bind(this, currentUser)}>
+                <img alt="currentUser" src={currentUser.image_url} />
+                <ul className="dropdown">
+                  <li><Link to={`/user-home/${currentUser.strId}/home`}>User center</Link></li>
+                  <li><span>Settings</span></li>
+                  <li onClick={this.handleLogout} ><span>Logout</span></li>
+                </ul>
+              </li>
+            }
+          </ul>
+        </header>
+        <Modals />
+      </section>
+    );
+  }
 });
 
 export default Navbar;

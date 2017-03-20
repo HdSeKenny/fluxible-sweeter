@@ -5,7 +5,7 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { BlogsWell, HotBlogsTabs } from '../UI';
+import { BlogsWell, HotBlogsTabs, MainSliders } from '../UI';
 
 const BlogsDisplay = React.createClass({
 
@@ -217,6 +217,7 @@ const BlogsDisplay = React.createClass({
     const displayUser = currentUser || kenny;
     return (
       <div className="main-blog-page">
+        <MainSliders />
         <div className="display-blog">
           <div className="blog-left">
             {this._renderCreateWell()}
