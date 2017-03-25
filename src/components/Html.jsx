@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 /**
  * build general structure of whole app
@@ -8,16 +8,17 @@ import React from 'react';
  * <script src="/styles/js/jquery.sticky.js"></script>
  * <script src="/styles/js/menuzord.js"></script>
  * <link href="/styles/css/admin-less/react-admin.min.css" rel="stylesheet" />
+ * <link href="/styles/blog.css" rel="stylesheet" />
  */
-export default React.createClass({
+export default class Html extends Component {
 
-  displayName: 'Html',
+  static displayName = 'Html';
 
-  propTypes: {
+  static propTypes = {
     assets: React.PropTypes.object,
     exposed: React.PropTypes.string,
     markup: React.PropTypes.string
-  },
+  };
 
   render() {
     return (
@@ -26,21 +27,21 @@ export default React.createClass({
           <meta charSet="utf-8" />
           <title>Kenny"s Blog</title>
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
+          <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/styles/main.css" rel="stylesheet" />
-          <link href="/styles/css/navbar/font-awesome.css" rel="stylesheet" />
-          <link href="/styles/css/navbar/menuzord.css" rel="stylesheet" />
-          <link href="/styles/blog.css" rel="stylesheet" />
-          <link href="/styles/sweetalert/sweetalert.css" rel="stylesheet" />
+          <link href="/styles/components/usercontrol/menuzord.css" rel="stylesheet" />
+          <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
+          <link href="/styles/components/pages/blog.css" rel="stylesheet" />
         </head>
         <body>
           <div id="main" dangerouslySetInnerHTML={{ __html: this.props.markup }}></div>
           <script dangerouslySetInnerHTML={{ __html: this.props.exposed }}></script>
           <script src={this.props.assets.common}></script>
           <script src={this.props.assets.main}></script>
-          <script src="/styles/sweetalert/sweetalert.min.js"></script>
+          <script src="/styles/js/sweetalert.min.js"></script>
           {this.props.assets.essentials && (<script src={this.props.assets.essentials}></script>)}
         </body>
       </html>
     );
   }
-});
+}

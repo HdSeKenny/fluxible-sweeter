@@ -1,32 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classSet from 'classnames';
 
-const FullScreen = React.createClass({
+export default class FullScreen extends Component {
 
-  displayName: 'FullScreen',
+  static displayName = 'FullScreen';
 
-  getDefaultProps() {
-    return {
-      scroll: false
-    };
-  },
+  static propTypes = {
+    className: React.PropTypes.string,
+    scroll: React.PropTypes.bool,
+    children: React.PropTypes.array
+  };
 
   getClassName() {
     return classSet({
       'fullscreen': true,
       'fullscreen-scroll': this.props.scroll
-    }, this.props.className)
-  },
+    }, this.props.className);
+  }
 
   render () {
-    var className = this.getClassName();
+    const className = this.getClassName();
     return (
-      <div {...this.props} className={className} >
+      <div {...this.props} className={className}>
         {this.props.children}
       </div>
     );
   }
-});
-
-export default FullScreen
+}
 

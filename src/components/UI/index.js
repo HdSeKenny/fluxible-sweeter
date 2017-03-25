@@ -9,3 +9,5 @@ export HotBlogsTabs from './HotBlogsTabs';
 export UserFollowsTabs from './UserFollowsTabs';
 export MainSliders from './MainSliders';
 export Modals from './Modals';
+export Input from './Input';
+export Layout from './Layout';

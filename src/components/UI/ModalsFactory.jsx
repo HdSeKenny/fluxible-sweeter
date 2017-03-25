@@ -19,11 +19,13 @@ export default class ModalsFactory extends Component {
         <div className={`modal-dialog ${size}`}>
           <div className="modal-content">
             <div className="modal-header">
-              <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h4 className="modal-title">{title}</h4>
+              <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">x</button>
+              <h3 className="modal-title">{title}</h3>
             </div>
             <div className="modal-body">
               <ModalComponent {...this.props} />
+            </div>
+            <div className="modal-footer">
             </div>
           </div>
         </div>

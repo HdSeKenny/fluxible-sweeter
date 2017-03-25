@@ -187,23 +187,27 @@ module.exports = function(grunt) {
       },
 
       less: {
-        files: ["<%= project.public %>/styles/**/*.less"],
-        tasks: ["less:dev"]
+        files: ['<%= project.public %>/styles/bootstrap/less/*.less'],
+        tasks: ['less:dev']
       }
     }
 
   });
 
-  //development environment task
-  grunt.registerTask('default', ['clean', 'less:dev', 'webpack-dev-server']);
+  grunt.loadNpmTasks('grunt-contrib-less');
+
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+  // development environment task
+  grunt.registerTask('default', ['clean', 'less:dev', 'webpack-dev-server', 'watch:less']);
 
   // serve task for dev
   grunt.registerTask('serve', ['clean', 'less:dev', 'webpack-dev-server']);
 
-  //production environment task
+  // production environment task
   grunt.registerTask('prod', ['clean', 'less:prod', 'webpack:prod']);
 
-  //test task
+  // test task
   grunt.registerTask('test', ['clean', 'webpack:test', 'karma']);
 
 };

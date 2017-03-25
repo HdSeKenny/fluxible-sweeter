@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Button } from 'react-bootstrap';
 import { routerShape } from 'react-router/lib/PropTypes';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
+import { Input, Layout } from '../UI';
 
 const Login = React.createClass({
 
@@ -13,7 +13,11 @@ const Login = React.createClass({
   contextTypes: {
     router: routerShape.isRequired,
     config: PropTypes.object,
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+  },
+
+  propTypes: {
+    onForgotPassword: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -68,11 +72,11 @@ const Login = React.createClass({
     }
   },
 
-  onEmailChange(e) {
+  handleEmailChange(e) {
     this.setState({ email: e.target.value });
   },
 
-  onPasswordChange(e) {
+  handlePasswordChange(e) {
     this.setState({ password: e.target.value });
   },
 
@@ -85,43 +89,53 @@ const Login = React.createClass({
     const { errorMessage, userImg } = this.state;
     const imageUrl = userImg || '/images/users/default-user.png';
     return (
-      <div className="login-page">
-        <form>
-          <div className="form-content">
-            <div className="form-group">
-              <img alt="" src={imageUrl} />
-            </div>
-            <div className="form-group">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-                onChange={this.onEmailChange}
-                onBlur={this.getLoginUserImage}
-                autoComplete="off"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                onChange={this.onPasswordChange}
-                autoComplete="off"
-                required
-              />
-              <div className="help-block"> {errorMessage} </div>
-            </div>
-            <div className="form-group">
-              <label><input type="checkbox" value="remember-me" /> Remember me</label>
-            </div>
-            <div className="form-group">
-              <Button className="btn btn-lg btn-primary btn-block" type="submit" onClick={this.onLoginSubmit} >Sign in</Button>
-            </div>
+      <section className="wrapper-md animated fadeInUp">
+        <form role="form">
+          <div className="form-group">
+            <Input
+              ref="emailRef"
+              autoComplete={'off'}
+              format="email"
+              icon="fa fa-user"
+              required={true}
+              errorMessage="Please verify your email"
+              placeholder="email"
+              value={this.state.email}
+              onFieldChange={this.handleEmailChange}
+            />
+          </div>
+          <div className="form-group">
+            <Input
+              ref="loginRef"
+              autoComplete={'off'}
+              format="password"
+              icon="fa fa-lock"
+              required={true}
+              errorMessage="Password is required"
+              placeholder="password"
+              value={this.state.password}
+              onFieldChange={(e) => this.handlePasswordChange(e)}
+            />
+          </div>
+          <p className="help-block">{errorMessage || ''}</p>
+          <div className="form-group">
+            <button type="button" onClick={this.handleLogin} className="btn btn-info btn-block w-pad">Login</button>
+          </div>
+          <div className="form-group">
+            <p>{this.state.error}</p>
+          </div>
+          <div className="text-center">
+            <Layout.Row>
+              <Layout.Col size="6" className="...">
+                <span onClick={this.props.onForgotPassword} className="w-login">Forgot your password?</span>
+              </Layout.Col>
+              <Layout.Col size="6">
+                <span onClick={this.props.onForgotPassword} className="w-login">Forgot your password?</span>
+              </Layout.Col>
+            </Layout.Row>
           </div>
         </form>
-      </div>
+      </section>
     );
   }
 });

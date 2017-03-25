@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import ModalsFactory from './ModalsFactory';
 import Layout from './Layout';
-import { Login } from '../Pages';
+import { Login, signup } from '../Pages';
 
 const shallowCompare = require('react-addons-shallow-compare');
 
@@ -24,7 +24,8 @@ export default class Modals extends Component {
   render() {
     return (
       <Layout.Page>
-        <ModalsFactory modalref="loginModal" title="Login" factory={Login} size="modal-md" />
+        <ModalsFactory modalref="loginModal" title="Login to account" factory={Login} size="modal-md" />
+        <ModalsFactory modalref="signupModal" title="Signup" factory={signup} size="modal-md" />
       </Layout.Page>
     );
   }

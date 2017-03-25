@@ -65,6 +65,7 @@ const Navbar = React.createClass({
 
   componentWillUnmount() {
     Modals.hide('loginModal');
+    Modals.hide('signupModal');
   },
 
   openLoginModal() {
@@ -72,7 +73,7 @@ const Navbar = React.createClass({
   },
 
   openSignupModal() {
-
+    Modals.show('signupModal');
   },
 
   GoToUserCenter(currentUser) {
