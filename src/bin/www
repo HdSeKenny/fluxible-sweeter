@@ -6,18 +6,20 @@ const contra = require('contra');
 const mongoClient = require('mongodb').MongoClient;
 const _ = require('lodash');
 const http = require('http');
-const config = require('../configs/server');
-const testMongoConnection=[];
 const assert = require('assert');
-const seed = require('../configs/seed');
 const colors = require('colors');
+
+const config = require('../configs/server');
+const seed = require('../configs/seed');
+
+const testMongoConnection = [];
 
 global.dbIsAvaliable = false;
 
 const connectDb = (cb, url) => {
   mongoClient.connect(url, (err, db) => {
     if (err) {
-      console.log(`Database unavaliable: ${url}`.gray);
+      console.log(`==> Database unavaliable: ${url}`.gray);
       cb(null, false);
     }
     else {
@@ -25,20 +27,20 @@ const connectDb = (cb, url) => {
         if (items.length == 0) {
           console.log(`Database unavaliable: ${url}`);
           if (url === config.mongo.kenny.url) {
-            console.info("########## Insert default user... ##########".green);
+            console.info(`${'==>'.green} Insert default user... `);
             db.collection('users').insert(seed.user, (err, result) => {
               assert.equal(null, err);
               db.close();
             });
-            console.info("########## Insert default blogs... #########".green);
+            console.info(`${'==>'.green} Insert default blogs... `);
             db.collection('blogs').insert(seed.blogs, (err, result) => {
               assert.equal(null, err);
               db.close();
             });
-            console.info("");
+            console.info('');
           }
           else {
-            console.info("########## Insert default session... #######".green);
+            console.info(`${'==>'.green} Insert default session... `);
             db.collection('test').insert({ 'test': 'test' }, (err, result) => {
               assert.equal(null, err);
               db.close();
@@ -46,7 +48,7 @@ const connectDb = (cb, url) => {
           }
         }
         else {
-          console.log(`Database avaliable: ${url}`);
+          console.log(`${'==>'.green} Database avaliable: ${url.cyan}`);
         }
         cb(null, true);
         db.close();
@@ -55,7 +57,7 @@ const connectDb = (cb, url) => {
   });
 };
 
-console.log('Start to check database......');
+console.log(`${'==>'.green} Start to check database......`);
 
 testMongoConnection.push(
   (cb) => {
@@ -80,17 +82,7 @@ contra.concurrent(testMongoConnection, (err, results) => {
   const addr = config.server.addr || 3000;
   const server = http.createServer(app);
 
-  /**
-  * Listen on provided port, on all network interfaces.
-  */
-  server.listen(port, addr);
-  server.on('error', onError);
-  server.on('listening', onListening);
-
-  /**
-  * Event listener for HTTP server "error" event.
-  */
-  function onError(error){
+  function onError(error) {
     if (error.syscall !== 'listen') {
       throw error;
     }
@@ -112,14 +104,16 @@ contra.concurrent(testMongoConnection, (err, results) => {
     }
   }
 
-  /**
-  * Event listener for HTTP server "listening" event.
-  */
   function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-    console.log('\x1b[36m%s\x1b[0m', `App is listening on ${bind}, open http://localhost/3000`);
-    // const logStatus = config.server.logUserActivity ? "on":"off";
-    // console.log('\x1b[36m%s\x1b[0m', `Save Activity Log: ${logStatus}`);
+    const serverAddr = server.address();
+    const address = `http://localhost/${serverAddr.port}`;
+    console.log(`${'==>'.green} Application running: ${address.cyan}`);
+    console.log('');
   }
+
+  server.listen(port, addr);
+  server.on('error', onError);
+  server.on('listening', onListening);
+
 });
+

@@ -87,39 +87,54 @@ const Login = React.createClass({
 
   render() {
     const { errorMessage, userImg } = this.state;
-    const imageUrl = userImg || '/images/users/default-user.png';
+    const imageUrls = userImg || '/images/users/default-user.png';
     return (
       <section className="wrapper-md animated fadeInUp">
         <form role="form">
           <div className="form-group">
-            <Input
-              ref="emailRef"
-              autoComplete={'off'}
-              format="email"
-              icon="fa fa-user"
-              required={true}
-              errorMessage="Please verify your email"
-              placeholder="email"
-              value={this.state.email}
-              onFieldChange={this.handleEmailChange}
-            />
+            <Layout.Row>
+              <Layout.Col size="12">
+                <Input
+                  ref="emailRef"
+                  autoComplete={'off'}
+                  format="email"
+                  icon="fa fa-user"
+                  required={true}
+                  errorMessage="Please verify your email"
+                  placeholder="email"
+                  value={this.state.email}
+                  onFieldChange={this.handleEmailChange}
+                />
+              </Layout.Col>
+            </Layout.Row>
           </div>
           <div className="form-group">
-            <Input
-              ref="loginRef"
-              autoComplete={'off'}
-              format="password"
-              icon="fa fa-lock"
-              required={true}
-              errorMessage="Password is required"
-              placeholder="password"
-              value={this.state.password}
-              onFieldChange={(e) => this.handlePasswordChange(e)}
-            />
+            <Layout.Row>
+              <Layout.Col size="12">
+                <Input
+                  ref="loginRef"
+                  autoComplete={'off'}
+                  format="password"
+                  icon="fa fa-lock"
+                  required={true}
+                  errorMessage="Password is required"
+                  placeholder="password"
+                  value={this.state.password}
+                  onFieldChange={(e) => this.handlePasswordChange(e)}
+                />
+              </Layout.Col>
+            </Layout.Row>
           </div>
           <p className="help-block">{errorMessage || ''}</p>
           <div className="form-group">
-            <button type="button" onClick={this.handleLogin} className="btn btn-info btn-block w-pad">Login</button>
+            <Layout.Row>
+              <Layout.Col size="6" className="...">
+                <button type="button" onClick={this.handleLogin} className="btn btn-info btn-block w-pad">Login</button>
+              </Layout.Col>
+              <Layout.Col size="6">
+                <button type="button" onClick={this.handleLogin} className="btn btn-primary btn-block">signup</button>
+              </Layout.Col>
+            </Layout.Row>
           </div>
           <div className="form-group">
             <p>{this.state.error}</p>

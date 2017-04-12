@@ -28,7 +28,7 @@ export default class Html extends Component {
           <title>Kenny"s Blog</title>
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
-          <link href="/styles/main.css" rel="stylesheet" />
+          <link href={this.props.assets.main_css} rel="stylesheet" />
           <link href="/styles/components/usercontrol/menuzord.css" rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
           <link href="/styles/components/pages/blog.css" rel="stylesheet" />
@@ -36,8 +36,8 @@ export default class Html extends Component {
         <body>
           <div id="main" dangerouslySetInnerHTML={{ __html: this.props.markup }}></div>
           <script dangerouslySetInnerHTML={{ __html: this.props.exposed }}></script>
-          <script src={this.props.assets.common}></script>
-          <script src={this.props.assets.main}></script>
+          <script src={this.props.assets.common_js}></script>
+          <script src={this.props.assets.main_js}></script>
           <script src="/styles/js/sweetalert.min.js"></script>
           {this.props.assets.essentials && (<script src={this.props.assets.essentials}></script>)}
         </body>

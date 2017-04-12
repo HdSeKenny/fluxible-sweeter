@@ -39,7 +39,10 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "global-require": 0,
     "no-mixed-operators": 0,
-    "space-before-function-paren": 0
+    "space-before-function-paren": 0,
+    "padded-blocks": 0,
+    "import/newline-after-import": 0,
+    'new-cap': 0
   },
   "globals": {
     "document": true,

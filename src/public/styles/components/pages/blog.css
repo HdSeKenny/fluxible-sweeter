@@ -8,6 +8,11 @@ body {
   background-color: #cccccc;
 }
 
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
 #app {
   display: flex;
   flex-flow: row wrap;
@@ -19,31 +24,6 @@ body {
   padding: 0;
 }
 
-
-/*.row .col-xs-3 { padding: 0 };*/
-
-.glyphicon {
-  font-size: 10px;
-}
-
-.dialog-header {
-  background-color: #f1f1f1
-}
-
-.dialog-content {
-  padding: 0 30px;
-  background-color: #f1f1f1
-}
-
-.dialog-content .col-xs-3 {
-  padding: 0;
-}
-
-.dialog-footer {
-  padding: 0 15px;
-  margin: 0;
-  background-color: #f1f1f1
-}
 
 .footer {
   position: relative;
@@ -1870,13 +1850,4 @@ body {
 .user-more .more-content .well {
   background-color: #fff;
   min-height: 350px;
-}
-
-.menuzord-section {
-  width: 100%;
-}
-
-.main-sliders {
-  height: 300px;
-  background-color: #00a9da;
 }

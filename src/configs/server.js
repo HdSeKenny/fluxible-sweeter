@@ -1,25 +1,32 @@
-import config from './';
+const path = require('path');
+const config = require('./');
 const environmentConfig = require('./server_overwrite.json');
+
 const serverConfig = {
   mongo: {
     session: {
       url: 'mongodb://localhost/kblogsession',
-      ttl: 60 * config.userProfileExpire //20 min
+      ttl: 60 * config.userProfileExpire // 20 min
     },
     kenny: {
       url: 'mongodb://localhost/kblog',
     },
-    connectErrorMsg: "Please check configuration is right or datebase is running properly."
+    connectErrorMsg: 'Please check configuration is right or datebase is running properly.'
   },
   server: {
     addr: '',
     port: 3000,
 
+    host: 'localhost',
     // user activity logger
     logUserActivity: true,
 
-    //enable logger middleware ,it should set to false on production env
-    enableLog: false
+    root: path.normalize(`${__dirname}/../..`),
+
+    browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
+
+    // enable logger middleware ,it should set to false on production env
+    logEnable: true
   },
 
   userRoles: ['guest', 'user', 'admin'],

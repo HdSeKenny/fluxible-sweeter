@@ -1,213 +1,159 @@
-const webpack = require('webpack');
+// eslint-disable-next-line no-unused-vars
+const colors = require('colors');
 const path = require('path');
-const fs = require('fs');
+const makeWebpackConfig = require('./webpack.config');
 const env = require('./src/configs/development');
-const webpackDevConfig = require('./webpack.dev.config');
-const config = require('./src/configs');
-const CHUNK_REGEX = /^([A-Za-z0-9_\-]+)\..*/;
 
 module.exports = function(grunt) {
-
-  require("load-grunt-tasks")(grunt);
+  // load npm grunt tasks
+  // require('load-grunt-tasks')(grunt);
+  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
-    // project variables
-    project: {
-      build: path.join(__dirname, '/src/public/build'),
-      public: 'src/public',
-      test: './unitTest/build'
 
-    },
-    // clean build
-    clean: [path.join(__dirname, '/src/public/build/js')],
+    clean: [path.join(__dirname, '/dist')],
 
-    less: {
-      dev: {
-        files: {
-          "./src/public/styles/main.css": "./src/public/styles/main.less"
-        }
-      },
-      prod: {
-        files: {
-          "./src/public/styles/main.css": "./src/public/styles/main.less"
-        },
-        options: {
-          compress: true
-        }
-      }
-    },
-    // webpack bundling
     webpack: {
-      test: {
-        context: path.join(__dirname, '/unitTest'),
-        resolve: {
-          extensions: ['', '.js', '.jsx']
-        },
-        entry: {
-          test: ['./index.js']
-        },
-        output: {
-          path: '<%= project.test %>',
-
-          filename: '[name].js',
-          chunkFilename: '[name].[chunkhash].js'
-        },
-        module: {
-          loaders: [
-            { test: /\.jsx?$/, exclude: /node_modules/, loader: require.resolve('babel-loader') }, {
-              test: /\.json$/,
-              exclude: /node_modules/,
-              loaders: ['json-loader']
-            }
-          ]
-        },
-        plugins: [
-          new webpack.DefinePlugin({
-            'process.env': {
-              NODE_ENV: JSON.stringify('development')
-            }
-          }),
-          new webpack.optimize.CommonsChunkPlugin('common.js', undefined, 2),
-          new webpack.NormalModuleReplacementPlugin(/^react(\/addons)?$/, require.resolve('react/addons'))
-        ],
-
-        stats: {
-          colors: true
-        },
-
-        devtool: 'source-map'
-      },
-      prod: {
-        resolve: {
-          extensions: ['', '.js', '.jsx']
-        },
-        entry: './src/client.js',
-        output: {
-          path: '<%= project.build %>/js',
-          filename: '[name].[chunkhash].min.js',
-          chunkFilename: '[name].[chunkhash].min.js'
-        },
-        module: {
-          loaders: [{
-            test: /\.jsx?$/,
-            exclude: /node_modules/,
-            loaders: ['babel']
-          }, {
-            test: /\.json$/,
-            exclude: /node_modules/,
-            loaders: ['json-loader']
-          }]
-        },
-        plugins: [
-          new webpack.DefinePlugin({
-            'process.env': {
-              NODE_ENV: JSON.stringify('production')
-            }
-          }),
-
-          // These are performance optimizations for your bundles
-          new webpack.optimize.DedupePlugin(),
-          new webpack.optimize.OccurenceOrderPlugin(),
-          new webpack.optimize.CommonsChunkPlugin('common.[hash].min.js', 2),
-
-          // This ensures requires for `react` and `react/addons` normalize to the same requirement
-          new webpack.NormalModuleReplacementPlugin(/^react(\/addons)?$/, require.resolve('react/addons')),
-
-          new webpack.optimize.UglifyJsPlugin({
-            compress: {
-              warnings: false
-            },
-            output: {
-              comments: false
-            }
-          }),
-
-          // generates webpack assets config to use hashed assets in production mode
-          function webpackStatsPlugin() {
-            this.plugin('done', function(stats) {
-              var data = stats.toJson();
-              var assets = data.assetsByChunkName;
-              var output = {
-                assets: {},
-                cdnPath: this.options.output.publicPath
-              };
-
-              Object.keys(assets).forEach(function eachAsset(key) {
-                var value = assets[key];
-                // if `*.[chunkhash].min.js` regex matched, then use file name for key
-                var matches = key.match(CHUNK_REGEX);
-                if (matches) {
-                  key = matches[1];
-                }
-                output.assets[key] = config.path_prefix + '/build/js/' + value;
-              });
-              if (grunt.file.exists(path.join(__dirname, '/src/public/build', 'essentials.js'))) {
-                //add essentials
-                output.assets["essentials"] = config.path_prefix + '/build/essentials.js';
-              }
-              fs.writeFileSync(
-                path.join(__dirname, '/src/public/build', 'assets.json'),
-                JSON.stringify(output, null, 4)
-              );
-            });
-          }
-        ],
-        // removes verbosity from builds
-        progress: false
-      }
-    },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js'
-      }
+      build: makeWebpackConfig({ model: 'prod' }),
+      dev: makeWebpackConfig({ model: 'dev', disableDevServer: true })
     },
 
     'webpack-dev-server': {
       options: {
-        hot: true,
+        // hot: true,
         host: '0.0.0.0',
+        inline: true,
+        // watchContentBase: true,
         historyApiFallback: true,
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         },
         port: env.hot_server_port,
-        webpack: webpackDevConfig,
-        publicPath: webpackDevConfig.output.publicPath,
-        contentBase: 'http://' + env.hot_server_host + ':' + env.hot_server_port
+        webpack: makeWebpackConfig({ model: 'dev' }),
+        publicPath: `http://${env.hot_server_host}:${env.hot_server_port}`
       },
-      start: {
-        keepAlive: true
+
+      start: {}
+    },
+
+    express: {
+      options: {
+        port: 3000
+        // port: process.env.PORT || 3000
+      },
+      dev: {
+        options: {
+          script: 'src/bin/www'
+        }
+      },
+      prod: {
+        options: {
+          script: 'src/bin/www'
+        }
+      }
+    },
+    open: {
+      server: {
+        url: 'http://localhost:<%= express.options.port %>'
       }
     },
 
     watch: {
-      options: {
-        nospawn: true
+      livereload: {
+        files: ['src/**/*'],
+        options: {
+          livereload: true
+        }
       },
+      express: {
+        files: ['src/public/styles/**/*'],
+        tasks: ['less:dev', 'express:dev', 'wait'],
+        options: {
+          spawn: false,
+          livereload: true
+        }
+      }
+    },
 
-      less: {
-        files: ['<%= project.public %>/styles/bootstrap/less/*.less'],
-        tasks: ['less:dev']
+    env: {
+      options: {
+        // Shared Options Hash
+      },
+      dev: {
+        NODE_ENV: 'development',
+        logger: () => {
+          grunt.log.ok('set NODE_ENV = development');
+        }
+      },
+      build: {
+        NODE_ENV: 'production',
+        logger: () => {
+          grunt.log.ok('set NODE_ENV = production');
+        }
       }
     }
-
   });
 
-  grunt.loadNpmTasks('grunt-contrib-less');
+  // The development server (the recommended option for development)
+  grunt.registerTask('default', ['env:dev', 'clean', 'less:dev', 'webpack-dev-server']);
 
-  grunt.loadNpmTasks('grunt-contrib-watch');
+  // Run the node server
+  grunt.registerTask('server:prod', function() {
+    grunt.log.ok('Waiting for server loading...');
+    this.async();
+    require('./src/bin/www');
+  });
 
-  // development environment task
-  grunt.registerTask('default', ['clean', 'less:dev', 'webpack-dev-server', 'watch:less']);
+  // Used for development
+  grunt.registerTask('devWatch', ['less:dev', 'express:dev', 'watch:less']);
+  grunt.registerTask('devServer', ['env:dev', 'webpack-dev-server']);
 
-  // serve task for dev
-  grunt.registerTask('serve', ['clean', 'less:dev', 'webpack-dev-server']);
+  grunt.registerTask('server:dev', () => {
+    grunt.log.ok('Waiting for server loading...');
+    require('./src/bin/www');
+  });
 
-  // production environment task
-  grunt.registerTask('prod', ['clean', 'less:prod', 'webpack:prod']);
+  // Used for delaying livereload until after server has restarted
+  grunt.registerTask('wait', function() {
+    grunt.log.ok('Waiting for server loading...');
+    const done = this.async();
+    setTimeout(() => {
+      grunt.log.writeln('Done waiting!');
+      done();
+    }, 2000);
+  });
 
-  // test task
-  grunt.registerTask('test', ['clean', 'webpack:test', 'karma']);
+  // Development model
+  grunt.registerTask('dev', [
+    'less:dev',
+    'express:dev',
+    'wait',
+    'watch'
+  ]);
 
+  // Production model
+  grunt.registerTask('prod', [
+    'env:build',
+    'clean',
+    'less:dev',
+    'webpack:build',
+    'server:prod'
+  ]);
+
+  // Production model
+  grunt.registerTask('serve', [
+    'env:build',
+    'clean',
+    'less:dev',
+    'webpack:build',
+    'server:prod'
+  ]);
+
+  // Production model => build
+  grunt.registerTask('build', [
+    'clean',
+    'less:dev',
+    'webpack:build'
+  ]);
 };

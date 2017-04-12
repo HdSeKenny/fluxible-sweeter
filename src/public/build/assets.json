@@ -1,7 +1,0 @@
-{
-    "assets": {
-        "main": "http://localhost:5858/build/js/main.js",
-        "common": "http://localhost:5858/build/js/common.js"
-    },
-    "cdnPath": "http://localhost:5858/build/js"
-}

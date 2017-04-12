@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classSet from 'classnames';
+import { Modals } from '../UI';
 
 export default class FullScreen extends Component {
 
@@ -23,6 +24,7 @@ export default class FullScreen extends Component {
     return (
       <div {...this.props} className={className}>
         {this.props.children}
+        <Modals />
       </div>
     );
   }

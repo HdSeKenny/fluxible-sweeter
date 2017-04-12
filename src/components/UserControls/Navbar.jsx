@@ -87,6 +87,21 @@ const Navbar = React.createClass({
         <header id="menuzord" className="menuzord blue">
           <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>K.Blog</Link>
           <ul className="menuzord-menu menuzord-right">
+            <li className="menuzord-search">
+              <form className="search-content" action="#" method="post">
+                <div className="iconic-input">
+                  <i className="fa fa-search"></i>
+                  <input type="text" className="form-control" name="keyword" placeholder="Search..." />
+                </div>
+              </form>
+            </li>
+
+              <li className="menuzord-blog">
+                <button type="button" className="btn btn-info btn-block w-pad">
+                  <i className="fa fa-pencil"></i> blog
+                </button>
+              </li>
+
             {!authenticated &&
               <li className={`${this.isActive('/signup')}`}>
                 <span onClick={this.openSignupModal}>Sign up</span>
@@ -109,7 +124,7 @@ const Navbar = React.createClass({
             }
           </ul>
         </header>
-        <Modals />
+
       </section>
     );
   }

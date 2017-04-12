@@ -25,7 +25,8 @@ export default class Modals extends Component {
     return (
       <Layout.Page>
         <ModalsFactory modalref="loginModal" title="Login to account" factory={Login} size="modal-md" />
-        <ModalsFactory modalref="signupModal" title="Signup" factory={signup} size="modal-md" />
+        <ModalsFactory modalref="signupModal" title="Sign up" factory={signup} size="modal-md" />
+        <ModalsFactory modalref="signupModal" title="Sign up" factory={signup} size="modal-md" />
       </Layout.Page>
     );
   }

@@ -4,7 +4,7 @@ import useragent from 'express-useragent';
 import connectMongo from 'connect-mongo';
 import path from 'path';
 import favicon from 'serve-favicon';
-import logger from 'morgan';
+import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import serialize from 'serialize-javascript';
@@ -18,8 +18,6 @@ import fetchData from './utils/fetchData';
 import app from './app';
 import CustomFluxibleComponent from './components/CustomFluxibleComponent';
 import {
-  // clientApi,
-  // language as LanguageService,
   blogs as BlogService,
   users as UserService,
   comments as CommentService
@@ -27,21 +25,21 @@ import {
 import Html from './components/Html';
 import config from './configs';
 import assets from './utils/assets';
-// import Language from './utils/language';
 import serverConfig from './configs/server';
-import metadata from './plugins/metadata.js';
-
 
 const server = express();
-// const customContextTypes = {
-//   config: React.PropTypes.object,
-// };
+const env = server.get('env');
 
 // view engine setup
 server.set('views', path.join(__dirname, 'views'));
 server.set('view engine', 'jade');
-if (serverConfig.server.enableLog) {
-  server.use(logger('dev'));
+
+if (serverConfig.server.logEnable && env !== 'production') {
+  server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+}
+
+if (env === 'development') {
+  server.use(express.static(path.join(serverConfig.server.root, 'dist')));
 }
 
 // limit size of json object less than 20M for extracting metadata
@@ -55,9 +53,9 @@ server.use(cors());
 server.use(`${config.path_prefix}/`, express.static(path.join(__dirname, 'public')));
 server.use(useragent.express());
 
+// Used for upload image
 require('./configs/routes')(server);
 
-// when db is not avaliable,show error in the page
 if (!global.dbIsAvaliable) {
   server.use((req, res) => {
     res.render('error', { status: serverConfig.mongo.connectErrorMsg });
@@ -78,7 +76,6 @@ if (!global.dbIsAvaliable) {
   fetchrPlugin.registerService(UserService);
   fetchrPlugin.registerService(CommentService);
 
-  server.use('/extractMetadata', metadata);
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
   server.use((req, res) => {
     const context = app.createContext({
@@ -102,6 +99,7 @@ if (!global.dbIsAvaliable) {
             CustomFluxibleComponent, { context: context.getComponentContext() }, <RouterContext {...routerState} />
           ));
           const html = renderToStaticMarkup(<Html assets={assets} markup={markup} exposed={exposed} />);
+
           res.send(doctype + html);
         });
       }
