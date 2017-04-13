@@ -5,11 +5,14 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { BlogsWell, HotBlogsTabs, MainSliders } from '../UI';
+import { BlogsWell, HotBlogsTabs, MainSliders, PinItem, ModalsFactory } from '../UI';
+import { Row, Col, Page } from '../UI/Layout';
+import data from '../../utils/data';
+import { ViewPin } from '../UserControls';
 
-const BlogsDisplay = React.createClass({
+const Home = React.createClass({
 
-  displayName: 'BlogsDisplay',
+  displayName: 'Home',
 
   contextTypes: {
     executeAction: React.PropTypes.func
@@ -31,7 +34,8 @@ const BlogsDisplay = React.createClass({
       kenny: this.getStore(UserStore).getKennyUser(),
       blogs: this.getStore(BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
-      blogText: ''
+      blogText: '',
+      selectedPin: {}
     };
   },
 
@@ -102,6 +106,11 @@ const BlogsDisplay = React.createClass({
     this.setState(this.getStateFromStores());
   },
 
+  viewPin(id) {
+    this.setState({ selectedPin: data.find(p => p._id === id) });
+    ModalsFactory.show('viewpinModal');
+  },
+
   _renderCreateBtns(isDisabled) {
     const { currentUser } = this.state;
     return (
@@ -112,7 +121,7 @@ const BlogsDisplay = React.createClass({
         {currentUser &&
           <Link to={`/user-blogs/${currentUser.strId}/add`}>
             <Button className="btn-info create-btn">
-              <Glyphicon glyph="pencil"/>Articles
+              <Glyphicon glyph="pencil" />Articles
             </Button>
           </Link>
         }
@@ -216,9 +225,39 @@ const BlogsDisplay = React.createClass({
     const { currentUser, kenny, blogs } = this.state;
     const displayUser = currentUser || kenny;
     return (
-      <div className="main-blog-page">
+      <div className="home-page">
         <MainSliders />
-        <div className="display-blog">
+        <div className="main">
+          <div className="mason_row row">
+            <div className="pin">
+              <section className="panel panel-default m-b-lg">
+                <header className="panel-heading text-uc">Add new pin<strong></strong>
+                  <hr />
+                </header>
+                <section className="panel-body">
+                  <span href="#" onClick={() => this.newPin()}>
+                    <i className="fa fa-plus-circle text-muted" style={{textAlign: 'center',fontSize: '124px',width: '100%'}} />
+                  </span>
+                </section>
+                <footer className="panel-footer text-center">
+                </footer>
+              </section>
+            </div>
+            {data.map((pin, index) => (<PinItem key={index} index={index++} onSelect={(id) => this.viewPin(id)} pin={pin} />))}
+          </div>
+        </div>
+        <Page height={900}>
+          <ModalsFactory modalref="viewpinModal" large={true} title={this.state.selectedPin.title} pin={this.state.selectedPin} ModalComponent={ViewPin} />
+        </Page>
+      </div>
+    );
+  }
+});
+
+export default Home;
+
+
+/*
           <div className="blog-left">
             {this._renderCreateWell()}
             {this._renderBlogSearch()}
@@ -234,10 +273,4 @@ const BlogsDisplay = React.createClass({
               <HotBlogsTabs />
             </div>
           </div>
-        </div>
-      </div>
-    );
-  }
-});
-
-export default BlogsDisplay;
+ */

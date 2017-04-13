@@ -1,6 +1,6 @@
 html,
 body {
-  font-weight: normal;
+  font-weight: 500;
   font-family: 'Open Sans', sans-serif;
   background-attachment: fixed;
   background-position: 50% 50%;
@@ -62,10 +62,6 @@ body {
   height: 60px;
 }
 
-.content-pages {
-  width: 100%;
-}
-
 .current-user-image {
   cursor: pointer;
 }
@@ -83,7 +79,6 @@ body {
   font-weight: 500;
 }
 
-.main-blog-page {}
 
 .main-blog-page .blog-title {
   text-align: center;
@@ -95,7 +90,6 @@ body {
 
 .main-blog-page .display-blog {
   z-index: -1;
-  padding: 0 130px;
 }
 
 .main-blog-page .display-blog .blog-left {
@@ -384,78 +378,7 @@ body {
   padding-right: 0;
 }
 
-.main-blog-page .create-well {
-  height: 200px;
-  padding: 15px 25px;
-  margin-bottom: 20px;
-}
 
-.main-blog-page .create-well .col-xs-7 p {
-  color: #00a9da;
-  margin: 8px 0 0 2px;
-  font-size: 18px;
-  font-family: 'Droid serif', serif;
-  font-weight: 600;
-}
-
-.main-blog-page .create-well .col-xs-5 {
-  text-align: right;
-  color: gray;
-  font-size: 12px;
-  font-style: italic;
-  margin-top: 6px;
-}
-
-.main-blog-page .create-well .len-span {
-  color: #00a9da;
-  font-size: 18px;
-  margin: 0 2px;
-}
-
-.main-blog-page .create-well .len-span-red {
-  color: red;
-  font-size: 18px;
-  margin: 0 2px;
-}
-
-.main-blog-page .create-well .textarea-row textarea {
-  padding: 10px;
-  margin: 8px 0 5px 0;
-  width: 100%;
-  border: 1px solid #00a9da;
-  background-color: #f9f9f9;
-  border-radius: 2px;
-  overflow: auto;
-  outline: none;
-  cursor: pointer;
-}
-
-.main-blog-page .create-well .textarea-row textarea:focus {
-  border: 1px solid #00a9da;
-  background-color: #fff
-}
-
-.main-blog-page .create-well .textarea-row textarea:visit {
-  border: none;
-}
-
-.main-blog-page .create-well .btn-row {
-  text-align: right;
-}
-
-.main-blog-page .create-well .btn-row .glyphicon {
-  margin-right: 5px;
-}
-
-.main-blog-page .create-well .btn-row button {
-  outline: none;
-  border: none;
-  margin-left: 10px;
-}
-
-.main-blog-page .create-well .btn-row .btn-info {
-  background-color: #00a9da;
-}
 
 .blog-details-page {
   padding-bottom: 50px;

@@ -11,3 +11,6 @@ export MainSliders from './MainSliders';
 export Modals from './Modals';
 export Input from './Input';
 export Layout from './Layout';
+export ModalsFactory from './ModalsFactory';
+export Switch from './Switch';
+export PinItem from './PinItem';

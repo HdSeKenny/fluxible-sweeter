@@ -49,14 +49,14 @@ License: http://codecanyon.net/licenses
 /* FONT
 ======================================*/
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
 
 /* 1 - MENU CONTAINER
 ======================================*/
 
 .menuzord,
 .menuzord * {
-  font-family: 'Open Sans', sans-serif;
+  // font-family: 'Open Sans', sans-serif;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;

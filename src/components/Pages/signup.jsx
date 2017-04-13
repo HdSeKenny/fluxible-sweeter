@@ -7,9 +7,9 @@ import { UserStore } from '../../stores';
 import sweetAlert from '../../utils/sweetAlert';
 
 
-const Register = React.createClass({
+const Signup = React.createClass({
 
-  displayName: 'Register',
+  displayName: 'Signup',
 
   contextTypes: {
     router: routerShape.isRequired,
@@ -306,4 +306,4 @@ const Register = React.createClass({
   }
 });
 
-export default Register;
+export default Signup;

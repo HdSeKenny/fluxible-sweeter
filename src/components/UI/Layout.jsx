@@ -98,4 +98,8 @@ Layout.Scroller = ({ children, height }) => (
   </div>
 );
 
+export const Row = Layout.Row;
+export const Col = Layout.Col;
+export const Page = Layout.Page;
+
 export default Layout;

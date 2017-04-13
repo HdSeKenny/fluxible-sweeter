@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Glyphicon } from 'react-bootstrap';
-import { Link } from 'react-router';
-
+import { Row, Col } from '../UI/Layout';
+import { ModalsFactory } from '../UI';
 
 export default class BlogModal extends Component {
 
@@ -15,32 +14,28 @@ export default class BlogModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      welcomeText: 'What happened today, Write a blog here !',
+      welcomeText: "What's happening now ?",
       blogText: ''
     };
   }
 
+  closeCreateBlogModal() {
+    ModalsFactory.hide('createBlogModal');
+  }
+
+  onChangeBlogText(e) {
+    this.setState({ blogText: e.target.value });
+  }
+
   _renderCreateBtns(isDisabled) {
-    const { currentUser } = this.state;
     return (
       <div className="row btn-row">
-        <button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
-          <Glyphicon glyph="send" />Create
+        <button type="button" disabled={isDisabled} className="btn btn-info" onClick={this.handleMicroBlog}>
+          <i className="fa fa-pencil"></i> Create
         </button>
-        {currentUser &&
-          <Link to={`/user-blogs/${currentUser.strId}/add`}>
-            <button className="btn-info create-btn">
-              <Glyphicon glyph="pencil" />Articles
-            </button>
-          </Link>
-        }
-        {!currentUser &&
-          <Link to="">
-            <button className="btn-info create-btn" onClick={this.checkCurrentUser}>
-              <Glyphicon glyph="pencil" />Articles
-            </button>
-          </Link>
-        }
+        <button type="button" disabled={false} className="btn btn-primary" onClick={this.closeCreateBlogModal}>
+          <i className="fa fa-pencil"></i> Cancel
+        </button>
       </div>
     );
   }
@@ -49,20 +44,24 @@ export default class BlogModal extends Component {
     const { welcomeText, blogText } = this.state;
     const isDisabled = blogText.length > 140 || blogText.length === 0;
     return (
-      <div className="well create-well">
-        <div className="row">
-          <div className="col-xs-7 col-md-7">
-            <p>{welcomeText}</p>
-          </div>
-          <div className="col-xs-5 col-md-5">
+      <div className="create-well mt-15">
+        <Row>
+          <Col size="12" className="p-0">
+            <p className="welcomeText">{welcomeText}</p>
             {blogText.length < 141 &&
-              <p>You can still write <span className="len-span">{140 - blogText.length}</span> words</p> }
+              <p className="create-tip mt-5">
+                You can still write <span className="len-span">{140 - blogText.length}</span>
+              </p>
+            }
             {blogText.length > 140 &&
-              <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
-          </div>
-        </div>
+              <p className="create-tip mt-5">
+                Words can't be more than <span className="len-span-red">140</span> words
+              </p>
+            }
+          </Col>
+        </Row>
         <div className="row textarea-row">
-          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
+          <textarea type="text" rows="4" value={blogText} onChange={(e) => this.onChangeBlogText(e)} />
         </div>
         {this._renderCreateBtns(isDisabled)}
       </div>

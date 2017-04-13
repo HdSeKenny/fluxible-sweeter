@@ -4,7 +4,10 @@ import { routerShape } from 'react-router/lib/PropTypes';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { Input, Layout } from '../UI';
+import { Input, ModalsFactory, Switch } from '../UI';
+import { Row, Col } from '../UI/Layout';
+
+// var update = require('react-addons-update');
 
 const Login = React.createClass({
 
@@ -32,7 +35,8 @@ const Login = React.createClass({
 
   getStateFromStores() {
     return {
-      userImg: this.getStore(UserStore).getLoginUserloginUserImage()
+      userImg: this.getStore(UserStore).getLoginUserloginUserImage(),
+      switchOn: false
     };
   },
 
@@ -85,72 +89,99 @@ const Login = React.createClass({
     this.executeAction(UserActions.GetLoginUserImage, { email });
   },
 
+  openSignupModal(e) {
+    e.preventDefault();
+    ModalsFactory.hide('loginModal');
+    ModalsFactory.show('signupModal');
+  },
+
   render() {
-    const { errorMessage, userImg } = this.state;
-    const imageUrls = userImg || '/images/users/default-user.png';
+    const { errorMessage } = this.state;
+
     return (
-      <section className="wrapper-md animated fadeInUp">
-        <form role="form">
-          <div className="form-group">
-            <Layout.Row>
-              <Layout.Col size="12">
-                <Input
-                  ref="emailRef"
-                  autoComplete={'off'}
-                  format="email"
-                  icon="fa fa-user"
-                  required={true}
-                  errorMessage="Please verify your email"
-                  placeholder="email"
-                  value={this.state.email}
-                  onFieldChange={this.handleEmailChange}
-                />
-              </Layout.Col>
-            </Layout.Row>
-          </div>
-          <div className="form-group">
-            <Layout.Row>
-              <Layout.Col size="12">
-                <Input
-                  ref="loginRef"
-                  autoComplete={'off'}
-                  format="password"
-                  icon="fa fa-lock"
-                  required={true}
-                  errorMessage="Password is required"
-                  placeholder="password"
-                  value={this.state.password}
-                  onFieldChange={(e) => this.handlePasswordChange(e)}
-                />
-              </Layout.Col>
-            </Layout.Row>
-          </div>
-          <p className="help-block">{errorMessage || ''}</p>
-          <div className="form-group">
-            <Layout.Row>
-              <Layout.Col size="6" className="...">
-                <button type="button" onClick={this.handleLogin} className="btn btn-info btn-block w-pad">Login</button>
-              </Layout.Col>
-              <Layout.Col size="6">
-                <button type="button" onClick={this.handleLogin} className="btn btn-primary btn-block">signup</button>
-              </Layout.Col>
-            </Layout.Row>
-          </div>
-          <div className="form-group">
-            <p>{this.state.error}</p>
-          </div>
-          <div className="text-center">
-            <Layout.Row>
-              <Layout.Col size="6" className="...">
-                <span onClick={this.props.onForgotPassword} className="w-login">Forgot your password?</span>
-              </Layout.Col>
-              <Layout.Col size="6">
-                <span onClick={this.props.onForgotPassword} className="w-login">Forgot your password?</span>
-              </Layout.Col>
-            </Layout.Row>
-          </div>
-        </form>
+      <section className="login-section mt-20">
+        <div className="wrapper-md animated fadeInUp">
+          <form role="form">
+            <div className="form-group">
+              <Input
+                ref="emailRef"
+                autoComplete={'off'}
+                format="email"
+                icon="fa fa-user"
+                required={true}
+                errorMessage="Please verify your email"
+                placeholder="email"
+                value={this.state.email}
+                onFieldChange={this.handleEmailChange}
+              />
+            </div>
+            <div className="form-group">
+              <Input
+                ref="loginRef"
+                autoComplete={'off'}
+                format="password"
+                icon="fa fa-lock"
+                required={true}
+                errorMessage="Password is required"
+                placeholder="password"
+                value={this.state.password}
+                onFieldChange={(e) => this.handlePasswordChange(e)}
+              />
+            </div>
+            <p className="help-block">{errorMessage || ''}</p>
+            <div className="form-group">
+              <Row>
+                <Col size="6" className="pl-0">
+                  <Switch after="Remember me" />
+                </Col>
+                <Col size="6" className="pr-0 tar">
+                  <a href="#">Forgot your password ?</a>
+                </Col>
+              </Row>
+            </div>
+            <div className="form-group pt-10">
+              <Row>
+                <Col size="6" className="pl-0">
+                  <button onClick={this.handleLogin} className="btn btn-info btn-block btn-login">Login</button>
+                </Col>
+                <Col size="6" className="pr-0 tar">
+                  <button onClick={(e) => this.openSignupModal(e)} className="btn btn-primary btn-block btn-signup">signup</button>
+                </Col>
+              </Row>
+            </div>
+            <div className="form-group">
+              <p>{this.state.error}</p>
+            </div>
+            <div className="form-group">
+              <Row>
+                <Col size="4" className="p-0">
+                  <hr />
+                </Col>
+                <Col size="4">
+                  <h5 className="tac">or login with</h5>
+                </Col>
+                <Col size="4" className="p-0 tar">
+                  <hr />
+                </Col>
+              </Row>
+            </div>
+            <div className="form-group">
+              <Row className="other-auths">
+                <Col size="4" className="tac">
+                  <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
+                </Col>
+                <Col size="4" className="tac">
+                  <img alt="google+" className="" src="styles/images/google+.png" />
+                </Col>
+                <Col size="4" className="tac">
+                  <img alt="github" className="" src="styles/images/github.png" />
+                </Col>
+              </Row>
+            </div>
+          </form>
+        </div>
       </section>
+
     );
   }
 });

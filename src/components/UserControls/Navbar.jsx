@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Link, routerShape } from 'react-router';
 import $ from 'jquery';
-import { UserStore } from '../../stores';
-import { UserActions } from '../../actions';
+import { Link, routerShape } from 'react-router';
 import sweetAlert from '../../utils/sweetAlert';
 import menuzord from '../../utils/menuzord';
-import { Modals } from '../UI';
+import { UserStore } from '../../stores';
+import { UserActions } from '../../actions';
+import { ModalsFactory, Layout } from '../UI';
+import { Login, signup } from '../Pages';
+import BlogModal from './BlogModal';
 
 const Navbar = React.createClass({
 
@@ -64,16 +66,20 @@ const Navbar = React.createClass({
   },
 
   componentWillUnmount() {
-    Modals.hide('loginModal');
-    Modals.hide('signupModal');
+    ModalsFactory.hide('loginModal');
+    ModalsFactory.hide('signupModal');
   },
 
   openLoginModal() {
-    Modals.show('loginModal');
+    ModalsFactory.show('loginModal');
   },
 
   openSignupModal() {
-    Modals.show('signupModal');
+    ModalsFactory.show('signupModal');
+  },
+
+  openCreateBlogModal() {
+    ModalsFactory.show('createBlogModal');
   },
 
   GoToUserCenter(currentUser) {
@@ -87,6 +93,7 @@ const Navbar = React.createClass({
         <header id="menuzord" className="menuzord blue">
           <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>K.Blog</Link>
           <ul className="menuzord-menu menuzord-right">
+
             <li className="menuzord-search">
               <form className="search-content" action="#" method="post">
                 <div className="iconic-input">
@@ -95,12 +102,11 @@ const Navbar = React.createClass({
                 </div>
               </form>
             </li>
-
-              <li className="menuzord-blog">
-                <button type="button" className="btn btn-info btn-block w-pad">
-                  <i className="fa fa-pencil"></i> blog
-                </button>
-              </li>
+            <li className="menuzord-blog">
+              <button type="button" className="btn btn-info btn-block w-pad" onClick={this.openCreateBlogModal}>
+                <i className="fa fa-pencil"></i> blog
+              </button>
+            </li>
 
             {!authenticated &&
               <li className={`${this.isActive('/signup')}`}>
@@ -125,6 +131,29 @@ const Navbar = React.createClass({
           </ul>
         </header>
 
+        <Layout.Page>
+          <ModalsFactory
+            modalref="loginModal"
+            title="Login to account"
+            ModalComponent={Login}
+            size="modal-md"
+            showHeaderAndFooter={true}
+          />
+          <ModalsFactory
+            modalref="signupModal"
+            title="Sign up"
+            ModalComponent={signup}
+            size="modal-md"
+            showHeaderAndFooter={true}
+          />
+          <ModalsFactory
+            modalref="createBlogModal"
+            title="Write a blog here !"
+            ModalComponent={BlogModal}
+            size="modal-md"
+            showHeaderAndFooter={false}
+          />
+        </Layout.Page>
       </section>
     );
   }

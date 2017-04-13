@@ -204,7 +204,7 @@
 @input-color-placeholder:        #999;
 
 //** Default `.form-control` height
-@input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
+@input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 4);
 //** Large `.form-control` height
 @input-height-large:             (ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2);
 //** Small `.form-control` height
@@ -584,18 +584,20 @@
 //== Modals
 //
 //
-@modal-header-hr-margin:    15px 0 0 0;
-@modal-footer-padding:      10px 30px;
+@modal-header-hr-margin:    10px 0 0 0;
+@modal-footer-padding:      0 30px 10px 30px;
 //
 //
 //
 //##
 
 //** Padding applied to the modal body
-@modal-inner-padding:         15px;
+@modal-inner-padding:         5px 15px;
+@modal-inner-margin:          0 0 0 0;
 
 //** Padding applied to the modal title
-@modal-title-padding:         15px 30px;
+@modal-title-padding:         0 30px;
+@modal-title-margin:          15px 0 0 0;
 //** Modal title line-height
 @modal-title-line-height:     @line-height-base;
 

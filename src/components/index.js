@@ -1,6 +1,6 @@
 export NotFound from './NotFound';
 export App from './App';
-export BlogsDisplay from './Pages/BlogsDisplay';
+export Home from './Pages/Home';
 export AddBlog from './Users/AddBlog';
 export BlogsDetails from './Pages/BlogsDetails';
 export Login from './Users/Login';

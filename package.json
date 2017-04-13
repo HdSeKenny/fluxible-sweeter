@@ -57,6 +57,7 @@
     "querystring": "^0.2.0",
     "react": "^0.14.0",
     "react-addons-shallow-compare": "^15.4.2",
+    "react-addons-update": "^15.5.2",
     "react-bootstrap": "^0.28.1",
     "react-color": "^2.0.0",
     "react-dom": "^0.14.0",
