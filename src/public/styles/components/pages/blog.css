@@ -3,9 +3,10 @@ body {
   font-weight: 500;
   font-family: 'Open Sans', sans-serif;
   background-attachment: fixed;
-  background-position: 50% 50%;
   background-size: cover;
   background-color: #cccccc;
+  margin: 0;
+  padding: 0;
 }
 
 

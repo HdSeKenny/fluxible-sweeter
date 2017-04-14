@@ -92,7 +92,7 @@ License: http://codecanyon.net/licenses
   color: #666;
   text-decoration: none;
   font-size: 24px;
-  font-weight: 600;
+  // font-weight: 600;
   line-height: 1.3;
   cursor: pointer;
 }
@@ -136,7 +136,7 @@ License: http://codecanyon.net/licenses
   display: inline-block;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 600;
+  // font-weight: 600;
   color: #888;
   outline: 0;
   line-height: 1.42857143;

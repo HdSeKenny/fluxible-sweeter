@@ -1,7 +1,7 @@
 {
     "assets": {
         "main_js": "http://localhost:5858/main.js",
-        "0_97a61427201714bd6e43_hot-update_js": "http://localhost:5858/0.97a61427201714bd6e43.hot-update.js",
+        "0_e40b8bbc9a8e6251b04f_hot-update_js": "http://localhost:5858/0.e40b8bbc9a8e6251b04f.hot-update.js",
         "main_css": "http://localhost:5858/main.css",
         "common_js": "http://localhost:5858/common.js"
     },
