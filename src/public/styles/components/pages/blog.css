@@ -579,17 +579,17 @@ body {
   min-height: 500px;
 }
 
-.hot-blogs .hot-blog-row {
-  margin-top: 5px;
-}
+// .hot-blogs .hot-blog-row {
+//   margin-top: 5px;
+// }
 
-.hot-blogs .hot-blog-row .col-xs-3 {
-  text-align: right;
-}
+// .hot-blogs .hot-blog-row .col-xs-3 {
+//   text-align: right;
+// }
 
-.hot-blogs .hot-blog-row .col-xs-3 .fa-heart-o {
-  margin-right: 6px;
-}
+// .hot-blogs .hot-blog-row .col-xs-3 .fa-heart-o {
+//   margin-right: 6px;
+// }
 
 .user-page-loading {
   min-height: 752px;

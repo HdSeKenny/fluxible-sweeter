@@ -1,6 +1,59 @@
 /* eslint-disable all, quotes */
 export default [{
   "_id": "5765683b5a9aec9dd1badc14",
+  "type": "article",
+  "thumbs": 23,
+  "author": {
+    "_id": "54b7f2a7a2d4bdde5b96117b",
+    "username": "admin",
+    "email": "andrew@slightsinthesky.io",
+    "avatar": "/dist/images/img3.jpg",
+    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
+    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
+    "orgId": "54babb8ba2d4bdde5b96117d",
+    "__v": 0,
+    "name": "Admin User",
+    "meta": {
+      "points": 20,
+      "minutes": 10,
+      "level": 1,
+      "pointsFromJournals": 0,
+      "exercisesComplete": [
+        "56212419267e63c53af6357b",
+        "5696a7196670f96f07f23578"
+      ],
+      "assignementsComplete": [],
+      "notificationsRead": [],
+      "favorites": [],
+      "badges": [{
+        "value": 100,
+        "reference": "minutes",
+        "icon": "fa-rocket",
+        "color": "blue",
+        "description": "Awarded for completing your first exercise",
+        "title": "A Good Start!",
+        "id": 0
+      }],
+      "group": "56f133615a3e48000000e040",
+      "friend": "5624dc5a3b3a9036ef9cc9bb"
+    },
+    "groups": [],
+    "accepted": true,
+    "created": "2015-01-08T14:03:47.025Z",
+    "type": 0
+  },
+  "board": "576566e35a9aec9dd1badc13",
+  "description": "Color and shape",
+  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
+  "source_url": "https://airbnb.ca",
+  "title": "Airbnb",
+  "web_url": "https://airbnb.ca",
+  "dateCreated": "2016-03-22T11:58:25.630Z",
+  "dateUpdated": "2016-03-22T11:58:25.630Z"
+}, {
+  "_id": "5765683b5a9aec9dd1badc14",
+  "type": "article",
+  "thumbs": 3,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -50,6 +103,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 13,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -99,6 +153,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 8,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -148,6 +203,107 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 42,
+  "author": {
+    "_id": "54b7f2a7a2d4bdde5b96117b",
+    "username": "admin",
+    "email": "andrew@slightsinthesky.io",
+    "avatar": "/dist/images/img3.jpg",
+    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
+    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
+    "orgId": "54babb8ba2d4bdde5b96117d",
+    "__v": 0,
+    "name": "Yao Ji",
+    "meta": {
+      "points": 20,
+      "minutes": 10,
+      "level": 1,
+      "pointsFromJournals": 0,
+      "exercisesComplete": [
+        "56212419267e63c53af6357b",
+        "5696a7196670f96f07f23578"
+      ],
+      "assignementsComplete": [],
+      "notificationsRead": [],
+      "favorites": [],
+      "badges": [{
+        "value": 100,
+        "reference": "minutes",
+        "icon": "fa-rocket",
+        "color": "blue",
+        "description": "Awarded for completing your first exercise",
+        "title": "A Good Start!",
+        "id": 0
+      }],
+      "group": "56f133615a3e48000000e040",
+      "friend": "5624dc5a3b3a9036ef9cc9bb"
+    },
+    "groups": [],
+    "accepted": true,
+    "created": "2015-01-08T14:03:47.025Z",
+    "type": 0
+  },
+  "board": "576566e35a9aec9dd1badc13",
+  "description": "Color and shape",
+  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
+  "source_url": "https://airbnb.ca",
+  "title": "Airbnb",
+  "web_url": "https://airbnb.ca",
+  "dateCreated": "2016-03-22T11:58:25.630Z",
+  "dateUpdated": "2016-03-22T11:58:25.630Z"
+},{
+  "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 43,
+  "author": {
+    "_id": "54b7f2a7a2d4bdde5b96117b",
+    "username": "Kuan Lu",
+    "email": "andrew@slightsinthesky.io",
+    "avatar": "/dist/images/img3.jpg",
+    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
+    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
+    "orgId": "54babb8ba2d4bdde5b96117d",
+    "__v": 0,
+    "name": "Kuan Lu",
+    "meta": {
+      "points": 20,
+      "minutes": 10,
+      "level": 1,
+      "pointsFromJournals": 0,
+      "exercisesComplete": [
+        "56212419267e63c53af6357b",
+        "5696a7196670f96f07f23578"
+      ],
+      "assignementsComplete": [],
+      "notificationsRead": [],
+      "favorites": [],
+      "badges": [{
+        "value": 100,
+        "reference": "minutes",
+        "icon": "fa-rocket",
+        "color": "blue",
+        "description": "Awarded for completing your first exercise",
+        "title": "A Good Start!",
+        "id": 0
+      }],
+      "group": "56f133615a3e48000000e040",
+      "friend": "5624dc5a3b3a9036ef9cc9bb"
+    },
+    "groups": [],
+    "accepted": true,
+    "created": "2015-01-08T14:03:47.025Z",
+    "type": 0
+  },
+  "board": "576566e35a9aec9dd1badc13",
+  "description": "Color and shape",
+  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
+  "source_url": "https://airbnb.ca",
+  "title": "Airbnb",
+  "web_url": "https://airbnb.ca",
+  "dateCreated": "2016-03-22T11:58:25.630Z",
+  "dateUpdated": "2016-03-22T11:58:25.630Z"
+},{
+  "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 9,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -197,6 +353,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 29,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -246,6 +403,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 14,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -295,153 +453,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 },{
   "_id": "5765683b5a9aec9dd1badc14",
-  "author": {
-    "_id": "54b7f2a7a2d4bdde5b96117b",
-    "username": "admin",
-    "email": "andrew@slightsinthesky.io",
-    "avatar": "/dist/images/img3.jpg",
-    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
-    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
-    "orgId": "54babb8ba2d4bdde5b96117d",
-    "__v": 0,
-    "name": "Admin User",
-    "meta": {
-      "points": 20,
-      "minutes": 10,
-      "level": 1,
-      "pointsFromJournals": 0,
-      "exercisesComplete": [
-        "56212419267e63c53af6357b",
-        "5696a7196670f96f07f23578"
-      ],
-      "assignementsComplete": [],
-      "notificationsRead": [],
-      "favorites": [],
-      "badges": [{
-        "value": 100,
-        "reference": "minutes",
-        "icon": "fa-rocket",
-        "color": "blue",
-        "description": "Awarded for completing your first exercise",
-        "title": "A Good Start!",
-        "id": 0
-      }],
-      "group": "56f133615a3e48000000e040",
-      "friend": "5624dc5a3b3a9036ef9cc9bb"
-    },
-    "groups": [],
-    "accepted": true,
-    "created": "2015-01-08T14:03:47.025Z",
-    "type": 0
-  },
-  "board": "576566e35a9aec9dd1badc13",
-  "description": "Color and shape",
-  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
-  "source_url": "https://airbnb.ca",
-  "title": "Airbnb",
-  "web_url": "https://airbnb.ca",
-  "dateCreated": "2016-03-22T11:58:25.630Z",
-  "dateUpdated": "2016-03-22T11:58:25.630Z"
-},{
-  "_id": "5765683b5a9aec9dd1badc14",
-  "author": {
-    "_id": "54b7f2a7a2d4bdde5b96117b",
-    "username": "admin",
-    "email": "andrew@slightsinthesky.io",
-    "avatar": "/dist/images/img3.jpg",
-    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
-    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
-    "orgId": "54babb8ba2d4bdde5b96117d",
-    "__v": 0,
-    "name": "Admin User",
-    "meta": {
-      "points": 20,
-      "minutes": 10,
-      "level": 1,
-      "pointsFromJournals": 0,
-      "exercisesComplete": [
-        "56212419267e63c53af6357b",
-        "5696a7196670f96f07f23578"
-      ],
-      "assignementsComplete": [],
-      "notificationsRead": [],
-      "favorites": [],
-      "badges": [{
-        "value": 100,
-        "reference": "minutes",
-        "icon": "fa-rocket",
-        "color": "blue",
-        "description": "Awarded for completing your first exercise",
-        "title": "A Good Start!",
-        "id": 0
-      }],
-      "group": "56f133615a3e48000000e040",
-      "friend": "5624dc5a3b3a9036ef9cc9bb"
-    },
-    "groups": [],
-    "accepted": true,
-    "created": "2015-01-08T14:03:47.025Z",
-    "type": 0
-  },
-  "board": "576566e35a9aec9dd1badc13",
-  "description": "Color and shape",
-  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
-  "source_url": "https://airbnb.ca",
-  "title": "Airbnb",
-  "web_url": "https://airbnb.ca",
-  "dateCreated": "2016-03-22T11:58:25.630Z",
-  "dateUpdated": "2016-03-22T11:58:25.630Z"
-},{
-  "_id": "5765683b5a9aec9dd1badc14",
-  "author": {
-    "_id": "54b7f2a7a2d4bdde5b96117b",
-    "username": "admin",
-    "email": "andrew@slightsinthesky.io",
-    "avatar": "/dist/images/img3.jpg",
-    "hashedPassword": "e6f70300badd93d9cc4a14c7e5429a9c4f6afe75",
-    "salt": "Lj4L9hCqXnZPjmxWxS71td0C+9wabhdNBqE8Oyuwa78=",
-    "orgId": "54babb8ba2d4bdde5b96117d",
-    "__v": 0,
-    "name": "Admin User",
-    "meta": {
-      "points": 20,
-      "minutes": 10,
-      "level": 1,
-      "pointsFromJournals": 0,
-      "exercisesComplete": [
-        "56212419267e63c53af6357b",
-        "5696a7196670f96f07f23578"
-      ],
-      "assignementsComplete": [],
-      "notificationsRead": [],
-      "favorites": [],
-      "badges": [{
-        "value": 100,
-        "reference": "minutes",
-        "icon": "fa-rocket",
-        "color": "blue",
-        "description": "Awarded for completing your first exercise",
-        "title": "A Good Start!",
-        "id": 0
-      }],
-      "group": "56f133615a3e48000000e040",
-      "friend": "5624dc5a3b3a9036ef9cc9bb"
-    },
-    "groups": [],
-    "accepted": true,
-    "created": "2015-01-08T14:03:47.025Z",
-    "type": 0
-  },
-  "board": "576566e35a9aec9dd1badc13",
-  "description": "Color and shape",
-  "image_url": "https://s-media-cache-ak0.pinimg.com/564x/25/4b/97/254b97bef2fe046e9e9845b851529088.jpg",
-  "source_url": "https://airbnb.ca",
-  "title": "Airbnb",
-  "web_url": "https://airbnb.ca",
-  "dateCreated": "2016-03-22T11:58:25.630Z",
-  "dateUpdated": "2016-03-22T11:58:25.630Z"
-},{
-  "_id": "5765683b5a9aec9dd1badc14",
+  "thumbs": 5,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -491,6 +503,7 @@ export default [{
   "dateUpdated": "2016-03-22T11:58:25.630Z"
 }, {
   "_id": "5768319caea3dd0000fe3fb5",
+  "thumbs": 10,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -540,6 +553,7 @@ export default [{
   "__v": 0
 }, {
   "_id": "576836e9aea3dd0000fe3fb6",
+  "thumbs": 7,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -589,6 +603,7 @@ export default [{
   "__v": 0
 }, {
   "_id": "57683811aea3dd0000fe3fb8",
+  "thumbs": 5,
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -638,6 +653,8 @@ export default [{
   "__v": 0
 }, {
   "_id": "5768555caea3dd0000fe3fb9",
+  "thumbs": 9,
+  "type": "moment",
   "author": {
     "_id": "54b7f2a7a2d4bdde5b96117b",
     "username": "admin",
@@ -687,6 +704,8 @@ export default [{
   "__v": 0
 }, {
   "_id": "5768569746094c000056b95d",
+  "thumbs": 17,
+  "type": "moment",
   "author": {
     "_id": "5624dbaa3b3a9036ef9cc9b8",
     "username": "boss",

@@ -44,13 +44,13 @@ export default class BlogModal extends Component {
     const { welcomeText, blogText } = this.state;
     const isDisabled = blogText.length > 140 || blogText.length === 0;
     return (
-      <div className="create-well mt-15">
+      <div className="create-well">
         <Row>
           <Col size="12" className="p-0">
             <p className="welcomeText">{welcomeText}</p>
             {blogText.length < 141 &&
               <p className="create-tip mt-5">
-                You can still write <span className="len-span">{140 - blogText.length}</span>
+                You can still write <span className="len-span">{140 - blogText.length}</span> words
               </p>
             }
             {blogText.length > 140 &&

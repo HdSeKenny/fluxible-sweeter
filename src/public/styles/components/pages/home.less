@@ -12,7 +12,35 @@
     background-color: @brand-info;
     padding: 8em;
   }
+  @media (min-width: 768px) {
+    .main {
+      padding: 3em 8em;
+      .vbox {
+        min-height: 60em;
+      }
+    }
+  }
   .main {
-    padding: 3em 8em;
+    .classification {
+      section {
+        .home-tag {
+          padding: 0.4em;
+          font-size: 1.5em;
+          margin-top: 1em;
+          color: #333;
+          .view-all {
+            font-size: 0.7em;
+            font-style: italic;
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+        .pin {
+          display: inline-block;
+        }
+      }
+    }
   }
 }
+

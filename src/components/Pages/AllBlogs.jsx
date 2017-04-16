@@ -8,11 +8,11 @@ import { BlogActions } from '../../actions';
 import { BlogsWell, HotBlogsTabs, MainSliders, PinItem, ModalsFactory } from '../UI';
 import { Row, Col, Page } from '../UI/Layout';
 import data from '../../utils/data';
-import { ViewPin } from '../UserControls';
+import { ViewPin, BlogModal } from '../UserControls';
 
-const Home = React.createClass({
+const AllBlogs = React.createClass({
 
-  displayName: 'Home',
+  displayName: 'AllBlogs',
 
   contextTypes: {
     executeAction: React.PropTypes.func
@@ -261,44 +261,56 @@ const Home = React.createClass({
   render() {
     const { currentUser, kenny, blogs } = this.state;
     const displayUser = currentUser || kenny;
+    console.log(displayUser);
     return (
-      <div className="home-page">
-        <MainSliders />
-        <div className="main">
-          {this._renderPinItems(data)}
-        </div>
-        <Page>
-          <ModalsFactory
-            modalref="pinModal"
-            large={true}
-            title={this.state.selectedPin.title}
-            pin={this.state.selectedPin}
-            ModalComponent={ViewPin}
-            showHeaderAndFooter={true}
-          />
-        </Page>
-      </div>
+      <article className="allblogs-page">
+        <section className="all-left">
+          <div className="blog-create mb-15">
+            <BlogModal />
+          </div>
+          {data.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
+            .map((pin, index) =>
+              <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
+            )
+          }
+        </section>
+        <section className="all-right">
+          <div className="right-user-card">
+            <Row>
+              <Col size="4">
+                <Link to={`/user-home/${displayUser.strId}/home`}>
+                  <img alt="user" src="/styles/images/upload/1484229196773.jpg" />
+                </Link>
+              </Col>
+              <Col size="8">
+                <Row>
+                  <h3 className="m-0">
+                    <Link to={`/user-home/${displayUser.strId}/home`}>{displayUser.username}</Link>
+                  </h3>
+                </Row>
+                <Row>
+                  <h5>{displayUser.profession}</h5>
+                </Row>
+              </Col>
+            </Row>
+            <Row className="card-footer">
+              <Col size="4" className="tac">
+                <h5>Follwers <span className="ml-5">{displayUser.fans.length}</span></h5>
+              </Col>
+              <Col size="4" className="tac">
+                <h5>Blogs <span className="ml-5">{displayUser.blogs.length}</span></h5>
+              </Col>
+              <Col size="4" className="tac">
+                <h5>Articles 454</h5>
+              </Col>
+            </Row>
+          </div>
+          <div className="right-blog-option">
+          </div>
+        </section>
+      </article>
     );
   }
 });
 
-export default Home;
-
-
-/*
-  <div className="blog-left">
-    {this._renderCreateWell()}
-    {this._renderBlogSearch()}
-    <BlogsWell
-      displayBlogs={blogs}
-      changeShowCommentsState={this.changeShowCommentsState}
-      changeBlogThumbsUpState={this.changeBlogThumbsUpState}
-    />
-  </div>
-  <div className="blog-right" >
-    {this._renderUserCard(displayUser)}
-    <div className="well right-second">
-      <HotBlogsTabs />
-    </div>
-  </div>
- */
+export default AllBlogs;

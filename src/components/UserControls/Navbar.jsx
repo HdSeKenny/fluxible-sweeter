@@ -92,6 +92,11 @@ const Navbar = React.createClass({
       <section className="menuzord-section">
         <header id="menuzord" className="menuzord blue">
           <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>K.Blog</Link>
+          <ul className="menuzord-menu menuzord-left ml-20">
+            <li className={`${this.isActive('/AllBlogs')}`}>
+              <Link to="/AllBlogs">Blogs</Link>
+            </li>
+          </ul>
           <ul className="menuzord-menu menuzord-right">
 
             <li className="menuzord-search">
@@ -104,7 +109,7 @@ const Navbar = React.createClass({
             </li>
             <li className="menuzord-blog">
               <button type="button" className="btn btn-info btn-block w-pad" onClick={this.openCreateBlogModal}>
-                <i className="fa fa-pencil"></i> blog
+                <i className="fa fa-pencil"></i> Create
               </button>
             </li>
 

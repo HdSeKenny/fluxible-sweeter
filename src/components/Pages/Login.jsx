@@ -152,32 +152,31 @@ const Login = React.createClass({
             <div className="form-group">
               <p>{this.state.error}</p>
             </div>
-            <div className="form-group">
-              <Row>
-                <Col size="4" className="p-0">
-                  <hr />
-                </Col>
-                <Col size="4">
-                  <h5 className="tac">or login with</h5>
-                </Col>
-                <Col size="4" className="p-0 tar">
-                  <hr />
-                </Col>
-              </Row>
-            </div>
-            <div className="form-group">
-              <Row className="other-auths">
-                <Col size="4" className="tac">
-                  <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
-                </Col>
-                <Col size="4" className="tac">
-                  <img alt="google+" className="" src="styles/images/google+.png" />
-                </Col>
-                <Col size="4" className="tac">
-                  <img alt="github" className="" src="styles/images/github.png" />
-                </Col>
-              </Row>
-            </div>
+
+            <Row>
+              <Col size="4" className="p-0">
+                <hr />
+              </Col>
+              <Col size="4">
+                <h5 className="tac">or login with</h5>
+              </Col>
+              <Col size="4" className="p-0 tar">
+                <hr />
+              </Col>
+            </Row>
+
+            <Row className="other-auths">
+              <Col size="4" className="tac">
+                <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
+              </Col>
+              <Col size="4" className="tac">
+                <img alt="google+" className="" src="styles/images/google+.png" />
+              </Col>
+              <Col size="4" className="tac">
+                <img alt="github" className="" src="styles/images/github.png" />
+              </Col>
+            </Row>
+
           </form>
         </div>
       </section>

@@ -236,13 +236,15 @@
 
 .mason_row {
   -moz-column-width: 18em;
-  -webkit-column-width: 18em;
+  @media (min-width: 768px) {
+    -webkit-column-width: 24em;
+  }
   -moz-column-gap: 1em;
   -webkit-column-gap: 1em;
   .pin {
     display: inline-block;
     width: 100%;
-    padding: 1rem;
+    padding: 0.5em;
   }
 }
 

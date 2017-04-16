@@ -63,7 +63,7 @@ export default class ModalsFactory extends Component {
 
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div className={`modal-dialog ${size}`}>
+        <div className={`modal-dialog mt-80 ${size}`}>
           <div className="modal-content">
             {showHeaderAndFooter && this._renderModalHeader(title)}
             {this._renderModalBody(ModalComponent)}
