@@ -3,12 +3,6 @@ import React, { Component } from 'react';
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
- * <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
- * <link href="/styles/css/navbar/skins/menuzord-shadow.css" rel="stylesheet" type="text/css"/>
- * <script src="/styles/js/jquery.sticky.js"></script>
- * <script src="/styles/js/menuzord.js"></script>
- * <link href="/styles/css/admin-less/react-admin.min.css" rel="stylesheet" />
- * <link href="/styles/blog.css" rel="stylesheet" />
  */
 export default class Html extends Component {
 
@@ -29,7 +23,6 @@ export default class Html extends Component {
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
           <link href={this.props.assets.main_css} rel="stylesheet" />
-          <link href="/styles/components/usercontrol/menuzord.css" rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
           <link href="/styles/components/pages/blog.css" rel="stylesheet" />
         </head>

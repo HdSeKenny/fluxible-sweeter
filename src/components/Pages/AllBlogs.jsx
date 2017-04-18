@@ -182,41 +182,31 @@ const AllBlogs = React.createClass({
 
   _renderUserCard(displayUser) {
     return (
-      <div className="well right-first">
-        <div className="rf-body">
-          <div className="rf-img">
-            <Link to={`/user-home/${displayUser._id}/home`}>
-              <img alt="" src={displayUser.image_url} />
+      <div className="right-user-card">
+        <Row>
+          <Col size="3">
+            <Link to={`/user-home/${displayUser.strId}/home`}>
+              <img alt="user" src="/styles/images/upload/1484229196773.jpg" />
             </Link>
-          </div>
-          <div className="rf-info">
-            <h3>
-              <Link to={`/user-home/${displayUser._id}/home`}>
-                {displayUser.username}
-              </Link>
+          </Col>
+          <Col size="9">
+            <h3 className="m-0">
+              <Link to={`/user-home/${displayUser.strId}/home`}>{displayUser.username}</Link>
             </h3>
-            <p>{displayUser.profession}</p>
-          </div>
-        </div>
-        <div className="row rf-footer">
-          <div className="col-xs-4">
-            <Link to={`/user-blogs/${displayUser._id}/list`}>
-              {displayUser.blogs.length} Blogs
-            </Link>
-          </div>
-          <div className="rf-border"></div>
-          <div className="col-xs-4">
-            <Link to={`/user-follows/${displayUser._id}`}>
-              {displayUser.fans.length} Fans
-            </Link>
-          </div>
-          <div className="rf-border"></div>
-          <div className="col-xs-4">
-            <Link to={`/user-follows/${displayUser._id}`}>
-              {displayUser.focuses.length} Focuses
-            </Link>
-          </div>
-        </div>
+            <h5>{displayUser.profession}</h5>
+          </Col>
+        </Row>
+        <Row className="card-footer">
+          <Col size="4" className="tac">
+            <h5>Follwers <span className="ml-5">{displayUser.fans.length}</span></h5>
+          </Col>
+          <Col size="4" className="tac">
+            <h5>Blogs <span className="ml-5">{displayUser.blogs.length}</span></h5>
+          </Col>
+          <Col size="4" className="tac">
+            <h5>Articles 454</h5>
+          </Col>
+        </Row>
       </div>
     );
   },
@@ -261,7 +251,6 @@ const AllBlogs = React.createClass({
   render() {
     const { currentUser, kenny, blogs } = this.state;
     const displayUser = currentUser || kenny;
-    console.log(displayUser);
     return (
       <article className="allblogs-page">
         <section className="all-left">
@@ -275,36 +264,7 @@ const AllBlogs = React.createClass({
           }
         </section>
         <section className="all-right">
-          <div className="right-user-card">
-            <Row>
-              <Col size="4">
-                <Link to={`/user-home/${displayUser.strId}/home`}>
-                  <img alt="user" src="/styles/images/upload/1484229196773.jpg" />
-                </Link>
-              </Col>
-              <Col size="8">
-                <Row>
-                  <h3 className="m-0">
-                    <Link to={`/user-home/${displayUser.strId}/home`}>{displayUser.username}</Link>
-                  </h3>
-                </Row>
-                <Row>
-                  <h5>{displayUser.profession}</h5>
-                </Row>
-              </Col>
-            </Row>
-            <Row className="card-footer">
-              <Col size="4" className="tac">
-                <h5>Follwers <span className="ml-5">{displayUser.fans.length}</span></h5>
-              </Col>
-              <Col size="4" className="tac">
-                <h5>Blogs <span className="ml-5">{displayUser.blogs.length}</span></h5>
-              </Col>
-              <Col size="4" className="tac">
-                <h5>Articles 454</h5>
-              </Col>
-            </Row>
-          </div>
+          {this._renderUserCard(displayUser)}
           <div className="right-blog-option">
           </div>
         </section>

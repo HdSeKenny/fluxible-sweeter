@@ -23,7 +23,7 @@ export default (element, options) => {
 
   // variables
   const menu_container = $(element);
-  const menu = $(menu_container).children('.menuzord-menu');
+  const menu = $(menu_container).children('.sweet-nav-menu');
   const menu_li = $(menu).find('li');
   const mobileWidthBase = 768;
 
@@ -46,17 +46,17 @@ export default (element, options) => {
 
   // navigation alignment
   if (settings.align == 'right') {
-    $(menu).addClass('menuzord-right');
+    $(menu).addClass('sweet-nav-right');
   }
 
   // dropdown indentation (mobile mode)
   if (settings.indentChildren) {
-    $(menu).addClass('menuzord-indented');
+    $(menu).addClass('sweet-nav-indented');
   }
 
   // responsive behavior
   if (settings.responsive) {
-    $(menu_container).addClass('menuzord-responsive').prepend("<a href='javascript:void(0)' class='showhide'><em></em><em></em><em></em></a>");
+    $(menu_container).addClass('sweet-nav-responsive');
     showHideButton = $(menu_container).children('.showhide');
   }
 
@@ -108,7 +108,7 @@ export default (element, options) => {
   function landscapeMode() {
     $(menu).find('.dropdown, .megamenu').hide(0);
     if (navigator.userAgent.match(/Mobi/i) || window.navigator.msMaxTouchPoints > 0 || settings.trigger == 'click') {
-      $('.menuzord-menu > li > a, .menuzord-menu ul.dropdown li a').bind('click touchstart', function(e) {
+      $('.sweet-nav-menu > li > a, .sweet-nav-menu ul.dropdown li a').bind('click touchstart', function(e) {
         e.stopPropagation();
         e.preventDefault();
         $(this).parent('li').siblings('li')
@@ -124,8 +124,8 @@ export default (element, options) => {
         window.location.href = $(this).attr('href');
       });
       $(document).bind('click.menu touchstart.menu', (ev) => {
-        if ($(ev.target).closest('.menuzord').length == 0) {
-          $('.menuzord-menu').find('.dropdown, .megamenu').fadeOut(300);
+        if ($(ev.target).closest('.sweet-nav').length == 0) {
+          $('.sweet-nav-menu').find('.dropdown, .megamenu').fadeOut(300);
         }
       });
     } else {
@@ -206,11 +206,11 @@ export default (element, options) => {
     $(document).unbind('click.menu touchstart.menu');
   }
 
-  // Menuzord tabs
+  // sweet-nav tabs
   function menuTabs() {
     function startTab(tab) {
-      const TabNavs = $(tab).find('.menuzord-tabs-nav > li');
-      const TabContents = $(tab).find('.menuzord-tabs-content');
+      const TabNavs = $(tab).find('.sweet-nav-tabs-nav > li');
+      const TabContents = $(tab).find('.sweet-nav-tabs-content');
       $(TabNavs).bind('click touchstart', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -220,10 +220,10 @@ export default (element, options) => {
         $(TabContents[$(this).index()]).show(0);
       });
     }
-    if ($(menu).find('.menuzord-tabs').length > 0) {
-      const menuzordTabs = $(menu).find('.menuzord-tabs');
-      for (let i = 0; i < menuzordTabs.length; i++) {
-        startTab(menuzordTabs[i]);
+    if ($(menu).find('.sweet-nav-tabs').length > 0) {
+      const navTabs = $(menu).find('.sweet-nav-tabs');
+      for (let i = 0; i < navTabs.length; i++) {
+        startTab(navTabs[i]);
       }
     }
   }

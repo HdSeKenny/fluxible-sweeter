@@ -90,50 +90,54 @@ const Navbar = React.createClass({
     const { authenticated, currentUser } = this.state;
     return (
       <section className="menuzord-section">
-        <header id="menuzord" className="menuzord blue">
-          <Link to="/" className={`menuzord-brand ${this.isActive('/')}`}>K.Blog</Link>
-          <ul className="menuzord-menu menuzord-left ml-20">
-            <li className={`${this.isActive('/AllBlogs')}`}>
-              <Link to="/AllBlogs">Blogs</Link>
-            </li>
-          </ul>
-          <ul className="menuzord-menu menuzord-right">
+        <header id="menuzord" className="sweet-nav blue">
+          <div className="sweet-nav-wrap">
+            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>K.Blog</Link>
+            <ul className="sweet-nav-menu sweet-nav-left ml-20">
+              <li className={`${this.isActive('/AllBlogs')}`}>
+                <Link to="/AllBlogs">Moments</Link>
+              </li>
+            </ul>
+            <ul className="sweet-nav-menu sweet-nav-right">
+              <li className="search">
+                <form action="" method="get">
+                  <input type="text" name="search" placeholder="Search" />
+                </form>
+              </li>
+              <li className="sweet-nav-search">
+                <form className="search-content" action="#" method="post">
+                  <div className="iconic-input">
+                    <i className="fa fa-search"></i>
+                    <input type="text" className="form-control" name="keyword" placeholder="Search..." />
+                  </div>
+                </form>
+              </li>
+              <li className="sweet-nav-blog">
 
-            <li className="menuzord-search">
-              <form className="search-content" action="#" method="post">
-                <div className="iconic-input">
-                  <i className="fa fa-search"></i>
-                  <input type="text" className="form-control" name="keyword" placeholder="Search..." />
-                </div>
-              </form>
-            </li>
-            <li className="menuzord-blog">
-              <button type="button" className="btn btn-info btn-block w-pad" onClick={this.openCreateBlogModal}>
-                <i className="fa fa-pencil"></i> Create
-              </button>
-            </li>
+              </li>
 
-            {!authenticated &&
-              <li className={`${this.isActive('/signup')}`}>
-                <span onClick={this.openSignupModal}>Sign up</span>
-              </li>
-            }
-            {!authenticated &&
-              <li className={`${this.isActive('/login')}`}>
-                <span onClick={this.openLoginModal}>Log in</span>
-              </li>
-            }
-            {authenticated &&
-              <li onClick={this.GoToUserCenter.bind(this, currentUser)}>
-                <img alt="currentUser" src={currentUser.image_url} />
-                <ul className="dropdown">
-                  <li><Link to={`/user-home/${currentUser.strId}/home`}>User center</Link></li>
-                  <li><span>Settings</span></li>
-                  <li onClick={this.handleLogout} ><span>Logout</span></li>
-                </ul>
-              </li>
-            }
-          </ul>
+              {!authenticated &&
+                <li className={`${this.isActive('/signup')}`}>
+                  <span onClick={this.openSignupModal}>Sign up</span>
+                </li>
+              }
+              {!authenticated &&
+                <li className={`${this.isActive('/login')}`}>
+                  <span onClick={this.openLoginModal}>Log in</span>
+                </li>
+              }
+              {authenticated &&
+                <li onClick={this.GoToUserCenter.bind(this, currentUser)}>
+                  <img alt="currentUser" src={currentUser.image_url} />
+                  <ul className="dropdown">
+                    <li><Link to={`/user-home/${currentUser.strId}/home`}>User center</Link></li>
+                    <li><span>Settings</span></li>
+                    <li onClick={this.handleLogout} ><span>Logout</span></li>
+                  </ul>
+                </li>
+              }
+            </ul>
+          </div>
         </header>
 
         <Layout.Page>

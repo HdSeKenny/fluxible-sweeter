@@ -4,59 +4,8 @@ Author: marcoarib - marco.arib@gmail.com
 License: http://codecanyon.net/licenses
 */
 
-
-/*
-	CONTENTS:
-
-	 1 - MENU CONTAINER
-		- Scrollable menu
-	 2 - BRAND
-	 3 - MENU
-		- Right alignment
-		- Menu items
-		- Active/hover state
-	 4 - DROPDOWN
-		- Dropdown items
-		- Hover state
-		- Dropdown left alignment
-	 5 - DROPDOWN/MEGAMENU INDICATORS
-	 6 - MEGAMENU
-	 7 - MEGAMENU WIDTHS
-		- Half width
-		- Quarter width
-	 8 - GRID SYSTEM
-	 9 - SHOW/HIDE BUTTON (MOBILE MODE)
-		- Icon
-	10 - ICONS (parent menu items)
-	11 - SEARCH FIELD
-		- Form
-		- Input
-	12 - VERTICAL TABS
-	13 - COLOR SCHEMES
-	14 - MOBILE MODE (RESPONSIVE MODE)
-		- Menu container
-		- Brand
-		- Show/hide button
-		- Menu
-		- Dropdown
-		- Dropdown items
-		- Dropdown/megamenu indicators
-		- Megamenu
-		- Search field
-*/
-
-
-/* FONT
-======================================*/
-
-// @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
-
-/* 1 - MENU CONTAINER
-======================================*/
-
 .menuzord,
 .menuzord * {
-  // font-family: 'Open Sans', sans-serif;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -64,7 +13,6 @@ License: http://codecanyon.net/licenses
 
 .menuzord {
   width: 100%;
-  padding: 0 8.5em;
   float: left;
   position: relative;
   background: #fff;
@@ -77,22 +25,16 @@ License: http://codecanyon.net/licenses
   transition: color .3s linear, background .3s linear;
 }
 
-
-/* scrollable menu */
 .menuzord-menu.scrollable > .scrollable-fix {
   display: none;
 }
 
-
-/* 2 - BRAND
-======================================*/
 .menuzord-brand {
-  margin: 20px 30px 0 0;
+  margin: 18px 30px 0 0;
   float: left;
   color: #666;
   text-decoration: none;
   font-size: 24px;
-  // font-weight: 600;
   line-height: 1.3;
   cursor: pointer;
 }
@@ -106,10 +48,6 @@ License: http://codecanyon.net/licenses
   color: #00a9da;
 }
 
-
-/* 3 - MENU
-======================================*/
-
 .menuzord-menu {
   margin: 0;
   padding: 0;
@@ -117,14 +55,9 @@ License: http://codecanyon.net/licenses
   list-style: none;
 }
 
-
-/* Right alignment */
-
 .menuzord-menu.menuzord-right {
   float: right;
 }
-
-/* Menu items */
 
 .menuzord-menu > li {
   display: inline-block;
@@ -136,7 +69,6 @@ License: http://codecanyon.net/licenses
   display: inline-block;
   text-decoration: none;
   font-size: 16px;
-  // font-weight: 600;
   color: #888;
   outline: 0;
   line-height: 1.42857143;
@@ -153,17 +85,12 @@ License: http://codecanyon.net/licenses
   cursor: pointer;
 }
 
-/* Active/hover state (Menu items) */
 .menuzord-menu > li.active > span,
 .menuzord-menu > li:hover > span,
 .menuzord-menu > li.active > a,
 .menuzord-menu > li:hover > a {
   color: #333;
 }
-
-
-/* 4 - DROPDOWN
-======================================*/
 
 .menuzord-menu ul.dropdown,
 .menuzord-menu ul.dropdown li ul.dropdown {
@@ -183,9 +110,6 @@ License: http://codecanyon.net/licenses
 .menuzord-menu ul.dropdown li ul.dropdown {
   left: 100%;
 }
-
-
-/* Dropdown items */
 
 .menuzord-menu ul.dropdown li {
   clear: both;
@@ -214,17 +138,12 @@ License: http://codecanyon.net/licenses
   cursor: pointer;
 }
 
-
-/* Hover state (dropdown items) */
 .menuzord-menu ul.dropdown li:hover > span,
 .menuzord-menu ul.dropdown li:hover > a {
   padding-left: 35px;
   padding-right: 19px;
   color: #333;
 }
-
-
-/* Dropdown left alignment */
 
 .menuzord-menu ul.dropdown.dropdown-left {
   left: none;
@@ -233,10 +152,6 @@ License: http://codecanyon.net/licenses
 .menuzord-menu ul.dropdown li ul.dropdown.dropdown-left {
   left: -100%;
 }
-
-
-/* 5 - DROPDOWN/MEGAMENU INDICATORS
-======================================*/
 
 .menuzord-menu li .indicator {
   margin-left: 3px;
@@ -249,10 +164,6 @@ License: http://codecanyon.net/licenses
   font-size: 15px;
 }
 
-
-/* 6 - MEGAMENU
-======================================*/
-
 .menuzord-menu > li > .megamenu {
   width: 100%;
   padding: 20px 30px;
@@ -264,29 +175,16 @@ License: http://codecanyon.net/licenses
   background: #fff;
 }
 
-
-/* 7 - MEGAMENU WIDTHS
-======================================*/
-
-
-/* Half width */
-
 .menuzord-menu > li > .megamenu.megamenu-half-width {
   width: 50%;
   left: auto;
 }
-
-
-/* Quarter width */
 
 .menuzord-menu > li > .megamenu.megamenu-quarter-width {
   width: 25%;
   left: auto;
 }
 
-
-/* 8 - GRID SYSTEM
-======================================*/
 
 .menuzord-menu > li > .megamenu .megamenu-row {
   width: 100%;
@@ -378,10 +276,6 @@ License: http://codecanyon.net/licenses
   width: 100%;
 }
 
-
-/* 9 - SHOW/HIDE BUTTON (MOBILE MODE)
-======================================*/
-
 .menuzord .showhide {
   width: 60px;
   height: 46px;
@@ -394,9 +288,6 @@ License: http://codecanyon.net/licenses
   -webkit-tap-highlight-color: transparent;
 }
 
-
-/* Show/hide button icon */
-
 .menuzord .showhide em {
   width: 20px;
   height: 3px;
@@ -404,10 +295,6 @@ License: http://codecanyon.net/licenses
   float: right;
   background: #777;
 }
-
-
-/* 10 - ICONS (parent menu items)
-======================================*/
 
 .menuzord-menu > li > a > i {
   margin: 0 5px 0 0;
@@ -417,20 +304,10 @@ License: http://codecanyon.net/licenses
   font-family: 'FontAwesome';
 }
 
-
-/* 11 - SEARCH FIELD
-======================================*/
-
-
-/* Form */
-
 .menuzord-menu > li.search form {
   float: left;
   padding: 22px 16px 17px;
 }
-
-
-/* Input */
 
 .menuzord-menu > li.search form input[type="text"] {
   width: 160px;
@@ -449,10 +326,6 @@ License: http://codecanyon.net/licenses
 .menuzord-menu > li.search form:hover input[type="text"] {
   width: 160px;
 }
-
-
-/* 12 - VERTICAL TABS
-======================================*/
 
 .menuzord-tabs {
   width: 100%;
@@ -497,12 +370,6 @@ License: http://codecanyon.net/licenses
   display: block;
 }
 
-
-/* 13 - COLOR SCHEMES
-======================================*/
-
-
-/* blue */
 .menuzord.blue .menuzord-menu > li.active > span,
 .menuzord.blue .menuzord-menu > li:hover > span,
 .menuzord.blue .menuzord-menu ul.dropdown li:hover > span,
@@ -512,17 +379,11 @@ License: http://codecanyon.net/licenses
   color: #00a9da;
 }
 
-
-/* green */
-
 .menuzord.green .menuzord-menu > li.active > a,
 .menuzord.green .menuzord-menu > li:hover > a,
 .menuzord.green .menuzord-menu ul.dropdown li:hover > a {
   color: #37BC9B;
 }
-
-
-/* red */
 
 .menuzord.red .menuzord-menu > li.active > a,
 .menuzord.red .menuzord-menu > li:hover > a,
@@ -530,17 +391,11 @@ License: http://codecanyon.net/licenses
   color: #E9573F;
 }
 
-
-/* orange */
-
 .menuzord.orange .menuzord-menu > li.active > a,
 .menuzord.orange .menuzord-menu > li:hover > a,
 .menuzord.orange .menuzord-menu ul.dropdown li:hover > a {
   color: #ff670f;
 }
-
-
-/* yellow */
 
 .menuzord.yellow .menuzord-menu > li.active > a,
 .menuzord.yellow .menuzord-menu > li:hover > a,
@@ -548,17 +403,11 @@ License: http://codecanyon.net/licenses
   color: #F6BB42;
 }
 
-
-/* purple */
-
 .menuzord.purple .menuzord-menu > li.active > a,
 .menuzord.purple .menuzord-menu > li:hover > a,
 .menuzord.purple .menuzord-menu ul.dropdown li:hover > a {
   color: #967ADC;
 }
-
-
-/* pink */
 
 .menuzord.pink .menuzord-menu > li.active > a,
 .menuzord.pink .menuzord-menu > li:hover > a,
@@ -566,31 +415,27 @@ License: http://codecanyon.net/licenses
   color: #D770AD;
 }
 
-
-/* 14 - MOBILE MODE (RESPONSIVE MODE)
-======================================*/
-
 @media (max-width: 768px) {
-  /* Responsive menu container */
+
   .menuzord-responsive.menuzord {
     padding: 0;
   }
-  /* Brand */
+
   .menuzord-responsive .menuzord-brand {
     margin: 8px 30px 10px 20px;
     font-size: 20px;
     line-height: 1.55;
   }
-  /* Show/hide button */
+
   .menuzord-responsive .showhide {
     margin: 0;
   }
-  /* Menu */
+
   .menuzord-responsive .menuzord-menu {
     width: 100%;
     float: left !important;
   }
-  /* scrollable menu*/
+
   .menuzord-responsive .menuzord-menu.scrollable {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -598,7 +443,7 @@ License: http://codecanyon.net/licenses
   .menuzord-responsive .menuzord-menu.scrollable > .scrollable-fix {
     display: block;
   }
-  /* Menu items */
+
   .menuzord-responsive .menuzord-menu > li {
     width: 100%;
     display: block;
@@ -617,7 +462,7 @@ License: http://codecanyon.net/licenses
   .menuzord-responsive .menuzord-menu > li:first-child > a {
     border-top: solid 1px #f0f0f0;
   }
-  /* Dropdown */
+
   .menuzord-responsive .menuzord-menu ul.dropdown,
   .menuzord-responsive .menuzord-menu ul.dropdown li ul.dropdown {
     width: 100%;
@@ -627,7 +472,7 @@ License: http://codecanyon.net/licenses
     background: #fff;
     float: left;
   }
-  /* Dropdown items */
+
   .menuzord-responsive .menuzord-menu ul.dropdown li {
     position: relative;
   }
