@@ -93,7 +93,21 @@ const Navbar = React.createClass({
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
             <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>Sweeter</Link>
-            <ul className="sweet-nav-menu sweet-nav-left ml-20">
+            <ul className="sweet-nav-menu sweet-nav-right">
+              <li className="sweet-nav-search">
+                <form className="search-content" action="#" method="post">
+                  <div className="iconic-input">
+                    <i className="fa fa-search"></i>
+                    <input type="text" className="form-control" name="keyword" placeholder="Search..." />
+                  </div>
+                </form>
+              </li>
+              <li className="sweet-nav-blog">
+                <button className="btn btn-info btn-block" onClick={this.openCreateBlogModal}>
+                  <i className="fa fa-pencil"></i> Sweet
+                </button>
+              </li>
+
               <li className={`${this.isActive('/AllBlogs')}`}>
                 <Link to="/AllBlogs">Moments</Link>
               </li>
@@ -118,20 +132,6 @@ const Navbar = React.createClass({
                   <li><a href="#">Business cards</a></li>
                 </ul>
               </li>
-            </ul>
-            <ul className="sweet-nav-menu sweet-nav-right">
-              <li className="sweet-nav-search">
-                <form className="search-content" action="#" method="post">
-                  <div className="iconic-input">
-                    <i className="fa fa-search"></i>
-                    <input type="text" className="form-control" name="keyword" placeholder="Search..." />
-                  </div>
-                </form>
-              </li>
-              <li className="sweet-nav-blog">
-                <button className="btn btn-info btn-block" onClick={this.openCreateBlogModal}><i className="fa fa-pencil"></i> sweet</button>
-              </li>
-
               {!authenticated &&
                 <li className={`${this.isActive('/signup')}`}>
                   <span onClick={this.openSignupModal}>Sign up</span>
@@ -157,27 +157,9 @@ const Navbar = React.createClass({
         </header>
 
         <Layout.Page>
-          <ModalsFactory
-            modalref="loginModal"
-            title="Login to account"
-            ModalComponent={Login}
-            size="modal-md"
-            showHeaderAndFooter={true}
-          />
-          <ModalsFactory
-            modalref="signupModal"
-            title="Sign up"
-            ModalComponent={signup}
-            size="modal-md"
-            showHeaderAndFooter={true}
-          />
-          <ModalsFactory
-            modalref="createBlogModal"
-            title="Write a blog here !"
-            ModalComponent={BlogModal}
-            size="modal-md"
-            showHeaderAndFooter={false}
-          />
+          <ModalsFactory modalref="loginModal" title="Login to account" ModalComponent={Login} size="modal-md" showHeaderAndFooter={true} />
+          <ModalsFactory modalref="signupModal" title="Sign up" ModalComponent={signup} size="modal-md" showHeaderAndFooter={true} />
+          <ModalsFactory modalref="createBlogModal" title="Create a sweet !" ModalComponent={BlogModal} size="modal-md" showHeaderAndFooter={false} />
         </Layout.Page>
       </section>
     );

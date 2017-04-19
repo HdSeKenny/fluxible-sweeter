@@ -5,7 +5,7 @@ License: http://codecanyon.net/licenses
 */
 @nav-wrap-width:      85em;
 @nav-height:          72px;
-@nav-li-height:       52px;
+@nav-li-height:       72px;
 
 @nav-blue:            #00a9da;
 @nav-green:           #37bc9B;
@@ -17,8 +17,8 @@ License: http://codecanyon.net/licenses
 
 @nav-padding:         0 1em;
 @nav-li-padding:      10px;
-@nav-li-margin:       10px;
-@nav-a-margin:        15px 0;
+@nav-li-margin:       0 15px;
+@nav-a-margin:        25px 0;
 
 .sweet-nav,
 .sweet-nav * {
@@ -50,7 +50,7 @@ License: http://codecanyon.net/licenses
     float: left;
     color: #666;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 26px;
     cursor: pointer;
     margin: 18px 0;
     &.active {
@@ -71,19 +71,18 @@ License: http://codecanyon.net/licenses
       float: right;
     }
 
-    li {
+    > li {
       padding: 0;
       margin: @nav-li-margin;
       height: @nav-li-height;
       display: inline-block;
       float: left;
-
       &:hover {
         ul.dropdown {
           display: block;
         }
       }
-      span, a {
+      > span, > a {
         display: inline-block;
         text-decoration: none;
         font-size: 16px;
@@ -109,30 +108,6 @@ License: http://codecanyon.net/licenses
           font-family: 'FontAwesome';
         }
       }
-
-      .btn {
-        &.btn-info {
-          height: 32px;
-          // padding: 0 10px;
-          // font-size: 14px;
-          color: #fff;
-          // margin: 10px 0;
-          outline: none;
-          border: none;
-          &:hover {
-            border: none;;
-          }
-          // span {
-          //   // font-size: 14px;
-          //   margin: 0;
-          //   padding: 0;
-          //   color: #fff;
-          // }
-          i {
-            margin-right: 5px;
-          }
-        }
-      }
       img {
         width: 40px;
         height: 40px;
@@ -140,6 +115,8 @@ License: http://codecanyon.net/licenses
         margin: 16px 0;
         cursor: pointer;
       }
+
+      // sweet nav megamenu
       .megamenu {
         width: 100%;
         padding: 20px 30px;
@@ -238,6 +215,8 @@ License: http://codecanyon.net/licenses
 
         }
       }
+
+      // sweet nav search
       &.search {
         form {
           float: left;
@@ -263,68 +242,78 @@ License: http://codecanyon.net/licenses
       }
     }
 
-    ul {
-      &.dropdown {
-        list-style: none;
-        margin: 0;
+    ul.dropdown {
+      list-style: none;
+      padding: 0;
+      display: none;
+      position: absolute;
+      z-index: 99;
+      min-width: 180px;
+      white-space: nowrap;
+      background: #fff;
+      margin: 0 0 0 -30px;
+      &.dropdown-left {
+        left: none;
+      }
+      li {
+        clear: both;
+        width: 100%;
+        border: 0 none;
+        font-size: 13px;
+        position: relative;
+        margin: 0 0 5px 0;
         padding: 0;
-        display: none;
-        position: absolute;
-        z-index: 99;
-        min-width: 180px;
-        white-space: nowrap;
-        background: red;
-
-        &.dropdown-left {
-          left: none;
-        }
-        li {
-          clear: both;
-          width: 100%;
-          border: 0 none;
-          font-size: 13px;
-          position: relative;
-          &:hover {
-            a, span {
-              padding-left: 35px;
-              padding-right: 19px;
-              color: @nav-blue;
-            }
-          }
-          .indicator {
-            margin-left: 3px;
-          }
-          a, span {
-            width: 100%;
-            background: none;
-            padding: 10px 30px;
-            color: #888;
-            text-decoration: none;
-            display: inline-block;
-            float: left;
-            clear: both;
-            position: relative;
-            outline: 0;
-            -o-transition: padding .2s linear;
-            -moz-transition: padding .2s linear;
-            -webkit-transition: padding .2s linear;
-            transition: padding .2s linear;
-            cursor: pointer;
+        height: 30px;
+        color: #888;
+        &:hover {
+          > a, > span {
+            padding-left: 40px;
+            color: @nav-blue;
           }
           ul.dropdown {
-            left: 100%;
-            li {
-              .indicator {
-                position: absolute;
-                top: 8px;
-                right: 10px;
-                font-size: 15px;
-              }
-            }
-            &.dropdown-left {
-              left: -100%;
+            display: block;
+          }
+        }
+        .indicator {
+          margin-left: 3px;
+        }
+        a, span {
+          width: 100%;
+          background: none;
+          padding: 0 30px;
+          color: #888;
+          font-size: 13px;
+          margin: 6px 0;
+          text-decoration: none;
+          display: inline-block;
+          float: left;
+          clear: both;
+          position: relative;
+          outline: 0;
+          -o-transition: padding .2s linear;
+          -moz-transition: padding .2s linear;
+          -webkit-transition: padding .2s linear;
+          transition: padding .2s linear;
+          cursor: pointer;
+        }
+        ul.dropdown {
+          left: 100%;
+          margin: 0;
+          display: none;
+          li {
+            .indicator {
+              position: absolute;
+              top: 8px;
+              right: 10px;
+              font-size: 15px;
             }
           }
+          &.dropdown-left {
+            left: -100%;
+          }
+        }
+        &:last-child {
+          margin-bottom: 10px;
         }
       }
     }
@@ -395,16 +384,16 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.blue {
   .sweet-nav-menu{
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-blue;
         }
       }
-    }
-    ul.dropdown li:hover {
-      a, span {
-        color: @nav-blue;
+      ul.dropdown li:hover {
+        > a, > span {
+          color: @nav-blue;
+        }
       }
     }
   }
