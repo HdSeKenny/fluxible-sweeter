@@ -58,11 +58,11 @@ const Navbar = React.createClass({
   },
 
   componentDidMount() {
-    menuzord($('#menuzord'), {});
+    // menuzord($('#menuzord'), {});
   },
 
   componentDidUpdate() {
-    menuzord($('#menuzord'), {});
+    // menuzord($('#menuzord'), {});
   },
 
   componentWillUnmount() {
@@ -92,14 +92,34 @@ const Navbar = React.createClass({
       <section className="menuzord-section">
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
-            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>K.Blog</Link>
+            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>Sweeter</Link>
             <ul className="sweet-nav-menu sweet-nav-left ml-20">
               <li className={`${this.isActive('/AllBlogs')}`}>
                 <Link to="/AllBlogs">Moments</Link>
               </li>
+              <li><a href="javascript:void(0)">Dropdown</a>
+                <ul className="dropdown">
+                  <li><a href="#">Programming</a></li>
+                  <li><a href="#">Hosting</a></li>
+                  <li><a href="#">Design</a></li>
+                  <li><a href="#">Vectors</a></li>
+                  <li><a href="#">Web development</a>
+                    <ul className="dropdown">
+                      <li><a href="#">.NET</a></li>
+                      <li><a href="#">Magento</a></li>
+                      <li><a href="#">Joomla</a></li>
+                      <li><a href="#">MODX</a></li>
+                      <li><a href="#">Wordpress</a></li>
+                      <li><a href="#">Ruby on Rails</a></li>
+                      <li><a href="#">Mobile</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Folders</a></li>
+                  <li><a href="#">Business cards</a></li>
+                </ul>
+              </li>
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
-
               <li className="sweet-nav-search">
                 <form className="search-content" action="#" method="post">
                   <div className="iconic-input">
@@ -109,7 +129,7 @@ const Navbar = React.createClass({
                 </form>
               </li>
               <li className="sweet-nav-blog">
-                <button className="btn btn-info btn-block" onClick={this.openCreateBlogModal}><i className="fa fa-pencil"> </i>Create</button>
+                <button className="btn btn-info btn-block" onClick={this.openCreateBlogModal}><i className="fa fa-pencil"></i> sweet</button>
               </li>
 
               {!authenticated &&

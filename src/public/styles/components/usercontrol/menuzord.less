@@ -3,7 +3,7 @@ Item name: sweet-nav - Responsive Megamenu
 Author: marcoarib - marco.arib@gmail.com
 License: http://codecanyon.net/licenses
 */
-@nav-wrap-width:      80em;
+@nav-wrap-width:      85em;
 @nav-height:          72px;
 @nav-li-height:       52px;
 
@@ -16,9 +16,9 @@ License: http://codecanyon.net/licenses
 @nav-pink:            #d770ad;
 
 @nav-padding:         0 1em;
-@nav-li-padding:      10px 15px;
+@nav-li-padding:      10px;
 @nav-li-margin:       10px;
-@nav-a-margin:        5px 0;
+@nav-a-margin:        15px 0;
 
 .sweet-nav,
 .sweet-nav * {
@@ -72,12 +72,17 @@ License: http://codecanyon.net/licenses
     }
 
     li {
-      padding: @nav-li-padding;
+      padding: 0;
       margin: @nav-li-margin;
       height: @nav-li-height;
       display: inline-block;
       float: left;
 
+      &:hover {
+        ul.dropdown {
+          display: block;
+        }
+      }
       span, a {
         display: inline-block;
         text-decoration: none;
@@ -105,6 +110,29 @@ License: http://codecanyon.net/licenses
         }
       }
 
+      .btn {
+        &.btn-info {
+          height: 32px;
+          // padding: 0 10px;
+          // font-size: 14px;
+          color: #fff;
+          // margin: 10px 0;
+          outline: none;
+          border: none;
+          &:hover {
+            border: none;;
+          }
+          // span {
+          //   // font-size: 14px;
+          //   margin: 0;
+          //   padding: 0;
+          //   color: #fff;
+          // }
+          i {
+            margin-right: 5px;
+          }
+        }
+      }
       img {
         width: 40px;
         height: 40px;
@@ -245,7 +273,7 @@ License: http://codecanyon.net/licenses
         z-index: 99;
         min-width: 180px;
         white-space: nowrap;
-        background: #fff;
+        background: red;
 
         &.dropdown-left {
           left: none;

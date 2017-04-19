@@ -31,10 +31,10 @@ export default class BlogModal extends Component {
     return (
       <div className="row btn-row">
         <button type="button" disabled={isDisabled} className="btn btn-info" onClick={this.handleMicroBlog}>
-          <i className="fa fa-pencil"></i> Create
+           Create
         </button>
         <button type="button" disabled={false} className="btn btn-primary" onClick={this.closeCreateBlogModal}>
-          <i className="fa fa-pencil"></i> Cancel
+           Cancel
         </button>
       </div>
     );
