@@ -99,11 +99,7 @@ const Navbar = React.createClass({
               </li>
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
-              <li className="search">
-                <form action="" method="get">
-                  <input type="text" name="search" placeholder="Search" />
-                </form>
-              </li>
+
               <li className="sweet-nav-search">
                 <form className="search-content" action="#" method="post">
                   <div className="iconic-input">
@@ -113,7 +109,7 @@ const Navbar = React.createClass({
                 </form>
               </li>
               <li className="sweet-nav-blog">
-
+                <button className="btn btn-info btn-block" onClick={this.openCreateBlogModal}><i className="fa fa-pencil"> </i>Create</button>
               </li>
 
               {!authenticated &&

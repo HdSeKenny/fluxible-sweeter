@@ -3,14 +3,22 @@ Item name: sweet-nav - Responsive Megamenu
 Author: marcoarib - marco.arib@gmail.com
 License: http://codecanyon.net/licenses
 */
+@nav-wrap-width:      80em;
+@nav-height:          72px;
+@nav-li-height:       52px;
 
-@sweet-nav-blue:            #00a9da;
-@sweet-nav-green:           #37bc9B;
-@sweet-nav-red:             #e9573f;
-@sweet-nav-orange:          #ff670f;
-@sweet-nav-yellow:          #f6bb42;
-@sweet-nav-purple:          #967adc;
-@sweet-nav-pink:            #d770ad;
+@nav-blue:            #00a9da;
+@nav-green:           #37bc9B;
+@nav-red:             #e9573f;
+@nav-orange:          #ff670f;
+@nav-yellow:          #f6bb42;
+@nav-purple:          #967adc;
+@nav-pink:            #d770ad;
+
+@nav-padding:         0 1em;
+@nav-li-padding:      10px 15px;
+@nav-li-margin:       10px;
+@nav-a-margin:        5px 0;
 
 .sweet-nav,
 .sweet-nav * {
@@ -24,6 +32,7 @@ License: http://codecanyon.net/licenses
   float: left;
   position: relative;
   background: #fff;
+  height: @nav-height;
   a {
     -o-transition: color .3s linear, background .3s linear;
     -moz-transition: color .3s linear, background .3s linear;
@@ -38,20 +47,18 @@ License: http://codecanyon.net/licenses
   }
 
   .sweet-nav-brand {
-    margin: 18px 30px 0 0;
     float: left;
     color: #666;
     text-decoration: none;
     font-size: 24px;
-    line-height: 1.3;
     cursor: pointer;
-
+    margin: 18px 0;
     &.active {
-      color: @sweet-nav-blue;
+      color: @nav-blue;
     }
     &:hover {
       text-decoration: none;
-      color: @sweet-nav-blue;
+      color: @nav-blue;
     }
   }
 
@@ -65,41 +72,30 @@ License: http://codecanyon.net/licenses
     }
 
     li {
+      padding: @nav-li-padding;
+      margin: @nav-li-margin;
+      height: @nav-li-height;
       display: inline-block;
       float: left;
-      &.active {
-        a, span {
-          color: @sweet-nav-blue;
-        }
-      }
-      &:hover {
-        a, span {
-          color: @sweet-nav-blue;
-        }
-      }
-      span {
-        padding: 25px 16px;
+
+      span, a {
         display: inline-block;
         text-decoration: none;
         font-size: 16px;
         color: #888;
         outline: 0;
+        margin: @nav-a-margin;
         line-height: 1.42857143;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-tap-highlight-color: transparent;
         cursor: pointer;
-      }
-      a {
-        padding: 25px 16px;
-        display: inline-block;
-        text-decoration: none;
-        font-size: 16px;
-        color: #888;
-        outline: 0;
-        line-height: 1.42857143;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        -webkit-tap-highlight-color: transparent;
-        cursor: pointer;
+        &.active {
+          color: @nav-blue;
+        }
+        &:hover {
+          color: @nav-blue;
+        }
+
         i {
           margin: 0 5px 0 0;
           font-size: 18px;
@@ -108,6 +104,7 @@ License: http://codecanyon.net/licenses
           font-family: 'FontAwesome';
         }
       }
+
       img {
         width: 40px;
         height: 40px;
@@ -263,7 +260,7 @@ License: http://codecanyon.net/licenses
             a, span {
               padding-left: 35px;
               padding-right: 19px;
-              color: @sweet-nav-blue;
+              color: @nav-blue;
             }
           }
           .indicator {
@@ -373,13 +370,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-blue;
+          color: @nav-blue;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-blue;
+        color: @nav-blue;
       }
     }
   }
@@ -390,13 +387,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-green;
+          color: @nav-green;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-green;
+        color: @nav-green;
       }
     }
   }
@@ -408,13 +405,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-red;
+          color: @nav-red;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-red;
+        color: @nav-red;
       }
     }
   }
@@ -425,13 +422,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-orange;
+          color: @nav-orange;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-orange;
+        color: @nav-orange;
       }
     }
   }
@@ -442,13 +439,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-yellow;
+          color: @nav-yellow;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-yellow;
+        color: @nav-yellow;
       }
     }
   }
@@ -459,13 +456,13 @@ License: http://codecanyon.net/licenses
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-purple;
+          color: @nav-purple;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-purple;
+        color: @nav-purple;
       }
     }
   }
@@ -473,17 +470,17 @@ License: http://codecanyon.net/licenses
 
 
 .sweet-nav.pink {
-  .sweet-nav-menu{
+  .sweet-nav-menu {
     li {
       &.active, &:hover {
         a, span {
-          color: @sweet-nav-pink;
+          color: @nav-pink;
         }
       }
     }
     ul.dropdown li:hover {
       a, span {
-        color: @sweet-nav-pink;
+        color: @nav-pink;
       }
     }
   }
