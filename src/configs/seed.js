@@ -35,8 +35,8 @@ const seed = {
     'phone': '13918544928',
     'profession': 'Web Developer',
     'password': md5('test'),
-    'image_url': '/images/kuan.jpg',
-    'background_image_url': '/images/users/user-center-bg.jpg',
+    'image_url': '/styles/images/kuan.jpg',
+    'background_image_url': '/styles/images/users/user-center-bg.jpg',
     'blogs': ['584a75341e8a6c8b80c9da7d', '584a75341e8a6c8b80c9da7e'],
     'focuses': [],
     'fans': []

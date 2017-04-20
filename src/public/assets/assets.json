@@ -1,8 +1,8 @@
 {
     "assets": {
-        "main_js": "http://localhost:5858/main.js",
-        "main_css": "http://localhost:5858/main.css",
-        "common_js": "http://localhost:5858/common.js"
+        "main_js": "http://192.168.0.169:5858/main.js",
+        "main_css": "http://192.168.0.169:5858/main.css",
+        "common_js": "http://192.168.0.169:5858/common.js"
     },
-    "cdnPath": "http://localhost:5858/"
+    "cdnPath": "http://192.168.0.169:5858/"
 }

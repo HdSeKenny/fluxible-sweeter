@@ -42,6 +42,8 @@ const Login = React.createClass({
 
   onChange(res) {
     if (res.resMsg === 'USER_LOGIN_SUCCESS') {
+        this.setState({ errorMessage: '' });
+        ModalsFactory.hide('loginModal');
       sweetAlert.alertSuccessMessageWithCallback('Login success !', () => {
         this.context.router.push('/');
       });
@@ -76,11 +78,11 @@ const Login = React.createClass({
     }
   },
 
-  handleEmailChange(e) {
+  onEmailChange(e) {
     this.setState({ email: e.target.value });
   },
 
-  handlePasswordChange(e) {
+  onPasswordChange(e) {
     this.setState({ password: e.target.value });
   },
 
@@ -95,13 +97,39 @@ const Login = React.createClass({
     ModalsFactory.show('signupModal');
   },
 
+  _renderOtherAuths() {
+    return (
+      <div className="">
+        <Row>
+          <Col size="4" className="p-0"><hr /></Col>
+          <Col size="4"><h5 className="tac">or login with</h5></Col>
+          <Col size="4" className="p-0 tar"><hr /></Col>
+        </Row>
+        <Row className="other-auths">
+          <Col size="4" className="tac">
+            <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
+          </Col>
+          <Col size="4" className="tac">
+            <img alt="google+" className="" src="styles/images/google+.png" />
+          </Col>
+          <Col size="4" className="tac">
+            <img alt="github" className="" src="styles/images/github.png" />
+          </Col>
+        </Row>
+      </div>
+    );
+  },
+
   render() {
-    const { errorMessage } = this.state;
+    const { errorMessage, password, email } = this.state;
 
     return (
       <section className="login-section mt-20">
         <div className="wrapper-md animated fadeInUp">
-          <form role="form">
+          <form role="form" onSubmit={this.onLoginSubmit}>
+            <div className="form-group">
+              <p className="help-block text-left">{errorMessage}</p>
+            </div>
             <div className="form-group">
               <Input
                 ref="emailRef"
@@ -111,8 +139,8 @@ const Login = React.createClass({
                 required={true}
                 errorMessage="Please verify your email"
                 placeholder="email"
-                value={this.state.email}
-                onFieldChange={this.handleEmailChange}
+                value={email}
+                onFieldChange={this.onEmailChange}
               />
             </div>
             <div className="form-group">
@@ -124,60 +152,30 @@ const Login = React.createClass({
                 required={true}
                 errorMessage="Password is required"
                 placeholder="password"
-                value={this.state.password}
-                onFieldChange={(e) => this.handlePasswordChange(e)}
+                value={password}
+                onFieldChange={this.onPasswordChange}
               />
             </div>
-            <p className="help-block">{errorMessage || ''}</p>
             <div className="form-group">
               <Row>
-                <Col size="6" className="pl-0">
-                  <Switch after="Remember me" />
-                </Col>
-                <Col size="6" className="pr-0 tar">
-                  <a href="#">Forgot your password ?</a>
-                </Col>
+                <Col size="6" className="pl-0"><Switch after="Remember me" /></Col>
+                <Col size="6" className="pr-0 tar"><span className="forgot-pw">Forgot your password ?</span></Col>
               </Row>
             </div>
             <div className="form-group pt-10">
               <Row>
                 <Col size="6" className="pl-0">
-                  <button onClick={this.handleLogin} className="btn btn-info btn-block btn-login">Login</button>
+                  <button type="submit" className="btn btn-info btn-block btn-login">Login</button>
                 </Col>
                 <Col size="6" className="pr-0 tar">
                   <button onClick={(e) => this.openSignupModal(e)} className="btn btn-primary btn-block btn-signup">signup</button>
                 </Col>
               </Row>
             </div>
-            <div className="form-group">
-              <p>{this.state.error}</p>
-            </div>
-
-            <Row>
-              <Col size="4" className="p-0">
-                <hr />
-              </Col>
-              <Col size="4">
-                <h5 className="tac">or login with</h5>
-              </Col>
-              <Col size="4" className="p-0 tar">
-                <hr />
-              </Col>
-            </Row>
-
-            <Row className="other-auths">
-              <Col size="4" className="tac">
-                <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
-              </Col>
-              <Col size="4" className="tac">
-                <img alt="google+" className="" src="styles/images/google+.png" />
-              </Col>
-              <Col size="4" className="tac">
-                <img alt="github" className="" src="styles/images/github.png" />
-              </Col>
-            </Row>
 
           </form>
+
+          {this._renderOtherAuths()}
         </div>
       </section>
 

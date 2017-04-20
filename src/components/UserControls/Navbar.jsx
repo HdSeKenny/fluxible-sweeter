@@ -88,6 +88,7 @@ const Navbar = React.createClass({
 
   render() {
     const { authenticated, currentUser } = this.state;
+    console.log(currentUser);
     return (
       <section className="menuzord-section">
         <header id="menuzord" className="sweet-nav blue">
@@ -143,12 +144,12 @@ const Navbar = React.createClass({
                 </li>
               }
               {authenticated &&
-                <li onClick={this.GoToUserCenter.bind(this, currentUser)}>
+                <li className="">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
                     <li><Link to={`/user-home/${currentUser.strId}/home`}>User center</Link></li>
                     <li><span>Settings</span></li>
-                    <li onClick={this.handleLogout} ><span>Logout</span></li>
+                    <li onClick={this.handleLogout}><span>Logout</span></li>
                   </ul>
                 </li>
               }
