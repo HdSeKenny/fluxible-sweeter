@@ -20,9 +20,9 @@ module.exports = function(grunt) {
 
     'webpack-dev-server': {
       options: {
-        // hot: true,
+        hot: true,
         host: '0.0.0.0',
-        inline: true,
+        // inline: true,
         // watchContentBase: true,
         historyApiFallback: true,
         headers: {

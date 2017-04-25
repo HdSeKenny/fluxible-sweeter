@@ -7,7 +7,8 @@ import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { BlogsWell, HotBlogsTabs, MainSliders, PinItem, ModalsFactory } from '../UI';
 import { Row, Col, Page } from '../UI/Layout';
-import data from '../../../files/sweets.json';
+// import data from '../../../../../filesDownloader/sweets.json';
+import data from '../../utils/data';
 import { ViewPin } from '../UserControls';
 
 const Home = React.createClass({
@@ -245,7 +246,7 @@ const Home = React.createClass({
           </Row>
         </section>
         <section className="hot-blogs">
-          <p className="home-tag">Hot Blogs > <Link to="/AllBlogs" className="view-all">.view all</Link></p>
+          <p className="home-tag">Hot Sweets > <Link to="/AllBlogs" className="view-all">.view all</Link></p>
           <Row className="mason_row">
             {pins.sort((a, b) => (b.thumbs - a.thumbs))
               .map((pin, index) =>
