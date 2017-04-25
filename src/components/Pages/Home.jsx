@@ -7,7 +7,7 @@ import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { BlogsWell, HotBlogsTabs, MainSliders, PinItem, ModalsFactory } from '../UI';
 import { Row, Col, Page } from '../UI/Layout';
-import data from '../../utils/data';
+import data from '../../../files/sweets.json';
 import { ViewPin } from '../UserControls';
 
 const Home = React.createClass({

@@ -88,7 +88,6 @@ const Navbar = React.createClass({
 
   render() {
     const { authenticated, currentUser } = this.state;
-    console.log(currentUser);
     return (
       <section className="menuzord-section">
         <header id="menuzord" className="sweet-nav blue">
