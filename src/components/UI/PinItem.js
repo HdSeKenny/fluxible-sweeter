@@ -28,9 +28,11 @@ export default class PinItem extends Component {
             <span className="thumb-sm avatar pull-left mr-5">
               <img alt="pin" src={author.avatar || ''} />
             </span>
-            <strong className="author-name pt-5">{author.name}</strong>
+            <strong className="author-name">
+              {author.name} <small className="from-now fr">{fromNow}</small>
+            </strong>
             <span className="text-muted text-xs">
-              {author.username} <small className="fr mt-2">{fromNow}</small>
+              {author.username}
             </span>
           </div>
         }
@@ -38,6 +40,30 @@ export default class PinItem extends Component {
         {isArticle && <hr />}
       </div>
     );
+  }
+
+  _renderPinBody(pin, isArticle) {
+    if (isArticle) {
+      const imagesUrl = pin.images_url;
+      if (imagesUrl && imagesUrl.length) {
+        const displayImgUrl = imagesUrl[0];
+        return (
+          <span className="pin-image" onClick={() => this.onViewPinItem()}>
+            <img alt="pin" src={displayImgUrl} />
+          </span>
+        );
+      }
+      else {
+        return this._renderTextPin(pin);
+      }
+    }
+    else {
+      return this._renderTextPin(pin);
+    }
+  }
+
+  _renderTextPin(pin) {
+    return (<div />);
   }
 
   _renderPinFooter(pin) {
@@ -83,9 +109,7 @@ export default class PinItem extends Component {
             {this._renderPinHeader(pin, isArticle)}
           </header>
           <section className="panel-body">
-            <span className="pin-image" onClick={() => this.onViewPinItem()}>
-              <img alt="pin" src={pin.image_url} />
-            </span>
+            {this._renderPinBody(pin, isArticle)}
           </section>
           <footer className="panel-footer">
             {isArticle && this._renderPinFooter(pin)}

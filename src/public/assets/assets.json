@@ -1,9 +1,8 @@
 {
-    "assets": {
-        "main_js": "http://localhost:5858/main.js",
-        "0_19a8e7b6c667ed31fa56_hot-update_js": "http://localhost:5858/0.19a8e7b6c667ed31fa56.hot-update.js",
-        "main_css": "http://localhost:5858/main.css",
-        "common_js": "http://localhost:5858/common.js"
-    },
-    "cdnPath": "http://localhost:5858/"
+  "assets": {
+    "main_js": "http://localhost:5858/main.js",
+    "main_css": "http://localhost:5858/main.css",
+    "common_js": "http://localhost:5858/common.js"
+  },
+  "cdnPath": "http://192.168.1.5:5858/"
 }
