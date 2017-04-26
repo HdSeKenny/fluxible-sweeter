@@ -228,7 +228,7 @@ const Home = React.createClass({
     return (
       <article className="classification">
         <section className="new-monments">
-          <p className="home-tag">New monments > <Link to="/AllBlogs" className="view-all">.view all</Link></p>
+          <p className="home-tag">New monments > <Link to="/list" className="view-all">.view all</Link></p>
           <Row className="mason_row">
             {moments.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
               .map((pin, index) =>
@@ -238,7 +238,7 @@ const Home = React.createClass({
           </Row>
         </section>
         <section className="articles">
-          <p className="home-tag">Articles > <Link to="/AllBlogs" className="view-all">.view all</Link></p>
+          <p className="home-tag">Articles > <Link to="/list" className="view-all">.view all</Link></p>
           <Row className="mason_row">
             {articles.map((article, index) =>
               <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={article} type={article.type} />
@@ -246,7 +246,7 @@ const Home = React.createClass({
           </Row>
         </section>
         <section className="hot-blogs">
-          <p className="home-tag">Hot Sweets > <Link to="/AllBlogs" className="view-all">.view all</Link></p>
+          <p className="home-tag">Hot Sweets > <Link to="/list" className="view-all">.view all</Link></p>
           <Row className="mason_row">
             {pins.sort((a, b) => (b.thumbs - a.thumbs))
               .map((pin, index) =>

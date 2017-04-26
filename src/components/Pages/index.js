@@ -2,4 +2,4 @@ export Comments from './Comments';
 export Login from './Login';
 export signup from './signup';
 export Home from './Home';
-export AllBlogs from './AllBlogs';
+export List from './List';

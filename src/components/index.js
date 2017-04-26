@@ -12,4 +12,4 @@ export ChangePassword from './Users/ChangePassword';
 export UserMore from './Users/UserMore';
 export UserMessages from './Users/UserMessages';
 export UserFollows from './Users/UserFollows';
-export AllBlogs from './Pages/AllBlogs';
+export List from './Pages/List';

@@ -56,16 +56,16 @@ export default class PinItem extends Component {
   _renderPinFooterIcons(pin) {
     return (
       <Row>
-        <Col size="3" />
-        <Col size="3" className="tar p-0">
+        <Col size="6" />
+        <Col size="2" className="tal p-0">
           <i className="fa fa-share" />
           <span className="ml-10">3434</span>
         </Col>
-        <Col size="3" className="tar p-0">
+        <Col size="2" className="tal p-0">
           <i className="fa fa-comments-o" />
           <span className="ml-10">3434</span>
         </Col>
-        <Col size="3" className="tar p-0">
+        <Col size="2" className="tal p-0">
           <i className="fa fa-thumbs-o-up" />
           <span className="ml-10">{pin.thumbs}</span>
         </Col>
@@ -78,7 +78,7 @@ export default class PinItem extends Component {
     const isArticle = pin.type === 'article';
     return (
       <div className="pin">
-        <section className="panel panel-default mb-20">
+        <section className="panel panel-default mb-10">
           <header className="panel-heading text-uc p-r">
             {this._renderPinHeader(pin, isArticle)}
           </header>

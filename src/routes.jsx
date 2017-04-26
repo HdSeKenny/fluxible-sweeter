@@ -19,7 +19,7 @@ import {
   UserMore,
   UserMessages,
   UserFollows,
-  AllBlogs
+  List
 } from './components';
 
 const path = config.path_prefix === '' ? '/' : config.path_prefix;
@@ -53,7 +53,7 @@ const createRoutes = (context) => {
       <Route path="/" component={Home} />
       <Route path="login" component={Login} />
       <Route path="register" component={Register} />
-      <Route path="AllBlogs" component={AllBlogs} />
+      <Route path="list" component={List} />
 
       <Route path="blog-details/:blogId" component={BlogsDetails} />
       <Route path="user-home/:userId/home" component={UserHome} />
