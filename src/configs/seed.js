@@ -13,7 +13,8 @@ const seed = {
     'show_comments': false,
     'tag': 'moment',
     'likers': [],
-    'comments': []
+    'comments': [],
+    'images': []
   }, {
     '_id': mongdb.ObjectID('584a75341e8a6c8b80c9da7e'),
     'id_str': '584a75341e8a6c8b80c9da7e',
@@ -26,7 +27,8 @@ const seed = {
     'show_comments': false,
     'tag': 'life',
     'likers': [],
-    'comments': []
+    'comments': [],
+    'images': []
   }, {
     '_id': mongdb.ObjectID('584a75341e8a6c8b20c9da7e'),
     'id_str': '584a75341e8a6c8b20c9da7e',

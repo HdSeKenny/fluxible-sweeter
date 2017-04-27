@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import moment from 'moment';
+// import sizeOf from 'image-size';
 import { Row, Col } from './Layout';
 
 export default class PinItem extends Component {
@@ -15,6 +17,10 @@ export default class PinItem extends Component {
   onViewPinItem() {
     const { pin } = this.props;
     this.props.onSelect(pin._id);
+  }
+
+  componentDidMount() {
+
   }
 
   _renderPinHeader(pin, isArticle) {
@@ -45,17 +51,19 @@ export default class PinItem extends Component {
   _renderPinBody(pin, isArticle) {
     if (isArticle) {
       const imagesUrl = pin.images_url;
-      if (imagesUrl && imagesUrl.length) {
-        const displayImgUrl = imagesUrl[0];
+      // if (imagesUrl && imagesUrl.length) {
+      //   const displayImgUrl = imagesUrl[0];
+      // const dimensions = sizeOf(pin.image_url);
+      // console.log(dimensions.width, dimensions.height);
         return (
           <span className="pin-image" onClick={() => this.onViewPinItem()}>
-            <img alt="pin" src={displayImgUrl} />
+            <img alt="pin" src={pin.image_url} />
           </span>
         );
-      }
-      else {
-        return this._renderTextPin(pin);
-      }
+      // }
+      // else {
+      //   return this._renderTextPin(pin);
+      // }
     }
     else {
       return this._renderTextPin(pin);
@@ -83,15 +91,15 @@ export default class PinItem extends Component {
     return (
       <Row>
         <Col size="6" />
-        <Col size="2" className="tal p-0">
+        <Col size="2" className="tar p-0">
           <i className="fa fa-share" />
           <span className="ml-10">3434</span>
         </Col>
-        <Col size="2" className="tal p-0">
+        <Col size="2" className="tar p-0">
           <i className="fa fa-comments-o" />
           <span className="ml-10">3434</span>
         </Col>
-        <Col size="2" className="tal p-0">
+        <Col size="2" className="tar p-0">
           <i className="fa fa-thumbs-o-up" />
           <span className="ml-10">{pin.thumbs}</span>
         </Col>

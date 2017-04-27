@@ -1,3 +1,4 @@
+/* eslint-disable all */
 import React, {PropTypes}from 'react';
 import {Button} from 'react-bootstrap';
 import {Dialog} from '../UI';
@@ -50,7 +51,7 @@ const UserImageEditor = React.createClass({
           $('.user-image-modal').attr('src', e.target.result);
         };
         reader.readAsDataURL(file);
-        
+
         this.setState({image: newImage})
     },
     _renderModalBody(image) {
