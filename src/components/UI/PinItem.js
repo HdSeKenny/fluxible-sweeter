@@ -89,21 +89,20 @@ export default class PinItem extends Component {
 
   _renderPinFooterIcons(pin) {
     return (
-      <Row>
-        <Col size="6" />
-        <Col size="2" className="tar p-0">
+      <div className="pin-footer-icons">
+        <div className="icon-span">
           <i className="fa fa-share" />
-          <span className="ml-10">3434</span>
-        </Col>
-        <Col size="2" className="tar p-0">
+          <span className="ml-5">3434</span>
+        </div>
+        <div className="icon-span">
           <i className="fa fa-comments-o" />
-          <span className="ml-10">3434</span>
-        </Col>
-        <Col size="2" className="tar p-0">
+          <span className="ml-5">3434</span>
+        </div>
+        <div className="icon-span">
           <i className="fa fa-thumbs-o-up" />
-          <span className="ml-10">{pin.thumbs}</span>
-        </Col>
-      </Row>
+          <span className="ml-5">{pin.thumbs}dsadsa</span>
+        </div>
+      </div>
     );
   }
 
@@ -111,22 +110,20 @@ export default class PinItem extends Component {
     const { pin } = this.props;
     const isArticle = pin.type === 'article';
     return (
-      <div className="pin">
+      <pin className="pin">
         <section className="panel panel-default mb-10">
-          <header className="panel-heading text-uc p-r">
+          <header className="panel-heading text-uc p-0 mb-15">
             {this._renderPinHeader(pin, isArticle)}
           </header>
-          <section className="panel-body">
+          <section className="panel-body p-0 mb-15">
             {this._renderPinBody(pin, isArticle)}
           </section>
-          <footer className="panel-footer">
+          <footer className="panel-footer p-0">
             {isArticle && this._renderPinFooter(pin)}
-            <div className="panel-footer-icon pt-20">
-              {this._renderPinFooterIcons(pin)}
-            </div>
+            {this._renderPinFooterIcons(pin)}
           </footer>
         </section>
-      </div>
+      </pin>
     );
   }
 }

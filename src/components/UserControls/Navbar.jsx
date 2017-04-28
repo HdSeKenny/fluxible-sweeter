@@ -1,14 +1,11 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import $ from 'jquery';
 import { Link, routerShape } from 'react-router';
-import sweetAlert from '../../utils/sweetAlert';
-import menuzord from '../../utils/menuzord';
+import { sweetAlert, animations } from '../../utils';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
 import { ModalsFactory, Layout } from '../UI';
 import { Login, signup } from '../Pages';
-import BlogModal from './BlogModal';
 
 const Navbar = React.createClass({
 
@@ -59,27 +56,7 @@ const Navbar = React.createClass({
   },
 
   componentDidMount() {
-    const $window = $(window);
-    const $nav = $('.sweet-nav');
-    const stickyHeaderHeight = 250;
-    let isScroll = true;
-
-    $window.on('scroll', () => {
-      const scrollTopHeight = $window.scrollTop();
-      if (scrollTopHeight > stickyHeaderHeight) {
-        if (isScroll === true) {
-          $nav.fadeOut(500, () => {
-            $nav.addClass('sticky').fadeIn(500);
-          });
-          isScroll = false;
-        }
-      } else if (isScroll === false) {
-        $nav.fadeOut(500, () => {
-          $nav.removeClass('sticky').fadeIn(500);
-        });
-        isScroll = true;
-      }
-    });
+    animations.sticky_header('.sweet-nav');
   },
 
   componentDidUpdate() {
@@ -99,10 +76,6 @@ const Navbar = React.createClass({
     ModalsFactory.show('signupModal');
   },
 
-  GoToUserCenter(currentUser) {
-    this.context.router.push(`/user-home/${currentUser.strId}/home`);
-  },
-
   render() {
     const { authenticated, currentUser, grayUserImageUrl } = this.state;
     return (
@@ -117,15 +90,6 @@ const Navbar = React.createClass({
               </li>
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
-              <li className="sweet-nav-search mr-100">
-                <form className="search-content" action="#" method="post">
-                  <div className="iconic-input">
-                    <i className="fa fa-search"></i>
-                    <input type="text" className="form-control" name="keyword" placeholder="Search..." />
-                  </div>
-                </form>
-              </li>
-
               {!authenticated &&
                 <li className="mr-0">
                   <img alt="gray-user" src={grayUserImageUrl} />

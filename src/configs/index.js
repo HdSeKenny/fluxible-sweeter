@@ -1,10 +1,12 @@
-const hostConfig = require('./host');
+import hostConfig from './host';
+import params from './params';
 
 const config = {
   userProfileExpire: 40,
-  program: 'K.Blog'
+  program: 'K.Blog',
+  params
 };
 
 config.path_prefix = hostConfig.instance_name ? '/' : hostConfig.instance_name;
 
-module.exports = config;
+export default config;
