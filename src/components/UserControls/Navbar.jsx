@@ -59,11 +59,31 @@ const Navbar = React.createClass({
   },
 
   componentDidMount() {
-    // menuzord($('#menuzord'), {});
+    const $window = $(window);
+    const $nav = $('.sweet-nav');
+    const stickyHeaderHeight = 250;
+    let isScroll = true;
+
+    $window.on('scroll', () => {
+      const scrollTopHeight = $window.scrollTop();
+      if (scrollTopHeight > stickyHeaderHeight) {
+        if (isScroll === true) {
+          $nav.fadeOut(500, () => {
+            $nav.addClass('sticky').fadeIn(500);
+          });
+          isScroll = false;
+        }
+      } else if (isScroll === false) {
+        $nav.fadeOut(500, () => {
+          $nav.removeClass('sticky').fadeIn(500);
+        });
+        isScroll = true;
+      }
+    });
   },
 
   componentDidUpdate() {
-    // menuzord($('#menuzord'), {});
+
   },
 
   componentWillUnmount() {
@@ -87,6 +107,7 @@ const Navbar = React.createClass({
     const { authenticated, currentUser, grayUserImageUrl } = this.state;
     return (
       <section className="menuzord-section">
+        <header className="hidden-header" />
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
             <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>Sweeter</Link>

@@ -33,7 +33,7 @@ License: http://codecanyon.net/licenses
   position: relative;
   background: #fff;
   height: @nav-height;
-  a {
+  a, span {
     -o-transition: color .3s linear, background .3s linear;
     -moz-transition: color .3s linear, background .3s linear;
     -webkit-transition: color .3s linear, background .3s linear;
@@ -46,6 +46,10 @@ License: http://codecanyon.net/licenses
     }
   }
 
+  &.sticky {
+    position: fixed;
+    z-index: 999;
+  }
   .sweet-nav-brand {
     float: left;
     color: #666;
@@ -253,6 +257,7 @@ License: http://codecanyon.net/licenses
       background: #fff;
       margin: 0 0 0 -30px;
       border: 1px solid #efefef;
+
       // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       &.dropdown-left {
         left: none;
@@ -295,10 +300,6 @@ License: http://codecanyon.net/licenses
           clear: both;
           position: relative;
           outline: 0;
-          -o-transition: padding .2s linear;
-          -moz-transition: padding .2s linear;
-          -webkit-transition: padding .2s linear;
-          transition: padding .2s linear;
           cursor: pointer;
         }
         ul.dropdown {
