@@ -1,5 +1,7 @@
-import hostConfig from './host';
-import params from './params';
+// import hostConfig from './host';
+// import params from './params';
+const hostConfig = require('./host');
+const params = require('./params');
 
 const config = {
   userProfileExpire: 40,
@@ -9,4 +11,5 @@ const config = {
 
 config.path_prefix = hostConfig.instance_name ? '/' : hostConfig.instance_name;
 
-export default config;
+// export default config;
+module.exports = config;
