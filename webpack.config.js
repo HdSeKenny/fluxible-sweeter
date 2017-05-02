@@ -30,7 +30,7 @@ module.exports = function makeWebpackConfig(options) {
   config.output = {
     // Absolute output directory
     // path: path.join(__dirname, '/src/public/build/'),
-    path: `${__dirname}/src/public/build/`,
+    path: `${__dirname}/dist/`,
 
     // Uses webpack-dev-server in development
     publicPath: isProd ? '/' : `http://${env.hot_server_host}:${env.hot_server_port}/`,

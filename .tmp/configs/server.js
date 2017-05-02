@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 const path = require('path');
 const config = require('./');
 const environmentConfig = require('./server_overwrite.json');
@@ -6,10 +11,10 @@ const serverConfig = {
   mongo: {
     session: {
       url: 'mongodb://localhost/kblogsession',
-      ttl: 60 * config.userProfileExpire  // 20 min
+      ttl: 60 * config.userProfileExpire // 20 min
     },
     kenny: {
-      url: 'mongodb://localhost/kblog',
+      url: 'mongodb://localhost/kblog'
     },
     connectErrorMsg: 'Please check configuration is right or datebase is running properly.'
   },
@@ -34,7 +39,7 @@ const serverConfig = {
   apiTimeout: 120000, // .net api timeout
   APIAuthHeader: 'Basic cXVhdHRyb3VzZXIxOjFxYXoyd3N4',
   exportPath: '/tmp',
-  requestBodySize: '20mb',
+  requestBodySize: '20mb'
 };
 
 if (environmentConfig.apiService) {
@@ -44,4 +49,5 @@ if (environmentConfig.APIAuthHeader) {
   serverConfig.APIAuthHeader = environmentConfig.APIAuthHeader;
 }
 
-export default serverConfig;
+exports.default = serverConfig;
+module.exports = exports['default'];

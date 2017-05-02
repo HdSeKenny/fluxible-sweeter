@@ -14,11 +14,11 @@ module.exports = function(grunt) {
     project: {
       srcPublic: path.join(__dirname, '/src/public'),
       distPublic: path.join(__dirname, '/dist/public'),
-      devPublic: path.join(__dirname, '/dev/public'),
+      devPublic: path.join(__dirname, '/.tmp/public'),
 
       src: path.join(__dirname, '/src'),
       dist: path.join(__dirname, '/dist'),
-      dev: path.join(__dirname, '/dev')
+      dev: path.join(__dirname, '/.tmp')
     },
 
     // clean dist
@@ -96,7 +96,20 @@ module.exports = function(grunt) {
         {
           expand: true,
           cwd: '<%= project.srcPublic %>',
-          src: ['styles/**/*.ttf', 'styles/**/*.woff'],
+          src: [
+            'styles/**/*.ttf',
+            'styles/**/*.woff',
+            'styles/**/*.eot',
+            'styles/**/*.woff2',
+            'styles/**/*.svg',
+            'styles/**/*.otf'
+          ],
+          dest: '<%= project.devPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.css'],
           dest: '<%= project.devPublic %>'
         },
         ]
@@ -149,7 +162,7 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
-          script: 'dev/bin/server.js'
+          script: '.tmp/bin/server.js'
         }
       },
       prod: {
@@ -203,7 +216,7 @@ module.exports = function(grunt) {
       },
 
       express: {
-        files: ['dev/services/*.js'],
+        files: ['.tmp/services/*.js'],
         tasks: ['express:dev'],
         options: {
           spawn: false,
@@ -216,20 +229,20 @@ module.exports = function(grunt) {
     // complete the ignore list to get a better experience on server-side relaunch
     nodemon: {
       client: {
-        script: 'dev/bin/server.js',
+        script: '.tmp/bin/server.js',
         options: {
-          watch: ['dev/**/*'],
+          watch: ['.tmp/**/*'],
           ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
           nodeArgs: ['--harmony', '--inspect'],
           verbose: true,
         }
       },
       server: {
-        script: 'dev/bin/server.js',
+        script: '.tmp/bin/server.js',
         options: {
           nodeArgs: ['--harmony', '--inspect'],
           verbose: true,
-          watch: ['dev/**/*'],
+          watch: ['.tmp/**/*'],
           ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
         },
       }
@@ -267,13 +280,13 @@ module.exports = function(grunt) {
         }
       },
       express: {
-        tasks: ['express', 'watch'],
+        tasks: ['webpack-dev-server', 'express-server'],
         options: {
           logConcurrentOutput: true
         }
       },
       'babel-webpack': {
-        tasks: ['webpack-dev-server', 'watch:scripts', 'watch:jsons'],
+        tasks: ['watch:scripts', 'watch:jsons', 'webpack-dev-server'],
         options: {
           logConcurrentOutput: true
         }
@@ -282,22 +295,41 @@ module.exports = function(grunt) {
   });
 
   // defaule model
-  grunt.registerTask('default', []);
-
+  grunt.registerTask('default', ['prod']);
 
   // Development model
-  grunt.registerTask('webpack-server', ['env:dev', 'webpack-dev-server']);
-
-  grunt.registerTask('express-server', ['express:dev', 'wait', 'watch:express']);
-  grunt.registerTask('babel-webpack-server', [
+  grunt.registerTask('webpack-server', [
     'env:dev',
     'clean:dev',
     'babel:dev',
     'copy:dev',
     'assets',
-    'concurrent:babel-webpack'
+    'webpack-dev-server'
   ]);
 
+  grunt.registerTask('express-server', [
+    'express:dev',
+    'wait',
+    'watch'
+  ]);
+
+  grunt.registerTask('server', [
+    'env:dev',
+    'clean:dev',
+    'babel:dev',
+    'copy:dev',
+    'assets',
+    'concurrent:express'
+  ]);
+
+  grunt.registerTask('serve', [
+    'env:dev',
+    'clean:dev',
+    'babel:dev',
+    'copy:dev',
+    'assets',
+    'concurrent:express'
+  ]);
 
   // Production model
   grunt.registerTask('prod', [
@@ -308,26 +340,15 @@ module.exports = function(grunt) {
     'server:prod'
   ]);
 
-  // Production model
-  grunt.registerTask('serve', [
-    'env:build',
-    'clean',
-    'less:dev',
-    'webpack:build',
-    'server:prod'
-  ]);
-
   // Production model => build
-  grunt.registerTask('build', [
-
-  ]);
+  grunt.registerTask('build', []);
 
   // grunt don't know when the dev webpack has finished,
   // it will cause the app crash because cant find the assets.json.
   // Because the assets is immutable for now
   // just hard code the assets instead get it from the webpack stats
   grunt.registerTask('assets', () => {
-    grunt.file.write('src/configs/assets.json', JSON.stringify({
+    grunt.file.write('.tmp/configs/assets.json', JSON.stringify({
       assets: {
         'style': `http://${env.hot_server_host}:${env.hot_server_port}/main.css`,
         'main': `http://${env.hot_server_host}:${env.hot_server_port}/main.js`,
@@ -345,7 +366,7 @@ module.exports = function(grunt) {
     setTimeout(() => {
       grunt.log.writeln('Done waiting!');
       done();
-    }, 3000);
+    }, 5000);
   });
 
   grunt.event.on('watch', (action, filepath, target) => {
