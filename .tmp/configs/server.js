@@ -10,11 +10,11 @@ const environmentConfig = require('./server_overwrite.json');
 const serverConfig = {
   mongo: {
     session: {
-      url: 'mongodb://localhost/kblogsession',
+      url: 'mongodb://localhost/sweetersession',
       ttl: 60 * config.userProfileExpire // 20 min
     },
-    kenny: {
-      url: 'mongodb://localhost/kblog'
+    sweeter: {
+      url: 'mongodb://localhost/sweeter'
     },
     connectErrorMsg: 'Please check configuration is right or datebase is running properly.'
   },

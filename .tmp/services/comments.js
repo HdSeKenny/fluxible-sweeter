@@ -15,7 +15,7 @@ var _mongodb2 = _interopRequireDefault(_mongodb);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const ObjectID = _mongodb2.default.ObjectID;
-const MongoUrl = _server2.default.mongo.kenny.url;
+const MongoUrl = _server2.default.mongo.sweeter.url;
 
 exports.default = {
 

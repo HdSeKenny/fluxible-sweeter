@@ -23,5 +23,6 @@ const NotFound = _react2.default.createClass({
     );
   }
 });
+
 exports.default = NotFound;
 module.exports = exports['default'];

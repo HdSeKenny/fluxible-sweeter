@@ -23,7 +23,7 @@ var _multer2 = _interopRequireDefault(_multer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const ObjectID = _mongodb2.default.ObjectID;
-const MongoUrl = _server2.default.mongo.kenny.url;
+const MongoUrl = _server2.default.mongo.sweeter.url;
 
 exports.default = {
 

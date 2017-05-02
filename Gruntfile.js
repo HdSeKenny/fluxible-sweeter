@@ -112,7 +112,18 @@ module.exports = function(grunt) {
           src: ['styles/**/*.css'],
           dest: '<%= project.devPublic %>'
         },
-        ]
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.css'],
+          dest: '<%= project.devPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.src %>',
+          src: ['**/*.jade'],
+          dest: '<%= project.dev %>'
+        }]
       },
       prod: {
         files: [{
@@ -129,11 +140,10 @@ module.exports = function(grunt) {
         },
         {
           expand: true,
-          cwd: '<%= project.srcPublic %>',
-          src: ['styles/**/*.ttf', 'styles/**/*.woff'],
+          cwd: '<%= project.src %>',
+          src: ['views/*.jade'],
           dest: '<%= project.distPublic %>'
-        },
-        ]
+        }]
       }
     },
 

@@ -2,7 +2,7 @@ import MongoClient from 'mongodb';
 import serverConfig from '../configs/server';
 
 const ObjectID = MongoClient.ObjectID;
-const MongoUrl = serverConfig.mongo.kenny.url;
+const MongoUrl = serverConfig.mongo.sweeter.url;
 
 export default {
 

@@ -4,7 +4,7 @@ import MongoClient from 'mongodb';
 import multer from 'multer';
 
 const ObjectID = MongoClient.ObjectID;
-const MongoUrl = serverConfig.mongo.kenny.url;
+const MongoUrl = serverConfig.mongo.sweeter.url;
 
 export default {
 
