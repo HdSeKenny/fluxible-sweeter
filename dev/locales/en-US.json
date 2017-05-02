@@ -1,0 +1,12 @@
+{
+  "locales": "en-US",
+  "messages": {
+    "login": {
+      "sign": "Sign in",
+      "signing": "Signing in...",
+      "username": "User Name",
+      "password": "Password",
+      "failure": "Invalid username or password"
+    }
+  }
+}

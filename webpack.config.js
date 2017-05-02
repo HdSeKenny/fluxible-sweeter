@@ -30,7 +30,7 @@ module.exports = function makeWebpackConfig(options) {
   config.output = {
     // Absolute output directory
     // path: path.join(__dirname, '/src/public/build/'),
-    path: `${__dirname}/dist`,
+    path: `${__dirname}/src/public/build/`,
 
     // Uses webpack-dev-server in development
     publicPath: isProd ? '/' : `http://${env.hot_server_host}:${env.hot_server_port}/`,
@@ -107,42 +107,7 @@ module.exports = function makeWebpackConfig(options) {
     new webpack.NoEmitOnErrorsPlugin(),
 
     // generates webpack assets config to use hashed assets in production mode
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: 'common.js' }),
-
-    function webpackStatsPlugin() {
-      this.plugin('done', function(stats) {
-        const data = stats.toJson();
-        const assets = data.assetsByChunkName;
-        const output = {
-          assets: {},
-          cdnPath: this.options.output.publicPath
-        };
-
-        Object.keys(assets).forEach((key) => {
-          const value = assets[key];
-          const isArrayValue = _.isArray(value);
-
-          if (isDev && !disableDevServer) {
-            if (isArrayValue) {
-              value.forEach(v => {
-                const assetsKey = v.split('.').join('_');
-                output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${v}`;
-              });
-            } else {
-              const assetsKey = value.split('.').join('_');
-              output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${value}`;
-            }
-          } else {
-            output.assets[key] = `${configs.path_prefix}/dist/${value}`;
-          }
-        });
-
-        fs.writeFileSync(
-          path.join(__dirname, '/src/public/assets', 'assets.json'),
-          JSON.stringify(output, null, 4)
-        );
-      });
-    }
+    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: 'common.js' })
   ];
 
   // Add build specific plugins
@@ -170,7 +135,42 @@ module.exports = function makeWebpackConfig(options) {
         'process.env': {
           NODE_ENV: '"production"'
         }
-      })
+      }),
+
+      function webpackStatsPlugin() {
+        this.plugin('done', function(stats) {
+          const data = stats.toJson();
+          const assets = data.assetsByChunkName;
+          const output = {
+            assets: {},
+            cdnPath: this.options.output.publicPath
+          };
+
+          Object.keys(assets).forEach((key) => {
+            const value = assets[key];
+            const isArrayValue = _.isArray(value);
+
+            if (isDev && !disableDevServer) {
+              if (isArrayValue) {
+                value.forEach(v => {
+                  const assetsKey = v.split('.').join('_');
+                  output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${v}`;
+                });
+              } else {
+                const assetsKey = value.split('.').join('_');
+                output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${value}`;
+              }
+            } else {
+              output.assets[key] = `${configs.path_prefix}/dist/${value}`;
+            }
+          });
+
+          fs.writeFileSync(
+            path.join(__dirname, '/src/public/assets', 'assets.json'),
+            JSON.stringify(output, null, 4)
+          );
+        });
+      }
     );
   }
 

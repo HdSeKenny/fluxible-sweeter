@@ -2,16 +2,16 @@
 let webpackAssets;
 
 try {
-  webpackAssets = require('../public/assets/assets.json');
+  webpackAssets = require('../configs/assets.json');
 } catch (e) {
   throw new Error('Please run `grunt prod or grunt` to generate the js assets.');
 }
 
 const assets = {};
 
-assets.common_js = webpackAssets.assets.common_js;
-assets.main_js = webpackAssets.assets.main_js;
-assets.main_css = webpackAssets.assets.main_css;
+assets.common = webpackAssets.assets.common;
+assets.main = webpackAssets.assets.main;
+assets.style = webpackAssets.assets.style;
 assets.essentials = webpackAssets.assets.essentials ? webpackAssets.assets.essentials : null;
 
 export default assets;

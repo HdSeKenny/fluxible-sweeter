@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Module dependencies.
  */
@@ -21,8 +23,7 @@ const connectDb = (cb, url) => {
     if (err) {
       console.log(`==> Database unavaliable: ${url}`.gray);
       cb(null, false);
-    }
-    else {
+    } else {
       db.listCollections().toArray((err, items) => {
         if (items.length == 0) {
           console.log(`Database unavaliable: ${url}`);
@@ -38,16 +39,14 @@ const connectDb = (cb, url) => {
               db.close();
             });
             console.info('');
-          }
-          else {
+          } else {
             console.info(`${'==>'.green} Insert default session... `);
             db.collection('test').insert({ 'test': 'test' }, (err, result) => {
               assert.equal(null, err);
               db.close();
             });
           }
-        }
-        else {
+        } else {
           console.log(`${'==>'.green} Database avaliable: ${url.cyan}`);
         }
         cb(null, true);
@@ -59,25 +58,21 @@ const connectDb = (cb, url) => {
 
 console.log(`${'==>'.green} Start to check database......`);
 
-testMongoConnection.push(
-  (cb) => {
-    connectDb(cb, config.mongo.kenny.url);
-  },
-  (cb) => {
-    connectDb(cb, config.mongo.session.url);
-  }
-);
+testMongoConnection.push(cb => {
+  connectDb(cb, config.mongo.kenny.url);
+}, cb => {
+  connectDb(cb, config.mongo.session.url);
+});
 
 contra.concurrent(testMongoConnection, (err, results) => {
   if (_.every(results, Boolean)) {
     global.dbIsAvaliable = true;
-  }
-  else {
+  } else {
     console.log('');
     console.log('* Please check your database! *');
   }
 
-  const app = require('../server');
+  const app = require('../express');
   const port = config.server.port || '0.0.0.0';
   const addr = config.server.addr || 3000;
   const server = http.createServer(app);
@@ -114,6 +109,4 @@ contra.concurrent(testMongoConnection, (err, results) => {
   server.listen(port, addr);
   server.on('error', onError);
   server.on('listening', onListening);
-
 });
-

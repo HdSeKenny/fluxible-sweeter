@@ -1,0 +1,9 @@
+{
+    "assets": {
+        "main_js": "http://localhost:8080/main.js",
+        "0_f9c29325566f332f0581_hot-update_js": "http://localhost:8080/0.f9c29325566f332f0581.hot-update.js",
+        "main_css": "http://localhost:8080/main.css",
+        "common_js": "http://localhost:8080/common.js"
+    },
+    "cdnPath": "http://localhost:8080/"
+}

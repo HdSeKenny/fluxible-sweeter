@@ -10,12 +10,118 @@ module.exports = function(grunt) {
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
+    // project variables
+    project: {
+      srcPublic: path.join(__dirname, '/src/public'),
+      distPublic: path.join(__dirname, '/dist/public'),
+      devPublic: path.join(__dirname, '/dev/public'),
 
-    clean: [path.join(__dirname, '/dist')],
+      src: path.join(__dirname, '/src'),
+      dist: path.join(__dirname, '/dist'),
+      dev: path.join(__dirname, '/dev')
+    },
+
+    // clean dist
+    clean: {
+      dev: ['<%= project.dev %>'],
+      prod: ['<%= project.dist %>']
+    },
 
     webpack: {
       build: makeWebpackConfig({ model: 'prod' }),
-      dev: makeWebpackConfig({ model: 'dev', disableDevServer: true })
+      // dev: makeWebpackConfig({ model: 'dev', disableDevServer: true })
+    },
+
+    babel: {
+      options: {
+        'babelrc': false,
+        presets: ['react'],
+        plugins: [
+          'add-module-exports',
+          'transform-es2015-modules-commonjs',
+          'transform-export-extensions',
+          'transform-object-rest-spread',
+
+          // following plugins can be removed when done the todos in changes-on-project-transpiling.md
+          'transform-es2015-shorthand-properties',
+          'transform-es2015-duplicate-keys',
+          'transform-function-bind',
+          'transform-class-properties',
+        ]
+      },
+      dev: {
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: [
+            'bin/server.js',
+            '**/*.js',
+            '**/*.jsx',
+            '!**tests/**/*',
+            '!**mocks/**/*'
+          ],
+          dest: '<%= project.dev %>'
+        }]
+      },
+      prod: {
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: [
+            'bin/server.js',
+            '**/*.js',
+            '**/*.jsx',
+            '!**tests/**/*',
+            '!**mocks/**/*'
+          ],
+          dest: '<%= project.dist %>'
+        }]
+      }
+    },
+
+    copy: {
+      dev: {
+        files: [{
+          expand: true,
+          cwd: '<%= project.src %>',
+          src: ['**/*.json'],
+          dest: '<%= project.dev %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/images/**/*'],
+          dest: '<%= project.devPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.ttf', 'styles/**/*.woff'],
+          dest: '<%= project.devPublic %>'
+        },
+        ]
+      },
+      prod: {
+        files: [{
+          expand: true,
+          cwd: '<%= project.src %>',
+          src: ['**/*.json'],
+          dest: '<%= project.dist %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['images/**/*'],
+          dest: '<%= project.distPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.ttf', 'styles/**/*.woff'],
+          dest: '<%= project.distPublic %>'
+        },
+        ]
+      }
     },
 
     'webpack-dev-server': {
@@ -39,40 +145,93 @@ module.exports = function(grunt) {
 
     express: {
       options: {
-        port: 3000
-        // port: process.env.PORT || 3000
+        // Override defaults here
       },
       dev: {
         options: {
-          script: 'src/bin/www'
+          script: 'dev/bin/server.js'
         }
       },
       prod: {
         options: {
-          script: 'src/bin/www'
+          script: '<%= project.dist %>/server.js',
+          node_env: 'production'
         }
-      }
-    },
-    open: {
-      server: {
-        url: 'http://localhost:<%= express.options.port %>'
+      },
+      test: {
+        options: {
+          // script: 'path/to/test/server.js'
+        }
       }
     },
 
     watch: {
-      livereload: {
-        files: ['src/**/*'],
-        options: {
-          livereload: true
-        }
+      options: {
+
       },
-      express: {
-        files: ['src/public/styles/**/*'],
-        tasks: ['less:dev', 'express:dev', 'wait'],
+
+      scripts: {
+        files: ['src/**/*.js', '!tests/**/*', '!mocks/**/*'],
+        tasks: ['newer:babel:dev'],
         options: {
           spawn: false,
-          livereload: true
+          // add interval can reduce the cpu usage
+          interval: 500,
+        },
+      },
+
+      less: {
+        options: {
+          livereload: false
+        },
+        files: ['src/public/styles/**/*.less'],
+        tasks: [],
+      },
+
+      css: {
+        files: 'src/public/styles/main.css',
+        tasks: []
+      },
+
+      jsons: {
+        files: ['src/**/*.json'],
+        tasks: ['newer:copy:dev'],
+        options: {
+          spawn: false,
+          interval: 500,
         }
+      },
+
+      express: {
+        files: ['dev/services/*.js'],
+        tasks: ['express:dev'],
+        options: {
+          spawn: false,
+          interval: 500
+        }
+      }
+    },
+
+    // todo client and server should monitor different files
+    // complete the ignore list to get a better experience on server-side relaunch
+    nodemon: {
+      client: {
+        script: 'dev/bin/server.js',
+        options: {
+          watch: ['dev/**/*'],
+          ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
+          nodeArgs: ['--harmony', '--inspect'],
+          verbose: true,
+        }
+      },
+      server: {
+        script: 'dev/bin/server.js',
+        options: {
+          nodeArgs: ['--harmony', '--inspect'],
+          verbose: true,
+          watch: ['dev/**/*'],
+          ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
+        },
       }
     },
 
@@ -92,45 +251,53 @@ module.exports = function(grunt) {
           grunt.log.ok('set NODE_ENV = production');
         }
       }
+    },
+
+    concurrent: {
+      client: {
+        tasks: ['webpack-dev-server', 'watch', 'nodemon:client'],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
+      server: {
+        tasks: ['webpack-dev-server', 'watch', 'nodemon:server'],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
+      express: {
+        tasks: ['express', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
+      'babel-webpack': {
+        tasks: ['webpack-dev-server', 'watch:scripts', 'watch:jsons'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
     }
   });
 
-  // The development server (the recommended option for development)
-  grunt.registerTask('default', ['env:dev', 'clean', 'less:dev', 'webpack-dev-server']);
+  // defaule model
+  grunt.registerTask('default', []);
 
-  // Run the node server
-  grunt.registerTask('server:prod', function() {
-    grunt.log.ok('Waiting for server loading...');
-    this.async();
-    require('./src/bin/www');
-  });
-
-  // Used for development
-  grunt.registerTask('devWatch', ['less:dev', 'express:dev', 'watch:less']);
-  grunt.registerTask('devServer', ['env:dev', 'webpack-dev-server']);
-
-  grunt.registerTask('server:dev', () => {
-    grunt.log.ok('Waiting for server loading...');
-    require('./src/bin/www');
-  });
-
-  // Used for delaying livereload until after server has restarted
-  grunt.registerTask('wait', function() {
-    grunt.log.ok('Waiting for server loading...');
-    const done = this.async();
-    setTimeout(() => {
-      grunt.log.writeln('Done waiting!');
-      done();
-    }, 2000);
-  });
 
   // Development model
-  grunt.registerTask('dev', [
-    'less:dev',
-    'express:dev',
-    'wait',
-    'watch'
+  grunt.registerTask('webpack-server', ['env:dev', 'webpack-dev-server']);
+
+  grunt.registerTask('express-server', ['express:dev', 'wait', 'watch:express']);
+  grunt.registerTask('babel-webpack-server', [
+    'env:dev',
+    'clean:dev',
+    'babel:dev',
+    'copy:dev',
+    'assets',
+    'concurrent:babel-webpack'
   ]);
+
 
   // Production model
   grunt.registerTask('prod', [
@@ -152,8 +319,36 @@ module.exports = function(grunt) {
 
   // Production model => build
   grunt.registerTask('build', [
-    'clean',
-    'less:dev',
-    'webpack:build'
+
   ]);
+
+  // grunt don't know when the dev webpack has finished,
+  // it will cause the app crash because cant find the assets.json.
+  // Because the assets is immutable for now
+  // just hard code the assets instead get it from the webpack stats
+  grunt.registerTask('assets', () => {
+    grunt.file.write('src/configs/assets.json', JSON.stringify({
+      assets: {
+        'style': `http://${env.hot_server_host}:${env.hot_server_port}/main.css`,
+        'main': `http://${env.hot_server_host}:${env.hot_server_port}/main.js`,
+        'common': `http://${env.hot_server_host}:${env.hot_server_port}/common.js`
+      }
+    }, null, 2));
+
+    grunt.log.ok('done');
+  });
+
+  // Used for delaying livereload until after server has restarted
+  grunt.registerTask('wait', function() {
+    grunt.log.ok('Waiting for server loading...');
+    const done = this.async();
+    setTimeout(() => {
+      grunt.log.writeln('Done waiting!');
+      done();
+    }, 3000);
+  });
+
+  grunt.event.on('watch', (action, filepath, target) => {
+    grunt.log.writeln(`${target}:${filepath} has ${action}`);
+  });
 };
