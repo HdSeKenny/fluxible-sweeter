@@ -193,15 +193,15 @@ module.exports = function(grunt) {
 
       },
 
-      scripts: {
-        files: ['src/**/*.js', '!tests/**/*', '!mocks/**/*'],
-        tasks: ['newer:babel:dev'],
-        options: {
-          spawn: false,
-          // add interval can reduce the cpu usage
-          interval: 500,
-        },
-      },
+      // scripts: {
+      //   files: ['src/**/*.js', '!tests/**/*', '!mocks/**/*'],
+      //   tasks: ['newer:babel:dev'],
+      //   options: {
+      //     spawn: false,
+      //     // add interval can reduce the cpu usage
+      //     interval: 500,
+      //   },
+      // },
 
       less: {
         options: {
@@ -226,8 +226,8 @@ module.exports = function(grunt) {
       },
 
       express: {
-        files: ['.tmp/services/*.js'],
-        tasks: ['express:dev'],
+        files: ['src/**/*.js'],
+        tasks: ['newer:babel:dev', 'newer:copy:dev', 'express:dev'],
         options: {
           spawn: false,
           interval: 500

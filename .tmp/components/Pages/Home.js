@@ -28,15 +28,10 @@ var _UI = require('../UI');
 
 var _Layout = require('../UI/Layout');
 
-var _data = require('../../utils/data');
-
-var _data2 = _interopRequireDefault(_data);
-
 var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import data from '../../../../../filesDownloader/sweets.json';
 const Home = _react2.default.createClass({
 
   displayName: 'Home',
@@ -124,7 +119,8 @@ const Home = _react2.default.createClass({
     this.setState(this.getStateFromStores());
   },
   onViewPinItem: function (id) {
-    this.setState({ selectedPin: _data2.default.find(p => p._id === id) });
+    const { blogs: blogs } = this.state;
+    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
     _UI.ModalsFactory.show('pinModal');
   },
   _renderCreateBtns: function (isDisabled) {
@@ -400,7 +396,7 @@ const Home = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { className: 'main' },
-        this._renderPinItems(_data2.default)
+        this._renderPinItems(blogs)
       ),
       _react2.default.createElement(
         _Layout.Page,

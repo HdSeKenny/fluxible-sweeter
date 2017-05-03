@@ -5,10 +5,8 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { BlogsWell, HotBlogsTabs, MainSliders, PinItem, ModalsFactory } from '../UI';
-import { Row, Col, Page } from '../UI/Layout';
-// import data from '../../../../../filesDownloader/sweets.json';
-import data from '../../utils/data';
+import { MainSliders, PinItem, ModalsFactory } from '../UI';
+import { Row, Page } from '../UI/Layout';
 import { ViewPin } from '../UserControls';
 
 const Home = React.createClass({
@@ -108,7 +106,8 @@ const Home = React.createClass({
   },
 
   onViewPinItem(id) {
-    this.setState({ selectedPin: data.find(p => p._id === id) });
+    const { blogs } = this.state;
+    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
     ModalsFactory.show('pinModal');
   },
 
@@ -266,7 +265,7 @@ const Home = React.createClass({
       <div className="home-page">
         <MainSliders />
         <div className="main">
-          {this._renderPinItems(data)}
+          {this._renderPinItems(blogs)}
         </div>
         <Page>
           <ModalsFactory

@@ -1,7 +1,7 @@
 {
   "assets": {
-    "style": "http://localhost:8080/main.css",
-    "main": "http://localhost:8080/main.js",
-    "common": "http://localhost:8080/common.js"
+    "style": "http://localhost:5858/main.css",
+    "main": "http://localhost:5858/main.js",
+    "common": "http://localhost:5858/common.js"
   }
 }

@@ -3,9 +3,6 @@
     padding: 15px 15px 30px 15px;
     .panel-heading {
       .pin-header {
-        .pin-title {
-          font-size: 25px;
-        }
         .text-xs {
           font-size: 11px;
           font-style: italic;
@@ -14,6 +11,14 @@
       }
     }
     .panel-body {
+      .pin-article-title {
+        font-size: 18px;
+        color: #333;
+        &:hover {
+          color: @brand-info;
+          cursor: pointer;
+        }
+      }
       .pin-image{
         img {
           width: 100%;
@@ -23,44 +28,55 @@
       .pin-body-text {
         p {
           word-break: break-all;
-          font-size: 13px;
+          font-size: 14px;
           &:hover {
             cursor: pointer;
             color: #333;
           }
         }
       }
+      .pin-footer-user {
+        margin-top: 28px;
+      }
     }
     .author-name {
       display: block;
       line-height: 10px;
-      font-size: 14px;
-      color: #333;
-      padding-top: 5px;
+      font-size: 15px;
+      color: @brand-info;
+      padding-top: 7px;
       .from-now {
         color: gray;
         font-size: 11px;
       }
     }
-    .panel-footer {
-      .pin-article-user {
-        margin: 40px 0 20px 0;
+    .pin-article-user, .pin-moment-user {
+      .text-xs {
+        font-size: 11px;
+        font-style: italic;
+        color: gray;
       }
-      .pin-footer-icons {
-        float: right;
-        margin-bottom: 10px;
-        .icon-span {
-          color: gray;
-          font-size: 12px;
-          margin-right: 15px;
-          display: inline-block;
-          &:last-child {
-            margin-right: 0;
-          }
-          &:hover {
-            color: @brand-primary;
-            cursor: pointer;
-          }
+      &:hover {
+        cursor: pointer;
+        .author-name {
+          color: @brand-primary;
+        }
+      }
+    }
+    .pin-footer-icons {
+      float: right;
+      margin-bottom: 10px;
+      .icon-span {
+        color: #666666;
+        font-size: 12px;
+        margin-right: 15px;
+        display: inline-block;
+        &:last-child {
+          margin-right: 0;
+        }
+        &:hover {
+          color: @brand-primary;
+          cursor: pointer;
         }
       }
     }

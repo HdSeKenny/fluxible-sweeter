@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
+import { routerShape } from 'react-router';
 import moment from 'moment';
-// import sizeOf from 'image-size';
-// import { Row, Col } from './Layout';
+import { Row, Col } from './Layout';
 
 export default class PinItem extends Component {
 
   static displayName = 'PinItem';
+
+  static contextTypes = {
+    router: routerShape.isRequired
+  };
 
   static propTypes = {
     pin: React.PropTypes.object,
@@ -23,32 +26,39 @@ export default class PinItem extends Component {
 
   }
 
-  _renderPinHeader(pin, isArticle) {
-    const isMoment = pin.type === 'moment';
+  GoToUserCenter(author) {
+    this.context.router.push(`/${author.username}/home`);
+  }
+
+  _renderPinHeader(pin) {
     const { author } = pin;
     const fromNow = moment(pin.created_at).fromNow();
     return (
       <div className="pin-header">
-        {isMoment &&
-          <div className="pin-moment">
-            <span className="thumb-sm avatar pull-left mr-10">
-              <img alt="pin" className="img-thumbnail p-0" src={author.image_url || ''} />
-            </span>
-            <strong className="author-name">
-              {author.firstName} {author.lastName}
-              <small className="from-now fr">{fromNow}</small>
-            </strong>
-            <span className="text-muted text-xs">
-              {author.username}
-            </span>
-          </div>
-        }
-        {isArticle && <span className="pin-title">{pin.title}</span>}
+        <div className="pin-moment-user" onClick={() => this.GoToUserCenter(author)}>
+          <span className="thumb-sm avatar pull-left mr-10" data-balloon="Go user center!" data-balloon-pos="left">
+            <img alt="pin" className="" src={author.image_url || ''} />
+          </span>
+          <strong className="author-name">
+            {author.firstName} {author.lastName}
+            <small className="from-now fr">{fromNow}</small>
+          </strong>
+          <p className="text-muted text-xs mt-5">
+            {author.username}
+          </p>
+        </div>
       </div>
     );
   }
 
   _renderPinBody(pin, isArticle) {
+    const imageStyle = {
+      backgroundImage: `url(${pin.author.background_image_url})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center center',
+      height: '100px',
+      // width: '200px'
+    };
     if (isArticle) {
       const imagesUrl = pin.images_url;
       // if (imagesUrl && imagesUrl.length) {
@@ -56,9 +66,23 @@ export default class PinItem extends Component {
       // const dimensions = sizeOf(pin.image_url);
       // console.log(dimensions.width, dimensions.height);
         return (
-          <span className="pin-image" onClick={() => this.onViewPinItem()}>
-            <img alt="pin" src={pin.image_url} />
-          </span>
+          <Row className="p-0">
+            <Col size="3" className="pin-image" onClick={() => this.onViewPinItem()} style={imageStyle}>
+            </Col>
+            <Col size="9" className="pl-15">
+              <div className="">
+                <span className="pin-article-title">{pin.title}</span>
+              </div>
+              <Row className="">
+                <Col size="4" className="p-0 pin-footer-user">
+                  {this._renderPinFooter(pin)}
+                </Col>
+                <Col size="8" className="p-0 mt-45">
+                  {this._renderPinFooterIcons(pin)}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         );
       // }
       // else {
@@ -72,8 +96,8 @@ export default class PinItem extends Component {
 
   _renderTextPin(pin) {
     return (
-      <div className="pin-body-text" onClick={() => this.onViewPinItem()}>
-        <p>das dasd dasdadas  dasdadsa  dasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsa</p>
+      <div className="pin-body-text mt-10 mb-10" onClick={() => this.onViewPinItem()}>
+        <p>{pin.text}</p>
       </div>
     );
   }
@@ -81,12 +105,12 @@ export default class PinItem extends Component {
   _renderPinFooter(pin) {
     const { author } = pin;
     return (
-      <div className="pin-article-user">
-        <span className="thumb-sm avatar pull-left mr-5">
-          <img alt="pin" src={author.avatar || ''} />
+      <div className="pin-article-user" onClick={() => this.GoToUserCenter(author)}>
+        <span className="thumb-sm avatar pull-left mr-5" data-balloon="Go user center!" data-balloon-pos="left">
+          <img alt="pin" src={author.image_url} />
         </span>
-        <strong className="author-name pt-5">{author.name}</strong>
-        <span className="text-muted text-xs">{author.username}</span>
+        <strong className="author-name">{author.firstName} {author.lastName}</strong>
+        <p className="text-muted text-xs mt-5">{author.username}</p>
       </div>
     );
   }
@@ -104,7 +128,7 @@ export default class PinItem extends Component {
         </div>
         <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-thumbs-o-up" />
-          <span className="ml-5">{pin.thumbs}dsadsa</span>
+          <span className="ml-5">{pin.thumbs}</span>
         </div>
       </div>
     );
@@ -117,15 +141,16 @@ export default class PinItem extends Component {
       <pin className="pin">
         <section className="panel panel-default mb-10">
           <header className="panel-heading text-uc p-0 mb-10">
-            {this._renderPinHeader(pin, isArticle)}
+            {!isArticle && this._renderPinHeader(pin)}
           </header>
-          <section className="panel-body p-0 mb-15">
+          <section className="panel-body p-0">
             {this._renderPinBody(pin, isArticle)}
           </section>
-          <footer className="panel-footer p-0">
-            {isArticle && this._renderPinFooter(pin)}
-            {this._renderPinFooterIcons(pin)}
-          </footer>
+          {!isArticle &&
+            <footer className="panel-footer p-0 mt-15">
+              {this._renderPinFooterIcons(pin)}
+            </footer>
+          }
         </section>
       </pin>
     );

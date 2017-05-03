@@ -71,7 +71,7 @@ Layout.Row = ({ children: children, className: className, mason: mason }) => {
   );
 };
 
-Layout.Col = ({ children: children, size: size, offset: offset, className: className }) => {
+Layout.Col = ({ children: children, size: size, offset: offset, className: className, style: style }) => {
   const colSize = getColSizeClassName(size);
   const offsetSize = getOffsetSizeClassName(offset);
   let classesString = '';
@@ -88,7 +88,7 @@ Layout.Col = ({ children: children, size: size, offset: offset, className: class
   }
   return _react2.default.createElement(
     'div',
-    { className: classesString },
+    { className: classesString, style: style },
     children
   );
 };

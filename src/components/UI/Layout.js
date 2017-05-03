@@ -60,7 +60,7 @@ Layout.Row = ({ children, className, mason }) => {
   );
 };
 
-Layout.Col = ({ children, size, offset, className }) => {
+Layout.Col = ({ children, size, offset, className, style }) => {
   const colSize = getColSizeClassName(size);
   const offsetSize = getOffsetSizeClassName(offset);
   let classesString = '';
@@ -76,7 +76,7 @@ Layout.Col = ({ children, size, offset, className }) => {
     }
   }
   return (
-    <div className={classesString}>
+    <div className={classesString} style={style}>
       {children}
     </div>
   );
