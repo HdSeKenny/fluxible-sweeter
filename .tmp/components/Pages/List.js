@@ -14,7 +14,9 @@ var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
 var _reactRouter = require('react-router');
 
-var _reactBootstrap = require('react-bootstrap');
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _sweetAlert = require('../../utils/sweetAlert');
 
@@ -124,7 +126,8 @@ const List = _react2.default.createClass({
     this.setState(this.getStateFromStores());
   },
   onViewPinItem: function (id) {
-    this.setState({ selectedPin: _data2.default.find(p => p._id === id) });
+    const { blogs: blogs } = this.state;
+    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
     _UI.ModalsFactory.show('pinModal');
   },
   openCreateBlogModal: function () {
@@ -312,7 +315,7 @@ const List = _react2.default.createClass({
     );
   },
   render: function () {
-    const { currentUser: currentUser, kenny: kenny, blogs: blogs } = this.state;
+    const { currentUser: currentUser, kenny: kenny, blogs: blogs, selectedPin: selectedPin } = this.state;
     const displayUser = currentUser || kenny;
     return _react2.default.createElement(
       'article',
@@ -321,7 +324,7 @@ const List = _react2.default.createClass({
         'section',
         { className: 'mid' },
         this._renderSearchBlock(),
-        this._renderAllPinItems(_data2.default)
+        this._renderAllPinItems(blogs)
       ),
       _react2.default.createElement(
         'section',
@@ -337,7 +340,8 @@ const List = _react2.default.createClass({
       _react2.default.createElement(
         _UI.Layout.Page,
         null,
-        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'createBlogModal', title: 'Create a sweet !', ModalComponent: _UserControls.BlogModal, size: 'modal-md', showHeaderAndFooter: false })
+        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'createBlogModal', title: 'Create a sweet !', ModalComponent: _UserControls.BlogModal, size: 'modal-md', showHeaderAndFooter: false }),
+        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'pinModal', large: true, pin: selectedPin, ModalComponent: _UserControls.ViewPin, showHeaderAndFooter: true })
       )
     );
   }

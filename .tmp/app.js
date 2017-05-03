@@ -21,16 +21,16 @@ var _stores = require('./stores');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // init namespace for current App
-// sessionStorage.setNamespace('di_quattro_metadata_explorer');
+// sessionStorage.setNamespace('sweeter');
 
-let app = new _fluxible2.default({
+const app = new _fluxible2.default({
   component: require('./routes')
 });
 // import sessionStorage from './utils/sessionStorage';
 
 
 app.plug((0, _fluxiblePluginFetchr2.default)({
-  xhrPath: _configs2.default.path_prefix + '/api',
+  xhrPath: `${_configs2.default.path_prefix}/api`,
   xhrTimeout: 30000
 }));
 

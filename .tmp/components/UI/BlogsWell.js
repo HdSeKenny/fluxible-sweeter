@@ -73,7 +73,7 @@ const BlogsWell = _react2.default.createClass({
     }
   },
   onDisplayEllipsis: function (blog) {
-    const blogWords = blog.content.split(' ');
+    const blogWords = blog.text.split(' ');
     let blogContent = '';
     if (blogWords.length > 20) {
       blogWords.forEach((word, index) => {
@@ -83,7 +83,7 @@ const BlogsWell = _react2.default.createClass({
       });
       blogContent = `${blogContent}...`;
     } else {
-      blogContent = blog.content;
+      blogContent = blog.text;
     }
 
     return blogContent;

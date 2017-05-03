@@ -88,6 +88,11 @@ const Navbar = React.createClass({
               <li className={`${this.isActive('/list')}`}>
                 <Link to="/list">Moments</Link>
               </li>
+              {authenticated &&
+                <li className={`${this.isActive('/home')}`}>
+                  <Link to={`/${currentUser.username}/home`}>Personal</Link>
+                </li>
+              }
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
               {!authenticated &&
@@ -104,12 +109,13 @@ const Navbar = React.createClass({
                 <li className="">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
-                    <li><Link to={`/user-home/${currentUser.strId}/home`}>User center</Link></li>
+                    <li><Link to={`/${currentUser.username}/home`}>User center</Link></li>
                     <li><span>Settings</span></li>
                     <li onClick={this.handleLogout}><span>Logout</span></li>
                   </ul>
                 </li>
               }
+
             </ul>
           </div>
         </header>

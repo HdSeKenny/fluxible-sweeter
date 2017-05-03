@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import moment from 'moment';
 // import sizeOf from 'image-size';
-import { Row, Col } from './Layout';
+// import { Row, Col } from './Layout';
 
 export default class PinItem extends Component {
 
@@ -16,7 +16,7 @@ export default class PinItem extends Component {
 
   onViewPinItem() {
     const { pin } = this.props;
-    this.props.onSelect(pin._id);
+    this.props.onSelect(pin.id_str);
   }
 
   componentDidMount() {
@@ -26,16 +26,17 @@ export default class PinItem extends Component {
   _renderPinHeader(pin, isArticle) {
     const isMoment = pin.type === 'moment';
     const { author } = pin;
-    const fromNow = moment(pin.dateCreated).fromNow();
+    const fromNow = moment(pin.created_at).fromNow();
     return (
       <div className="pin-header">
         {isMoment &&
           <div className="pin-moment">
-            <span className="thumb-sm avatar pull-left mr-5">
-              <img alt="pin" src={author.avatar || ''} />
+            <span className="thumb-sm avatar pull-left mr-10">
+              <img alt="pin" className="img-thumbnail p-0" src={author.image_url || ''} />
             </span>
             <strong className="author-name">
-              {author.name} <small className="from-now fr">{fromNow}</small>
+              {author.firstName} {author.lastName}
+              <small className="from-now fr">{fromNow}</small>
             </strong>
             <span className="text-muted text-xs">
               {author.username}
@@ -43,7 +44,6 @@ export default class PinItem extends Component {
           </div>
         }
         {isArticle && <span className="pin-title">{pin.title}</span>}
-        {isArticle && <hr />}
       </div>
     );
   }
@@ -71,7 +71,11 @@ export default class PinItem extends Component {
   }
 
   _renderTextPin(pin) {
-    return (<div />);
+    return (
+      <div className="pin-body-text" onClick={() => this.onViewPinItem()}>
+        <p>das dasd dasdadas  dasdadsa  dasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsa</p>
+      </div>
+    );
   }
 
   _renderPinFooter(pin) {
@@ -89,16 +93,16 @@ export default class PinItem extends Component {
 
   _renderPinFooterIcons(pin) {
     return (
-      <div className="pin-footer-icons">
-        <div className="icon-span">
+      <div className="pin-footer-icons mb-5">
+        <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-share" />
           <span className="ml-5">3434</span>
         </div>
-        <div className="icon-span">
+        <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-comments-o" />
           <span className="ml-5">3434</span>
         </div>
-        <div className="icon-span">
+        <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-thumbs-o-up" />
           <span className="ml-5">{pin.thumbs}dsadsa</span>
         </div>
@@ -112,7 +116,7 @@ export default class PinItem extends Component {
     return (
       <pin className="pin">
         <section className="panel panel-default mb-10">
-          <header className="panel-heading text-uc p-0 mb-15">
+          <header className="panel-heading text-uc p-0 mb-10">
             {this._renderPinHeader(pin, isArticle)}
           </header>
           <section className="panel-body p-0 mb-15">

@@ -1,15 +1,14 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link } from 'react-router';
-import { Glyphicon } from 'react-bootstrap';
+import _ from 'lodash';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { BlogsWell, HotBlogsTabs, PinItem, ModalsFactory, Layout, Button } from '../UI';
-import { Row, Col, Page } from '../UI/Layout';
+import { PinItem, ModalsFactory, Layout } from '../UI';
+import { Row, Col } from '../UI/Layout';
 import data from '../../utils/data';
-import { ViewPin, BlogModal, ListLeftNav } from '../UserControls';
-
+import { ViewPin, BlogModal } from '../UserControls';
 
 const List = React.createClass({
 
@@ -112,7 +111,8 @@ const List = React.createClass({
   },
 
   onViewPinItem(id) {
-    this.setState({ selectedPin: data.find(p => p._id === id) });
+    const { blogs } = this.state;
+    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
     ModalsFactory.show('pinModal');
   },
 
@@ -231,13 +231,13 @@ const List = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs } = this.state;
+    const { currentUser, kenny, blogs, selectedPin } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <article className="list-page">
         <section className="mid">
           {this._renderSearchBlock()}
-          {this._renderAllPinItems(data)}
+          {this._renderAllPinItems(blogs)}
         </section>
         <section className="right">
           <div className="right-user-card">
@@ -250,6 +250,7 @@ const List = React.createClass({
 
         <Layout.Page>
           <ModalsFactory modalref="createBlogModal" title="Create a sweet !" ModalComponent={BlogModal} size="modal-md" showHeaderAndFooter={false} />
+          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={ViewPin} showHeaderAndFooter={true} />
         </Layout.Page>
       </article>
     );

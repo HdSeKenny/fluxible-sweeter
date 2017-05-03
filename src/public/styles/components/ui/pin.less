@@ -6,6 +6,11 @@
         .pin-title {
           font-size: 25px;
         }
+        .text-xs {
+          font-size: 11px;
+          font-style: italic;
+          color: gray;
+        }
       }
     }
     .panel-body {
@@ -15,16 +20,26 @@
           max-height: 100px;
         }
       }
+      .pin-body-text {
+        p {
+          word-break: break-all;
+          font-size: 13px;
+          &:hover {
+            cursor: pointer;
+            color: #333;
+          }
+        }
+      }
     }
     .author-name {
       display: block;
       line-height: 10px;
-      font-size: 13px;
+      font-size: 14px;
       color: #333;
       padding-top: 5px;
       .from-now {
         color: gray;
-        font-size: 10px;
+        font-size: 11px;
       }
     }
     .panel-footer {

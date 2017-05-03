@@ -1,5 +1,6 @@
 import MongoClient from 'mongodb';
 import assert from 'assert';
+import 'colors';
 import config from './server';
 import seed from './seed';
 
@@ -25,17 +26,13 @@ const insertDefaultData = (url, db) => {
   }
 
   console.log(`${'==>'.green} Finish insert default data... `);
-
 };
 
 
 const connectMongodbPromise = (url) => new Promise((resolve, reject) => {
-  console.log(`${'==>'.green} Start to check database......`);
-
   MongoClient.connect(url, (connectErr, db) => {
     if (connectErr) {
-      // console.log(`==> Database unavaliable: ${url}`.gray);
-      return reject('Database connectErr :', connectErr);
+      return reject('Database connectErr, please check your database');
     }
 
     db.listCollections().toArray((err, items) => {
@@ -50,9 +47,9 @@ const connectMongodbPromise = (url) => new Promise((resolve, reject) => {
       db.close();
       resolve();
     });
-
   });
 });
+
 
 export default () => {
   const mongodbPromises = [];
@@ -60,13 +57,8 @@ export default () => {
     connectMongodbPromise(mongo.sweeter.url),
     connectMongodbPromise(mongo.session.url)
   );
-  Promise.all(mongodbPromises)
-    .then(() => {
-      global.dbIsAvaliable = true;
-      console.log('Connect mongodb succssfully');
-    })
-    .catch((error) => {
-      console.log('Connect mongodb catch error:', error);
-    });
-};
 
+  console.log(`${'==>'.green} Start to check database......`);
+
+  return mongodbPromises;
+};

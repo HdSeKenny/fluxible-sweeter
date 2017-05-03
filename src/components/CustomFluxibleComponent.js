@@ -29,4 +29,5 @@ const CustomFluxibleComponent = React.createClass({
     return React.cloneElement(this.props.children, { context: this.props.context });
   }
 });
+
 export default CustomFluxibleComponent;

@@ -1,5 +1,8 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 const md5 = require('md5');
 const mongdb = require('mongodb');
 
@@ -64,4 +67,5 @@ const seed = {
   }
 };
 
-module.exports = seed;
+exports.default = seed;
+module.exports = exports['default'];

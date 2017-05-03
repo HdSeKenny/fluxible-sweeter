@@ -12,6 +12,8 @@ var _assert = require('assert');
 
 var _assert2 = _interopRequireDefault(_assert);
 
+require('colors');
+
 var _server = require('./server');
 
 var _server2 = _interopRequireDefault(_server);
@@ -46,12 +48,9 @@ const insertDefaultData = (url, db) => {
 };
 
 const connectMongodbPromise = url => new Promise((resolve, reject) => {
-  console.log(`${'==>'.green} Start to check database......`);
-
   _mongodb2.default.connect(url, (connectErr, db) => {
     if (connectErr) {
-      // console.log(`==> Database unavaliable: ${url}`.gray);
-      return reject('Database connectErr :', connectErr);
+      return reject('Database connectErr, please check your database');
     }
 
     db.listCollections().toArray((err, items) => {
@@ -71,12 +70,10 @@ const connectMongodbPromise = url => new Promise((resolve, reject) => {
 exports.default = () => {
   const mongodbPromises = [];
   mongodbPromises.push(connectMongodbPromise(mongo.sweeter.url), connectMongodbPromise(mongo.session.url));
-  Promise.all(mongodbPromises).then(() => {
-    global.dbIsAvaliable = true;
-    console.log('Connect mongodb succssfully');
-  }).catch(error => {
-    console.log('Connect mongodb catch error:', error);
-  });
+
+  console.log(`${'==>'.green} Start to check database......`);
+
+  return mongodbPromises;
 };
 
 module.exports = exports['default'];

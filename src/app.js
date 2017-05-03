@@ -10,14 +10,14 @@ import {
 } from './stores';
 
 // init namespace for current App
-// sessionStorage.setNamespace('di_quattro_metadata_explorer');
+// sessionStorage.setNamespace('sweeter');
 
-let app = new Fluxible({
+const app = new Fluxible({
   component: require('./routes')
 });
 
 app.plug(fetchrPlugin({
-  xhrPath: config.path_prefix + '/api',
+  xhrPath: `${config.path_prefix}/api`,
   xhrTimeout: 30000
 }));
 

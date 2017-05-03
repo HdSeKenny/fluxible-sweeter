@@ -38,5 +38,6 @@ const CustomFluxibleComponent = _react2.default.createClass({
     return _react2.default.cloneElement(this.props.children, { context: this.props.context });
   }
 });
+
 exports.default = CustomFluxibleComponent;
 module.exports = exports['default'];

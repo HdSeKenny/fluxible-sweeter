@@ -58,7 +58,7 @@ const createRoutes = context => {
     _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _components.Register }),
     _react2.default.createElement(_reactRouter.Route, { path: 'list', component: _components.List }),
     _react2.default.createElement(_reactRouter.Route, { path: 'blog-details/:blogId', component: _components.BlogsDetails }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'user-home/:userId/home', component: _components.UserHome }),
+    _react2.default.createElement(_reactRouter.Route, { path: ':user/home', component: _components.UserHome }),
     _react2.default.createElement(_reactRouter.Route, { path: 'user-blogs/:userId/list', component: _components.UserBlogs }),
     _react2.default.createElement(_reactRouter.Route, { path: 'user-blogs/:userId/add', component: _components.AddBlog }),
     _react2.default.createElement(_reactRouter.Route, { path: 'user-settings/:userId/info', component: _components.UserInfo }),

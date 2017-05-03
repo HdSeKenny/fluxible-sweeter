@@ -5,8 +5,8 @@
   "author": "Kenny",
   "scripts": {
     "prod": "grunt prod && node ./dist/bin/server.js",
-    "start": "node ./dev/bin/server.js",
-    "dev": "nodemon ./dev/bin/server.js"
+    "start": "node ./.tmp/bin/server.js",
+    "dev": "nodemon ./.tmp/bin/server.js"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
@@ -74,7 +74,7 @@
     "autoprefixer": "^6.7.7",
     "babel-core": "^6.24.0",
     "babel-eslint": "^7.2.2",
-    "babel-loader": "^6.0.1",
+    "babel-loader": "^7.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
@@ -127,8 +127,8 @@
     "strip-ansi": "^3.0.1",
     "style-loader": "^0.16.1",
     "url-loader": "^0.5.8",
-    "webpack": "2.2.0",
+    "webpack": "^2.4.1",
     "webpack-dev-middleware": "^1.10.1",
-    "webpack-dev-server": "2.2.0"
+    "webpack-dev-server": "^2.4.5"
   }
 }

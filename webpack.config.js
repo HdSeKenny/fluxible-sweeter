@@ -24,7 +24,7 @@ module.exports = function makeWebpackConfig(options) {
     extensions: ['.js', '.jsx']
   };
 
-  config.entry = './src/client.js';
+  config.entry = ['./src/client.js'];
 
 
   config.output = {
@@ -53,14 +53,6 @@ module.exports = function makeWebpackConfig(options) {
       test: /\.json$/,
       exclude: /node_modules/,
       loaders: ['json-loader']
-    }, {
-      // JS LOADER
-      // Reference: https://github.com/babel/babel-loader
-      // Transpile .js files using babel-loader
-      // Compiles ES6 and ES7 into ES5 code
-      test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
     }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({

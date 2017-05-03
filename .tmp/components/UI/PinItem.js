@@ -8,23 +8,20 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _Layout = require('./Layout');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import sizeOf from 'image-size';
+// import { Row, Col } from './Layout';
 
 class PinItem extends _react.Component {
 
   onViewPinItem() {
     const { pin: pin } = this.props;
-    this.props.onSelect(pin._id);
+    this.props.onSelect(pin.id_str);
   }
 
   componentDidMount() {}
@@ -32,7 +29,7 @@ class PinItem extends _react.Component {
   _renderPinHeader(pin, isArticle) {
     const isMoment = pin.type === 'moment';
     const { author: author } = pin;
-    const fromNow = (0, _moment2.default)(pin.dateCreated).fromNow();
+    const fromNow = (0, _moment2.default)(pin.created_at).fromNow();
     return _react2.default.createElement(
       'div',
       { className: 'pin-header' },
@@ -41,14 +38,15 @@ class PinItem extends _react.Component {
         { className: 'pin-moment' },
         _react2.default.createElement(
           'span',
-          { className: 'thumb-sm avatar pull-left mr-5' },
-          _react2.default.createElement('img', { alt: 'pin', src: author.avatar || '' })
+          { className: 'thumb-sm avatar pull-left mr-10' },
+          _react2.default.createElement('img', { alt: 'pin', className: 'img-thumbnail p-0', src: author.image_url || '' })
         ),
         _react2.default.createElement(
           'strong',
           { className: 'author-name' },
-          author.name,
+          author.firstName,
           ' ',
+          author.lastName,
           _react2.default.createElement(
             'small',
             { className: 'from-now fr' },
@@ -65,8 +63,7 @@ class PinItem extends _react.Component {
         'span',
         { className: 'pin-title' },
         pin.title
-      ),
-      isArticle && _react2.default.createElement('hr', null)
+      )
     );
   }
 
@@ -92,7 +89,15 @@ class PinItem extends _react.Component {
   }
 
   _renderTextPin(pin) {
-    return _react2.default.createElement('div', null);
+    return _react2.default.createElement(
+      'div',
+      { className: 'pin-body-text', onClick: () => this.onViewPinItem() },
+      _react2.default.createElement(
+        'p',
+        null,
+        'das dasd dasdadas  dasdadsa  dasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsadasdsa'
+      )
+    );
   }
 
   _renderPinFooter(pin) {
@@ -121,10 +126,10 @@ class PinItem extends _react.Component {
   _renderPinFooterIcons(pin) {
     return _react2.default.createElement(
       'div',
-      { className: 'pin-footer-icons' },
+      { className: 'pin-footer-icons mb-5' },
       _react2.default.createElement(
         'div',
-        { className: 'icon-span' },
+        { className: 'icon-span', onClick: () => this.onViewPinItem() },
         _react2.default.createElement('i', { className: 'fa fa-share' }),
         _react2.default.createElement(
           'span',
@@ -134,7 +139,7 @@ class PinItem extends _react.Component {
       ),
       _react2.default.createElement(
         'div',
-        { className: 'icon-span' },
+        { className: 'icon-span', onClick: () => this.onViewPinItem() },
         _react2.default.createElement('i', { className: 'fa fa-comments-o' }),
         _react2.default.createElement(
           'span',
@@ -144,7 +149,7 @@ class PinItem extends _react.Component {
       ),
       _react2.default.createElement(
         'div',
-        { className: 'icon-span' },
+        { className: 'icon-span', onClick: () => this.onViewPinItem() },
         _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
         _react2.default.createElement(
           'span',
@@ -167,7 +172,7 @@ class PinItem extends _react.Component {
         { className: 'panel panel-default mb-10' },
         _react2.default.createElement(
           'header',
-          { className: 'panel-heading text-uc p-0 mb-15' },
+          { className: 'panel-heading text-uc p-0 mb-10' },
           this._renderPinHeader(pin, isArticle)
         ),
         _react2.default.createElement(
@@ -186,7 +191,7 @@ class PinItem extends _react.Component {
   }
 }
 exports.default = PinItem;
-// import sizeOf from 'image-size';
+// import ReactDOM from 'react-dom';
 
 PinItem.displayName = 'PinItem';
 PinItem.propTypes = {

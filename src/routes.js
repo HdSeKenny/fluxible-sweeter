@@ -56,7 +56,7 @@ const createRoutes = (context) => {
       <Route path="list" component={List} />
 
       <Route path="blog-details/:blogId" component={BlogsDetails} />
-      <Route path="user-home/:userId/home" component={UserHome} />
+      <Route path=":user/home" component={UserHome} />
       <Route path="user-blogs/:userId/list" component={UserBlogs} />
       <Route path="user-blogs/:userId/add" component={AddBlog} />
       <Route path="user-settings/:userId/info" component={UserInfo} />

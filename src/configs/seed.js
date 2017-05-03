@@ -62,4 +62,4 @@ const seed = {
   }
 };
 
-module.exports = seed;
+export default seed;

@@ -32,9 +32,9 @@ var _fetchData = require('./utils/fetchData');
 
 var _fetchData2 = _interopRequireDefault(_fetchData);
 
-require('./public/styles/main.less');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import './public/styles/main.less';
 
 window.React = _react2.default;
 

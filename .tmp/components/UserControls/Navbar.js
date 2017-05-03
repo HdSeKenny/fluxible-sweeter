@@ -111,6 +111,15 @@ const Navbar = _react2.default.createClass({
                 { to: '/list' },
                 'Moments'
               )
+            ),
+            authenticated && _react2.default.createElement(
+              'li',
+              { className: `${this.isActive('/home')}` },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: `/${currentUser.username}/home` },
+                'Personal'
+              )
             )
           ),
           _react2.default.createElement(
@@ -155,7 +164,7 @@ const Navbar = _react2.default.createClass({
                   null,
                   _react2.default.createElement(
                     _reactRouter.Link,
-                    { to: `/user-home/${currentUser.strId}/home` },
+                    { to: `/${currentUser.username}/home` },
                     'User center'
                   )
                 ),
