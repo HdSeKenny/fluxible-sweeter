@@ -36,7 +36,7 @@ export default class PinItem extends Component {
     return (
       <div className="pin-header">
         <div className="pin-moment-user" onClick={() => this.GoToUserCenter(author)}>
-          <span className="thumb-sm avatar pull-left mr-10" data-balloon="Go user center!" data-balloon-pos="left">
+          <span className="thumb-sm avatar pull-left mr-10">
             <img alt="pin" className="" src={author.image_url || ''} />
           </span>
           <strong className="author-name">
@@ -52,42 +52,52 @@ export default class PinItem extends Component {
   }
 
   _renderPinBody(pin, isArticle) {
-    const imageStyle = {
-      backgroundImage: `url(${pin.author.background_image_url})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center',
-      height: '100px',
-      // width: '200px'
-    };
     if (isArticle) {
-      const imagesUrl = pin.images_url;
-      // if (imagesUrl && imagesUrl.length) {
-      //   const displayImgUrl = imagesUrl[0];
-      // const dimensions = sizeOf(pin.image_url);
-      // console.log(dimensions.width, dimensions.height);
+      const imageUrls = pin.images;
+      if (imageUrls && imageUrls.length) {
+        const displayImgUrl = imageUrls[0];
+        const imageStyle = {
+          backgroundImage: `url(${displayImgUrl})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center center',
+          height: '100px'
+        };
         return (
           <Row className="p-0">
-            <Col size="3" className="pin-image" onClick={() => this.onViewPinItem()} style={imageStyle}>
-            </Col>
-            <Col size="9" className="pl-15">
-              <div className="">
-                <span className="pin-article-title">{pin.title}</span>
-              </div>
+            <Col size="4 p-0" className="pin-image" onClick={() => this.onViewPinItem()} style={imageStyle} />
+            <Col size="8 p-0" className="pl-15">
               <Row className="">
-                <Col size="4" className="p-0 pin-footer-user">
+                <span className="pin-article-title">{pin.title}</span>
+              </Row>
+              <Row className="">
+                <Col size="5" className="p-0 pin-footer-user">
                   {this._renderPinFooter(pin)}
                 </Col>
-                <Col size="8" className="p-0 mt-45">
+                <Col size="7" className="p-0 mt-53 tar">
                   {this._renderPinFooterIcons(pin)}
                 </Col>
               </Row>
             </Col>
           </Row>
         );
-      // }
-      // else {
-      //   return this._renderTextPin(pin);
-      // }
+      }
+      else {
+        return (
+          <div className="">
+            <div className="">
+              <span className="pin-article-title">{pin.title}</span>
+            </div>
+            <Row className="">
+              <Col size="5" className="p-0 pin-footer-user">
+                {this._renderPinFooter(pin)}
+              </Col>
+              <Col size="7" className="p-0 mt-53 tar">
+                {this._renderPinFooterIcons(pin)}
+              </Col>
+            </Row>
+          </div>
+        );
+      }
     }
     else {
       return this._renderTextPin(pin);
@@ -104,31 +114,38 @@ export default class PinItem extends Component {
 
   _renderPinFooter(pin) {
     const { author } = pin;
+    const fromNow = moment(pin.created_at).fromNow();
+
     return (
       <div className="pin-article-user" onClick={() => this.GoToUserCenter(author)}>
-        <span className="thumb-sm avatar pull-left mr-5" data-balloon="Go user center!" data-balloon-pos="left">
+        <span className="thumb-sm avatar pull-left" data-balloon="Go user center!" data-balloon-pos="left">
           <img alt="pin" src={author.image_url} />
         </span>
         <strong className="author-name">{author.firstName} {author.lastName}</strong>
-        <p className="text-muted text-xs mt-5">{author.username}</p>
+        <p className="text-muted text-xs">{fromNow}</p>
       </div>
     );
   }
 
   _renderPinFooterIcons(pin) {
     return (
-      <div className="pin-footer-icons mb-5">
+      <div className="pin-footer-icons">
         <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-share" />
           <span className="ml-5">3434</span>
         </div>
         <div className="icon-span" onClick={() => this.onViewPinItem()}>
           <i className="fa fa-comments-o" />
-          <span className="ml-5">3434</span>
+          <span className="ml-5">{pin.comments.length}</span>
         </div>
-        <div className="icon-span" onClick={() => this.onViewPinItem()}>
+        <div
+          className="icon-span"
+          onClick={() => this.onViewPinItem()}
+          data-balloon="thumbs up!"
+          data-balloon-pos="top"
+        >
           <i className="fa fa-thumbs-o-up" />
-          <span className="ml-5">{pin.thumbs}</span>
+          <span className="ml-5">{pin.likers.length}</span>
         </div>
       </div>
     );
@@ -138,21 +155,23 @@ export default class PinItem extends Component {
     const { pin } = this.props;
     const isArticle = pin.type === 'article';
     return (
-      <pin className="pin">
-        <section className="panel panel-default mb-10">
-          <header className="panel-heading text-uc p-0 mb-10">
-            {!isArticle && this._renderPinHeader(pin)}
-          </header>
-          <section className="panel-body p-0">
-            {this._renderPinBody(pin, isArticle)}
-          </section>
+      <div className="pin">
+        <div className="panel panel-default">
           {!isArticle &&
-            <footer className="panel-footer p-0 mt-15">
-              {this._renderPinFooterIcons(pin)}
-            </footer>
+            <div className="panel-heading text-uc p-0">
+              {this._renderPinHeader(pin)}
+            </div>
           }
-        </section>
-      </pin>
+          <div className="panel-body p-0">
+            {this._renderPinBody(pin, isArticle)}
+          </div>
+          {!isArticle &&
+            <div className="panel-footer p-0 tar">
+              {this._renderPinFooterIcons(pin)}
+            </div>
+          }
+        </div>
+      </div>
     );
   }
 }

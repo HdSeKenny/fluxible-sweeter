@@ -1,5 +1,5 @@
 {
-  "mongo_kenny_url": "mongodb://localhost/kblog",
-  "apiService": "http://localhost:3000/api/",
+  "mongo_url": "mongodb://localhost/sweeter",
+  "api_service": "http://localhost:9000/api/",
   "server_port": 9000
 }

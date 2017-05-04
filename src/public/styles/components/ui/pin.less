@@ -1,6 +1,7 @@
 .pin {
   .panel {
-    padding: 15px 15px 30px 15px;
+    padding: 15px;
+    margin-bottom: 10px;
     .panel-heading {
       .pin-header {
         .text-xs {
@@ -13,6 +14,7 @@
     .panel-body {
       .pin-article-title {
         font-size: 18px;
+        font-weight: 500;
         color: #333;
         &:hover {
           color: @brand-info;
@@ -36,7 +38,7 @@
         }
       }
       .pin-footer-user {
-        margin-top: 28px;
+        margin-top: 38px;
       }
     }
     .author-name {
@@ -63,9 +65,23 @@
         }
       }
     }
+
+    .pin-article-user {
+      img {
+        width: 35px;
+      }
+      .author-name {
+        padding-top: 5px;
+        font-size: 12px;
+      }
+      .text-xs {
+        font-size: 10px;
+        font-style: italic;
+        color: gray;
+      }
+    }
+
     .pin-footer-icons {
-      float: right;
-      margin-bottom: 10px;
       .icon-span {
         color: #666666;
         font-size: 12px;

@@ -160,7 +160,7 @@ module.exports = function(grunt) {
         },
         port: env.hot_server_port,
         webpack: makeWebpackConfig({ model: 'dev' }),
-        // publicPath: `http://${env.hot_server_host}:${env.hot_server_port}`
+        publicPath: `http://${env.hot_server_host}:${env.hot_server_port}`
       },
 
       start: {}

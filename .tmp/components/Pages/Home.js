@@ -123,204 +123,77 @@ const Home = _react2.default.createClass({
     this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
     _UI.ModalsFactory.show('pinModal');
   },
-  _renderCreateBtns: function (isDisabled) {
-    const { currentUser: currentUser } = this.state;
-    return _react2.default.createElement(
-      'div',
-      { className: 'row btn-row' },
-      _react2.default.createElement(
-        _reactBootstrap.Button,
-        { disabled: isDisabled, onClick: this.handleMicroBlog, className: 'btn-primary create-btn' },
-        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'send' }),
-        'Create'
-      ),
-      currentUser && _react2.default.createElement(
-        _reactRouter.Link,
-        { to: `/user-blogs/${currentUser.strId}/add` },
-        _react2.default.createElement(
-          _reactBootstrap.Button,
-          { className: 'btn-info create-btn' },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
-          'Articles'
-        )
-      ),
-      !currentUser && _react2.default.createElement(
-        _reactRouter.Link,
-        { to: '' },
-        _react2.default.createElement(
-          _reactBootstrap.Button,
-          { className: 'btn-info create-btn', onClick: this.checkCurrentUser },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
-          'Articles'
-        )
-      )
-    );
-  },
-  _renderCreateWell: function () {
-    const { blogText: blogText, welcomeText: welcomeText } = this.state;
-    const length = blogText.length;
-    const isDisabled = length > 140 || length === 0;
-    return _react2.default.createElement(
-      'div',
-      { className: 'well create-well' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-7 col-md-7' },
-          _react2.default.createElement(
-            'p',
-            null,
-            welcomeText
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-5 col-md-5' },
-          length < 141 && _react2.default.createElement(
-            'p',
-            null,
-            'You can still write ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span' },
-              140 - length
-            ),
-            ' words'
-          ),
-          length > 140 && _react2.default.createElement(
-            'p',
-            null,
-            'Words can\'t be more than ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span-red' },
-              '140'
-            ),
-            ' words'
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row textarea-row' },
-        _react2.default.createElement('textarea', { type: 'text', rows: '3', value: blogText, onChange: this.handleBlogText })
-      ),
-      this._renderCreateBtns(isDisabled)
-    );
-  },
-  _renderBlogSearch: function () {
-    return _react2.default.createElement(
-      'div',
-      { className: 'well blog' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-9 search-query' },
-          _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search', onChange: this.onSearchBlog })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 sort-by' },
-          _react2.default.createElement(
-            'select',
-            { className: 'form-control', onChange: this.sortByType },
-            _react2.default.createElement(
-              'option',
-              null,
-              'All blogs'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Microblog'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Article'
-            )
-          )
-        )
-      )
-    );
-  },
-  _renderUserCard: function (displayUser) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'well right-first' },
-      _react2.default.createElement(
-        'div',
-        { className: 'rf-body' },
-        _react2.default.createElement(
-          'div',
-          { className: 'rf-img' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: `/user-home/${displayUser._id}/home` },
-            _react2.default.createElement('img', { alt: '', src: displayUser.image_url })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'rf-info' },
-          _react2.default.createElement(
-            'h3',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: `/user-home/${displayUser._id}/home` },
-              displayUser.username
-            )
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            displayUser.profession
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row rf-footer' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-4' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: `/user-blogs/${displayUser._id}/list` },
-            displayUser.blogs.length,
-            ' Blogs'
-          )
-        ),
-        _react2.default.createElement('div', { className: 'rf-border' }),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-4' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: `/user-follows/${displayUser._id}` },
-            displayUser.fans.length,
-            ' Fans'
-          )
-        ),
-        _react2.default.createElement('div', { className: 'rf-border' }),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-4' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: `/user-follows/${displayUser._id}` },
-            displayUser.focuses.length,
-            ' Focuses'
-          )
-        )
-      )
-    );
-  },
+
+
+  // _renderCreateBtns(isDisabled) {
+  //   const { currentUser } = this.state;
+  //   return (
+  //     <div className="row btn-row">
+  //       <Button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
+  //         <Glyphicon glyph="send" />Create
+  //       </Button>
+  //       {currentUser &&
+  //         <Link to={`/user-blogs/${currentUser.strId}/add`}>
+  //           <Button className="btn-info create-btn">
+  //             <Glyphicon glyph="pencil" />Articles
+  //           </Button>
+  //         </Link>
+  //       }
+  //       {!currentUser &&
+  //         <Link to="">
+  //           <Button className="btn-info create-btn" onClick={this.checkCurrentUser}>
+  //             <Glyphicon glyph="pencil" />Articles
+  //           </Button>
+  //         </Link>
+  //       }
+  //     </div>
+  //   );
+  // },
+
+  // _renderCreateWell() {
+  //   const { blogText, welcomeText } = this.state;
+  //   const length = blogText.length;
+  //   const isDisabled = length > 140 || length === 0;
+  //   return (
+  //     <div className="well create-well">
+  //       <div className="row">
+  //         <div className="col-xs-7 col-md-7">
+  //           <p>{welcomeText}</p>
+  //         </div>
+  //         <div className="col-xs-5 col-md-5">
+  //           {length < 141 &&
+  //             <p>You can still write <span className="len-span">{140 - length}</span> words</p> }
+  //           {length > 140 &&
+  //             <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
+  //         </div>
+  //       </div>
+  //       <div className="row textarea-row">
+  //         <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
+  //       </div>
+  //       {this._renderCreateBtns(isDisabled)}
+  //     </div>
+  //   );
+  // },
+
+  // _renderBlogSearch() {
+  //   return (
+  //     <div className="well blog">
+  //       <div className="row">
+  //         <div className="col-xs-9 search-query">
+  //           <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
+  //         </div>
+  //         <div className="col-xs-3 sort-by">
+  //           <select className="form-control" onChange={this.sortByType}>
+  //             <option>All blogs</option>
+  //             <option>Microblog</option>
+  //             <option>Article</option>
+  //           </select>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // },
+
   _renderPinItems: function (pins) {
     const articles = pins.filter(pin => pin.type === 'article');
     const moments = pins.filter(pin => pin.type === 'moment');
@@ -333,7 +206,7 @@ const Home = _react2.default.createClass({
         _react2.default.createElement(
           'p',
           { className: 'home-tag' },
-          'New monments > ',
+          'New sweets > ',
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/list', className: 'view-all' },
@@ -341,8 +214,8 @@ const Home = _react2.default.createClass({
           )
         ),
         _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mason_row' },
+          'div',
+          { className: 'pins-block' },
           moments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, type: pin.type }))
         )
       ),
@@ -352,7 +225,7 @@ const Home = _react2.default.createClass({
         _react2.default.createElement(
           'p',
           { className: 'home-tag' },
-          'Articles > ',
+          'New articles > ',
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/list', className: 'view-all' },
@@ -360,8 +233,8 @@ const Home = _react2.default.createClass({
           )
         ),
         _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mason_row' },
+          'div',
+          { className: 'pins-block' },
           articles.map((article, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: article, type: article.type }))
         )
       ),
@@ -371,7 +244,7 @@ const Home = _react2.default.createClass({
         _react2.default.createElement(
           'p',
           { className: 'home-tag' },
-          'Hot Sweets > ',
+          'Hot sweets > ',
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/list', className: 'view-all' },
@@ -379,9 +252,9 @@ const Home = _react2.default.createClass({
           )
         ),
         _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mason_row' },
-          pins.sort((a, b) => b.thumbs - a.thumbs).map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, type: pin.type }))
+          'div',
+          { className: 'pins-block' },
+          pins.sort((a, b) => b.likers.length - a.likers.length).map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, type: pin.type }))
         )
       )
     );

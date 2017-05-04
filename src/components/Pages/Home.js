@@ -111,115 +111,74 @@ const Home = React.createClass({
     ModalsFactory.show('pinModal');
   },
 
-  _renderCreateBtns(isDisabled) {
-    const { currentUser } = this.state;
-    return (
-      <div className="row btn-row">
-        <Button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
-          <Glyphicon glyph="send" />Create
-        </Button>
-        {currentUser &&
-          <Link to={`/user-blogs/${currentUser.strId}/add`}>
-            <Button className="btn-info create-btn">
-              <Glyphicon glyph="pencil" />Articles
-            </Button>
-          </Link>
-        }
-        {!currentUser &&
-          <Link to="">
-            <Button className="btn-info create-btn" onClick={this.checkCurrentUser}>
-              <Glyphicon glyph="pencil" />Articles
-            </Button>
-          </Link>
-        }
-      </div>
-    );
-  },
+  // _renderCreateBtns(isDisabled) {
+  //   const { currentUser } = this.state;
+  //   return (
+  //     <div className="row btn-row">
+  //       <Button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
+  //         <Glyphicon glyph="send" />Create
+  //       </Button>
+  //       {currentUser &&
+  //         <Link to={`/user-blogs/${currentUser.strId}/add`}>
+  //           <Button className="btn-info create-btn">
+  //             <Glyphicon glyph="pencil" />Articles
+  //           </Button>
+  //         </Link>
+  //       }
+  //       {!currentUser &&
+  //         <Link to="">
+  //           <Button className="btn-info create-btn" onClick={this.checkCurrentUser}>
+  //             <Glyphicon glyph="pencil" />Articles
+  //           </Button>
+  //         </Link>
+  //       }
+  //     </div>
+  //   );
+  // },
 
-  _renderCreateWell() {
-    const { blogText, welcomeText } = this.state;
-    const length = blogText.length;
-    const isDisabled = length > 140 || length === 0;
-    return (
-      <div className="well create-well">
-        <div className="row">
-          <div className="col-xs-7 col-md-7">
-            <p>{welcomeText}</p>
-          </div>
-          <div className="col-xs-5 col-md-5">
-            {length < 141 &&
-              <p>You can still write <span className="len-span">{140 - length}</span> words</p> }
-            {length > 140 &&
-              <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
-          </div>
-        </div>
-        <div className="row textarea-row">
-          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
-        </div>
-        {this._renderCreateBtns(isDisabled)}
-      </div>
-    );
-  },
+  // _renderCreateWell() {
+  //   const { blogText, welcomeText } = this.state;
+  //   const length = blogText.length;
+  //   const isDisabled = length > 140 || length === 0;
+  //   return (
+  //     <div className="well create-well">
+  //       <div className="row">
+  //         <div className="col-xs-7 col-md-7">
+  //           <p>{welcomeText}</p>
+  //         </div>
+  //         <div className="col-xs-5 col-md-5">
+  //           {length < 141 &&
+  //             <p>You can still write <span className="len-span">{140 - length}</span> words</p> }
+  //           {length > 140 &&
+  //             <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
+  //         </div>
+  //       </div>
+  //       <div className="row textarea-row">
+  //         <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
+  //       </div>
+  //       {this._renderCreateBtns(isDisabled)}
+  //     </div>
+  //   );
+  // },
 
-  _renderBlogSearch() {
-    return (
-      <div className="well blog">
-        <div className="row">
-          <div className="col-xs-9 search-query">
-            <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
-          </div>
-          <div className="col-xs-3 sort-by">
-            <select className="form-control" onChange={this.sortByType}>
-              <option>All blogs</option>
-              <option>Microblog</option>
-              <option>Article</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    );
-  },
-
-  _renderUserCard(displayUser) {
-    return (
-      <div className="well right-first">
-        <div className="rf-body">
-          <div className="rf-img">
-            <Link to={`/user-home/${displayUser._id}/home`}>
-              <img alt="" src={displayUser.image_url} />
-            </Link>
-          </div>
-          <div className="rf-info">
-            <h3>
-              <Link to={`/user-home/${displayUser._id}/home`}>
-                {displayUser.username}
-              </Link>
-            </h3>
-            <p>{displayUser.profession}</p>
-          </div>
-        </div>
-        <div className="row rf-footer">
-          <div className="col-xs-4">
-            <Link to={`/user-blogs/${displayUser._id}/list`}>
-              {displayUser.blogs.length} Blogs
-            </Link>
-          </div>
-          <div className="rf-border"></div>
-          <div className="col-xs-4">
-            <Link to={`/user-follows/${displayUser._id}`}>
-              {displayUser.fans.length} Fans
-            </Link>
-          </div>
-          <div className="rf-border"></div>
-          <div className="col-xs-4">
-            <Link to={`/user-follows/${displayUser._id}`}>
-              {displayUser.focuses.length} Focuses
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  },
+  // _renderBlogSearch() {
+  //   return (
+  //     <div className="well blog">
+  //       <div className="row">
+  //         <div className="col-xs-9 search-query">
+  //           <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
+  //         </div>
+  //         <div className="col-xs-3 sort-by">
+  //           <select className="form-control" onChange={this.sortByType}>
+  //             <option>All blogs</option>
+  //             <option>Microblog</option>
+  //             <option>Article</option>
+  //           </select>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // },
 
   _renderPinItems(pins) {
     const articles = pins.filter(pin => pin.type === 'article');
@@ -227,32 +186,32 @@ const Home = React.createClass({
     return (
       <article className="classification">
         <section className="new-monments">
-          <p className="home-tag">New monments > <Link to="/list" className="view-all">.view all</Link></p>
-          <Row className="mason_row">
+          <p className="home-tag">New sweets > <Link to="/list" className="view-all">.view all</Link></p>
+          <div className="pins-block">
             {moments.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
               .map((pin, index) =>
                 <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
               )
             }
-          </Row>
+          </div>
         </section>
         <section className="articles">
-          <p className="home-tag">Articles > <Link to="/list" className="view-all">.view all</Link></p>
-          <Row className="mason_row">
+          <p className="home-tag">New articles > <Link to="/list" className="view-all">.view all</Link></p>
+          <div className="pins-block">
             {articles.map((article, index) =>
               <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={article} type={article.type} />
             )}
-          </Row>
+          </div>
         </section>
         <section className="hot-blogs">
-          <p className="home-tag">Hot Sweets > <Link to="/list" className="view-all">.view all</Link></p>
-          <Row className="mason_row">
-            {pins.sort((a, b) => (b.thumbs - a.thumbs))
+          <p className="home-tag">Hot sweets > <Link to="/list" className="view-all">.view all</Link></p>
+          <div className="pins-block">
+            {pins.sort((a, b) => (b.likers.length - a.likers.length))
               .map((pin, index) =>
                 <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
               )
             }
-          </Row>
+          </div>
         </section>
       </article>
     );
