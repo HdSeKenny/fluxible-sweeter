@@ -65,6 +65,14 @@ const Navbar = _react2.default.createClass({
   isActive: function (route) {
     return route === this.props.route ? 'active' : '';
   },
+  isHomeActive: function (route) {
+    const currentRoute = this.props.route;
+    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
+    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  },
+  getRouteSlashPosition: function (string, word, index) {
+    return string.split(word, index).join(word).length;
+  },
   handleLogout: function (e) {
     e.preventDefault();
     this.executeAction(_actions.UserActions.Logout);
@@ -114,7 +122,7 @@ const Navbar = _react2.default.createClass({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: `${this.isActive('/home')}` },
+              { className: `${this.isHomeActive('home')}` },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: `/${currentUser.username}/home` },
@@ -154,7 +162,7 @@ const Navbar = _react2.default.createClass({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: '' },
+              { className: 'm-0' },
               _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url }),
               _react2.default.createElement(
                 'ul',

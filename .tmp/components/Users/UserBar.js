@@ -76,7 +76,7 @@ const UserBar = _react2.default.createClass({
   isActive: function (route) {
     const currentRoute = this.props.path;
     const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(1, secondSlash) ? 'active' : '';
+    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
   },
   getRouteSlashPosition: function (string, word, index) {
     return string.split(word, index).join(word).length;
@@ -124,7 +124,7 @@ const UserBar = _react2.default.createClass({
     let isFollowed = false;
     if (currentUser && user) {
       user.fans.forEach(fan => {
-        if (fan.strId === currentUser.strId) {
+        if (fan.id_str === currentUser.id_str) {
           isFollowed = true;
         }
       });
@@ -154,10 +154,10 @@ const UserBar = _react2.default.createClass({
       { className: 'row nav' },
       _react2.default.createElement(
         'div',
-        { className: `col-md-2 col-xs-2 well user-home-well ${this.isActive('user-home')}` },
+        { className: `col-md-2 col-xs-2 well user-home-well ${this.isActive('home')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-home/${currentUser.strId}/home` },
+          { to: `/${currentUser.username}/home` },
           _react2.default.createElement('i', { className: 'fa fa-home' }),
           ' Home'
         )
@@ -167,7 +167,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-2 col-xs-2 well ${this.isActive('user-blogs')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-blogs/${currentUser.strId}/list` },
+          { to: `/${currentUser.username}/list` },
           _react2.default.createElement('i', { className: 'fa fa-book' }),
           ' Blogs'
         )
@@ -177,7 +177,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-2 col-xs-2 well ${this.isActive('user-follows')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-follows/${currentUser.strId}` },
+          { to: `/${currentUser.username}/following` },
           _react2.default.createElement('i', { className: 'fa fa-flag' }),
           ' Following'
         )
@@ -187,7 +187,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-2 col-xs-2 well ${this.isActive('user-messages')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-messages/${currentUser.strId}` },
+          { to: `/${currentUser.username}/messages` },
           _react2.default.createElement('i', { className: 'fa fa-comment' }),
           ' Messages'
         )
@@ -197,7 +197,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-2 col-xs-2 well ${this.isActive('user-settings')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-settings/${currentUser.strId}/info` },
+          { to: `/${currentUser.username}/info` },
           _react2.default.createElement('i', { className: 'fa fa-cogs' }),
           ' Settings'
         )
@@ -207,7 +207,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-2 col-xs-2 well ${this.isActive('user-more')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-more/${currentUser.strId}` },
+          { to: `/${currentUser.username}/more` },
           _react2.default.createElement('i', { className: 'fa fa-ellipsis-h' }),
           ' More'
         )
@@ -223,7 +223,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-3 col-xs-3 well user-home-well ${this.isActive('user-home')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-home/${user.strId}/home` },
+          { to: `/user-home/${user.username}/home` },
           _react2.default.createElement('i', { className: 'fa fa-home' }),
           ' Home'
         )
@@ -233,7 +233,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-3 col-xs-3 well ${this.isActive('user-blogs')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-blogs/${user.strId}/list` },
+          { to: `/user-blogs/${user.username}/list` },
           _react2.default.createElement('i', { className: 'fa fa-book' }),
           ' Blogs'
         )
@@ -243,7 +243,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-3 col-xs-3 well ${this.isActive('user-follows')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-follows/${user.strId}` },
+          { to: `/user-follows/${user.username}` },
           _react2.default.createElement('i', { className: 'fa fa-flag' }),
           ' Following'
         )
@@ -253,7 +253,7 @@ const UserBar = _react2.default.createClass({
         { className: `col-md-3 col-xs-3 well ${this.isActive('user-more')}` },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/user-more/${user.strId}` },
+          { to: `/user-more/${user.username}` },
           _react2.default.createElement('i', { className: 'fa fa-ellipsis-h' }),
           ' More'
         )

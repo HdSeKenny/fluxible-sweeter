@@ -157,12 +157,7 @@ const UserHome = React.createClass({
     const { pathname } = this.props.location;
     return (
       <div className="user-home">
-        <UserBar
-          path={pathname}
-          user={user}
-          isCurrentUser={isCurrentUser}
-          currentUser={currentUser}
-        />
+        <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
         <div className="user-content">
           <div className="content-left">
             <UserHomeNav

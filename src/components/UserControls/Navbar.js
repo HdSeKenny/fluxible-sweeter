@@ -50,6 +50,16 @@ const Navbar = React.createClass({
     return (route === this.props.route) ? 'active' : '';
   },
 
+  isHomeActive(route) {
+    const currentRoute = this.props.route;
+    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
+    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  },
+
+  getRouteSlashPosition(string, word, index) {
+    return string.split(word, index).join(word).length;
+  },
+
   handleLogout(e) {
     e.preventDefault();
     this.executeAction(UserActions.Logout);
@@ -89,7 +99,7 @@ const Navbar = React.createClass({
                 <Link to="/list">Moments</Link>
               </li>
               {authenticated &&
-                <li className={`${this.isActive('/home')}`}>
+                <li className={`${this.isHomeActive('home')}`}>
                   <Link to={`/${currentUser.username}/home`}>Personal</Link>
                 </li>
               }
@@ -106,7 +116,7 @@ const Navbar = React.createClass({
               }
 
               {authenticated &&
-                <li className="">
+                <li className="m-0">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
                     <li><Link to={`/${currentUser.username}/home`}>User center</Link></li>

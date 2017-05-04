@@ -13,7 +13,7 @@
     }
     .panel-body {
       .pin-article-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
         color: #333;
         &:hover {
@@ -29,16 +29,20 @@
       }
       .pin-body-text {
         p {
+          min-height: 42px;
           word-break: break-all;
           font-size: 14px;
           &:hover {
             cursor: pointer;
-            color: #333;
+            color: @brand-info;
           }
         }
       }
-      .pin-footer-user {
-        margin-top: 38px;
+      .body-user {
+        margin-top: 1px;
+      }
+      .body-icons {
+        margin-top: 16px;
       }
     }
     .author-name {
@@ -46,7 +50,7 @@
       line-height: 10px;
       font-size: 15px;
       color: @brand-info;
-      padding-top: 7px;
+      padding-top: 6px;
       .from-now {
         color: gray;
         font-size: 11px;

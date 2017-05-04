@@ -213,12 +213,7 @@ const UserHome = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'user-home' },
-      _react2.default.createElement(_UserBar2.default, {
-        path: pathname,
-        user: user,
-        isCurrentUser: isCurrentUser,
-        currentUser: currentUser
-      }),
+      _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
         { className: 'user-content' },

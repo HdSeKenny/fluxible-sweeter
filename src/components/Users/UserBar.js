@@ -58,7 +58,7 @@ const UserBar = React.createClass({
   isActive(route) {
     const currentRoute = this.props.path;
     const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(1, secondSlash) ? 'active' : '';
+    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
   },
 
   getRouteSlashPosition(string, word, index) {
@@ -112,7 +112,7 @@ const UserBar = React.createClass({
     let isFollowed = false;
     if (currentUser && user) {
       user.fans.forEach(fan => {
-        if (fan.strId === currentUser.strId) {
+        if (fan.id_str === currentUser.id_str) {
           isFollowed = true;
         }
       });
@@ -142,23 +142,23 @@ const UserBar = React.createClass({
   _renderCurrentUserNav(currentUser) {
     return (
       <div className="row nav">
-        <div className={`col-md-2 col-xs-2 well user-home-well ${this.isActive('user-home')}`}>
-          <Link to={`/user-home/${currentUser.strId}/home`}><i className="fa fa-home"></i> Home</Link>
+        <div className={`col-md-2 col-xs-2 well user-home-well ${this.isActive('home')}`}>
+          <Link to={`/${currentUser.username}/home`}><i className="fa fa-home"></i> Home</Link>
         </div>
         <div className={`col-md-2 col-xs-2 well ${this.isActive('user-blogs')}`}>
-          <Link to={`/user-blogs/${currentUser.strId}/list`}><i className="fa fa-book"></i> Blogs</Link>
+          <Link to={`/${currentUser.username}/list`}><i className="fa fa-book"></i> Blogs</Link>
         </div>
         <div className={`col-md-2 col-xs-2 well ${this.isActive('user-follows')}`}>
-          <Link to={`/user-follows/${currentUser.strId}`}><i className="fa fa-flag"></i> Following</Link>
+          <Link to={`/${currentUser.username}/following`}><i className="fa fa-flag"></i> Following</Link>
         </div>
         <div className={`col-md-2 col-xs-2 well ${this.isActive('user-messages')}`}>
-          <Link to={`/user-messages/${currentUser.strId}`}><i className="fa fa-comment"></i> Messages</Link>
+          <Link to={`/${currentUser.username}/messages`}><i className="fa fa-comment"></i> Messages</Link>
         </div>
         <div className={`col-md-2 col-xs-2 well ${this.isActive('user-settings')}`}>
-          <Link to={`/user-settings/${currentUser.strId}/info`}><i className="fa fa-cogs"></i> Settings</Link>
+          <Link to={`/${currentUser.username}/info`}><i className="fa fa-cogs"></i> Settings</Link>
         </div>
         <div className={`col-md-2 col-xs-2 well ${this.isActive('user-more')}`}>
-          <Link to={`/user-more/${currentUser.strId}`}><i className="fa fa-ellipsis-h"></i> More</Link>
+          <Link to={`/${currentUser.username}/more`}><i className="fa fa-ellipsis-h"></i> More</Link>
         </div>
       </div>
     );
@@ -168,16 +168,16 @@ const UserBar = React.createClass({
     return (
       <div className="row nav">
         <div className={`col-md-3 col-xs-3 well user-home-well ${this.isActive('user-home')}`}>
-          <Link to={`/user-home/${user.strId}/home`}><i className="fa fa-home"></i> Home</Link>
+          <Link to={`/user-home/${user.username}/home`}><i className="fa fa-home"></i> Home</Link>
         </div>
         <div className={`col-md-3 col-xs-3 well ${this.isActive('user-blogs')}`}>
-          <Link to={`/user-blogs/${user.strId}/list`}><i className="fa fa-book"></i> Blogs</Link>
+          <Link to={`/user-blogs/${user.username}/list`}><i className="fa fa-book"></i> Blogs</Link>
         </div>
         <div className={`col-md-3 col-xs-3 well ${this.isActive('user-follows')}`}>
-          <Link to={`/user-follows/${user.strId}`}><i className="fa fa-flag"></i> Following</Link>
+          <Link to={`/user-follows/${user.username}`}><i className="fa fa-flag"></i> Following</Link>
         </div>
         <div className={`col-md-3 col-xs-3 well ${this.isActive('user-more')}`}>
-          <Link to={`/user-more/${user.strId}`}><i className="fa fa-ellipsis-h"></i> More</Link>
+          <Link to={`/user-more/${user.username}`}><i className="fa fa-ellipsis-h"></i> More</Link>
         </div>
       </div>
     );

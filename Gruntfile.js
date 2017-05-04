@@ -115,7 +115,7 @@ module.exports = function(grunt) {
         {
           expand: true,
           cwd: '<%= project.srcPublic %>',
-          src: ['styles/**/*.css'],
+          src: ['styles/**/*.less'],
           dest: '<%= project.devPublic %>'
         },
         {

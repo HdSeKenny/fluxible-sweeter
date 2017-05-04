@@ -123,16 +123,21 @@ class PinItem extends _react.Component {
             )
           ),
           _react2.default.createElement(
+            'div',
+            { className: '' },
+            this._renderTextPin(pin)
+          ),
+          _react2.default.createElement(
             _Layout.Row,
             { className: '' },
             _react2.default.createElement(
               _Layout.Col,
-              { size: '5', className: 'p-0 pin-footer-user' },
+              { size: '5', className: 'p-0 body-user' },
               this._renderPinFooter(pin)
             ),
             _react2.default.createElement(
               _Layout.Col,
-              { size: '7', className: 'p-0 mt-53 tar' },
+              { size: '7', className: 'p-0 body-icons tar' },
               this._renderPinFooterIcons(pin)
             )
           )

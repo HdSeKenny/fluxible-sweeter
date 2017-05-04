@@ -87,11 +87,14 @@ export default class PinItem extends Component {
             <div className="">
               <span className="pin-article-title">{pin.title}</span>
             </div>
+            <div className="">
+              {this._renderTextPin(pin)}
+            </div>
             <Row className="">
-              <Col size="5" className="p-0 pin-footer-user">
+              <Col size="5" className="p-0 body-user">
                 {this._renderPinFooter(pin)}
               </Col>
-              <Col size="7" className="p-0 mt-53 tar">
+              <Col size="7" className="p-0 body-icons tar">
                 {this._renderPinFooterIcons(pin)}
               </Col>
             </Row>

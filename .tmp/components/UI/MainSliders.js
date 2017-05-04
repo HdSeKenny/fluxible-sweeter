@@ -13,7 +13,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class MainSliders extends _react.Component {
 
   render() {
-    return _react2.default.createElement("section", { className: "main-sliders" });
+    return _react2.default.createElement(
+      "section",
+      { className: "main-sliders tac" },
+      _react2.default.createElement(
+        "p",
+        null,
+        "Sweeter world, know what you want !"
+      )
+    );
   }
 }
 exports.default = MainSliders;
