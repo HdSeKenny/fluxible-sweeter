@@ -1,0 +1,8 @@
+{
+  "assets": {
+    "main": "http://localhost:9000/build/main.02e98e50d0a19b0c5552.js",
+    "style": "http://localhost:9000/build/main.aa4d645b3919e992be1a.css",
+    "common": "http://localhost:9000/build/common.aa4d645b3919e992be1a.js"
+  },
+  "cdnPath": "/"
+}

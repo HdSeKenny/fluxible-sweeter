@@ -13,9 +13,9 @@ var _Login2 = require('./Login');
 
 var _Login3 = _interopRequireDefault(_Login2);
 
-var _signup2 = require('./signup');
+var _Signup = require('./Signup');
 
-var _signup3 = _interopRequireDefault(_signup2);
+var _Signup2 = _interopRequireDefault(_Signup);
 
 var _Home2 = require('./Home');
 
@@ -29,6 +29,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Comments = _Comments3.default;
 exports.Login = _Login3.default;
-exports.signup = _signup3.default;
+exports.signup = _Signup2.default;
 exports.Home = _Home3.default;
 exports.List = _List3.default;

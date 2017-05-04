@@ -135,14 +135,39 @@ module.exports = function(grunt) {
         {
           expand: true,
           cwd: '<%= project.srcPublic %>',
-          src: ['images/**/*'],
+          src: ['styles/images/**/*'],
+          dest: '<%= project.distPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: [
+            'styles/**/*.ttf',
+            'styles/**/*.woff',
+            'styles/**/*.eot',
+            'styles/**/*.woff2',
+            'styles/**/*.svg',
+            'styles/**/*.otf'
+          ],
+          dest: '<%= project.distPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.css'],
+          dest: '<%= project.distPublic %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['styles/**/*.less'],
           dest: '<%= project.distPublic %>'
         },
         {
           expand: true,
           cwd: '<%= project.src %>',
-          src: ['views/*.jade'],
-          dest: '<%= project.distPublic %>'
+          src: ['**/*.jade'],
+          dest: '<%= project.dist %>'
         }]
       }
     },
@@ -333,9 +358,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('serve', [
-    'env:dev',
-    'clean:dev',
-    'babel:dev',
+    'env:build',
+    'clean:prod',
+    'babel:prod',
     'copy:dev',
     'assets',
     'concurrent:express'
@@ -344,10 +369,10 @@ module.exports = function(grunt) {
   // Production model
   grunt.registerTask('prod', [
     'env:build',
-    'clean',
-    'less:dev',
-    'webpack:build',
-    'server:prod'
+    'clean:prod',
+    'babel:prod',
+    'copy:prod',
+    'webpack:build'
   ]);
 
   // Production model => build

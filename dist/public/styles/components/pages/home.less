@@ -1,0 +1,63 @@
+.menuzord-section {
+  width: 100%;
+}
+
+.content-pages {
+  width: 100%;
+}
+
+.home-page {
+  .main-sliders {
+    height: 15em;
+    background-color: @brand-info;
+    padding: 5em 12em;
+    p {
+      color: #fff;
+      font-size: 40px;
+    }
+  }
+  @media (min-width: 769px) {
+    .main {
+      width: @nav-wrap-width;
+      margin: 0 auto;
+      padding: 0 0.5em;
+      .vbox {
+        min-height: 60em;
+      }
+    }
+  }
+  .main {
+    .classification {
+      section {
+        clear: both;
+        margin-top: 20px;
+        .home-tag {
+          padding: 1.4em 0.4em 0.4em 0.4em;
+          font-size: 1.5em;
+          margin-top: 1em;
+          color: #333;
+          .view-all {
+            font-size: 0.7em;
+            font-style: italic;
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+        .pins-block {
+          padding: 0.5em;
+          width: 100%;
+          .pin {
+            width: 32.66666666%;
+            margin-right: 1%;
+            display: inline-block;
+            float: left;
+            &:nth-child(3) {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

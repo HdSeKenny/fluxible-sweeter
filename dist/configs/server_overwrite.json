@@ -1,0 +1,5 @@
+{
+  "mongo_url": "mongodb://localhost/sweeter",
+  "api_service": "http://localhost:9000/api/",
+  "server_port": 9000
+}

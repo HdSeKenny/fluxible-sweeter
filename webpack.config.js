@@ -5,18 +5,13 @@ const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
 const env = require('./src/configs/development');
-// const babelrc = fs.readFileSync('./.babelrc');
-// const babelLoaderQuery = JSON.parse(babelrc);
-// const chunkRegex = /^([A-Za-z0-9_-]+)\..*/;
-const configs = require('./src/configs');
+const serverConfigs = require('./src/configs/server');
 
 module.exports = function makeWebpackConfig(options) {
   const isDev = options.model === 'dev';
   const isProd = options.model === 'prod';
   const isTest = options.model === 'test';
-  const { disableDevServer } = options;
 
   const config = {};
 
@@ -26,11 +21,10 @@ module.exports = function makeWebpackConfig(options) {
 
   config.entry = ['./src/client.js'];
 
-
   config.output = {
     // Absolute output directory
     // path: path.join(__dirname, '/src/public/build/'),
-    path: `${__dirname}/dist/`,
+    path: isProd ? `${__dirname}/dist/build/` : `${__dirname}/dist/`,
 
     // Uses webpack-dev-server in development
     publicPath: isProd ? '/' : `http://${env.hot_server_host}:${env.hot_server_port}/`,
@@ -76,7 +70,7 @@ module.exports = function makeWebpackConfig(options) {
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
-    new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),
+    new ExtractTextPlugin({ filename: isProd ? '[name].[hash].css' : '[name].css', disable: false, allChunks: true }),
 
     // Set jquery for global, used for bootstrap
     new webpack.ProvidePlugin({
@@ -99,7 +93,7 @@ module.exports = function makeWebpackConfig(options) {
     new webpack.NoEmitOnErrorsPlugin(),
 
     // generates webpack assets config to use hashed assets in production mode
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: 'common.js' })
+    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: isProd ? 'common.[hash].js' : 'common.js' })
   ];
 
   // Add build specific plugins
@@ -137,29 +131,29 @@ module.exports = function makeWebpackConfig(options) {
             assets: {},
             cdnPath: this.options.output.publicPath
           };
-
+          const hostAddress = `http://${env.hot_server_host}:${serverConfigs.server.port}/build/`;
           Object.keys(assets).forEach((key) => {
             const value = assets[key];
             const isArrayValue = _.isArray(value);
+            if (isArrayValue) {
+              value.forEach(str => {
+                if (str.includes('css') && !str.includes('map')) {
+                  output.assets.style = `${hostAddress}${str}`;
+                }
 
-            if (isDev && !disableDevServer) {
-              if (isArrayValue) {
-                value.forEach(v => {
-                  const assetsKey = v.split('.').join('_');
-                  output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${v}`;
-                });
-              } else {
-                const assetsKey = value.split('.').join('_');
-                output.assets[assetsKey] = `http://${env.hot_server_host}:${env.hot_server_port}/${value}`;
-              }
-            } else {
-              output.assets[key] = `${configs.path_prefix}/dist/${value}`;
+                if (str.includes('js')) {
+                  output.assets.main = `${hostAddress}${str}`;
+                }
+              });
+            }
+            else {
+              output.assets[key] = `${hostAddress}${value}`;
             }
           });
 
           fs.writeFileSync(
-            path.join(__dirname, '/src/public/assets', 'assets.json'),
-            JSON.stringify(output, null, 4)
+            path.join(__dirname, '/dist/configs', 'assets.json'),
+            JSON.stringify(output, null, 2)
           );
         });
       }

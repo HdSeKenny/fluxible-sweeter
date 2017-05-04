@@ -44,4 +44,4 @@ if (environmentConfig.APIAuthHeader) {
   serverConfig.APIAuthHeader = environmentConfig.APIAuthHeader;
 }
 
-export default serverConfig;
+module.exports = serverConfig;

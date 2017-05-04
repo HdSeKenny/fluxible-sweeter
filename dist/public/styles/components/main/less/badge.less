@@ -1,0 +1,67 @@
+
+.badgestack {
+    float: left;
+    position: relative;
+    margin-right: 20px;
+}
+
+.badgestack > i {
+    top: 20px;
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 69px;
+    left: 0;
+    color: #fff;
+}
+
+.hexagon {
+  position: relative;
+  width: 60px; 
+  height: 34.64px;
+  background-color: #90d7ed;
+  margin: 17.32px 0;
+}
+
+.badge-red {
+    background-color: #e55957;    
+}
+
+.badge-yellow {
+    background-color: #e4ba00;    
+}
+
+.hexagon:before,
+.hexagon:after {
+    left: 0;
+  content: "";
+  position: absolute;
+  width: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+}
+
+.hexagon:before {
+  bottom: 100%;
+  border-bottom: 17.32px solid #90d7ed;
+}
+
+.hexagon:after {
+  top: 100%;
+  width: 0;
+  border-top: 17.32px solid #90d7ed;
+}
+
+.hexagon.badge-red:after {
+  border-top: 17.32px solid #e55957;    
+}
+.hexagon.badge-red:before {
+  border-bottom: 17.32px solid #e55957;    
+}
+
+.hexagon.badge-yellow:after {
+  border-top: 17.32px solid #e4ba00;    
+}
+.hexagon.badge-yellow:before {
+  border-bottom: 17.32px solid #e4ba00;    
+}

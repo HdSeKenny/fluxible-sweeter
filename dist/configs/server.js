@@ -1,8 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 const path = require('path');
 const config = require('./');
 const environmentConfig = require('./server_overwrite.json');
@@ -49,5 +46,4 @@ if (environmentConfig.APIAuthHeader) {
   serverConfig.APIAuthHeader = environmentConfig.APIAuthHeader;
 }
 
-exports.default = serverConfig;
-module.exports = exports['default'];
+module.exports = serverConfig;
