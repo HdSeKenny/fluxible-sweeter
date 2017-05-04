@@ -6,7 +6,6 @@ const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const env = require('./src/configs/development');
-const serverConfigs = require('./src/configs/server');
 
 module.exports = function makeWebpackConfig(options) {
   const isDev = options.model === 'dev';
@@ -131,7 +130,7 @@ module.exports = function makeWebpackConfig(options) {
             assets: {},
             cdnPath: this.options.output.publicPath
           };
-          const hostAddress = `http://${env.hot_server_host}:${serverConfigs.server.port}/build/`;
+          const hostAddress = 'build/';
           Object.keys(assets).forEach((key) => {
             const value = assets[key];
             const isArrayValue = _.isArray(value);
