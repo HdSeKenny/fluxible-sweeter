@@ -88,12 +88,16 @@ const Navbar = React.createClass({
 
   render() {
     const { authenticated, currentUser, grayUserImageUrl } = this.state;
+    const isHome = this.props.route === '/';
+    const brandImage = isHome ? 'styles/images/sweeter.png' : 'styles/images/sweeter_gray.png'
     return (
       <section className="menuzord-section">
         <header className="hidden-header" />
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
-            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>Sweeter</Link>
+            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>
+              <img src={brandImage} alt="brand" height="26" />
+            </Link>
             <ul className="sweet-nav-menu sweet-nav-left">
               <li className={`${this.isActive('/list')}`}>
                 <Link to="/list">Moments</Link>
