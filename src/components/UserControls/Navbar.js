@@ -4,8 +4,8 @@ import { Link, routerShape } from 'react-router';
 import { sweetAlert, animations } from '../../utils';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
-import { ModalsFactory, Layout } from '../UI';
-import { Login, signup } from '../Pages';
+import { ModalsFactory } from '../UI';
+import { Modals } from '../UserControls/Modals';
 
 const Navbar = React.createClass({
 
@@ -99,12 +99,18 @@ const Navbar = React.createClass({
                 <Link to="/list">Moments</Link>
               </li>
               {authenticated &&
-                <li className={`${this.isHomeActive('home')}`}>
+                <li className={this.isHomeActive('home')}>
                   <Link to={`/${currentUser.username}/home`}>Personal</Link>
                 </li>
               }
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
+              <li className={this.isActive('about')}>
+                <Link to="/about">About</Link>
+              </li>
+              <li className={this.isHomeActive('contact')}>
+                <Link to="/contact">Contact</Link>
+              </li>
               {!authenticated &&
                 <li className="mr-0">
                   <img alt="gray-user" src={grayUserImageUrl} />
@@ -116,7 +122,7 @@ const Navbar = React.createClass({
               }
 
               {authenticated &&
-                <li className="m-0">
+                <li className="mr-0">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
                     <li><Link to={`/${currentUser.username}/home`}>User center</Link></li>
@@ -125,15 +131,10 @@ const Navbar = React.createClass({
                   </ul>
                 </li>
               }
-
             </ul>
           </div>
         </header>
-
-        <Layout.Page>
-          <ModalsFactory modalref="loginModal" title="Login to account" ModalComponent={Login} size="modal-md" showHeaderAndFooter={true} />
-          <ModalsFactory modalref="signupModal" title="Sign up" ModalComponent={signup} size="modal-md" showHeaderAndFooter={true} />
-        </Layout.Page>
+        <Modals />
       </section>
     );
   }

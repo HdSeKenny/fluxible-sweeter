@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-const colors = require('colors');
 const path = require('path');
 const makeWebpackConfig = require('./webpack.config');
 const env = require('./src/configs/development');
@@ -208,7 +206,7 @@ module.exports = function(grunt) {
       },
       test: {
         options: {
-          // script: 'path/to/test/server.js'
+          script: 'path/to/test/server.js'
         }
       }
     },
@@ -217,16 +215,6 @@ module.exports = function(grunt) {
       options: {
 
       },
-
-      // scripts: {
-      //   files: ['src/**/*.js', '!tests/**/*', '!mocks/**/*'],
-      //   tasks: ['newer:babel:dev'],
-      //   options: {
-      //     spawn: false,
-      //     // add interval can reduce the cpu usage
-      //     interval: 500,
-      //   },
-      // },
 
       less: {
         options: {
@@ -251,7 +239,7 @@ module.exports = function(grunt) {
       },
 
       express: {
-        files: ['src/**/*.js'],
+        files: ['src/configs/*.js', 'src/configs/*.json', 'src/services/*.js'],
         tasks: ['newer:babel:dev', 'newer:copy:dev', 'express:dev'],
         options: {
           spawn: false,

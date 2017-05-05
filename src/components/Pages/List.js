@@ -8,7 +8,7 @@ import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
 import data from '../../utils/data';
-import { ViewPin, BlogModal } from '../UserControls';
+import { PinItemModal, BlogModal } from '../UserControls';
 
 const List = React.createClass({
 
@@ -250,7 +250,7 @@ const List = React.createClass({
 
         <Layout.Page>
           <ModalsFactory modalref="createBlogModal" title="Create a sweet !" ModalComponent={BlogModal} size="modal-md" showHeaderAndFooter={false} />
-          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={ViewPin} showHeaderAndFooter={true} />
+          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={true} />
         </Layout.Page>
       </article>
     );

@@ -1,13 +1,11 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { MainSliders, PinItem, ModalsFactory } from '../UI';
-import { Row, Page } from '../UI/Layout';
-import { ViewPin } from '../UserControls';
+import { MainSliders, PinItem } from '../UI';
+import { Modals } from '../UserControls/Modals';
 
 const Home = React.createClass({
 
@@ -107,8 +105,9 @@ const Home = React.createClass({
 
   onViewPinItem(id) {
     const { blogs } = this.state;
-    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
-    ModalsFactory.show('pinModal');
+    const selectedPin = blogs.find(p => p.id_str === id);
+    this.setState({ selectedPin });
+    Modals.show('pinModal');
   },
 
   // _renderCreateBtns(isDisabled) {
@@ -218,7 +217,7 @@ const Home = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs } = this.state;
+    const { currentUser, kenny, blogs, selectedPin } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <div className="home-page">
@@ -226,38 +225,10 @@ const Home = React.createClass({
         <div className="main">
           {this._renderPinItems(blogs)}
         </div>
-        <Page>
-          <ModalsFactory
-            modalref="pinModal"
-            large={true}
-            title={this.state.selectedPin.title}
-            pin={this.state.selectedPin}
-            ModalComponent={ViewPin}
-            showHeaderAndFooter={true}
-          />
-        </Page>
+        <Modals selectedPin={selectedPin} />
       </div>
     );
   }
 });
 
 export default Home;
-
-
-/*
-  <div className="blog-left">
-    {this._renderCreateWell()}
-    {this._renderBlogSearch()}
-    <BlogsWell
-      displayBlogs={blogs}
-      changeShowCommentsState={this.changeShowCommentsState}
-      changeBlogThumbsUpState={this.changeBlogThumbsUpState}
-    />
-  </div>
-  <div className="blog-right" >
-    {this._renderUserCard(displayUser)}
-    <div className="well right-second">
-      <HotBlogsTabs />
-    </div>
-  </div>
- */

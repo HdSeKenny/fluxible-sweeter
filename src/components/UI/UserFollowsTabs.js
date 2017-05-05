@@ -1,10 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { UserStore } from '../../stores';
-import { UserActions } from '../../actions';
 import { Button, Glyphicon } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { UserStore } from '../../stores';
 import { Tabs, Pane } from '../UserControls';
 
 const UserFollowsTabs = React.createClass({
@@ -101,7 +98,7 @@ const UserFollowsTabs = React.createClass({
       )
     }
   },
-  
+
   _renderUserFans(currentUser, user) {
     if (user.fans.length > 0) {
       return(

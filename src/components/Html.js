@@ -23,7 +23,7 @@ export default class Html extends Component {
       <html lang="en">
         <head>
           <meta charSet="utf-8" />
-          <title>Kenny"s Blog</title>
+          <title>Sweeter</title>
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
           <link href={style} rel="stylesheet" />
@@ -36,7 +36,7 @@ export default class Html extends Component {
           <script src={common}></script>
           <script src={main}></script>
           <script src="/styles/js/sweetalert.min.js"></script>
-          {essentials && (<script src={essentials}></script>)}
+          {essentials && <script src={essentials}></script>}
         </body>
       </html>
     );
