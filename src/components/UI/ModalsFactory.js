@@ -30,14 +30,12 @@ export default class ModalsFactory extends Component {
     return shallowCompare(this, nextProps, nextState);
   }
 
-  _renderModalHeader(title, showHeaderAndFooter) {
+  _renderModalHeader(title) {
     return (
       <div className="modal-header">
-        {showHeaderAndFooter ?
-          <h3 className="modal-title ml-15 mr-15">
-            {title} <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">×</button>
-          </h3> : <button type="button" className="text-muted close mt-5 mr-5" data-dismiss="modal" aria-hidden="true">×</button>
-        }
+        <h3 className="modal-title ml-15 mr-15">
+          {title} <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">×</button>
+        </h3>
       </div>
     );
   }
@@ -67,7 +65,7 @@ export default class ModalsFactory extends Component {
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>
           <div className="modal-content">
-            {this._renderModalHeader(title, showHeaderAndFooter)}
+            {showHeaderAndFooter && this._renderModalHeader(title)}
             {this._renderModalBody(ModalComponent)}
             {showHeaderAndFooter && this._renderModalFooter()}
           </div>

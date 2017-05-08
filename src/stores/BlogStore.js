@@ -42,7 +42,7 @@ const BlogStore = createStore({
 
   /* Blogs comments */
   addCommentSuccess(res) {
-    const resObj = { resMsg: 'COMMENT_SUCCESS', blogId: res.blogId }
+    const resObj = { msg: 'COMMENT_SUCCESS', blogId: res.blogId, data: res };
     this.blogs.forEach((blog, index) => {
       if (blog.strId === res.blogId) {
         this.blogs[index].comments.push(res);
@@ -52,14 +52,14 @@ const BlogStore = createStore({
   },
 
   deleteCommentSuccess(res) {
-    const resObj = { resMsg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId }
+    const resObj = { msg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId, data: res.deletedCommentId };
     this.blogs.forEach((blog, bIdx) => {
       if (blog.strId === res.blogId) {
         blog.comments.forEach((comment, cIdx) => {
           if (comment.strId === res.deletedCommentId) {
             this.blogs[bIdx].comments.splice(cIdx, 1);
           }
-        })
+        });
       }
     });
     this.emitChange(resObj);
@@ -71,7 +71,7 @@ const BlogStore = createStore({
   /* Blogs comments end*/
 
   addBlogSuccess(res) {
-    const resObj ={
+    const resObj = {
       resMsg: 'CREATE_BLOG_SUCCESS'
     };
     this.blogs.push(res);
@@ -79,7 +79,7 @@ const BlogStore = createStore({
   },
 
   addBlogFail() {
-    const resObj ={
+    const resObj = {
       resMsg: 'ADD_BLOG_FAIL'
     };
     this.emitChange(resObj);
@@ -290,7 +290,7 @@ const BlogStore = createStore({
   uploadImageSuccess(newUser) {
     this.blogs.forEach((blog, idx) => {
       if (blog.author.strId === newUser.strId) {
-        this.blogs[idx].author.image_url = newUser.image_url; 
+        this.blogs[idx].author.image_url = newUser.image_url;
       }
     });
     this.emitChange();

@@ -29,12 +29,12 @@ export default {
             blog.comments = blog.comments.filter(comment => comment !== params._id);
             Blog.save(blog, (err, result) => {
               db.close();
-              callback(err, { deletedCommentId: params._id, blogId: blog._id, result });
+              callback(err, { deletedCommentId: params.id_str, blogId: blog._id, result });
             });
           }
           else {
             db.close();
-            callback(err, { deletedCommentId: params._id, result });
+            callback(err, { deletedCommentId: params.id_str, result });
           }
         });
       });

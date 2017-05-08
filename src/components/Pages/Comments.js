@@ -1,7 +1,7 @@
 import React from 'react';
 import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Link } from 'react-router';
+import { routerShape } from 'react-router';
 import { Glyphicon } from 'react-bootstrap';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
@@ -13,7 +13,8 @@ const Comments = React.createClass({
   displayName: 'Comments',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: React.PropTypes.func,
+    router: routerShape.isRequired
   },
 
   propTypes: {
@@ -34,14 +35,26 @@ const Comments = React.createClass({
   getStatesFromStores() {
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
+      blog: this.props.blog,
       commentText: '',
       replyText: ''
     };
   },
 
   onChange(res) {
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      // this.setState({ commentText: '' });
+    if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
+      const { blog } = this.state;
+      sweetAlert.alertSuccessMessage(res.msg);
+
+      if (res.msg === 'COMMENT_SUCCESS') {
+        blog.comments.push(res.data);
+      }
+
+      if (res.msg === 'DELETE_COMMENT_SUCCESS') {
+        blog.comments = blog.comments.filter(comment => comment.id_str !== res.data);
+      }
+
+      this.setState({ blog, commentText: '' });
     }
   },
 
@@ -106,6 +119,11 @@ const Comments = React.createClass({
     });
   },
 
+  _GoToUserCenter(username) {
+    $('#pinModal').modal('hide');
+    this.context.router.push(`/${username}/home`);
+  },
+
   _renderBlogTextarea(blog, isCommentText, currentUser, commentText) {
     return (
       <Row className="comment-textarea">
@@ -140,48 +158,50 @@ const Comments = React.createClass({
 
   _renderReplyTextarea(replyText, comment) {
     return (
-      <div className="row reply-row">
-        <div className="col-xs-1"></div>
-        <div className="col-xs-9">
+      <Row className="reply-row mt-10">
+        <Col size="1" />
+        <Col size="9">
           <textarea rows="1" className="form-control" value={replyText} onChange={this.handleReplyText} ></textarea>
-        </div>
-        <div className="col-xs-2">
-          <button className="reply-btn" onClick={this.onReplyComment.bind(this, comment)} disabled={replyText.length === 0}>
+        </Col>
+        <Col size="2">
+          <button className="btn btn-info reply-btn" onClick={this.onReplyComment.bind(this, comment)} disabled={replyText.length === 0}>
             Reply
           </button>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   },
 
   render() {
-    const { currentUser, replyText, commentText } = this.state;
+    const { currentUser, replyText, commentText, blog } = this.state;
     const isCommentText = commentText.length === 0;
-    const { blog, isBlogsWell } = this.props;
+    const { isBlogsWell } = this.props;
     const { comments } = blog;
     return (
       <div className="comments-page">
         {isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText)}
         {!isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText)}
-        <div className="row comments">
-          {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          .map(comment => {
-            const date = comment.created_at ? comment.created_at.toString() : null;
-            const commentDate = dateFormat(date, 'dddd, h:MM TT');
-            const commenter = this.getCommenter(comment.commenter);
-            const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
-            return (
-              <Row key={comment._id} className="comment-row">
-                <Col size="1 commenter-img p-0 pl-5">
+        {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .map(comment => {
+          const date = comment.created_at ? comment.created_at.toString() : null;
+          const commentDate = dateFormat(date, 'dddd, h:MM TT');
+          const commenter = this.getCommenter(comment.commenter);
+          const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
+          return (
+            <div key={comment._id}>
+              <Row className="comment-row">
+                <Col size="1 commenter-img p-0">
                   <img alt="commenter" src={commenter.image_url} />
                 </Col>
                 <Col size="10 p-0">
                   <h5 className="comment-text">
-                    <Link to={`/${commenter.username}/home`} >{commenter.username}</Link> : {comment.commentText}
+                    <span className="username" onClick={this._GoToUserCenter.bind(this, commenter.username)}>
+                      {commenter.username}
+                    </span> : {comment.commentText}
                   </h5>
                   <p className="comment-date">
                     <small>{commentDate}</small>
-                    <button onClick={this.showReplyTextarea.bind(this, comment)}>
+                    <button className="reply-icon" onClick={this.showReplyTextarea.bind(this, comment)}>
                       <i className="fa fa-reply"></i>
                     </button>
                   </p>
@@ -189,11 +209,11 @@ const Comments = React.createClass({
                 <Col size="1 comment-thumbs">
                   {displayIcon && <Glyphicon glyph="trash" onClick={this.onDeleteComment.bind(this, comment)} />}
                 </Col>
-                {comment.show_replies && this._renderReplyTextarea(replyText, comment)}
               </Row>
-            );
-          })}
-        </div>
+              {comment.show_replies && this._renderReplyTextarea(replyText, comment)}
+            </div>
+          );
+        })}
       </div>
     );
   }

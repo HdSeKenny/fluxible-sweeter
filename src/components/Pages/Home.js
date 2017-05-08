@@ -39,10 +39,10 @@ const Home = React.createClass({
   },
 
   onChange(res) {
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
-      this.setState(this.getStateFromStores());
-    }
+    // if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
+    //   sweetAlert.alertSuccessMessage(res.resMsg);
+    //   this.setState(this.getStateFromStores());
+    // }
 
     if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.alertSuccessMessage(res.resMsg);
@@ -115,6 +115,7 @@ const Home = React.createClass({
 
   hidePinModal() {
     this.setState({ selectedPin: {} });
+    $('#pinModal').modal('hide');
   },
 
   _renderPinItems(pins) {

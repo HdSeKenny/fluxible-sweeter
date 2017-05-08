@@ -250,7 +250,7 @@ const List = React.createClass({
 
         <Layout.Page>
           <ModalsFactory modalref="createBlogModal" title="Create a sweet !" ModalComponent={BlogModal} size="modal-md" showHeaderAndFooter={false} />
-          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={true} />
+          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
         </Layout.Page>
       </article>
     );

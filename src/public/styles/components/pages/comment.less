@@ -1,20 +1,40 @@
 .pin-item-modal {
+  margin: 15px 0 20px 0;
   .comments-page {
-    margin: 20px 0;
+    margin-top: 20px;
     .comment-row {
+      border-top: 1px solid #eee;
+      padding: 10px 0 0 0;
+      margin: 15px 5px;
       &:first-child {
         margin-top: 20px;
       }
       .comment-text {
-        margin: 5px 0;
-        color: #333;
-        word-wrap: break-word;
+        margin: 0;
+        color:  #000000;
+        word-break: break-all;
+        .username {
+          color: @brand-info;
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
       .comment-date {
         font-weight: 500;
         color: gray;
-        font-size: 12px;
+        font-size: 10px;
         margin-bottom: -10px;
+        .reply-icon {
+          color: #00a9da;
+          font-size: 10px;
+          margin-top: -3px;
+          margin-left: 15px;
+          background: none;
+          outline: none;
+          border: none;
+          padding: 0;
+        }
       }
       .commenter-img {
         img {
@@ -23,71 +43,20 @@
           border-radius: 3px;
         }
       }
+      .comment-thumbs {
+        padding: 0;
+        text-align: right;
+        &:hover {
+          color: red;
+          cursor: pointer;
+        }
+      }
+      .reply-row {
+        .reply-btn {
+          outline: none;
+          border: none;
+        }
+      }
     }
   }
-}
-
-
-// .comments-page .comment-textarea .comment-btn {
-//   float: right;
-//   background-color: @brand-info;
-//   border: none;
-//   color: #fff !important;
-//   outline: none;
-// }
-
-// .comments-page .comment-textarea button[disabled] {
-//   opacity: 0.8
-// }
-
-.comments-page .comments .comment-row .col-xs-9 p {
-  font-weight: 500;
-  color: gray;
-  font-size: 12px;
-  margin-bottom: -10px;
-}
-
-.comments-page .comments .comment-row .col-xs-9 p > button {
-  color: #00a9da;
-  font-size: 12px;
-  margin-top: -3px;
-  margin-left: 15px;
-  background: none;
-  outline: none;
-  border: none;
-  padding: 0;
-}
-
-.comments-page .comments .comment-row {
-  border-top: 1px solid #eee;
-  padding: 10px 0;
-  margin-bottom: 0px;
-}
-
-// .comments-page .comments .comment-row img {
-//   width: 45px;
-//   height: 45px;
-//   border-radius: 3px;
-// }
-
-.comments-page .comments .comment-thumbs {
-  margin: 0;
-  // padding: 0;
-  text-align: right;
-  color: red
-}
-
-.comments-page .comments .reply-row {
-  padding: 0
-}
-
-.comments-page .comments .reply-row .col-xs-2 {
-  text-align: right;
-}
-
-.comments-page .comments .reply-row .col-xs-2 button {
-  background-color: #00a9da;
-  color: #fff;
-  outline: none;
-  border: none;
 }
