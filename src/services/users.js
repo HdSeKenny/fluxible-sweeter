@@ -1,7 +1,6 @@
 import md5 from 'md5';
-import serverConfig from '../configs/server';
 import MongoClient from 'mongodb';
-import multer from 'multer';
+import serverConfig from '../configs/server';
 
 const ObjectID = MongoClient.ObjectID;
 const MongoUrl = serverConfig.mongo.sweeter.url;
@@ -16,34 +15,34 @@ export default {
       User.find().toArray((err, users) => {
         const allPromises = [];
         users.forEach(user => {
-          if (user.fans.length >0) {
+          if (user.fans.length) {
             user.fans.forEach((fanId, faIdx) => {
               allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
-            })
+            });
           }
-          if (user.focuses.length > 0) {
+          if (user.focuses.length) {
             user.focuses.forEach((focusId, fsIdx) => {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
-            })
+            });
           }
-        })
+        });
 
-        Promise.all(allPromises.map(ap => ap())).then((data)=>{
+        Promise.all(allPromises.map(ap => ap())).then((data) => {
           callback(null, users);
         })
         .catch(err => {
           callback(err, null);
-        })
-      })
+        });
+      });
     });
   },
 
-  loadKennyUser(req, resource, params, config, callback){
-    MongoClient.connect(MongoUrl, function(err, db) {
+  loadKennyUser(req, resource, params, config, callback) {
+    MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      User.findOne({_id: ObjectID('583ff3d6a193d70f6946948e')}, (err, kenny) => {
+      User.findOne({ _id: ObjectID('583ff3d6a193d70f6946948e') }, (err, kenny) => {
         callback(err, kenny);
-      })
+      });
     });
   },
 
@@ -56,16 +55,16 @@ export default {
             user: null,
             msg: 'This email is already in use !',
             stat: false
-          })
+          });
         } else {
           body.password = md5(body.password);
-          body.image_url = '/images/users/default-user.png';
-          body.background_image_url = '/images/users/user-center-bg.jpg';
+          body.image_url = '/styles/images/users/default-user.png';
+          body.background_image_url = '/styles/images/users/user-center-bg.jpg';
           body.fans = [];
           body.focuses = [];
           body.blogs = [];
           User.insert(body, (err, res) => {
-            let user = res.ops[0];
+            const user = res.ops[0];
             user.strId = user._id.toString();
             User.save(user);
             db.close();
@@ -73,13 +72,13 @@ export default {
             req.session.userId = user._id;
             req.session.authenticated = true;
             callback(err, {
-              user: user,
+              user,
               stat: true,
               msg: 'Create account success !'
             });
           });
         }
-      })
+      });
     });
   },
 

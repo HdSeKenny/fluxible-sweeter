@@ -4,8 +4,8 @@ import { Link, routerShape } from 'react-router';
 import { sweetAlert, animations } from '../../utils';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
-import { ModalsFactory } from '../UI';
-import { Modals } from '../UserControls/Modals';
+import { ModalsFactory, Layout } from '../UI';
+import { Login, Signup } from '../Pages';
 
 const Navbar = React.createClass({
 
@@ -35,7 +35,8 @@ const Navbar = React.createClass({
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       authenticated: this.getStore(UserStore).isAuthenticated(),
-      grayUserImageUrl: '/styles/images/users/gray-user.png'
+      grayUserImageUrl: '/styles/images/users/gray-user.png',
+      brandImage: 'styles/images/sweeter.png'
     };
   },
 
@@ -87,15 +88,13 @@ const Navbar = React.createClass({
   },
 
   render() {
-    const { authenticated, currentUser, grayUserImageUrl } = this.state;
-    const isHome = this.props.route === '/';
-    const brandImage = isHome ? 'styles/images/sweeter.png' : 'styles/images/sweeter_gray.png'
+    const { authenticated, currentUser, grayUserImageUrl, brandImage } = this.state;
     return (
       <section className="menuzord-section">
         <header className="hidden-header" />
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
-            <Link to="/" className={`sweet-nav-brand ${this.isActive('/')}`}>
+            <Link to="/" className="sweet-nav-brand">
               <img src={brandImage} alt="brand" height="26" />
             </Link>
             <ul className="sweet-nav-menu sweet-nav-left">
@@ -138,7 +137,10 @@ const Navbar = React.createClass({
             </ul>
           </div>
         </header>
-        <Modals />
+        <Layout.Page>
+          <ModalsFactory modalref="loginModal" title="Login to account" ModalComponent={Login} size="modal-md" showHeaderAndFooter={true} />
+          <ModalsFactory modalref="signupModal" title="Sign up" ModalComponent={Signup} size="modal-md" showHeaderAndFooter={true} />
+        </Layout.Page>
       </section>
     );
   }

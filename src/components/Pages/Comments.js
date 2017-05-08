@@ -2,10 +2,11 @@ import React from 'react';
 import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import sweetAlert from '../../utils/sweetAlert';
+import { Row, Col } from '../UI/Layout';
 
 const Comments = React.createClass({
 
@@ -107,17 +108,17 @@ const Comments = React.createClass({
 
   _renderBlogTextarea(blog, isCommentText, currentUser, commentText) {
     return (
-      <div className="row comment-textarea">
-        <div className="col-xs-10">
+      <Row className="comment-textarea">
+        <Col size="9 pl-5 pr-0">
           <textarea rows="1" className="form-control" value={commentText} onChange={this.handleCommentText} ></textarea>
-        </div>
-        <div className="col-xs-2">
+        </Col>
+        <Col size="3 pr-5 pl-5">
           {currentUser &&
-            <Button className="comment-btn" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</Button>}
+            <button className="btn btn-info fr" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button>}
           {!currentUser &&
-            <Button className="comment-btn" onClick={this.checkLogin} disabled={isCommentText}> Comment</Button>}
-        </div>
-      </div>
+            <button className="btn btn-info fr" onClick={this.checkLogin} disabled={isCommentText}> Comment</button>}
+        </Col>
+      </Row>
     );
   },
 
@@ -129,9 +130,9 @@ const Comments = React.createClass({
         </div>
         <div className="row">
           {currentUser &&
-            <Button className="comment-btn" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</Button>}
+            <button className="comment-btn" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button>}
           {!currentUser &&
-            <Button className="comment-btn" onClick={this.checkLogin} disabled={isCommentText}> Comment</Button>}
+            <button className="comment-btn" onClick={this.checkLogin} disabled={isCommentText}> Comment</button>}
         </div>
       </div>
     );
@@ -145,9 +146,9 @@ const Comments = React.createClass({
           <textarea rows="1" className="form-control" value={replyText} onChange={this.handleReplyText} ></textarea>
         </div>
         <div className="col-xs-2">
-          <Button className="reply-btn" onClick={this.onReplyComment.bind(this, comment)} disabled={replyText.length === 0}>
+          <button className="reply-btn" onClick={this.onReplyComment.bind(this, comment)} disabled={replyText.length === 0}>
             Reply
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -158,6 +159,7 @@ const Comments = React.createClass({
     const isCommentText = commentText.length === 0;
     const { blog, isBlogsWell } = this.props;
     const { comments } = blog;
+    console.log(this.state.currentUser);
     return (
       <div className="comments-page">
         {isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText)}
@@ -168,7 +170,7 @@ const Comments = React.createClass({
             const date = comment.created_at ? comment.created_at.toString() : null;
             const commentDate = dateFormat(date, 'dddd, h:MM TT');
             const commenter = this.getCommenter(comment.commenter);
-            const displayIcon = currentUser ? commenter.strId === currentUser.strId : false;
+            const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
             return (
               <div key={comment._id} className="row">
                 <div className="row comment-row">
@@ -178,9 +180,9 @@ const Comments = React.createClass({
                   <div className="col-xs-9">
                     <h5><Link to={`/user-home/${commenter._id}/home`} >{commenter.username}</Link> : {comment.commentText}</h5>
                     <p><small>{commentDate}</small>
-                      <Button onClick={this.showReplyTextarea.bind(this, comment)} >
+                      <button onClick={this.showReplyTextarea.bind(this, comment)} >
                         <i className="fa fa-reply"></i>
-                      </Button>
+                      </button>
                     </p>
                   </div>
                   <div className="col-xs-2 comment-thumbs">

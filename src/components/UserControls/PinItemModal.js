@@ -9,20 +9,22 @@
  */
 
 import React, { Component } from 'react';
-import moment from 'moment';
 import { PinItem } from '../UI';
+import { Comments } from '../Pages';
 
 export default class PinItemModal extends Component {
+
   static propTypes = {
     pin: React.PropTypes.object
   };
+
   render() {
     const { pin } = this.props;
     if (pin.author) {
-      const isMoment = pin.type === 'moment';
       return (
         <section className="pin-item-modal">
           <PinItem onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
+          <Comments blog={pin} isBlogsWell={true} />
         </section>
       );
     }

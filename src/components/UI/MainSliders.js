@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ModalsFactory from './ModalsFactory';
 import Layout from './Layout';
-import { Login, signup } from '../Pages';
+import { Login, Signup } from '../Pages';
 
 export default class MainSliders extends Component {
 
@@ -21,10 +21,7 @@ export default class MainSliders extends Component {
           <button className="btn btn-default mr-10" onClick={this.openLoginModal}>Log in</button>
           <button className="btn btn-default" onClick={this.openSignupModal}>Signup</button>
         </div>
-        <Layout.Page>
-          <ModalsFactory modalref="loginModal" title="Login to account" ModalComponent={Login} size="modal-md" showHeaderAndFooter={true} />
-          <ModalsFactory modalref="signupModal" title="Sign up" ModalComponent={signup} size="modal-md" showHeaderAndFooter={true} />
-        </Layout.Page>
+
       </section>
     );
   }

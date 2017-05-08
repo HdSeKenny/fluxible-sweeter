@@ -1,4 +1,3 @@
-html,
 body {
   font-weight: 500;
   font-family: 'Open Sans', sans-serif;
@@ -880,94 +879,7 @@ body {
 // .menuzord .menuzord-right .user-img ul.dropdown { list-style: none; margin-left: -100px; margin-top: 0px; padding: 0; display: none; background-color: #333; position: absolute; z-index: 99; min-width: 180px; white-space: nowrap;}
 // .menuzord .menuzord-right .user-img ul.dropdown li { clear: both; width: 100%; border: 0 none; font-size: 14px; position: relative; padding: 0;}
 // .menuzord .menuzord-right .user-img ul.dropdown li a{ width: 100%; background: none; padding: 10px 25px; color: #fff; text-decoration: none; display: inline-block; float: left; clear: both; position: relative; outline: 0; font-weight: normal; -o-transition: padding .2s linear; -moz-transition: padding .2s linear; -webkit-transition: padding .2s linear; transition: padding .2s linear;}
-.comments-page .comment-textarea {
-  margin-top: 20px;
-}
 
-.comments-page .comment-textarea button {
-  float: right;
-  background-color: #337a97;
-  border: none;
-  color: #fff;
-  outline: none;
-}
-
-.comments-page .comment-textarea button[disabled]:hover {
-  background-color: #337a97
-}
-
-.comments-page .comment-textarea .col-xs-10,
-.col-xs-2 {
-  padding: 0;
-  margin: 0;
-}
-
-.comments-page .comments .comment-row:first-child {
-  margin-top: 20px;
-}
-
-.comments-page .comments .comment-row .col-xs-1,
-.col-xs-9 {
-  margin: 0;
-  padding: 0;
-}
-
-.comments-page .comments .comment-row .col-xs-9 h5 {
-  margin: 5px 0;
-  word-wrap: break-word;
-}
-
-.comments-page .comments .comment-row .col-xs-9 p {
-  font-weight: 500;
-  color: gray;
-  font-size: 12px;
-  margin-bottom: -10px;
-}
-
-.comments-page .comments .comment-row .col-xs-9 p > button {
-  color: #00a9da;
-  font-size: 12px;
-  margin-top: -3px;
-  margin-left: 15px;
-  background: none;
-  outline: none;
-  border: none;
-  padding: 0;
-}
-
-.comments-page .comments .comment-row {
-  border-top: 1px solid #eee;
-  padding: 10px 0;
-  margin-bottom: 0px;
-}
-
-.comments-page .comments .comment-row img {
-  width: 45px;
-  height: 45px;
-  border-radius: 3px;
-}
-
-.comments-page .comments .comment-thumbs {
-  margin: 0;
-  padding: 0;
-  text-align: right;
-  color: red
-}
-
-.comments-page .comments .reply-row {
-  padding: 0
-}
-
-.comments-page .comments .reply-row .col-xs-2 {
-  text-align: right;
-}
-
-.comments-page .comments .reply-row .col-xs-2 button {
-  background-color: #00a9da;
-  color: #fff;
-  outline: none;
-  border: none;
-}
 
 .user-messages .messages-content .well {
   background-color: #fff;

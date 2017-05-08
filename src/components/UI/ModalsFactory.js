@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from './Layout';
 
-// const shallowCompare = require('react-addons-shallow-compare');
+const shallowCompare = require('react-addons-shallow-compare');
 
 export default class ModalsFactory extends Component {
 
@@ -25,16 +25,18 @@ export default class ModalsFactory extends Component {
     $(`#${modalRef}`).modal('hide');
   };
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return shallowCompare(this, nextProps, nextState);
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
 
-  _renderModalHeader(title) {
+  _renderModalHeader(title, showHeaderAndFooter) {
     return (
       <div className="modal-header">
-        <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h3 className="modal-title mt-20">{title}</h3>
-
+        {showHeaderAndFooter ?
+          <h3 className="modal-title ml-15 mr-15">
+            {title} <button type="button" className="text-muted close" data-dismiss="modal" aria-hidden="true">×</button>
+          </h3> : <button type="button" className="text-muted close mt-5 mr-5" data-dismiss="modal" aria-hidden="true">×</button>
+        }
       </div>
     );
   }
@@ -59,13 +61,13 @@ export default class ModalsFactory extends Component {
     );
   }
   render() {
-    const { size, modalref, title, ModalComponent, showHeaderAndFooter } = this.props;
+    const { size, modalref, title, ModalComponent, showHeaderAndFooter, show } = this.props;
 
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>
           <div className="modal-content">
-            {showHeaderAndFooter && this._renderModalHeader(title)}
+            {this._renderModalHeader(title, showHeaderAndFooter)}
             {this._renderModalBody(ModalComponent)}
             {showHeaderAndFooter && this._renderModalFooter()}
           </div>

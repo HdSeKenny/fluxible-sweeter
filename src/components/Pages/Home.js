@@ -4,8 +4,8 @@ import { Link } from 'react-router';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { MainSliders, PinItem } from '../UI';
-import { Modals } from '../UserControls/Modals';
+import { MainSliders, PinItem, Layout, ModalsFactory } from '../UI';
+import { PinItemModal } from '../UserControls';
 
 const Home = React.createClass({
 
@@ -32,7 +32,8 @@ const Home = React.createClass({
       blogs: this.getStore(BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {}
+      selectedPin: {},
+      showPinModal: false
     };
   },
 
@@ -57,6 +58,10 @@ const Home = React.createClass({
     if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
       this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
     }
+  },
+
+  componentDidMount() {
+
   },
 
   handleBlogText(e) {
@@ -95,89 +100,12 @@ const Home = React.createClass({
     this.setState({ blogText: '' });
   },
 
-  changeShowCommentsState() {
-    this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
-  },
-
-  changeBlogThumbsUpState() {
-    this.setState(this.getStateFromStores());
-  },
-
   onViewPinItem(id) {
     const { blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
     this.setState({ selectedPin });
-    Modals.show('pinModal');
+    ModalsFactory.show('pinModal');
   },
-
-  // _renderCreateBtns(isDisabled) {
-  //   const { currentUser } = this.state;
-  //   return (
-  //     <div className="row btn-row">
-  //       <Button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
-  //         <Glyphicon glyph="send" />Create
-  //       </Button>
-  //       {currentUser &&
-  //         <Link to={`/user-blogs/${currentUser.strId}/add`}>
-  //           <Button className="btn-info create-btn">
-  //             <Glyphicon glyph="pencil" />Articles
-  //           </Button>
-  //         </Link>
-  //       }
-  //       {!currentUser &&
-  //         <Link to="">
-  //           <Button className="btn-info create-btn" onClick={this.checkCurrentUser}>
-  //             <Glyphicon glyph="pencil" />Articles
-  //           </Button>
-  //         </Link>
-  //       }
-  //     </div>
-  //   );
-  // },
-
-  // _renderCreateWell() {
-  //   const { blogText, welcomeText } = this.state;
-  //   const length = blogText.length;
-  //   const isDisabled = length > 140 || length === 0;
-  //   return (
-  //     <div className="well create-well">
-  //       <div className="row">
-  //         <div className="col-xs-7 col-md-7">
-  //           <p>{welcomeText}</p>
-  //         </div>
-  //         <div className="col-xs-5 col-md-5">
-  //           {length < 141 &&
-  //             <p>You can still write <span className="len-span">{140 - length}</span> words</p> }
-  //           {length > 140 &&
-  //             <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
-  //         </div>
-  //       </div>
-  //       <div className="row textarea-row">
-  //         <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
-  //       </div>
-  //       {this._renderCreateBtns(isDisabled)}
-  //     </div>
-  //   );
-  // },
-
-  // _renderBlogSearch() {
-  //   return (
-  //     <div className="well blog">
-  //       <div className="row">
-  //         <div className="col-xs-9 search-query">
-  //           <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
-  //         </div>
-  //         <div className="col-xs-3 sort-by">
-  //           <select className="form-control" onChange={this.sortByType}>
-  //             <option>All blogs</option>
-  //             <option>Microblog</option>
-  //             <option>Article</option>
-  //           </select>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // },
 
   _renderPinItems(pins) {
     const articles = pins.filter(pin => pin.type === 'article');
@@ -217,7 +145,7 @@ const Home = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs, selectedPin } = this.state;
+    const { currentUser, kenny, blogs, selectedPin, showPinModal } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <div className="home-page">
@@ -225,7 +153,9 @@ const Home = React.createClass({
         <div className="main">
           {this._renderPinItems(blogs)}
         </div>
-        <Modals selectedPin={selectedPin} />
+        <Layout.Page>
+          <ModalsFactory modalref="pinModal" show={showPinModal} large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
+        </Layout.Page>
       </div>
     );
   }
