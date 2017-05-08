@@ -38,7 +38,7 @@ export default (server) => {
   }
 
   if (env === 'development') {
-    server.use(express.static(path.join(serverConfig.server.root, 'dist')));
+    server.use(express.static(path.join(serverConfig.server.root, '.tmp')));
   }
 
   // limit size of json object less than 20M for extracting metadata

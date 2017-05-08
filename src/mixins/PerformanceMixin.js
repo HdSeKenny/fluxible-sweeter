@@ -4,35 +4,32 @@ var isReactElement = require('react').isValidElement;
 
 
 function isNonImmutable(item) {
-    return (
-        item
-        && typeof item === 'object'
-        && !isReactElement(item)
-        && !isImmutable(item)
-    );
+  return (
+    item && typeof item === 'object' && !isReactElement(item) && !isImmutable(item)
+  );
 }
 
 function warnNonImmutable(component, prop) {
-    console.warn('Component ' +
-        '"' + component.constructor.displayName + '"' +
-        ' received non-immutable object for ' +
-        '"' + prop + '"');
+  console.warn('Component ' +
+    '"' + component.constructor.displayName + '"' +
+    ' received non-immutable object for ' +
+    '"' + prop + '"');
 }
 
 function merge(dest, src) {
-    dest || (dest = {});
+  dest || (dest = {});
 
-    src && typeof src === 'object' && Object.keys(src).forEach(function mergeCb(prop) {
-        dest[prop] = src[prop];
-    });
+  src && typeof src === 'object' && Object.keys(src).forEach(function mergeCb(prop) {
+    dest[prop] = src[prop];
+  });
 
-    return dest;
+  return dest;
 }
 
 function equal(object1, object2) {
-    var a = Immutable.fromJS(object1);
-    var b = Immutable.fromJS(object2);
-    return Immutable.is(a, b);
+  var a = Immutable.fromJS(object1);
+  var b = Immutable.fromJS(object2);
+  return Immutable.is(a, b);
 }
 
 var GET_STATE_FUNCTION = 'getStateFromStores';
@@ -48,10 +45,9 @@ var IGNORE_EQUALITY_CHECK_FLAG = 'SKIP_SHOULD_UPDATE';
  * @return {Boolean}    True if non-immutable object, else false.
  */
 function checkNonImmutableObject(key, item, component) {
-    if (isNonImmutable(item)) {
-        console.warn('WARN: component: ' + component.constructor.displayName
-            + ' received non-immutable object: ' + key);
-    }
+  if (isNonImmutable(item)) {
+    console.warn('WARN: component: ' + component.constructor.displayName + ' received non-immutable object: ' + key);
+  }
 }
 
 /**
@@ -62,16 +58,16 @@ function checkNonImmutableObject(key, item, component) {
  * @return {Undefined} none
  */
 function checkObjectProperties(object, component, ignoreImmutableCheckKeys) {
-    if (component.ignoreAllWarnings || !object || typeof object !== 'object') {
-        return;
+  if (component.ignoreAllWarnings || !object || typeof object !== 'object') {
+    return;
+  }
+  var ignoreImmutableCheck;
+  Object.keys(object).forEach(function objectIterator(key) {
+    ignoreImmutableCheck = ignoreImmutableCheckKeys[key];
+    if (!ignoreImmutableCheck) {
+      checkNonImmutableObject(key, object[key], component);
     }
-    var ignoreImmutableCheck;
-    Object.keys(object).forEach(function objectIterator(key) {
-        ignoreImmutableCheck = ignoreImmutableCheckKeys[key];
-        if (!ignoreImmutableCheck) {
-            checkNonImmutableObject(key, object[key], component);
-        }
-    });
+  });
 }
 
 /**
@@ -86,44 +82,43 @@ function checkObjectProperties(object, component, ignoreImmutableCheckKeys) {
  * @return {Boolean}      True if the objects are shallowly equavalent, else false.
  */
 function shallowEqualsImmutable(item1, item2, component, ignoreImmutableCheckKeys) {
-    if (equal(item1, item2)) {
-        return true;
-    }
-    if (!item1 || !item2) {
-        return false;
-    }
-
-    var i;
-    var key;
-    var ignoreImmutableCheck;
-    var ignoreAllWarnings = component.ignoreAllWarnings;
-    var item1Keys = Object.keys(item1);
-    var item2Keys = Object.keys(item2);
-    var item1Prop;
-    var item2Prop;
-
-    // Different key set length, no need to proceed..check it here because we still
-    // want to check all of item2's objects to see if any are non-immutable.
-    if (item1Keys.length !== item2Keys.length) {
-        return false;
-    }
-    // check item2keys so that we can also check for any non-immutable objects
-    for (i = 0; i < item2Keys.length; i++) {
-        key = item2Keys[i];
-        ignoreImmutableCheck = ignoreImmutableCheckKeys[key];
-        item2Prop = item2[key];
-        item1Prop = item1[key];
-
-        if (!ignoreAllWarnings && !ignoreImmutableCheck) {
-            checkNonImmutableObject(key, item2Prop, component);
-        }
-        if (ignoreImmutableCheck !== IGNORE_EQUALITY_CHECK_FLAG
-            && (!item1.hasOwnProperty(key) || !equal(item1Prop, item2Prop))) {
-            return false;
-        }
-    }
-
+  if (equal(item1, item2)) {
     return true;
+  }
+  if (!item1 || !item2) {
+    return false;
+  }
+
+  var i;
+  var key;
+  var ignoreImmutableCheck;
+  var ignoreAllWarnings = component.ignoreAllWarnings;
+  var item1Keys = Object.keys(item1);
+  var item2Keys = Object.keys(item2);
+  var item1Prop;
+  var item2Prop;
+
+  // Different key set length, no need to proceed..check it here because we still
+  // want to check all of item2's objects to see if any are non-immutable.
+  if (item1Keys.length !== item2Keys.length) {
+    return false;
+  }
+  // check item2keys so that we can also check for any non-immutable objects
+  for (i = 0; i < item2Keys.length; i++) {
+    key = item2Keys[i];
+    ignoreImmutableCheck = ignoreImmutableCheckKeys[key];
+    item2Prop = item2[key];
+    item1Prop = item1[key];
+
+    if (!ignoreAllWarnings && !ignoreImmutableCheck) {
+      checkNonImmutableObject(key, item2Prop, component);
+    }
+    if (ignoreImmutableCheck !== IGNORE_EQUALITY_CHECK_FLAG && (!item1.hasOwnProperty(key) || !equal(item1Prop, item2Prop))) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -137,67 +132,64 @@ function shallowEqualsImmutable(item1, item2, component, ignoreImmutableCheckKey
  * @return {Object}            The newly created object.
  */
 function mergeDefaultValues(defaultObject, config, objectName, component) {
-    var objectToCreate = component[objectName]
-        || component.constructor[objectName]
-        || config[objectName]
-        || {};
-    // merge any custom configs over defaults
-    objectToCreate.props = merge(defaultObject.props, objectToCreate.props);
-    objectToCreate.state = merge(defaultObject.state, objectToCreate.state);
+  var objectToCreate = component[objectName] || component.constructor[objectName] || config[objectName] || {};
+  // merge any custom configs over defaults
+  objectToCreate.props = merge(defaultObject.props, objectToCreate.props);
+  objectToCreate.state = merge(defaultObject.state, objectToCreate.state);
 
-    // assign any values that are for both props and state.
-    Object.keys(objectToCreate).forEach(function keyIterator(key) {
-        if (key !== 'props' && key !== 'state') {
-            var val = objectToCreate[key];
-            objectToCreate.props[key] = val;
-            objectToCreate.state[key] = val;
-        }
-    });
-    return objectToCreate;
+  // assign any values that are for both props and state.
+  Object.keys(objectToCreate).forEach(function keyIterator(key) {
+    if (key !== 'props' && key !== 'state') {
+      var val = objectToCreate[key];
+      objectToCreate.props[key] = val;
+      objectToCreate.state[key] = val;
+    }
+  });
+  return objectToCreate;
 }
 
 var defaults = {
-    /**
-     * Get default ignoreImmutableCheck objects. This is not a hardcoded object
-     * since it might be mutable
-     * @return {Object} by default avoid props.children
-     */
-    getIgnoreImmutableCheck: function () {
-        return {
-            props: {
-                // Always ignore children props since it's special
-                children: true
-            }
-        };
-    },
+  /**
+   * Get default ignoreImmutableCheck objects. This is not a hardcoded object
+   * since it might be mutable
+   * @return {Object} by default avoid props.children
+   */
+  getIgnoreImmutableCheck: function() {
+    return {
+      props: {
+        // Always ignore children props since it's special
+        children: true
+      }
+    };
+  },
 
-    /**
-     * Used as the default shouldComponentUpdate function.  Checks whether the props/state of the
-     * component has actually changed so that we know whether or not to run the render() method.
-     * Since all state/props are immutable, we can use a simple reference check in the majority of cases.
-     * @method shouldUpdate
-     * @param  {Object} nextProps The new props object for the component.
-     * @param  {Object} nextState The new state object for the component.
-     * @return {Boolean}           True if the component should run render(), else false.
-     */
-    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-        var ignoreImmutableCheck = this.ignoreImmutableCheck;
-        var propsEqual = shallowEqualsImmutable(this.props, nextProps, this, ignoreImmutableCheck.props);
-        var stateEqual = shallowEqualsImmutable(this.state, nextState, this, ignoreImmutableCheck.state);
-        return !(stateEqual && propsEqual);
-    },
+  /**
+   * Used as the default shouldComponentUpdate function.  Checks whether the props/state of the
+   * component has actually changed so that we know whether or not to run the render() method.
+   * Since all state/props are immutable, we can use a simple reference check in the majority of cases.
+   * @method shouldUpdate
+   * @param  {Object} nextProps The new props object for the component.
+   * @param  {Object} nextState The new state object for the component.
+   * @return {Boolean}           True if the component should run render(), else false.
+   */
+  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+    var ignoreImmutableCheck = this.ignoreImmutableCheck;
+    var propsEqual = shallowEqualsImmutable(this.props, nextProps, this, ignoreImmutableCheck.props);
+    var stateEqual = shallowEqualsImmutable(this.state, nextState, this, ignoreImmutableCheck.state);
+    return !(stateEqual && propsEqual);
+  },
 
-    /**
-     * A default onChange function that sets the the components state from the getStateOnChange
-     * method.  This is only set if a component does not implement its own onChange function.
-     * @method  defaultOnChange
-     * @return {undefined} Does not return anything
-     */
-    onChange: function onChange() {
-        if (this[GET_STATE_FUNCTION]) {
-            this.setState(this[GET_STATE_FUNCTION].apply(this, arguments));
-        }
+  /**
+   * A default onChange function that sets the the components state from the getStateOnChange
+   * method.  This is only set if a component does not implement its own onChange function.
+   * @method  defaultOnChange
+   * @return {undefined} Does not return anything
+   */
+  onChange: function onChange() {
+    if (this[GET_STATE_FUNCTION]) {
+      this.setState(this[GET_STATE_FUNCTION].apply(this, arguments));
     }
+  }
 };
 
 /**
@@ -217,18 +209,16 @@ var defaults = {
  * @return {Object}        The mixin object
  */
 module.exports = {
-    componentWillMount: function () {
-        this.ignoreImmutableCheck = mergeDefaultValues(
-            defaults.getIgnoreImmutableCheck(), {}, IGNORE_IMMUTABLE_CHECK, this);
-        this.ignoreAllWarnings = this.ignoreAllWarnings
-            || this.constructor.ignoreAllWarnings
-            || true;
+  componentWillMount: function() {
+    this.ignoreImmutableCheck = mergeDefaultValues(
+      defaults.getIgnoreImmutableCheck(), {}, IGNORE_IMMUTABLE_CHECK, this);
+    this.ignoreAllWarnings = this.ignoreAllWarnings || this.constructor.ignoreAllWarnings || true;
 
-        // Set default methods if the there is no override
-        this.onChange = this.onChange || defaults.onChange.bind(this);
-        this.shouldComponentUpdate = this.shouldComponentUpdate || defaults.shouldComponentUpdate.bind(this);
-        // Checks the props and state to raise warnings
-        checkObjectProperties(this.props, this, this.ignoreImmutableCheck.props);
-        checkObjectProperties(this.state, this, this.ignoreImmutableCheck.state);
-    },
+    // Set default methods if the there is no override
+    this.onChange = this.onChange || defaults.onChange.bind(this);
+    this.shouldComponentUpdate = this.shouldComponentUpdate || defaults.shouldComponentUpdate.bind(this);
+    // Checks the props and state to raise warnings
+    checkObjectProperties(this.props, this, this.ignoreImmutableCheck.props);
+    checkObjectProperties(this.state, this, this.ignoreImmutableCheck.state);
+  },
 }

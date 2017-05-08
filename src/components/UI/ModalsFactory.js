@@ -13,7 +13,8 @@ export default class ModalsFactory extends Component {
     modalref: React.PropTypes.string,
     title: React.PropTypes.string,
     showHeaderAndFooter: React.PropTypes.bool,
-    ModalComponent: React.PropTypes.func
+    ModalComponent: React.PropTypes.func,
+    hidePinModal: React.PropTypes.func,
   };
 
   static show = (modalRef) => {
@@ -61,8 +62,7 @@ export default class ModalsFactory extends Component {
     );
   }
   render() {
-    const { size, modalref, title, ModalComponent, showHeaderAndFooter, show } = this.props;
-
+    const { size, modalref, title, ModalComponent, showHeaderAndFooter } = this.props;
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>

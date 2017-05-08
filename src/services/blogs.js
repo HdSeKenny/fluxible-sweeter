@@ -1,3 +1,4 @@
+/* eslint-disable all, no-param-reassign */
 import MongoClient from 'mongodb';
 import serverConfig from '../configs/server';
 

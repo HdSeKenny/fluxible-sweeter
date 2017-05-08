@@ -41,7 +41,7 @@ const Comments = React.createClass({
 
   onChange(res) {
     if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      this.setState({ commentText: '' });
+      // this.setState({ commentText: '' });
     }
   },
 
@@ -159,7 +159,6 @@ const Comments = React.createClass({
     const isCommentText = commentText.length === 0;
     const { blog, isBlogsWell } = this.props;
     const { comments } = blog;
-    console.log(this.state.currentUser);
     return (
       <div className="comments-page">
         {isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText)}
@@ -172,25 +171,26 @@ const Comments = React.createClass({
             const commenter = this.getCommenter(comment.commenter);
             const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
             return (
-              <div key={comment._id} className="row">
-                <div className="row comment-row">
-                  <div className="col-xs-1">
-                    <img alt="" src={commenter.image_url} />
-                  </div>
-                  <div className="col-xs-9">
-                    <h5><Link to={`/user-home/${commenter._id}/home`} >{commenter.username}</Link> : {comment.commentText}</h5>
-                    <p><small>{commentDate}</small>
-                      <button onClick={this.showReplyTextarea.bind(this, comment)} >
-                        <i className="fa fa-reply"></i>
-                      </button>
-                    </p>
-                  </div>
-                  <div className="col-xs-2 comment-thumbs">
-                    {displayIcon && <Glyphicon glyph="trash" onClick={this.onDeleteComment.bind(this, comment)} />}
-                  </div>
-                </div>
+              <Row key={comment._id} className="comment-row">
+                <Col size="1 commenter-img p-0 pl-5">
+                  <img alt="commenter" src={commenter.image_url} />
+                </Col>
+                <Col size="10 p-0">
+                  <h5 className="comment-text">
+                    <Link to={`/${commenter.username}/home`} >{commenter.username}</Link> : {comment.commentText}
+                  </h5>
+                  <p className="comment-date">
+                    <small>{commentDate}</small>
+                    <button onClick={this.showReplyTextarea.bind(this, comment)}>
+                      <i className="fa fa-reply"></i>
+                    </button>
+                  </p>
+                </Col>
+                <Col size="1 comment-thumbs">
+                  {displayIcon && <Glyphicon glyph="trash" onClick={this.onDeleteComment.bind(this, comment)} />}
+                </Col>
                 {comment.show_replies && this._renderReplyTextarea(replyText, comment)}
-              </div>
+              </Row>
             );
           })}
         </div>

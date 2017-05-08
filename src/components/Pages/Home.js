@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { MainSliders, PinItem, Layout, ModalsFactory } from '../UI';
+import { MainSliders, PinItem, ModalsFactory } from '../UI';
+import { Page } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 
 const Home = React.createClass({
@@ -33,7 +34,7 @@ const Home = React.createClass({
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
-      showPinModal: false
+      showPinModal: true
     };
   },
 
@@ -104,7 +105,16 @@ const Home = React.createClass({
     const { blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
     this.setState({ selectedPin });
+
+    $('#pinModal').on('hidden.bs.modal', () => {
+      this.hidePinModal();
+    });
+
     ModalsFactory.show('pinModal');
+  },
+
+  hidePinModal() {
+    this.setState({ selectedPin: {} });
   },
 
   _renderPinItems(pins) {
@@ -145,17 +155,23 @@ const Home = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs, selectedPin, showPinModal } = this.state;
-    const displayUser = currentUser || kenny;
+    const { blogs, selectedPin } = this.state;
+    // const displayUser = currentUser || kenny;
     return (
       <div className="home-page">
         <MainSliders />
         <div className="main">
           {this._renderPinItems(blogs)}
         </div>
-        <Layout.Page>
-          <ModalsFactory modalref="pinModal" show={showPinModal} large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
-        </Layout.Page>
+        <Page>
+          <ModalsFactory
+            modalref="pinModal"
+            hidePinModal={this.hidePinModal}
+            pin={selectedPin}
+            ModalComponent={PinItemModal}
+            showHeaderAndFooter={false}
+          />
+        </Page>
       </div>
     );
   }

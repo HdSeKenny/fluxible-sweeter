@@ -3,14 +3,9 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-attachment: fixed;
   background-size: cover;
-  background-color: #cccccc;
+  background-color: #e0e0e0;
   margin: 0;
   padding: 0;
-}
-
-
-.mt-10 {
-  margin-top: 10px !important;
 }
 
 #app {
@@ -23,7 +18,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 
 .footer {
   position: relative;

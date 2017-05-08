@@ -241,7 +241,7 @@ const UserStore = createStore({
   },
 
   getCommenter(userId) {
-    return this.users ? this.users.find(user => user.strId === userId) : null;
+    return this.users ? this.users.find(user => user.id_str === userId) : null;
   },
 
   getCurrentUploadedImage() {
