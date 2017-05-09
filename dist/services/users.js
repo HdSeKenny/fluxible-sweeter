@@ -8,17 +8,13 @@ var _md = require('md5');
 
 var _md2 = _interopRequireDefault(_md);
 
-var _server = require('../configs/server');
-
-var _server2 = _interopRequireDefault(_server);
-
 var _mongodb = require('mongodb');
 
 var _mongodb2 = _interopRequireDefault(_mongodb);
 
-var _multer = require('multer');
+var _server = require('../configs/server');
 
-var _multer2 = _interopRequireDefault(_multer);
+var _server2 = _interopRequireDefault(_server);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35,12 +31,12 @@ exports.default = {
       User.find().toArray((err, users) => {
         const allPromises = [];
         users.forEach(user => {
-          if (user.fans.length > 0) {
+          if (user.fans.length) {
             user.fans.forEach((fanId, faIdx) => {
               allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
             });
           }
-          if (user.focuses.length > 0) {
+          if (user.focuses.length) {
             user.focuses.forEach((focusId, fsIdx) => {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
             });
@@ -56,7 +52,7 @@ exports.default = {
     });
   },
   loadKennyUser: function (req, resource, params, config, callback) {
-    _mongodb2.default.connect(MongoUrl, function (err, db) {
+    _mongodb2.default.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.findOne({ _id: ObjectID('583ff3d6a193d70f6946948e') }, (err, kenny) => {
         callback(err, kenny);
@@ -75,13 +71,13 @@ exports.default = {
           });
         } else {
           body.password = (0, _md2.default)(body.password);
-          body.image_url = '/images/users/default-user.png';
-          body.background_image_url = '/images/users/user-center-bg.jpg';
+          body.image_url = '/styles/images/users/default-user.png';
+          body.background_image_url = '/styles/images/users/user-center-bg.jpg';
           body.fans = [];
           body.focuses = [];
           body.blogs = [];
           User.insert(body, (err, res) => {
-            let user = res.ops[0];
+            const user = res.ops[0];
             user.strId = user._id.toString();
             User.save(user);
             db.close();

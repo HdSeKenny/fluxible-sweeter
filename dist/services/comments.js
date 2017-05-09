@@ -4,16 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _server = require('../configs/server');
-
-var _server2 = _interopRequireDefault(_server);
-
 var _mongodb = require('mongodb');
 
 var _mongodb2 = _interopRequireDefault(_mongodb);
 
+var _server = require('../configs/server');
+
+var _server2 = _interopRequireDefault(_server);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable all, no-param-reassign */
 const ObjectID = _mongodb2.default.ObjectID;
 const MongoUrl = _server2.default.mongo.sweeter.url;
 
@@ -39,11 +40,11 @@ exports.default = {
             blog.comments = blog.comments.filter(comment => comment !== params._id);
             Blog.save(blog, (err, result) => {
               db.close();
-              callback(err, { deletedCommentId: params._id, blogId: blog._id, result: result });
+              callback(err, { deletedCommentId: params.id_str, blogId: blog._id, result: result });
             });
           } else {
             db.close();
-            callback(err, { deletedCommentId: params._id, result: result });
+            callback(err, { deletedCommentId: params.id_str, result: result });
           }
         });
       });
@@ -81,7 +82,7 @@ exports.default = {
       body.show_replies = false;
       Comment.insert(body, (err, result) => {
         const newComment = result.ops[0];
-        newComment.strId = result.ops[0]._id.toString();
+        newComment.id_str = result.ops[0]._id.toString();
         Comment.save(newComment);
         Blog.findOne({ _id: ObjectID(newComment.blogId) }, (err, blog) => {
           blog.comments.push(newComment._id.toString());

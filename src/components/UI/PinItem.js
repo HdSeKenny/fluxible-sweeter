@@ -1,33 +1,86 @@
 import React, { Component } from 'react';
 import { routerShape } from 'react-router';
 import moment from 'moment';
+import sweetAlert from '../../utils/sweetAlert';
 import { Row, Col } from './Layout';
+import { BlogActions } from '../../actions';
+import { UserStore, BlogStore } from '../../stores';
 
 export default class PinItem extends Component {
 
   static displayName = 'PinItem';
 
   static contextTypes = {
-    router: routerShape.isRequired
+    router: routerShape.isRequired,
+    executeAction: React.PropTypes.func
   };
 
   static propTypes = {
     pin: React.PropTypes.object,
     index: React.PropTypes.number,
-    onSelect: React.PropTypes.func
+    onSelect: React.PropTypes.func,
+    currentUser: React.PropTypes.object
   };
+
+  static statics = {
+    storeListeners: [UserStore, BlogStore]
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: props.currentUser
+    };
+  }
+
+  onChange(res) {
+    console.log(res);
+  }
+
+
+  componentDidMount() {
+
+  }
+
+
+  GoToUserCenter(author) {
+    $('#pinModal').modal('hide');
+    this.context.router.push(`/${author.username}/home`);
+  }
 
   onViewPinItem() {
     const { pin } = this.props;
     this.props.onSelect(pin.id_str);
   }
 
-  componentDidMount() {
-
+  checkCurrentUser() {
+    sweetAlert.alertWarningMessage('Login first !');
   }
 
-  GoToUserCenter(author) {
-    this.context.router.push(`/${author.username}/home`);
+  cancelThumbsUpBlog(currentUser, blogId) {
+    if (currentUser) {
+      this.context.executeAction(BlogActions.CancelThumbsUpBlog, {
+        currentUserId: currentUser.id_str,
+        blogId
+      }).then((res) => {
+        console.log(res);
+      });
+    }
+    else {
+      this.checkCurrentUser();
+    }
+  }
+
+  thumbsUpBlog(currentUser, blogId) {
+    if (currentUser) {
+      this.context.executeAction(BlogActions.ThumbsUpBlog, {
+        currentUserId: currentUser.id_str,
+        blogId
+      });
+    }
+    else {
+      this.checkCurrentUser();
+    }
   }
 
   _renderPinHeader(pin) {
@@ -123,6 +176,7 @@ export default class PinItem extends Component {
   }
 
   _renderPinFooterIcons(pin) {
+    const { currentUser } = this.state;
     return (
       <div className="pin-footer-icons">
         <div className="icon-span" onClick={() => this.onViewPinItem()}>
@@ -133,7 +187,7 @@ export default class PinItem extends Component {
           <i className="fa fa-comments-o" />
           <span className="ml-5">{pin.comments.length}</span>
         </div>
-        <div className="icon-span" onClick={() => this.onViewPinItem()} data-balloon="thumbs up!" data-balloon-pos="top">
+        <div className="icon-span" onClick={() => this.thumbsUpBlog(currentUser, pin.id_str)} data-balloon="thumbs up!" data-balloon-pos="top">
           <i className="fa fa-thumbs-o-up" />
           <span className="ml-5">{pin.likers.length}</span>
         </div>

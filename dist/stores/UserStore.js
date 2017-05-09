@@ -227,7 +227,7 @@ const UserStore = (0, _createStore2.default)({
     return this.loginUserImage;
   },
   getCommenter: function (userId) {
-    return this.users ? this.users.find(user => user.strId === userId) : null;
+    return this.users ? this.users.find(user => user.id_str === userId) : null;
   },
   getCurrentUploadedImage: function () {
     return this.currentUploadedImage;

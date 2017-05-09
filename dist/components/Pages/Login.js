@@ -162,7 +162,7 @@ const Login = _react2.default.createClass({
 
     return _react2.default.createElement(
       'section',
-      { className: 'login-section mt-20' },
+      { className: 'login-section mt-15 mr-15 ml-15' },
       _react2.default.createElement(
         'div',
         { className: 'wrapper-md animated fadeInUp' },

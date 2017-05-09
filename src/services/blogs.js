@@ -114,7 +114,7 @@ export default {
     MongoClient.connect(MongoUrl, (err, db) => {
       const Blog = db.collection('blogs');
       Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
-        if (err) { console.log(`***** Find blog err: ${err}`); };
+        if (err) { console.log(`***** Find blog err: ${err}`); }
         if (blog) {
           blog.likers.push(body.currentUserId);
           Blog.save(blog, (err, result) => {

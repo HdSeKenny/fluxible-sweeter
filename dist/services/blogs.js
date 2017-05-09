@@ -14,6 +14,7 @@ var _server2 = _interopRequireDefault(_server);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable all, no-param-reassign */
 const ObjectID = _mongodb2.default.ObjectID;
 const MongoUrl = _server2.default.mongo.sweeter.url;
 

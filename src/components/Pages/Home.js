@@ -44,6 +44,13 @@ const Home = React.createClass({
     //   this.setState(this.getStateFromStores());
     // }
 
+    if (res.resMsg === 'THUMBS_UP_BLOG_SUCCESS' || res.resMsg === 'CANCEL_THUMBS_UP_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.resMsg);
+      this.setState({
+        blogs: this.getStore(BlogStore).getAllBlogs()
+      });
+    }
+
     if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.alertSuccessMessage(res.resMsg);
       this.setState({
@@ -107,18 +114,23 @@ const Home = React.createClass({
     this.setState({ selectedPin });
 
     $('#pinModal').on('hidden.bs.modal', () => {
-      this.hidePinModal();
+      if (this.hidePinModal) {
+        this.hidePinModal();
+      }
     });
 
     ModalsFactory.show('pinModal');
   },
 
   hidePinModal() {
-    this.setState({ selectedPin: {} });
-    $('#pinModal').modal('hide');
+    const homeDom = $('.home-page');
+    if (homeDom && homeDom.length) {
+      this.setState({ selectedPin: {} });
+    }
   },
 
   _renderPinItems(pins) {
+    const { currentUser } = this.state;
     const articles = pins.filter(pin => pin.type === 'article');
     const moments = pins.filter(pin => pin.type === 'moment');
     return (
@@ -128,7 +140,7 @@ const Home = React.createClass({
           <div className="pins-block">
             {moments.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
               .map((pin, index) =>
-                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
+                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} currentUser={currentUser} />
               )
             }
           </div>
@@ -137,7 +149,7 @@ const Home = React.createClass({
           <p className="home-tag">New articles > <Link to="/list" className="view-all">.view all</Link></p>
           <div className="pins-block">
             {articles.map((article, index) =>
-              <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={article} type={article.type} />
+              <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={article} type={article.type} currentUser={currentUser} />
             )}
           </div>
         </section>
@@ -146,7 +158,7 @@ const Home = React.createClass({
           <div className="pins-block">
             {pins.sort((a, b) => (b.likers.length - a.likers.length))
               .map((pin, index) =>
-                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
+                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} currentUser={currentUser} />
               )
             }
           </div>
@@ -156,7 +168,7 @@ const Home = React.createClass({
   },
 
   render() {
-    const { blogs, selectedPin } = this.state;
+    const { blogs, selectedPin, currentUser } = this.state;
     // const displayUser = currentUser || kenny;
     return (
       <div className="home-page">
@@ -169,6 +181,7 @@ const Home = React.createClass({
             modalref="pinModal"
             hidePinModal={this.hidePinModal}
             pin={selectedPin}
+            currentUser={currentUser}
             ModalComponent={PinItemModal}
             showHeaderAndFooter={false}
           />

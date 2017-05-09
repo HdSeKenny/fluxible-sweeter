@@ -8,21 +8,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _stores = require('../../stores');
-
-var _actions = require('../../actions');
-
 var _reactBootstrap = require('react-bootstrap');
 
-var _reactRouter = require('react-router');
+var _stores = require('../../stores');
 
 var _UserControls = require('../UserControls');
 

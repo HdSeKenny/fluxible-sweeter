@@ -55,7 +55,7 @@ const BlogStore = (0, _createStore2.default)({
 
   /* Blogs comments */
   addCommentSuccess: function (res) {
-    const resObj = { resMsg: 'COMMENT_SUCCESS', blogId: res.blogId };
+    const resObj = { msg: 'COMMENT_SUCCESS', blogId: res.blogId, data: res };
     this.blogs.forEach((blog, index) => {
       if (blog.strId === res.blogId) {
         this.blogs[index].comments.push(res);
@@ -64,7 +64,7 @@ const BlogStore = (0, _createStore2.default)({
     this.emitChange(resObj);
   },
   deleteCommentSuccess: function (res) {
-    const resObj = { resMsg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId };
+    const resObj = { msg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId, data: res.deletedCommentId };
     this.blogs.forEach((blog, bIdx) => {
       if (blog.strId === res.blogId) {
         blog.comments.forEach((comment, cIdx) => {

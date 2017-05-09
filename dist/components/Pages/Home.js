@@ -14,8 +14,6 @@ var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
 var _reactRouter = require('react-router');
 
-var _reactBootstrap = require('react-bootstrap');
-
 var _sweetAlert = require('../../utils/sweetAlert');
 
 var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
@@ -56,14 +54,15 @@ const Home = _react2.default.createClass({
       blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {}
+      selectedPin: {},
+      showPinModal: true
     };
   },
   onChange: function (res) {
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
-      this.setState(this.getStateFromStores());
-    }
+    // if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
+    //   sweetAlert.alertSuccessMessage(res.resMsg);
+    //   this.setState(this.getStateFromStores());
+    // }
 
     if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
       _sweetAlert2.default.alertSuccessMessage(res.resMsg);
@@ -81,6 +80,7 @@ const Home = _react2.default.createClass({
       this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
     }
   },
+  componentDidMount: function () {},
   handleBlogText: function (e) {
     this.setState({ blogText: e.target.value });
   },
@@ -112,88 +112,21 @@ const Home = _react2.default.createClass({
     _sweetAlert2.default.alertWarningMessage('Login first !');
     this.setState({ blogText: '' });
   },
-  changeShowCommentsState: function () {
-    this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
-  },
-  changeBlogThumbsUpState: function () {
-    this.setState(this.getStateFromStores());
-  },
   onViewPinItem: function (id) {
     const { blogs: blogs } = this.state;
-    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
+    const selectedPin = blogs.find(p => p.id_str === id);
+    this.setState({ selectedPin: selectedPin });
+
+    $('#pinModal').on('hidden.bs.modal', () => {
+      this.hidePinModal();
+    });
+
     _UI.ModalsFactory.show('pinModal');
   },
-
-
-  // _renderCreateBtns(isDisabled) {
-  //   const { currentUser } = this.state;
-  //   return (
-  //     <div className="row btn-row">
-  //       <Button disabled={isDisabled} onClick={this.handleMicroBlog} className="btn-primary create-btn">
-  //         <Glyphicon glyph="send" />Create
-  //       </Button>
-  //       {currentUser &&
-  //         <Link to={`/user-blogs/${currentUser.strId}/add`}>
-  //           <Button className="btn-info create-btn">
-  //             <Glyphicon glyph="pencil" />Articles
-  //           </Button>
-  //         </Link>
-  //       }
-  //       {!currentUser &&
-  //         <Link to="">
-  //           <Button className="btn-info create-btn" onClick={this.checkCurrentUser}>
-  //             <Glyphicon glyph="pencil" />Articles
-  //           </Button>
-  //         </Link>
-  //       }
-  //     </div>
-  //   );
-  // },
-
-  // _renderCreateWell() {
-  //   const { blogText, welcomeText } = this.state;
-  //   const length = blogText.length;
-  //   const isDisabled = length > 140 || length === 0;
-  //   return (
-  //     <div className="well create-well">
-  //       <div className="row">
-  //         <div className="col-xs-7 col-md-7">
-  //           <p>{welcomeText}</p>
-  //         </div>
-  //         <div className="col-xs-5 col-md-5">
-  //           {length < 141 &&
-  //             <p>You can still write <span className="len-span">{140 - length}</span> words</p> }
-  //           {length > 140 &&
-  //             <p>Words can't be more than <span className="len-span-red">140</span> words</p>}
-  //         </div>
-  //       </div>
-  //       <div className="row textarea-row">
-  //         <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
-  //       </div>
-  //       {this._renderCreateBtns(isDisabled)}
-  //     </div>
-  //   );
-  // },
-
-  // _renderBlogSearch() {
-  //   return (
-  //     <div className="well blog">
-  //       <div className="row">
-  //         <div className="col-xs-9 search-query">
-  //           <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
-  //         </div>
-  //         <div className="col-xs-3 sort-by">
-  //           <select className="form-control" onChange={this.sortByType}>
-  //             <option>All blogs</option>
-  //             <option>Microblog</option>
-  //             <option>Article</option>
-  //           </select>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // },
-
+  hidePinModal: function () {
+    this.setState({ selectedPin: {} });
+    $('#pinModal').modal('hide');
+  },
   _renderPinItems: function (pins) {
     const articles = pins.filter(pin => pin.type === 'article');
     const moments = pins.filter(pin => pin.type === 'moment');
@@ -260,8 +193,8 @@ const Home = _react2.default.createClass({
     );
   },
   render: function () {
-    const { currentUser: currentUser, kenny: kenny, blogs: blogs } = this.state;
-    const displayUser = currentUser || kenny;
+    const { blogs: blogs, selectedPin: selectedPin } = this.state;
+    // const displayUser = currentUser || kenny;
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
@@ -276,11 +209,10 @@ const Home = _react2.default.createClass({
         null,
         _react2.default.createElement(_UI.ModalsFactory, {
           modalref: 'pinModal',
-          large: true,
-          title: this.state.selectedPin.title,
-          pin: this.state.selectedPin,
-          ModalComponent: _UserControls.ViewPin,
-          showHeaderAndFooter: true
+          hidePinModal: this.hidePinModal,
+          pin: selectedPin,
+          ModalComponent: _UserControls.PinItemModal,
+          showHeaderAndFooter: false
         })
       )
     );
@@ -288,23 +220,4 @@ const Home = _react2.default.createClass({
 });
 
 exports.default = Home;
-
-/*
-  <div className="blog-left">
-    {this._renderCreateWell()}
-    {this._renderBlogSearch()}
-    <BlogsWell
-      displayBlogs={blogs}
-      changeShowCommentsState={this.changeShowCommentsState}
-      changeBlogThumbsUpState={this.changeBlogThumbsUpState}
-    />
-  </div>
-  <div className="blog-right" >
-    {this._renderUserCard(displayUser)}
-    <div className="well right-second">
-      <HotBlogsTabs />
-    </div>
-  </div>
- */
-
 module.exports = exports['default'];

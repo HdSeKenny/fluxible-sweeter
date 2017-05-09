@@ -31,7 +31,7 @@ class Html extends _react.Component {
         _react2.default.createElement(
           'title',
           null,
-          'Kenny"s Blog'
+          'Sweeter'
         ),
         _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
         _react2.default.createElement('link', { href: '/styles/bootstrap/css/font-awesome.min.css', rel: 'stylesheet' }),

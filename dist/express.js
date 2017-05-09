@@ -105,7 +105,7 @@ exports.default = server => {
   }
 
   if (env === 'development') {
-    server.use(_express2.default.static(_path2.default.join(_server3.default.server.root, 'dist')));
+    server.use(_express2.default.static(_path2.default.join(_server3.default.server.root, '.tmp')));
   }
 
   // limit size of json object less than 20M for extracting metadata

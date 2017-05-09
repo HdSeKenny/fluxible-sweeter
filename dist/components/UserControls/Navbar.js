@@ -53,7 +53,8 @@ const Navbar = _react2.default.createClass({
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
-      grayUserImageUrl: '/styles/images/users/gray-user.png'
+      grayUserImageUrl: '/styles/images/users/gray-user.png',
+      brandImage: 'styles/images/sweeter.png'
     };
   },
   onChange: function (res) {
@@ -92,7 +93,7 @@ const Navbar = _react2.default.createClass({
     _UI.ModalsFactory.show('signupModal');
   },
   render: function () {
-    const { authenticated: authenticated, currentUser: currentUser, grayUserImageUrl: grayUserImageUrl } = this.state;
+    const { authenticated: authenticated, currentUser: currentUser, grayUserImageUrl: grayUserImageUrl, brandImage: brandImage } = this.state;
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
@@ -105,8 +106,8 @@ const Navbar = _react2.default.createClass({
           { className: 'sweet-nav-wrap' },
           _react2.default.createElement(
             _reactRouter.Link,
-            { to: '/', className: `sweet-nav-brand ${this.isActive('/')}` },
-            'Sweeter'
+            { to: '/', className: 'sweet-nav-brand' },
+            _react2.default.createElement('img', { src: brandImage, alt: 'brand', height: '26' })
           ),
           _react2.default.createElement(
             'ul',
@@ -122,7 +123,7 @@ const Navbar = _react2.default.createClass({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: `${this.isHomeActive('home')}` },
+              { className: this.isHomeActive('home') },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: `/${currentUser.username}/home` },
@@ -133,6 +134,24 @@ const Navbar = _react2.default.createClass({
           _react2.default.createElement(
             'ul',
             { className: 'sweet-nav-menu sweet-nav-right' },
+            _react2.default.createElement(
+              'li',
+              { className: this.isActive('about') },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/about' },
+                'About'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              { className: this.isHomeActive('contact') },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/contact' },
+                'Contact'
+              )
+            ),
             !authenticated && _react2.default.createElement(
               'li',
               { className: 'mr-0' },
@@ -162,7 +181,7 @@ const Navbar = _react2.default.createClass({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: 'm-0' },
+              { className: 'mr-0' },
               _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url }),
               _react2.default.createElement(
                 'ul',
@@ -203,7 +222,7 @@ const Navbar = _react2.default.createClass({
         _UI.Layout.Page,
         null,
         _react2.default.createElement(_UI.ModalsFactory, { modalref: 'loginModal', title: 'Login to account', ModalComponent: _Pages.Login, size: 'modal-md', showHeaderAndFooter: true }),
-        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'signupModal', title: 'Sign up', ModalComponent: _Pages.signup, size: 'modal-md', showHeaderAndFooter: true })
+        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'signupModal', title: 'Sign up', ModalComponent: _Pages.Signup, size: 'modal-md', showHeaderAndFooter: true })
       )
     );
   }

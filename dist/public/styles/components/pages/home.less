@@ -10,16 +10,30 @@
   .main-sliders {
     height: 15em;
     background-color: @brand-info;
-    padding: 5em 12em;
-    p {
+    padding: 4em 12em;
+    .welcome {
       color: #fff;
       font-size: 40px;
+    }
+    .sliders-btns {
+      .btn-default {
+        background: @brand-info;
+        color: #fff !important;
+        border: 1px solid #fff;
+        padding: 6px 20px;
+        font-size: 15px;
+        &:hover {
+          background: #fff;
+          color: #717171 !important;
+          border: 1px solid #fff;
+        }
+      }
     }
   }
   @media (min-width: 769px) {
     .main {
-      width: @nav-wrap-width;
-      margin: 0 auto;
+      width: @content-pages-width;
+      margin: @content-pages-margin;
       padding: 0 0.5em;
       .vbox {
         min-height: 60em;
@@ -37,7 +51,7 @@
           margin-top: 1em;
           color: #333;
           .view-all {
-            font-size: 0.7em;
+            font-size: 1em;
             font-style: italic;
             &:hover {
               color: @brand-primary;

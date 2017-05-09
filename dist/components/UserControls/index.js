@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ListLeftNav = exports.ViewPin = exports.BlogModal = exports.Tabs = exports.Footer = exports.Pane = exports.UserImageEditor = exports.BlogEditor = exports.Navbar = undefined;
+exports.ListLeftNav = exports.PinItemModal = exports.BlogModal = exports.Tabs = exports.Footer = exports.Pane = exports.UserImageEditor = exports.BlogEditor = exports.Navbar = undefined;
 
 var _Navbar2 = require('./Navbar');
 
@@ -33,9 +33,9 @@ var _BlogModal2 = require('./BlogModal');
 
 var _BlogModal3 = _interopRequireDefault(_BlogModal2);
 
-var _ViewPin2 = require('./ViewPin');
+var _PinItemModal2 = require('./PinItemModal');
 
-var _ViewPin3 = _interopRequireDefault(_ViewPin2);
+var _PinItemModal3 = _interopRequireDefault(_PinItemModal2);
 
 var _ListLeftNav2 = require('./ListLeftNav');
 
@@ -50,5 +50,5 @@ exports.Pane = _Pane3.default;
 exports.Footer = _Footer3.default;
 exports.Tabs = _Tabs3.default;
 exports.BlogModal = _BlogModal3.default;
-exports.ViewPin = _ViewPin3.default;
+exports.PinItemModal = _PinItemModal3.default;
 exports.ListLeftNav = _ListLeftNav3.default;

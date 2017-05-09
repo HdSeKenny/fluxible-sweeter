@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.List = exports.Home = exports.signup = exports.Login = exports.Comments = undefined;
+exports.List = exports.Home = exports.Signup = exports.Login = exports.Comments = undefined;
 
 var _Comments2 = require('./Comments');
 
@@ -13,9 +13,9 @@ var _Login2 = require('./Login');
 
 var _Login3 = _interopRequireDefault(_Login2);
 
-var _Signup = require('./Signup');
+var _Signup2 = require('./Signup');
 
-var _Signup2 = _interopRequireDefault(_Signup);
+var _Signup3 = _interopRequireDefault(_Signup2);
 
 var _Home2 = require('./Home');
 
@@ -29,6 +29,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Comments = _Comments3.default;
 exports.Login = _Login3.default;
-exports.signup = _Signup2.default;
+exports.Signup = _Signup3.default;
 exports.Home = _Home3.default;
 exports.List = _List3.default;

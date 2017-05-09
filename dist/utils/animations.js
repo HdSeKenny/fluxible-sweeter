@@ -36,6 +36,9 @@ const animations = {
         } else if (isScroll === false) {
           $nav.removeClass('sticky');
           isScroll = true;
+        } else if ($nav.hasClass('sticky')) {
+          $nav.removeClass('sticky');
+          isScroll = true;
         }
       });
     }

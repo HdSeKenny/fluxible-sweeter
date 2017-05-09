@@ -36,7 +36,7 @@ const Navbar = React.createClass({
       currentUser: this.getStore(UserStore).getCurrentUser(),
       authenticated: this.getStore(UserStore).isAuthenticated(),
       grayUserImageUrl: '/styles/images/users/gray-user.png',
-      brandImage: 'styles/images/sweeter.png'
+      brandImage: '/styles/images/sweeter.png'
     };
   },
 

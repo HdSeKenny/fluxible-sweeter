@@ -341,7 +341,7 @@ const List = _react2.default.createClass({
         _UI.Layout.Page,
         null,
         _react2.default.createElement(_UI.ModalsFactory, { modalref: 'createBlogModal', title: 'Create a sweet !', ModalComponent: _UserControls.BlogModal, size: 'modal-md', showHeaderAndFooter: false }),
-        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'pinModal', large: true, pin: selectedPin, ModalComponent: _UserControls.ViewPin, showHeaderAndFooter: true })
+        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'pinModal', large: true, pin: selectedPin, ModalComponent: _UserControls.PinItemModal, showHeaderAndFooter: false })
       )
     );
   }
