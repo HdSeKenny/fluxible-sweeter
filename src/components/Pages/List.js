@@ -1,13 +1,11 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link } from 'react-router';
-import _ from 'lodash';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
-import data from '../../utils/data';
 import { PinItemModal, BlogModal } from '../UserControls';
 
 const List = React.createClass({
@@ -40,30 +38,32 @@ const List = React.createClass({
   },
 
   onChange(res) {
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
-      this.setState(this.getStateFromStores());
+    const thumbsAndCommentMsgs = [
+      'COMMENT_SUCCESS',
+      'DELETE_COMMENT_SUCCESS',
+      'THUMBS_UP_BLOG_SUCCESS',
+      'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      'DELETE_BLOG_SUCCESS'
+    ];
+
+    if (thumbsAndCommentMsgs.includes(res.msg)) {
+      sweetAlert.alertSuccessMessage(res.msg);
+      this.setState({
+        blogs: this.getStore(BlogStore).getAllBlogs()
+      });
     }
 
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({
         blogText: '',
         blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
-    if (res.resMsg === 'LOGOUT_SUCCESS') {
+    if (res.msg === 'LOGOUT_SUCCESS') {
       // this.setState(this.getStateFromStores());
     }
-
-    if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
-      this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
-    }
-  },
-
-  componentDidMount() {
-
   },
 
   handleBlogText(e) {
@@ -121,24 +121,19 @@ const List = React.createClass({
   },
 
   _renderUserCardInfo(displayUser) {
+    const { image_url, username, profession, description } = displayUser;
     return (
       <div className="">
         <Row className="card-header">
           <Col size="3">
-            <Link to={`/user-home/${displayUser.strId}/home`}>
-              <img alt="user" src="/styles/images/upload/1484229196773.jpg" />
-            </Link>
+            <Link to={`/${username}/home`}><img alt="user" src={image_url} /></Link>
           </Col>
           <Col size="8">
-            <h3 className="m-0">
-              <Link to={`/user-home/${displayUser.strId}/home`}>{displayUser.username}</Link>
-            </h3>
-            <h5>{displayUser.profession}</h5>
+            <h3 className="m-0"><Link to={`/${username}/home`}>{username}</Link></h3>
+            <h5>{profession}</h5>
           </Col>
         </Row>
-        <Row className="card-body">
-          <p>This guy is lazy...</p>
-        </Row>
+        <Row className="card-body"><p>{description}</p></Row>
       </div>
     );
   },
@@ -162,12 +157,18 @@ const List = React.createClass({
     );
   },
 
-  _renderAllPinItems(pins) {
+  _renderAllPinItems(pins, currentUser) {
     return (
       <div className="">
         {pins.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
           .map((pin, index) =>
-            <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
+            <PinItem
+              key={index}
+              onSelect={(id) => this.onViewPinItem(id)}
+              pin={pin}
+              type={pin.type}
+              currentUser={currentUser}
+            />
           )
         }
       </div>
@@ -237,7 +238,7 @@ const List = React.createClass({
       <article className="list-page">
         <section className="mid">
           {this._renderSearchBlock()}
-          {this._renderAllPinItems(blogs)}
+          {this._renderAllPinItems(blogs, currentUser)}
         </section>
         <section className="right">
           <div className="right-user-card">

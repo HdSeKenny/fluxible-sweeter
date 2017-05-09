@@ -1,3 +1,4 @@
+/* eslint-disable all, camelcase */
 import React from 'react';
 import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
@@ -47,7 +48,7 @@ const Comments = React.createClass({
       sweetAlert.alertSuccessMessage(res.msg);
 
       if (res.msg === 'COMMENT_SUCCESS') {
-        blog.comments.push(res.data);
+        // blog.comments.push(res.data);
       }
 
       if (res.msg === 'DELETE_COMMENT_SUCCESS') {
@@ -80,6 +81,11 @@ const Comments = React.createClass({
   },
 
   onCommentBlog(blog) {
+    const { currentUser } = this.state;
+    if (!currentUser) {
+      this.checkLogin();
+      return;
+    }
     const comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
@@ -119,7 +125,7 @@ const Comments = React.createClass({
     });
   },
 
-  _GoToUserCenter(username) {
+  goToUserCenter(username) {
     $('#pinModal').modal('hide');
     this.context.router.push(`/${username}/home`);
   },
@@ -128,13 +134,17 @@ const Comments = React.createClass({
     return (
       <Row className="comment-textarea">
         <Col size="9 pl-5 pr-0">
-          <textarea rows="1" className="form-control" value={commentText} onChange={this.handleCommentText} ></textarea>
+          <textarea
+            rows="1"
+            className="form-control"
+            value={commentText}
+            onChange={this.handleCommentText} />
         </Col>
         <Col size="3 pr-5 pl-5">
-          {currentUser &&
-            <button className="btn btn-info fr" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button>}
-          {!currentUser &&
-            <button className="btn btn-info fr" onClick={this.checkLogin} disabled={isCommentText}> Comment</button>}
+          <button
+            className="btn btn-info fr"
+            onClick={this.onCommentBlog.bind(this, blog)}
+            disabled={isCommentText}> Comment</button>
         </Col>
       </Row>
     );
@@ -142,31 +152,42 @@ const Comments = React.createClass({
 
   _renderArticleTextarea(blog, isCommentText, currentUser, commentText) {
     return (
-      <div className="row comment-textarea">
-        <div className="row">
-          <textarea rows="4" className="form-control" value={commentText} onChange={this.handleCommentText} ></textarea>
-        </div>
-        <div className="row">
-          {currentUser &&
-            <button className="comment-btn" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button>}
-          {!currentUser &&
-            <button className="comment-btn" onClick={this.checkLogin} disabled={isCommentText}> Comment</button>}
-        </div>
-      </div>
+      <Row className="comment-textarea">
+        <Row>
+          <textarea
+            rows="3"
+            className="form-control"
+            value={commentText}
+            onChange={this.handleCommentText}
+          />
+        </Row>
+        <Row>
+          <button
+            className="btn btn-info fr mt-15"
+            onClick={this.onCommentBlog.bind(this, blog)}
+            disabled={isCommentText}> Comment</button>
+        </Row>
+      </Row>
     );
   },
 
   _renderReplyTextarea(replyText, comment) {
+    const isDisabled = replyText.length === 0;
     return (
       <Row className="reply-row mt-10">
-        <Col size="1" />
+        <Col size="1 reply-empty" />
         <Col size="9">
-          <textarea rows="1" className="form-control" value={replyText} onChange={this.handleReplyText} ></textarea>
+          <textarea
+            rows="1"
+            className="form-control"
+            value={replyText}
+            onChange={this.handleReplyText} />
         </Col>
         <Col size="2">
-          <button className="btn btn-info reply-btn" onClick={this.onReplyComment.bind(this, comment)} disabled={replyText.length === 0}>
-            Reply
-          </button>
+          <button
+            className="btn btn-info reply-btn"
+            onClick={() => this.onReplyComment(this, comment)}
+            disabled={isDisabled}> Reply</button>
         </Col>
       </Row>
     );
@@ -183,34 +204,38 @@ const Comments = React.createClass({
         {!isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText)}
         {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         .map(comment => {
-          const date = comment.created_at ? comment.created_at.toString() : null;
+          const { id_str, commenter, created_at, show_replies } = comment;
+          const date = created_at ? created_at.toString() : null;
           const commentDate = dateFormat(date, 'dddd, h:MM TT');
-          const commenter = this.getCommenter(comment.commenter);
-          const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
+          const user = this.getCommenter(commenter);
+          const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
+          const { username, image_url } = user;
           return (
-            <div key={comment._id}>
+            <div key={id_str}>
               <Row className="comment-row">
                 <Col size="1 commenter-img p-0">
-                  <img alt="commenter" src={commenter.image_url} />
+                  <img alt="commenter" src={image_url} />
                 </Col>
                 <Col size="10 p-0">
                   <h5 className="comment-text">
-                    <span className="username" onClick={this._GoToUserCenter.bind(this, commenter.username)}>
-                      {commenter.username}
+                    <span className="username" onClick={() => this.goToUserCenter(username)}>
+                      {username}
                     </span> : {comment.commentText}
                   </h5>
                   <p className="comment-date">
                     <small>{commentDate}</small>
-                    <button className="reply-icon" onClick={this.showReplyTextarea.bind(this, comment)}>
+                    <button className="reply-icon" onClick={() => this.showReplyTextarea(comment)}>
                       <i className="fa fa-reply"></i>
                     </button>
                   </p>
                 </Col>
                 <Col size="1 comment-thumbs">
-                  {displayIcon && <Glyphicon glyph="trash" onClick={this.onDeleteComment.bind(this, comment)} />}
+                  {displayIcon && <Glyphicon glyph="trash" onClick={() => this.onDeleteComment(comment)} />}
                 </Col>
               </Row>
-              {comment.show_replies && this._renderReplyTextarea(replyText, comment)}
+              <Row className="comment-icons">
+              </Row>
+              {show_replies && this._renderReplyTextarea(replyText, comment)}
             </div>
           );
         })}

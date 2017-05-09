@@ -121,10 +121,10 @@ export default {
             Blog.findOne({ _id: blog._id }, (err, newBlog) => {
               db.close();
               callback(err, newBlog);
-            })
+            });
           });
         }
-      })
+      });
     });
   },
 

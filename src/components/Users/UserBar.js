@@ -39,17 +39,17 @@ const UserBar = React.createClass({
   },
 
   onChange(res) {
-    if (res.resMsg === 'FOLLOW_USER_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'FOLLOW_USER_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
     }
 
-    if (res.resMsg === 'CANCEL_FOLLOW_USER_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
     }
 
-    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.resMsg)) {
-      if (res.resMsg === 'UPLOAD_IMAGE_SUCCESS') {
-        sweetAlert.alertSuccessMessage(res.resMsg);
+    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.msg)) {
+      if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
+        sweetAlert.alertSuccessMessage(res.msg);
       }
       this.setState(this.getStateFromStores());
     }

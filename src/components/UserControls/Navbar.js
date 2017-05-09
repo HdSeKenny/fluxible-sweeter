@@ -41,8 +41,8 @@ const Navbar = React.createClass({
   },
 
   onChange(res) {
-    if (['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'].includes(res.resMsg)) {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'].includes(res.msg)) {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState(this.getStateFromStores());
     }
   },
@@ -110,9 +110,6 @@ const Navbar = React.createClass({
             <ul className="sweet-nav-menu sweet-nav-right">
               <li className={this.isActive('about')}>
                 <Link to="/about">About</Link>
-              </li>
-              <li className={this.isHomeActive('contact')}>
-                <Link to="/contact">Contact</Link>
               </li>
               {!authenticated &&
                 <li className="mr-0">

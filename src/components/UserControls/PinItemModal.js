@@ -22,7 +22,7 @@ export default class PinItemModal extends Component {
     const { pin } = this.props;
     if (pin.author) {
       return (
-        <section className="pin-item-modal">
+        <section className="pin-item-modal mt-15 mb-20">
           <PinItem onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} />
           <Comments blog={pin} isBlogsWell={true} />
         </section>

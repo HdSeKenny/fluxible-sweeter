@@ -46,8 +46,8 @@ const AddBlog = React.createClass({
 
   onChange(res) {
     const { currentUser } = this.state;
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessageWithCallback(res.resMsg, () => {
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
         this.context.router.push(`/user-blogs/${currentUser.strId}/list`);
       });
     }

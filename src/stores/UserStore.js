@@ -56,7 +56,7 @@ const UserStore = createStore({
   loadUsersFail(){
     const resObj = {
       resCode: 404,
-      resMsg:'LOAD_USERS_FAIL'
+      msg:'LOAD_USERS_FAIL'
     }
     this.users = null;
     this.emitChange(resObj)
@@ -77,7 +77,7 @@ const UserStore = createStore({
 
   loginSuccess(res) {
     const resObj = {
-      resMsg: 'USER_LOGIN_SUCCESS'
+      msg: 'USER_LOGIN_SUCCESS'
     }
     this.currentUser = res.user;
     this.authenticated = true;
@@ -86,7 +86,7 @@ const UserStore = createStore({
 
   loginFail(res) {
     const resObj = {
-      resMsg: 'USER_LOGIN_FAIL',
+      msg: 'USER_LOGIN_FAIL',
       errorMsg: res.auth.msg
     }
     this.currentUser = null;
@@ -97,7 +97,7 @@ const UserStore = createStore({
   logoutSuccess(res) {
     const resObj = {
       resCode: 200,
-      resMsg: 'LOGOUT_SUCCESS'
+      msg: 'LOGOUT_SUCCESS'
     }
     this.currentUser = null;
     this.authenticated = false;
@@ -125,7 +125,7 @@ const UserStore = createStore({
   },
 
   updateUserSuccess(res) {
-    const resObj ={resMsg: 'UPDATE_USER_SUCCESS'};
+    const resObj ={msg: 'UPDATE_USER_SUCCESS'};
     this.currentUser = res;
     this.emitChange(resObj);
   },
@@ -164,7 +164,7 @@ const UserStore = createStore({
 
   followUserSuccess(res){
     const resObj = {
-      resMsg: 'FOLLOW_USER_SUCCESS'
+      msg: 'FOLLOW_USER_SUCCESS'
     }
     this.users.forEach((user, index) => {
       if (user.strId === res.thisUser.strId) {
@@ -181,7 +181,7 @@ const UserStore = createStore({
 
   cancelFollowUserSuccess(res) {
     const resObj = {
-      resMsg: 'CANCEL_FOLLOW_USER_SUCCESS'
+      msg: 'CANCEL_FOLLOW_USER_SUCCESS'
     }
     this.users.forEach((user, index) => {
       if (user.strId === res.thisUser.strId) {
@@ -209,7 +209,7 @@ const UserStore = createStore({
   },
 
   followUserWithSuccess(res) {
-    const resObj = {resMsg: 'FOLLOW_USER_SUCCESS'};
+    const resObj = {msg: 'FOLLOW_USER_SUCCESS'};
     const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
     this.currentUser.focuses.push(res.thisUser);
     this.users[usrIdx] = this.currentUser;
@@ -217,7 +217,7 @@ const UserStore = createStore({
   },
 
   cancelFollowUserWithSuccess(res) {
-    const resObj = {resMsg: 'CANCEL_FOLLOW_USER_SUCCESS'};
+    const resObj = {msg: 'CANCEL_FOLLOW_USER_SUCCESS'};
     const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
     this.currentUser.focuses.forEach((focus, fsIdx) => {
       if (focus.strId === res.thisUser.strId) {
@@ -230,7 +230,7 @@ const UserStore = createStore({
 
   getLoginUserImageSuccess(res) {
     const resObj= {
-      resMsg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
+      msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
     }
     this.loginUserImage = res;
     this.emitChange(resObj);
@@ -250,7 +250,7 @@ const UserStore = createStore({
 
   editUserImage(image) {
     const resObj= {
-      resMsg: 'EDIT_IMAGE_SUCCESS'
+      msg: 'EDIT_IMAGE_SUCCESS'
     }
     this.currentUploadedImage = image;
     this.emitChange(resObj);
@@ -258,7 +258,7 @@ const UserStore = createStore({
 
   cancelEditUserImage() {
     const resObj= {
-      resMsg: 'CANCEL_IMAGE_SUCCESS'
+      msg: 'CANCEL_IMAGE_SUCCESS'
     }
     this.currentUploadedImage = null;
     this.emitChange(resObj);
@@ -266,7 +266,7 @@ const UserStore = createStore({
 
   uploadImageSuccess(newuser) {
     const resObj= {
-      resMsg: 'UPLOAD_IMAGE_SUCCESS'
+      msg: 'UPLOAD_IMAGE_SUCCESS'
     }
     this.currentUploadedImage = null;
     this.currentUser.image_url = newuser.image_url;

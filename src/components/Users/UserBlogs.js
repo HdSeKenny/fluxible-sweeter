@@ -50,13 +50,13 @@ const UserBlogs = React.createClass({
   onChange(res) {
     const { currentUser } = this.state;
     const { userId } = this.props.params;
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       // this.setState({displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id)});
     }
 
-    if (res.resMsg === 'UPDATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'UPDATE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({
         displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id),
         currentBlog: this.getStore(BlogStore).getCurrentBlog(),
@@ -64,16 +64,16 @@ const UserBlogs = React.createClass({
       });
     }
 
-    if (res.resMsg === 'EDIT_BLOG' || res.resMsg === 'CANCEL_EDIT_BLOG') {
+    if (res.msg === 'EDIT_BLOG' || res.msg === 'CANCEL_EDIT_BLOG') {
       this.setState({ currentBlog: this.getStore(BlogStore).getCurrentBlog() });
     }
 
-    if (res.resMsg === 'CONFIRM_DELETE_BLOG' || res.resMsg === 'CANCEL_DELETE_BLOG') {
+    if (res.msg === 'CONFIRM_DELETE_BLOG' || res.msg === 'CANCEL_DELETE_BLOG') {
       // this.setState({deletedBlog: this.getStore(BlogStore).getDeletedBlog()})
     }
 
-    if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'DELETE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({
         // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
         displayBlogs: this.getStore(BlogStore).getBlogsByUserId(userId)

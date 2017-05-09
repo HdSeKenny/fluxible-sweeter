@@ -47,19 +47,19 @@ const UserHome = React.createClass({
   onChange(res) {
     const { user, isCurrentUser } = this.state;
     const { userId } = this.props.params;
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({ blogText: '' });
     }
 
-    if (res.resMsg === 'COMMENT_SUCCESS'
-        || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'COMMENT_SUCCESS'
+        || res.msg === 'DELETE_COMMENT_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-      this.setState({ singleUserBlogs });
+      // this.setState({ singleUserBlogs });
     }
 
-    // if(res.resMsg === 'FOLLOW_USER_SUCCESS' || res.resMsg === 'CANCEL_FOLLOW_USER_SUCCESS'){
+    // if(res.msg === 'FOLLOW_USER_SUCCESS' || res.msg === 'CANCEL_FOLLOW_USER_SUCCESS'){
     //   this.setState({
     //     currentUser: this.getStore(UserStore).getCurrentUser(),
     //     user: this.getStore(UserStore).getUserById(userId),

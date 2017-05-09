@@ -33,17 +33,17 @@ const Login = React.createClass({
   },
 
   onChange(res) {
-    if (res.resMsg === 'USER_LOGIN_SUCCESS') {
+    if (res.msg === 'USER_LOGIN_SUCCESS') {
       sweetAlert.alertSuccessMessageWithCallback('Login success !', () => {
         this.context.router.push('/');
       });
     }
 
-    if (res.resMsg === 'USER_LOGIN_FAIL') {
+    if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
     }
 
-    if (res.resMsg === 'LOAD_LOGIN_USER_IMAGE_SUCCESS') {
+    if (res.msg === 'LOAD_LOGIN_USER_IMAGE_SUCCESS') {
       this.setState({ userImg: this.getStore(UserStore).getLoginUserloginUserImage() });
     }
   },

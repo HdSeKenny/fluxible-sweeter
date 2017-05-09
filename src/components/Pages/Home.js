@@ -39,31 +39,27 @@ const Home = React.createClass({
   },
 
   onChange(res) {
-    // if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-    //   sweetAlert.alertSuccessMessage(res.resMsg);
-    //   this.setState(this.getStateFromStores());
-    // }
 
-    if (res.resMsg === 'THUMBS_UP_BLOG_SUCCESS' || res.resMsg === 'CANCEL_THUMBS_UP_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'THUMBS_UP_BLOG_SUCCESS' || res.msg === 'CANCEL_THUMBS_UP_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({
         blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      sweetAlert.alertSuccessMessage(res.msg);
       this.setState({
         blogText: '',
         blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
-    if (res.resMsg === 'LOGOUT_SUCCESS') {
+    if (res.msg === 'LOGOUT_SUCCESS') {
       // this.setState(this.getStateFromStores());
     }
 
-    if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
+    if (res.msg === 'DELETE_BLOG_SUCCESS') {
       this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
     }
   },
@@ -129,47 +125,46 @@ const Home = React.createClass({
     }
   },
 
-  _renderPinItems(pins) {
+  _renderPinSection(sectionTitle, typedPins) {
     const { currentUser } = this.state;
+    return (
+      <section className="">
+        <p className="home-tag">
+          {sectionTitle} >
+          <Link to="/list" className="view-all">.view all</Link>
+        </p>
+        <div className="pins-block">
+          {typedPins.map((pin, index) =>
+            <PinItem
+              key={index}
+              onSelect={(id) => this.onViewPinItem(id)}
+              pin={pin}
+              type={pin.type}
+              currentUser={currentUser}
+            />
+          )}
+        </div>
+      </section>
+    );
+  },
+
+  _renderPinItems(pins) {
     const articles = pins.filter(pin => pin.type === 'article');
+    const thumbedSortedArticles = articles.sort((a, b) => b.likers.length - a.likers.length);
     const moments = pins.filter(pin => pin.type === 'moment');
+    const thumbedSortedMoments = moments.sort((a, b) => b.likers.length - a.likers.length);
+    const dateSortedPins = pins.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)));
     return (
       <article className="classification">
-        <section className="new-monments">
-          <p className="home-tag">New sweets > <Link to="/list" className="view-all">.view all</Link></p>
-          <div className="pins-block">
-            {moments.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
-              .map((pin, index) =>
-                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} currentUser={currentUser} />
-              )
-            }
-          </div>
-        </section>
-        <section className="articles">
-          <p className="home-tag">New articles > <Link to="/list" className="view-all">.view all</Link></p>
-          <div className="pins-block">
-            {articles.map((article, index) =>
-              <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={article} type={article.type} currentUser={currentUser} />
-            )}
-          </div>
-        </section>
-        <section className="hot-blogs">
-          <p className="home-tag">Hot sweets > <Link to="/list" className="view-all">.view all</Link></p>
-          <div className="pins-block">
-            {pins.sort((a, b) => (b.likers.length - a.likers.length))
-              .map((pin, index) =>
-                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} type={pin.type} currentUser={currentUser} />
-              )
-            }
-          </div>
-        </section>
+        {this._renderPinSection('What\'s new', dateSortedPins)}
+        {this._renderPinSection('Hot Articles', thumbedSortedArticles)}
+        {this._renderPinSection('Good Sweets', thumbedSortedMoments)}
       </article>
     );
   },
 
   render() {
     const { blogs, selectedPin, currentUser } = this.state;
-    // const displayUser = currentUser || kenny;
     return (
       <div className="home-page">
         <MainSliders />

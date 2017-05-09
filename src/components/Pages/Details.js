@@ -1,17 +1,16 @@
 import React from 'react';
 import dateFormat from 'dateformat';
-// import { Link, Router } from 'react-router';
-// import { Button, Glyphicon } from 'react-bootstrap';
+import { routerShape } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { BlogStore } from '../../stores';
 import { Comments } from '../Pages';
-import sweetAlert from '../../utils/sweetAlert';
 
-const BlogsDetails = React.createClass({
+const Details = React.createClass({
 
-  displayName: 'BlogsDetails',
+  displayName: 'Details',
 
   contextTypes: {
+    router: routerShape.isRequired,
     executeAction: React.PropTypes.func
   },
 
@@ -37,10 +36,7 @@ const BlogsDetails = React.createClass({
   },
 
   onChange(res) {
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.resMsg);
-      this.setState(this.getStatesFromStores());
-    }
+
   },
 
   render() {
@@ -49,12 +45,12 @@ const BlogsDetails = React.createClass({
     const blogDate = dateFormat(date);
     const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
     return (
-      <article className="blog-details-page">
-        <section className="blog-details">
-          <section className="blog-title">
-            <h2>{blog.title}</h2>
+      <article className="details-page">
+        <section className="details">
+          <section className="title">
+            <p>{blog.title}</p>
           </section>
-          <section classMame="blog-info">
+          <section classMame="info">
             <field className="info-left">
               {blog.author.username}
             </field>
@@ -62,18 +58,18 @@ const BlogsDetails = React.createClass({
               {blogDate}
             </field>
           </section>
-          <section className="blog-content">
-            <p>{blog.content}</p>
+          <section className="content">
+            <p>{blog.text}</p>
           </section>
+          <div className="comments">
+            <hr />
+            <h3>{blog.comments.length} {commentRefer}</h3>
+            <Comments blog={blog} isBlogsWell={false} />
+          </div>
         </section>
-        <div className="blog-comments">
-          <hr />
-          <h3>{blog.comments.length} {commentRefer}</h3>
-          <Comments blog={blog} isBlogsWell={false} />
-        </div>
       </article>
     );
   }
 });
 
-export default BlogsDetails;
+export default Details;

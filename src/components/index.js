@@ -2,7 +2,7 @@ export NotFound from './NotFound';
 export App from './App';
 export Home from './Pages/Home';
 export AddBlog from './Users/AddBlog';
-export BlogsDetails from './Pages/BlogsDetails';
+export Details from './Pages/Details';
 export Login from './Users/Login';
 export Register from './Users/Register';
 export UserHome from './Users/UserHome';

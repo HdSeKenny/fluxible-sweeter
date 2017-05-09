@@ -9,7 +9,7 @@ import {
   NotFound,
   Home,
   AddBlog,
-  BlogsDetails,
+  Details,
   Login,
   Register,
   UserHome,
@@ -55,7 +55,7 @@ const createRoutes = (context) => {
       <Route path="register" component={Register} />
       <Route path="list" component={List} />
 
-      <Route path="blog-details/:blogId" component={BlogsDetails} />
+      <Route path=":blogId/details" component={Details} />
       <Route path=":user/home" component={UserHome} />
       <Route path=":user/list" component={UserBlogs} />
       <Route path=":user/add" component={AddBlog} />
