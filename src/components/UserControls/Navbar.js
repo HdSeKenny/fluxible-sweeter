@@ -104,6 +104,7 @@ const Navbar = React.createClass({
     }
 
     ModalsFactory.hide(modalRef);
+    $('body').addClass('modal-open');
   },
 
   render() {
