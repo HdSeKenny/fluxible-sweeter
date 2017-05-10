@@ -63,46 +63,12 @@ const Navbar = React.createClass({
     return string.split(word, index).join(word).length;
   },
 
-  handleLogout(e) {
-    e.preventDefault();
+  handleLogout() {
     this.executeAction(UserActions.Logout);
   },
 
   componentDidMount() {
     animations.sticky_header('.sweet-nav');
-  },
-
-  componentWillUnmount() {
-    ModalsFactory.hide('loginModal');
-    ModalsFactory.hide('signupModal');
-  },
-
-  openLoginModal() {
-    if (!this.state.showModal) {
-      this.setState({ showModal: true });
-    }
-
-    ModalsFactory.show('loginModal');
-
-    $('#loginModal').on('hidden.bs.modal', () => {
-      if (this.hideLoginOrSignuoModal) {
-        this.hideLoginOrSignuoModal('loginModal');
-      }
-    });
-  },
-
-  openSignupModal() {
-    if (!this.state.showModal) {
-      this.setState({ showModal: true });
-    }
-
-    ModalsFactory.show('loginModal');
-
-    $('#loginModal').on('hidden.bs.modal', () => {
-      if (this.hideLoginOrSignuoModal) {
-        this.hideLoginOrSignuoModal('loginModal');
-      }
-    });
   },
 
   openNavbarModals(modalRef) {
@@ -136,6 +102,8 @@ const Navbar = React.createClass({
     if (isSignupModal) {
       this.setState({ showSignupModal: false });
     }
+
+    ModalsFactory.hide(modalRef);
   },
 
   render() {
@@ -147,6 +115,7 @@ const Navbar = React.createClass({
       showLoginModal,
       showSignupModal
     } = this.state;
+
     return (
       <section className="menuzord-section">
         <header className="hidden-header" />
@@ -185,13 +154,15 @@ const Navbar = React.createClass({
                   <ul className="dropdown">
                     <li><Link to={`/${currentUser.username}/home`}>User center</Link></li>
                     <li><span>Settings</span></li>
-                    <li onClick={this.handleLogout}><span>Logout</span></li>
+                    <li><span onClick={this.handleLogout}>Logout</span></li>
                   </ul>
                 </li>
               }
             </ul>
           </div>
         </header>
+
+
         <Layout.Page>
           <ModalsFactory
             modalref="loginModal"
@@ -199,7 +170,9 @@ const Navbar = React.createClass({
             ModalComponent={Login}
             size="modal-md"
             showHeaderAndFooter={true}
-            showModal={showLoginModal} />
+            showModal={showLoginModal}
+            openNavbarModals={this.openNavbarModals}
+            hideNavbarModals={this.hideNavbarModals} />
           <ModalsFactory
             modalref="signupModal"
             title="Sign up"

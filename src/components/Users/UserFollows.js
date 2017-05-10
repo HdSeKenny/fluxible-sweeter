@@ -1,8 +1,5 @@
 import React from 'react';
-
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-// import { Link } from 'react-router';
-// import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserFollowsTabs } from '../UI';
 import { UserActions } from '../../actions';

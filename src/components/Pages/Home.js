@@ -33,39 +33,21 @@ const Home = React.createClass({
       blogs: this.getStore(BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {},
-      showPinModal: true
+      selectedPin: {}
     };
   },
 
   onChange(res) {
-
-    if (res.msg === 'THUMBS_UP_BLOG_SUCCESS' || res.msg === 'CANCEL_THUMBS_UP_BLOG_SUCCESS') {
+    const blogMessages = [
+      'THUMBS_UP_BLOG_SUCCESS',
+      'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      'CREATE_BLOG_SUCCESS',
+      'DELETE_BLOG_SUCCESS'
+    ];
+    if (blogMessages.includes(res.msg)) {
       sweetAlert.alertSuccessMessage(res.msg);
-      this.setState({
-        blogs: this.getStore(BlogStore).getAllBlogs()
-      });
-    }
-
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
-      this.setState({
-        blogText: '',
-        blogs: this.getStore(BlogStore).getAllBlogs()
-      });
-    }
-
-    if (res.msg === 'LOGOUT_SUCCESS') {
-      // this.setState(this.getStateFromStores());
-    }
-
-    if (res.msg === 'DELETE_BLOG_SUCCESS') {
       this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
     }
-  },
-
-  componentDidMount() {
-
   },
 
   handleBlogText(e) {

@@ -3,7 +3,6 @@ import React from 'react';
 import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { routerShape } from 'react-router';
-import { Glyphicon } from 'react-bootstrap';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import sweetAlert from '../../utils/sweetAlert';
@@ -230,7 +229,7 @@ const Comments = React.createClass({
                   </p>
                 </Col>
                 <Col size="1 comment-thumbs">
-                  {displayIcon && <Glyphicon glyph="trash" onClick={() => this.onDeleteComment(comment)} />}
+                  {displayIcon && <i className="fa fa-trash" onClick={() => this.onDeleteComment(comment)} />}
                 </Col>
               </Row>
               <Row className="comment-icons">

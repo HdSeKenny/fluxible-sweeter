@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import sweetAlert from '../../utils/sweetAlert';
 import { DatePicker } from '../UI';
-
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../LeftNavs';
@@ -38,7 +37,7 @@ const UserInfo = React.createClass({
       firstName: '',
       lastName: '',
       username: '',
-      email:'',
+      email: '',
       phone: '',
       profession: '',
       firstNameValidate: '',

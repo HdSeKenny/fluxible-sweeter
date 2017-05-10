@@ -1,7 +1,7 @@
 import React from 'react';
 import dateFormat from 'dateformat';
-import { routerShape } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import { routerShape } from 'react-router';
 import { BlogStore } from '../../stores';
 import { Comments } from '../Pages';
 

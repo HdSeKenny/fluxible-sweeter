@@ -10,8 +10,6 @@ import {
   Home,
   AddBlog,
   Details,
-  Login,
-  Register,
   UserHome,
   UserBlogs,
   UserInfo,
@@ -51,8 +49,6 @@ const createRoutes = (context) => {
     <Route history={History} component={App} path={path} onEnter={requireLogin}>
       <IndexRoute component={Home} />
       <Route path="/" component={Home} />
-      <Route path="login" component={Login} />
-      <Route path="register" component={Register} />
       <Route path="list" component={List} />
 
       <Route path=":blogId/details" component={Details} />

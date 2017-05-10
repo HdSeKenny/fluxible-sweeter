@@ -1,11 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
 import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserStore, BlogStore } from '../../stores';
-import { UserActions, BlogActions } from '../../actions';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { BlogActions } from '../../actions';
 import { Link } from 'react-router';
 import { Comments } from '../Pages';
 import { ConfirmDialog } from '../UI';
@@ -88,7 +86,7 @@ const BlogsWell = React.createClass({
         blogId: blogId
       });
     }
-    else{
+    else {
       this.checkCurrentUser();
     }
   },
@@ -100,24 +98,24 @@ const BlogsWell = React.createClass({
         blogId: blogId
       });
     }
-    else{
+    else {
       this.checkCurrentUser();
     }
   },
 
   _renderBlogOptions() {
-    return(
+    return (
       <div className="dropdown">
-        <Button className="ellipsis-btn">
+        <button className="ellipsis-btn">
           <i className="fa fa-ellipsis-h"></i>
-        </Button>
+        </button>
         <div className="dropdown-content">
-          <Link to="" onClick={e => e.preventDefault()}>Share</Link>
-          <Link to="" onClick={e => e.preventDefault()}>Report</Link>
-          <Link to="" onClick={e => e.preventDefault()}>Delete</Link>
+          <span onClick={e => e.preventDefault()}>Share</span>
+          <span to="" onClick={e => e.preventDefault()}>Report</span>
+          <span to="" onClick={e => e.preventDefault()}>Delete</span>
         </div>
       </div>
-    )
+    );
   },
 
   _renderBlogAuthor(blog) {
@@ -174,20 +172,20 @@ const BlogsWell = React.createClass({
         <div className="row">
           <div className="col-xs-6"></div>
           <div className="col-xs-2">
-            <Button onClick={this.showCommentTextarea.bind(this, blog)}>
+            <button onClick={this.showCommentTextarea.bind(this, blog)}>
               <i className="fa fa-comments-o"></i> {blog.comments.length}
-            </Button>
+            </button>
           </div>
           <div className="col-xs-2">
             {isThumbedUp &&
-              <Button onClick={this.cancelThumbsUpBlog.bind(this, currentUser, blog._id)}>
+              <button onClick={this.cancelThumbsUpBlog.bind(this, currentUser, blog._id)}>
                 <i className="fa fa-thumbs-up"></i> {blog.likers.length}
-              </Button>
+              </button>
             }
             {!isThumbedUp &&
-              <Button onClick={this.thumbsUpBlog.bind(this, currentUser, blog._id)}>
+              <button onClick={this.thumbsUpBlog.bind(this, currentUser, blog._id)}>
                 <i className="fa fa-thumbs-o-up"></i> {blog.likers.length}
-              </Button>
+              </button>
             }
           </div>
           <div className="col-xs-2">

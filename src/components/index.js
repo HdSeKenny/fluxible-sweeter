@@ -3,8 +3,6 @@ export App from './App';
 export Home from './Pages/Home';
 export AddBlog from './Users/AddBlog';
 export Details from './Pages/Details';
-export Login from './Users/Login';
-export Register from './Users/Register';
 export UserHome from './Users/UserHome';
 export UserBlogs from './Users/UserBlogs';
 export UserInfo from './Users/UserInfo';

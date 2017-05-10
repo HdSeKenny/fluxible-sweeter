@@ -1,53 +1,50 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { History, Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
 import { UserStore } from '../../stores';
-import { UserActions } from '../../actions';
 
 const Footer = React.createClass({
 
-    displayName: 'Footer',
-    
-    mixins: [FluxibleMixin],
+  displayName: 'Footer',
 
-    contextTypes: {
-      config: React.PropTypes.object
-    },
+  mixins: [FluxibleMixin],
 
-    statics: {
-      storeListeners: [UserStore]
-    },
+  contextTypes: {
+    config: React.PropTypes.object
+  },
 
-    getInitialState() {
-      return this.getStatesFromStores();
-    },
+  statics: {
+    storeListeners: [UserStore]
+  },
 
-    getStatesFromStores() {
-      return {
-        kenny: this.getStore(UserStore).getKennyUser()
-      };
-    },
+  getInitialState() {
+    return this.getStatesFromStores();
+  },
 
-    onChange() {
-      this.setState(this.getStatesFromStores());
-    },
+  getStatesFromStores() {
+    return {
+      kenny: this.getStore(UserStore).getKennyUser()
+    };
+  },
 
-    render() {
-      const {kenny} = this.state; 
-      return (
-        <div className="footer">
-          <div className="row">
-            <div className="col-xs-8">
-            </div>
-            <div className="col-xs-4">
-              <h5>.</h5>
-              <h5>© 2016 <Link to="">{kenny.firstName} {kenny.lastName}</Link></h5>
-            </div>
+  onChange() {
+    this.setState(this.getStatesFromStores());
+  },
+
+  render() {
+    const { kenny } = this.state;
+    return (
+      <div className="footer">
+        <div className="row">
+          <div className="col-xs-8">
+          </div>
+          <div className="col-xs-4">
+            <h5>.</h5>
+            <h5>© 2016 <span>{kenny.firstName} {kenny.lastName}</span></h5>
           </div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 });
 
 export default Footer;

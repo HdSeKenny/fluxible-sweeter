@@ -4,6 +4,7 @@ import React from 'react';
  * adding child context to react component
  */
 const CustomFluxibleComponent = React.createClass({
+
   displayName: 'CustomFluxibleComponent',
 
   propTypes: {

@@ -1,8 +1,6 @@
-import React, {PropTypes}from 'react';
+import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import _ from 'lodash';
-import {Button} from 'react-bootstrap';
-import {Dialog} from '../UI';
+import { Dialog } from '../UI';
 
 const BlogEditor = React.createClass({
 
@@ -71,18 +69,18 @@ const BlogEditor = React.createClass({
                   <option>Sport</option>
                   <option>Life</option>
                   <option>Story</option>
-                </select>  
+                </select>
               </div>
               <div className="col-xs-9">
-                <input type="text" ref="blogTitle" onChange={this.handleUpdateTitle} 
-                  className="form-control" placeholder="Write title here.." 
+                <input type="text" ref="blogTitle" onChange={this.handleUpdateTitle}
+                  className="form-control" placeholder="Write title here.."
                   value={blogTitle} autoFocus />
               </div>
             </div>
           </div>
           <div className="form-group">
-            <textarea type="text" ref="blogContent" onChange={this.handleUpdateContent} 
-              className="form-control" rows="20" placeholder="Write content here.." 
+            <textarea type="text" ref="blogContent" onChange={this.handleUpdateContent}
+              className="form-control" rows="20" placeholder="Write content here.."
               value={blogContent} autoFocus />
           </div>
         </form>
@@ -93,7 +91,7 @@ const BlogEditor = React.createClass({
   render(){
     const {blogTitle, blogContent} = this.state;
     return (
-      <Dialog 
+      <Dialog
         showImmediately={this.props.show}
         onClose={this.onCancelEdit}
         close={true}
@@ -112,8 +110,8 @@ const BlogEditor = React.createClass({
       </Dialog.Content>
       <Dialog.Footer>
         <div className='modal-footer'>
-          <Button onClick={this.onCancelEdit}>Cancel</Button>
-          <Button bsStyle="primary" onClick={this.onSubmitEdit}>Save</Button>
+          <button onClick={this.onCancelEdit}>Cancel</button>
+          <button bsStyle="primary" onClick={this.onSubmitEdit}>Save</button>
         </div>
       </Dialog.Footer>
       </Dialog>

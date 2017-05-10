@@ -1,9 +1,8 @@
 import React from 'react';
-import UserBar from './UserBar';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import { routerShape } from 'react-router';
+import UserBar from './UserBar';
 import sweetAlert from '../../utils/sweetAlert';
-import { Link, routerShape } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../LeftNavs';
@@ -163,7 +162,7 @@ const ChangePassword = React.createClass({
               <h2>Change Password</h2>
               <div className="form-horizontal change-password">
                 <div className="form-group">
-                  <label className="col-sm-3 control-label">Old Password</label>
+                  <label className="col-sm-3 control-label" htmlFor="old-password">Old Password</label>
                   <div className="col-sm-6">
                     <input
                       type="password"
@@ -175,7 +174,7 @@ const ChangePassword = React.createClass({
                   </div>
                 </div>
                 <div className={`form-group ${this.state.passwordValidate}`}>
-                  <label className="col-sm-3 control-label">New Password</label>
+                  <label className="col-sm-3 control-label" htmlFor="new-password">New Password</label>
                   <div className="col-sm-6">
                     <input
                       type="password"
@@ -187,7 +186,7 @@ const ChangePassword = React.createClass({
                   </div>
                 </div>
                 <div className={`form-group ${this.state.confirmPasswordValidate}`}>
-                  <label className="col-sm-3 control-label">Confirm Password</label>
+                  <label className="col-sm-3 control-label" htmlFor="confirm-password">Confirm Password</label>
                   <div className="col-sm-6">
                     <input
                       type="password"
@@ -199,11 +198,11 @@ const ChangePassword = React.createClass({
                   </div>
                 </div>
                 <div className="form-group options">
-                  <label className="col-sm-3 control-label"></label>
+                  <label className="col-sm-3 control-label" htmlFor="confirm-btn"></label>
                   <div className="col-sm-6">
-                    <Button className="btn btn-primary" onClick={this.onSubmitChangePassword}>
+                    <button className="btn btn-primary" onClick={this.onSubmitChangePassword}>
                       Confirm change
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </div>

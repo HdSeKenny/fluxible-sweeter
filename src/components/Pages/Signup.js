@@ -274,6 +274,7 @@ const Signup = React.createClass({
       }
     };
 
+    console.log('signup...');
     return (
       <article className="register-page">
         <section className="register-section">

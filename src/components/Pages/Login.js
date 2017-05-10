@@ -7,8 +7,6 @@ import { UserStore } from '../../stores';
 import { Input, ModalsFactory, Switch } from '../UI';
 import { Row, Col } from '../UI/Layout';
 
-// var update = require('react-addons-update');
-
 const Login = React.createClass({
 
   displayName: 'Login',
@@ -16,11 +14,13 @@ const Login = React.createClass({
   contextTypes: {
     router: routerShape.isRequired,
     config: PropTypes.object,
-    executeAction: PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired
   },
 
   propTypes: {
-    onForgotPassword: PropTypes.func
+    onForgotPassword: PropTypes.func,
+    openNavbarModals: PropTypes.func,
+    hideNavbarModals: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -35,7 +35,6 @@ const Login = React.createClass({
 
   getStateFromStores() {
     return {
-      userImg: this.getStore(UserStore).getLoginUserloginUserImage(),
       switchOn: false
     };
   },
@@ -51,10 +50,6 @@ const Login = React.createClass({
 
     if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
-    }
-
-    if (res.msg === 'LOAD_LOGIN_USER_IMAGE_SUCCESS') {
-      this.setState({ userImg: this.getStore(UserStore).getLoginUserloginUserImage() });
     }
   },
 
@@ -86,18 +81,75 @@ const Login = React.createClass({
     this.setState({ password: e.target.value });
   },
 
-  getLoginUserImage() {
-    const { email } = this.state;
-    this.executeAction(UserActions.GetLoginUserImage, { email });
+  openSignupModal() {
+    this.props.hideNavbarModals('loginModal');
+    this.props.openNavbarModals('signupModal');
   },
 
-  openSignupModal(e) {
-    e.preventDefault();
-    ModalsFactory.hide('loginModal');
-    ModalsFactory.show('signupModal');
+  _renderEmailInput(email) {
+    return (
+      <Input
+        ref="emailRef"
+        autoComplete={'off'}
+        format="email"
+        icon="fa fa-user"
+        required={true}
+        errorMessage="Please verify your email"
+        placeholder="email"
+        value={email}
+        onFieldChange={this.onEmailChange}
+      />
+    );
+  },
+
+  _renderPasswordInput(password) {
+    return (
+      <Input
+        ref="loginRef"
+        autoComplete={'off'}
+        format="password"
+        icon="fa fa-lock"
+        required={true}
+        errorMessage="Password is required"
+        placeholder="password"
+        value={password}
+        onFieldChange={this.onPasswordChange}
+      />
+    );
+  },
+
+  _renderForgotPassword() {
+    return (
+      <Row>
+        <Col size="6" className="pl-0">
+          <Switch after="Remember me" />
+        </Col>
+        <Col size="6" className="pr-0 tar">
+          <span className="forgot-pw">
+            Forgot your password ?
+          </span>
+        </Col>
+      </Row>
+    );
+  },
+
+  _renderLoginBtns() {
+    return (
+      <Row>
+        <Col size="6" className="pl-0">
+          <button type="submit" className="btn btn-info btn-login">Login</button>
+        </Col>
+        <Col size="6" className="pr-0 tar">
+          <span onClick={this.openSignupModal} className="btn btn-primary btn-signup">signup</span>
+        </Col>
+      </Row>
+    );
   },
 
   _renderOtherAuths() {
+    const twitterImg = '/styles/images/svg/twitter.svg';
+    const googleImg = '/styles/images/google+.png';
+    const githubImg = '/styles/images/github.png';
     return (
       <div className="">
         <Row>
@@ -106,15 +158,9 @@ const Login = React.createClass({
           <Col size="4" className="p-0 tar"><hr /></Col>
         </Row>
         <Row className="other-auths">
-          <Col size="4" className="tac">
-            <img alt="twitter" className="" src="styles/images/svg/twitter.svg" />
-          </Col>
-          <Col size="4" className="tac">
-            <img alt="google+" className="" src="styles/images/google+.png" />
-          </Col>
-          <Col size="4" className="tac">
-            <img alt="github" className="" src="styles/images/github.png" />
-          </Col>
+          <Col size="4" className="tac"><img alt="twitter" src={twitterImg} /></Col>
+          <Col size="4" className="tac"><img alt="google+" src={googleImg} /></Col>
+          <Col size="4" className="tac"><img alt="github" src={githubImg} /></Col>
         </Row>
       </div>
     );
@@ -122,7 +168,6 @@ const Login = React.createClass({
 
   render() {
     const { errorMessage, password, email } = this.state;
-    console.log('login...');
     return (
       <section className="login-section mt-15 mr-15 ml-15">
         <div className="wrapper-md animated fadeInUp">
@@ -130,55 +175,14 @@ const Login = React.createClass({
             <div className="form-group">
               <p className="help-block text-left">{errorMessage}</p>
             </div>
-            <div className="form-group">
-              <Input
-                ref="emailRef"
-                autoComplete={'off'}
-                format="email"
-                icon="fa fa-user"
-                required={true}
-                errorMessage="Please verify your email"
-                placeholder="email"
-                value={email}
-                onFieldChange={this.onEmailChange}
-              />
-            </div>
-            <div className="form-group">
-              <Input
-                ref="loginRef"
-                autoComplete={'off'}
-                format="password"
-                icon="fa fa-lock"
-                required={true}
-                errorMessage="Password is required"
-                placeholder="password"
-                value={password}
-                onFieldChange={this.onPasswordChange}
-              />
-            </div>
-            <div className="form-group">
-              <Row>
-                <Col size="6" className="pl-0"><Switch after="Remember me" /></Col>
-                <Col size="6" className="pr-0 tar"><span className="forgot-pw">Forgot your password ?</span></Col>
-              </Row>
-            </div>
-            <div className="form-group pt-10">
-              <Row>
-                <Col size="6" className="pl-0">
-                  <button type="submit" className="btn btn-info btn-block btn-login">Login</button>
-                </Col>
-                <Col size="6" className="pr-0 tar">
-                  <button onClick={(e) => this.openSignupModal(e)} className="btn btn-primary btn-block btn-signup">signup</button>
-                </Col>
-              </Row>
-            </div>
-
+            <div className="form-group">{this._renderEmailInput(email)}</div>
+            <div className="form-group">{this._renderPasswordInput(password)}</div>
+            <div className="form-group">{this._renderForgotPassword()}</div>
+            <div className="form-group pt-10">{this._renderLoginBtns()}</div>
           </form>
-
-          {this._renderOtherAuths()}
+          <div className="">{this._renderOtherAuths()}</div>
         </div>
       </section>
-
     );
   }
 });
