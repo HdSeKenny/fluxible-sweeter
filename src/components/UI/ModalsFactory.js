@@ -60,15 +60,20 @@ export default class ModalsFactory extends Component {
     );
   }
   render() {
-    const { size, modalref, title, ModalComponent, showHeaderAndFooter } = this.props;
+    const { size, modalref, title, ModalComponent, showHeaderAndFooter, showModal } = this.props;
+    const isLoginModal = modalref === 'loginModal';
+    const isSignupModal = modalref === 'signupModal';
+    const show = (isLoginModal || isSignupModal) ? showModal : true;
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>
-          <div className="modal-content">
-            {showHeaderAndFooter && this._renderModalHeader(title)}
-            {this._renderModalBody(ModalComponent)}
-            {showHeaderAndFooter && this._renderModalFooter()}
-          </div>
+          {show &&
+            <div className="modal-content">
+              {showHeaderAndFooter && this._renderModalHeader(title)}
+              {this._renderModalBody(ModalComponent)}
+              {showHeaderAndFooter && this._renderModalFooter()}
+            </div>
+          }
         </div>
       </div>
     );

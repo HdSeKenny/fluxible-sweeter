@@ -1,11 +1,10 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Button, Glyphicon } from 'react-bootstrap';
 import { routerShape } from 'react-router';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import sweetAlert from '../../utils/sweetAlert';
-
+import { Row, Col } from '../UI/Layout';
 
 const Signup = React.createClass({
 
@@ -100,7 +99,7 @@ const Signup = React.createClass({
       });
     } else if (!regex.test(lastName)) {
       this.setState({
-        lastNameMsg: "* Alphabetical characters and ' only.",
+        lastNameMsg: "* Alphabetical characters and 'only.",
         lastNameValidate: 'has-error'
       });
     } else {
@@ -125,8 +124,8 @@ const Signup = React.createClass({
       this.setState({
         usernameMsg: '* Username should be alphabetical characters, number and "_".',
         usernameValidate: 'has-error'
-      })
-    } else if (username.length < 5 || username.length > 15){
+      });
+    } else if (username.length < 5 || username.length > 15) {
       this.setState({
         usernameMsg: '* he length should between 5 ~ 15',
         usernameValidate: 'has-error'
@@ -233,72 +232,87 @@ const Signup = React.createClass({
   },
 
   render() {
+    const {
+      firstNameValidate,
+      firstNameMsg,
+      lastNameValidate,
+      lastNameMsg,
+      usernameValidate,
+      usernameMsg,
+      emailValidate,
+      emailMsg,
+      passwordValidate,
+      passwordMsg,
+      confirmPasswordValidate,
+      confirmPasswordMsg
+    } = this.state;
+
+    const formGroups = {
+      username: {
+        valid: usernameValidate,
+        msg: usernameMsg,
+        holder: 'Username',
+        handleEvent: this.handleUsername
+      },
+      email: {
+        valid: emailValidate,
+        msg: emailMsg,
+        holder: 'Email Address',
+        handleEvent: this.handleEmail
+      },
+      password: {
+        valid: passwordValidate,
+        msg: passwordMsg,
+        holder: 'Password',
+        handleEvent: this.handlePassword
+      },
+      confirmPassword: {
+        valid: confirmPasswordValidate,
+        msg: confirmPasswordMsg,
+        holder: 'Confirm Password',
+        handleEvent: this.handleConfirmPassword
+      }
+    };
+
     return (
       <article className="register-page">
         <section className="register-section">
-          <form role="form" onSubmit={this.handleRegister} >
-            <div className="row">
-              <div className="col-xs-3"></div>
-              <div className="col-xs-6 form-content">
-                <h3>Please register </h3>
-                <div className="row">
-                  <div className="col-xs-12"><hr /></div>
+          <form role="form" onSubmit={this.handleRegister} className="mt-20">
+            <Row>
+              <Col size="6">
+                <div className={`form-group ${firstNameValidate}`} >
+                  <input type="text" onChange={this.handleFirstName} className="form-control" placeholder="First Name" />
+                  <p className="help-block"> {firstNameMsg}</p>
                 </div>
-                <div className="row">
-                  <div className="col-xs-6">
-                    <div className={`form-group ${this.state.firstNameValidate}`} >
-                      <input type="text" onChange={this.handleFirstName} className="form-control" placeholder="First Name" />
-                      <p className="help-block"> {this.state.firstNameMsg}</p>
+              </Col>
+              <Col size="6">
+                <div className={`form-group ${lastNameValidate}`} >
+                  <input type="text" onChange={this.handleLastName} className="form-control" placeholder="Last Name" />
+                  <p className="help-block"> {lastNameMsg}</p>
+                </div>
+              </Col>
+            </Row>
+            {Object.keys(formGroups).map((key, index) => {
+              const formGroup = formGroups[key];
+              const { valid, holder, handleEvent, msg } = formGroup;
+              return (
+                <Row key={index}>
+                  <Col size="12">
+                    <div className={`form-group ${valid}`} >
+                      <input type="text" onChange={handleEvent} className="form-control" placeholder={holder} />
+                      <p className="help-block"> {msg}</p>
                     </div>
-                  </div>
-                  <div className="col-xs-6">
-                    <div className={`form-group ${this.state.lastNameValidate}`} >
-                      <input type="text" onChange={this.handleLastName} className="form-control" placeholder="Last Name" />
-                      <p className="help-block"> {this.state.lastNameMsg}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-12 col-md-12">
-                    <div className={`form-group ${this.state.usernameValidate}`} >
-                      <input type="text" onChange={this.handleUsername} className="form-control" placeholder="Username" />
-                      <p className="help-block"> {this.state.usernameMsg}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-12 col-md-12">
-                    <div className={`form-group ${this.state.emailValidate}`} >
-                      <input type="email" onChange={this.handleEmail} className="form-control" placeholder="Email Address" />
-                      <p className="help-block"> {this.state.emailMsg}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-12 col-md-12">
-                    <div className={`form-group ${this.state.passwordValidate}`} >
-                      <input type="password" onChange={this.handlePassword} className="form-control" placeholder="Password" />
-                      <p className="help-block"> {this.state.passwordMsg}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-sm-12 col-md-12">
-                    <div className={`form-group ${this.state.confirmPasswordValidate}`} >
-                      <input type="password" onChange={this.handleConfirmPassword} className="form-control" placeholder="Password" />
-                      <p className="help-block"> {this.state.confirmPasswordMsg}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12"><hr className="hr-2" /></div>
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 col-md-12"><Button type="submit"><Glyphicon glyph="plane"/> Create</Button></div>
-                </div>
-              </div>
-              <div className="col-xs-3"></div>
-            </div>
+                  </Col>
+                </Row>
+              );
+            })}
+            <Row>
+              <Col size="12">
+                <button type="submit" className="btn btn-info fr">
+                  <i className="fa fa-plane" /> Create
+                </button>
+              </Col>
+            </Row>
           </form>
         </section>
       </article>

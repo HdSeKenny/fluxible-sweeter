@@ -36,7 +36,9 @@ const Navbar = React.createClass({
       currentUser: this.getStore(UserStore).getCurrentUser(),
       authenticated: this.getStore(UserStore).isAuthenticated(),
       grayUserImageUrl: '/styles/images/users/gray-user.png',
-      brandImage: '/styles/images/sweeter.png'
+      brandImage: '/styles/images/sweeter.png',
+      showLoginModal: true,
+      showSignupModal: true
     };
   },
 
@@ -70,25 +72,81 @@ const Navbar = React.createClass({
     animations.sticky_header('.sweet-nav');
   },
 
-  componentDidUpdate() {
-
-  },
-
   componentWillUnmount() {
     ModalsFactory.hide('loginModal');
     ModalsFactory.hide('signupModal');
   },
 
   openLoginModal() {
+    if (!this.state.showModal) {
+      this.setState({ showModal: true });
+    }
+
     ModalsFactory.show('loginModal');
+
+    $('#loginModal').on('hidden.bs.modal', () => {
+      if (this.hideLoginOrSignuoModal) {
+        this.hideLoginOrSignuoModal('loginModal');
+      }
+    });
   },
 
   openSignupModal() {
-    ModalsFactory.show('signupModal');
+    if (!this.state.showModal) {
+      this.setState({ showModal: true });
+    }
+
+    ModalsFactory.show('loginModal');
+
+    $('#loginModal').on('hidden.bs.modal', () => {
+      if (this.hideLoginOrSignuoModal) {
+        this.hideLoginOrSignuoModal('loginModal');
+      }
+    });
+  },
+
+  openNavbarModals(modalRef) {
+    const isLoginModal = modalRef === 'loginModal';
+    const isSignupModal = modalRef === 'signupModal';
+    const { showLoginModal, showSignupModal } = this.state;
+    if (isLoginModal && !showLoginModal) {
+      this.setState({ showLoginModal: true });
+    }
+
+    if (isSignupModal && !showSignupModal) {
+      this.setState({ showSignupModal: true });
+    }
+
+    ModalsFactory.show(modalRef);
+
+    $(`#${modalRef}`).on('hidden.bs.modal', () => {
+      if (this.hideNavbarModals) {
+        this.hideNavbarModals(modalRef);
+      }
+    });
+  },
+
+  hideNavbarModals(modalRef) {
+    const isLoginModal = modalRef === 'loginModal';
+    const isSignupModal = modalRef === 'signupModal';
+    if (isLoginModal) {
+      this.setState({ showLoginModal: false });
+    }
+
+    if (isSignupModal) {
+      this.setState({ showSignupModal: false });
+    }
   },
 
   render() {
-    const { authenticated, currentUser, grayUserImageUrl, brandImage } = this.state;
+    const {
+      authenticated,
+      currentUser,
+      grayUserImageUrl,
+      brandImage,
+      showLoginModal,
+      showSignupModal
+    } = this.state;
     return (
       <section className="menuzord-section">
         <header className="hidden-header" />
@@ -115,8 +173,8 @@ const Navbar = React.createClass({
                 <li className="mr-0">
                   <img alt="gray-user" src={grayUserImageUrl} />
                   <ul className="dropdown">
-                    <li><span onClick={this.openLoginModal}>Log in</span></li>
-                    <li><span onClick={this.openSignupModal}>Sign up</span></li>
+                    <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>
+                    <li><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>
                   </ul>
                 </li>
               }
@@ -135,8 +193,20 @@ const Navbar = React.createClass({
           </div>
         </header>
         <Layout.Page>
-          <ModalsFactory modalref="loginModal" title="Login to account" ModalComponent={Login} size="modal-md" showHeaderAndFooter={true} />
-          <ModalsFactory modalref="signupModal" title="Sign up" ModalComponent={Signup} size="modal-md" showHeaderAndFooter={true} />
+          <ModalsFactory
+            modalref="loginModal"
+            title="Login to account"
+            ModalComponent={Login}
+            size="modal-md"
+            showHeaderAndFooter={true}
+            showModal={showLoginModal} />
+          <ModalsFactory
+            modalref="signupModal"
+            title="Sign up"
+            ModalComponent={Signup}
+            size="modal-md"
+            showHeaderAndFooter={true}
+            showModal={showSignupModal} />
         </Layout.Page>
       </section>
     );

@@ -122,7 +122,7 @@ const Login = React.createClass({
 
   render() {
     const { errorMessage, password, email } = this.state;
-
+    console.log('login...');
     return (
       <section className="login-section mt-15 mr-15 ml-15">
         <div className="wrapper-md animated fadeInUp">
