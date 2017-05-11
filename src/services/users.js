@@ -1,3 +1,4 @@
+/* eslint-disable all, no-param-reassign */
 import md5 from 'md5';
 import MongoClient from 'mongodb';
 import serverConfig from '../configs/server';
@@ -9,7 +10,7 @@ export default {
 
   name: 'users',
 
-  loadUsers(req, resource, params, config, callback){
+  loadUsers(req, resource, params, config, callback) {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.find().toArray((err, users) => {
@@ -27,7 +28,7 @@ export default {
           }
         });
 
-        Promise.all(allPromises.map(ap => ap())).then((data) => {
+        Promise.all(allPromises.map(ap => ap())).then(() => {
           callback(null, users);
         })
         .catch(err => {
@@ -64,15 +65,15 @@ export default {
           body.focuses = [];
           body.blogs = [];
           User.insert(body, (err, res) => {
-            const user = res.ops[0];
-            user.strId = user._id.toString();
-            User.save(user);
+            const insertedUser = res.ops[0];
+            insertedUser.id_str = insertedUser._id.toString();
+            User.save(insertedUser);
             db.close();
 
-            req.session.userId = user._id;
+            req.session.userId = insertedUser._id;
             req.session.authenticated = true;
             callback(err, {
-              user,
+              user: insertedUser,
               stat: true,
               msg: 'Create account success !'
             });
@@ -86,25 +87,27 @@ export default {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       const ecryptedPassword = md5(body.password);
-      User.findOne({email: body.email}, (err, user) => {
-        let auth = { msg: '', stat: false };
-        if(err) { auth.msg = err;};
-        if(user) {
+      User.findOne({ email: body.email }, (err, user) => {
+        const auth = { msg: '', stat: false };
+        if (err) { auth.msg = err; }
+        if (user) {
           if (ecryptedPassword === user.password) {
             auth.msg = 'Login success !';
             auth.stat = true;
             req.session.userId = user._id;
-          }else{
+          }
+          else {
             auth.msg = 'The password is incorrect !';
             user = null;
           }
-        }else{
+        }
+        else {
           auth.msg = 'This email is not registered !';
           user = null;
         }
         db.close();
         req.session.authenticated = auth.stat;
-        callback(err, { user: user, auth: auth });
+        callback(err, { user, auth });
       });
     });
   },
@@ -130,7 +133,7 @@ export default {
   getLoginUserImage(req, resource, params, body, config, callback) {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      User.findOne({ email: body.email}, (err, user) => {
+      User.findOne({ email: body.email }, (err, user) => {
         if (err) {
           callback(err, null);
           return;
@@ -140,15 +143,15 @@ export default {
         } else {
           callback(null, null);
         }
-      })
+      });
     });
   },
 
   readCurrentUser(req, resource, params, config, callback) {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      let auth = {stat: false, msg:''};
-      User.findOne({ _id: ObjectID(req.session.userId)})
+      const auth = { stat: false, msg: '' };
+      User.findOne({ _id: ObjectID(req.session.userId) })
         .then(user => {
           const allPromises = [];
           if (!user) {
@@ -156,29 +159,30 @@ export default {
             req.session.authenticated = false;
             auth.msg = 'Authenticated fail !';
             user = null;
-          }else{
+          }
+          else {
             auth.stat = true;
             auth.msg = 'Authenticated success !';
             if (user.fans.length >0) {
               user.fans.forEach((fanId, faIdx) => {
                 allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
-              })
+              });
             }
             if (user.focuses.length > 0) {
               user.focuses.forEach((focusId, fsIdx) => {
                 allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
-              })
+              });
             }
           }
-          Promise.all(allPromises.map(ap => ap())).then((data)=>{
-              callback(null, { user: user, auth: auth });
-            })
-            .catch(err => {
-              callback(err, { user: null, auth: auth });
-            })
+          Promise.all(allPromises.map(ap => ap())).then(() => {
+            callback(null, { user, auth });
+          })
+          .catch(err => {
+            callback(err, { user: null, auth });
+          });
         })
-        .catch(err => callback(err, { user: null, auth: auth }));
-    })
+        .catch(err => callback(err, { user: null, auth }));
+    });
   },
 
   updateUserInfo(req, resource, params, body, config, callback) {
@@ -193,26 +197,26 @@ export default {
           User.findOne({ '_id': ObjectID(body._id) }, (err, newUser) => {
             const allPromises = [];
             if (newUser) {
-               if (newUser.fans.length >0) {
+              if (newUser.fans.length) {
                 newUser.fans.forEach((fanId, faIdx) => {
                   allPromises.push(getFansPromiseWrapper(newUser, fanId, faIdx));
-                })
+                });
               }
-              if (newUser.focuses.length > 0) {
+              if (newUser.focuses.length) {
                 newUser.focuses.forEach((focusId, fsIdx) => {
                   allPromises.push(getFocusesPromiseWrapper(newUser, focusId, fsIdx));
-                })
+                });
               }
-              Promise.all(allPromises.map(ap => ap())).then((data)=>{
+              Promise.all(allPromises.map(ap => ap())).then(() => {
                 callback(null, newUser);
               })
               .catch(err => {
                 callback(err, null);
-              })
+              });
             }
-          })
-        })
-      })
+          });
+        });
+      });
     });
   },
 
@@ -222,9 +226,9 @@ export default {
       User.findOne({ _id: ObjectID(body.userId) }, (err, user) => {
         if (user) {
           if (md5(body.oldPassword) !== user.password) {
-            callback(err, { stat: false, msg: 'Incorrect password !'});
+            callback(err, { stat: false, msg: 'Incorrect password !' });
           }
-          else{
+          else {
             user.password = md5(body.newPassword);
             User.save(user, (err, result) => {
               req.session.regenerate(err => {
@@ -233,52 +237,52 @@ export default {
                   msg: 'Change password successfully please login again!'
                 });
               });
-            })
+            });
           }
         }
-      })
+      });
     });
   },
 
   followThisUser(req, resource, params, body, config, callback) {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.thisUserId)}, (err, thisUser) => {
+      User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
         if (thisUser) {
           thisUser.fans.push(body.currentUserId);
           User.save(thisUser, (err, thisUserResult) => {
-            User.findOne({_id: ObjectID(body.currentUserId)}, (err, currentUser) => {
+            User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.push(body.thisUserId);
                 User.save(currentUser, (err, currentUserResult) => {
-                  callback(err, {thisUser: thisUser, currentUser: currentUser});
-                })
+                  callback(err, { thisUser, currentUser });
+                });
               }
-              else{
+              else {
                 callback(err, null);
               }
-            })
-          })
+            });
+          });
         }
-        else{
+        else {
           callback(err, null);
         }
-      })
+      });
     });
   },
 
   cancelFollowThisUser(req, resource, params, body, config, callback) {
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.thisUserId)}, (err, thisUser) => {
+      User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
         if (thisUser) {
           thisUser.fans.forEach((fan, index) => {
             if (fan === body.currentUserId) {
               thisUser.fans.splice(index, 1);
             }
-          })
+          });
           User.save(thisUser, (err, thisUserResult) => {
-            User.findOne({_id: ObjectID(body.currentUserId)}, (err, currentUser) => {
+            User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.forEach((focus, index) => {
                   if (focus === body.thisUserId) {
@@ -286,19 +290,19 @@ export default {
                   }
                 });
                 User.save(currentUser, (err, currentUserResult) => {
-                  callback(err, {thisUser: thisUser, currentUser: currentUser});
-                })
+                  callback(err, { thisUser, currentUser });
+                });
               }
-              else{
+              else {
                 callback(err, null);
               }
-            })
-          })
+            });
+          });
         }
-        else{
+        else {
           callback(err, null);
         }
-      })
+      });
     });
   }
 };
@@ -306,42 +310,43 @@ export default {
 const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
   MongoClient.connect(MongoUrl, (err, db) => {
     const User = db.collection('users');
-    User.findOne({_id: ObjectID(fanId)}, (err, fan) => {
+    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
       if (err) {
         return reject(err);
-      }else{
+      }
+      else {
         user.fans[faIdx] = fan;
       }
       db.close();
       resolve();
-    })
-  })
-})
+    });
+  });
+});
 
 const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
-  MongoClient.connect(MongoUrl, (err, db) =>{
+  MongoClient.connect(MongoUrl, (err, db) => {
     const User = db.collection('users');
-    User.findOne({_id: ObjectID(focusId)}, (err, focus) => {
+    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
       if (err) {
         return reject(err);
       }
-      else{
+      else {
         user.focuses[fsIdx] = focus;
       }
       db.close();
       resolve();
-    })
-  })
-})
+    });
+  });
+});
 
 const getFansPromiseWrapper = (user, fanId, faIdx) => {
   return () => {
     return getFansPromise(user, fanId, faIdx);
-  }
-}
+  };
+};
 
 const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
   return () => {
     return getFocusesPromise(user, focusId, fsIdx);
-  }
-}
+  };
+};

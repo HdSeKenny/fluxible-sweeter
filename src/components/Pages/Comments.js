@@ -44,7 +44,7 @@ const Comments = React.createClass({
   onChange(res) {
     if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
       const { blog } = this.state;
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
 
       if (res.msg === 'COMMENT_SUCCESS') {
         // blog.comments.push(res.data);

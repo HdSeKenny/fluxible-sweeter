@@ -51,12 +51,12 @@ const UserBlogs = React.createClass({
     const { currentUser } = this.state;
     const { userId } = this.props.params;
     if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       // this.setState({displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id)});
     }
 
     if (res.msg === 'UPDATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({
         displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id),
         currentBlog: this.getStore(BlogStore).getCurrentBlog(),
@@ -73,7 +73,7 @@ const UserBlogs = React.createClass({
     }
 
     if (res.msg === 'DELETE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({
         // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
         displayBlogs: this.getStore(BlogStore).getBlogsByUserId(userId)

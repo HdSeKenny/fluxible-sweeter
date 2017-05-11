@@ -5,6 +5,7 @@ import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import sweetAlert from '../../utils/sweetAlert';
 import { Row, Col } from '../UI/Layout';
+import { ModalsFactory } from '../UI';
 
 const Signup = React.createClass({
 
@@ -13,6 +14,10 @@ const Signup = React.createClass({
   contextTypes: {
     router: routerShape.isRequired,
     executeAction: React.PropTypes.func.isRequired
+  },
+
+  propTypes: {
+    switchOpenModal: React.PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -32,14 +37,14 @@ const Signup = React.createClass({
   },
 
   onChange(res) {
-    if (res.user) {
-      if (res.stat) {
-        sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
-          this.context.router.push('/');
-        });
-      } else {
-        this.setState({ emailMsg: `* ${res.msg}`, emailValidate: 'has-error' });
-      }
+    if (res.msg === 'USER_REGISTER_SUCCESS') {
+      sweetAlert.success(res.stat);
+      ModalsFactory.hide('signupModal');
+      this.context.router.push('/list');
+    }
+
+    if (res.msg === 'USER_REGISTER_FAIL') {
+      this.setState({ emailMsg: `* ${res.stat}`, emailValidate: 'has-error' });
     }
   },
 
@@ -201,6 +206,11 @@ const Signup = React.createClass({
     return flag;
   },
 
+  openLoginModal() {
+    this.props.switchOpenModal('loginModal');
+    ModalsFactory.hide('signupModal');
+  },
+
   handleFirstName(e) {
     this.validateFirstName(e.target.value);
     this.setState({ firstName: e.target.value });
@@ -273,7 +283,6 @@ const Signup = React.createClass({
         handleEvent: this.handleConfirmPassword
       }
     };
-
     return (
       <article className="register-page">
         <section className="register-section">
@@ -295,11 +304,20 @@ const Signup = React.createClass({
             {Object.keys(formGroups).map((key, index) => {
               const formGroup = formGroups[key];
               const { valid, holder, handleEvent, msg } = formGroup;
+              let inputType = 'text';
+              if (['password', 'confirmPassword'].includes(key)) {
+                inputType = 'password';
+              }
+
+              if (key === 'email') {
+                inputType = 'email';
+              }
+
               return (
                 <Row key={index}>
                   <Col size="12">
                     <div className={`form-group ${valid}`} >
-                      <input type="text" onChange={handleEvent} className="form-control" placeholder={holder} />
+                      <input type={inputType} onChange={handleEvent} className="form-control" placeholder={holder} />
                       <p className="help-block"> {msg}</p>
                     </div>
                   </Col>
@@ -307,10 +325,12 @@ const Signup = React.createClass({
               );
             })}
             <Row>
-              <Col size="12">
-                <button type="submit" className="btn btn-info fr">
-                  <i className="fa fa-plane" /> Create
-                </button>
+              <Col size="6" />
+              <Col size="3 tar pr-5">
+                <button type="submit" className="btn btn-info btn-block">Create</button>
+              </Col>
+              <Col size="3 tar pl-5">
+                <span onClick={this.openLoginModal} className="btn btn-info btn-block">Login</span>
               </Col>
             </Row>
           </form>

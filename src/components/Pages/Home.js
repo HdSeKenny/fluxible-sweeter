@@ -45,7 +45,7 @@ const Home = React.createClass({
       'DELETE_BLOG_SUCCESS'
     ];
     if (blogMessages.includes(res.msg)) {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
     }
   },

@@ -38,13 +38,23 @@ const Navbar = React.createClass({
       grayUserImageUrl: '/styles/images/users/gray-user.png',
       brandImage: '/styles/images/sweeter.png',
       showLoginModal: true,
-      showSignupModal: true
+      showSignupModal: true,
+      switchModal: {
+        modalRef: '',
+        state: false
+      }
     };
   },
 
   onChange(res) {
-    if (['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'].includes(res.msg)) {
-      sweetAlert.alertSuccessMessage(res.msg);
+    const accountMessages = [
+      'USER_LOGIN_SUCCESS',
+      'LOGOUT_SUCCESS',
+      'USER_REGISTER_FAIL',
+      'USER_REGISTER_SUCCESS'
+    ];
+
+    if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
     }
   },
@@ -86,8 +96,21 @@ const Navbar = React.createClass({
     ModalsFactory.show(modalRef);
 
     $(`#${modalRef}`).on('hidden.bs.modal', () => {
+      const { switchModal } = this.state;
       if (this.hideNavbarModals) {
         this.hideNavbarModals(modalRef);
+      }
+      if (switchModal.state) {
+        if (switchModal.modalRef === 'loginModal') {
+          this.setState({ showLoginModal: true });
+        }
+
+        if (switchModal.modalRef === 'signupModal') {
+          this.setState({ showSignupModal: true });
+        }
+
+        this.openNavbarModals(switchModal.modalRef);
+        this.setState({ switchModal: { modalRef: '', state: false } });
       }
     });
   },
@@ -102,9 +125,10 @@ const Navbar = React.createClass({
     if (isSignupModal) {
       this.setState({ showSignupModal: false });
     }
+  },
 
-    ModalsFactory.hide(modalRef);
-    $('body').addClass('modal-open');
+  switchOpenModal(modalRef) {
+    this.setState({ switchModal: { modalRef, state: true } });
   },
 
   render() {
@@ -127,7 +151,7 @@ const Navbar = React.createClass({
             </Link>
             <ul className="sweet-nav-menu sweet-nav-left">
               <li className={`${this.isActive('/list')}`}>
-                <Link to="/list">Moments</Link>
+                <Link to="/list">Home</Link>
               </li>
               {authenticated &&
                 <li className={this.isHomeActive('home')}>
@@ -173,14 +197,18 @@ const Navbar = React.createClass({
             showHeaderAndFooter={true}
             showModal={showLoginModal}
             openNavbarModals={this.openNavbarModals}
-            hideNavbarModals={this.hideNavbarModals} />
+            hideNavbarModals={this.hideNavbarModals}
+            switchOpenModal={this.switchOpenModal} />
           <ModalsFactory
             modalref="signupModal"
-            title="Sign up"
+            title="Create an account"
             ModalComponent={Signup}
             size="modal-md"
             showHeaderAndFooter={true}
-            showModal={showSignupModal} />
+            showModal={showSignupModal}
+            openNavbarModals={this.openNavbarModals}
+            hideNavbarModals={this.hideNavbarModals}
+            switchOpenModal={this.switchOpenModal} />
         </Layout.Page>
       </section>
     );

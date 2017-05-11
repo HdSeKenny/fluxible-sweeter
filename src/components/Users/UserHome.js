@@ -48,13 +48,13 @@ const UserHome = React.createClass({
     const { user, isCurrentUser } = this.state;
     const { userId } = this.props.params;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({ blogText: '' });
     }
 
     if (res.msg === 'COMMENT_SUCCESS'
         || res.msg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
       // this.setState({ singleUserBlogs });
     }
@@ -67,11 +67,11 @@ const UserHome = React.createClass({
     //   })
     // }
 
-    this.setState({
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
-    });
+    // this.setState({
+    //   currentUser: this.getStore(UserStore).getCurrentUser(),
+    //   user: this.getStore(UserStore).getUserById(userId),
+    //   isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
+    // });
   },
 
   handleBlogText(e) {

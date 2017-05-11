@@ -35,12 +35,12 @@ const BlogsWell = React.createClass({
 
   onChange(res) {
     if (res.msg === 'THUMBS_UP_BLOG_SUCCESS' || res.msg === 'CANCEL_THUMBS_UP_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.props.changeBlogThumbsUpState();
     }
 
     if (res.msg === 'DELETE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({deletedBlog: this.getStore(BlogStore).getDeletedBlog()})
     }
   },

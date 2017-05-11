@@ -1,5 +1,4 @@
 import createStore from 'fluxible/addons/createStore';
-import _ from 'lodash';
 
 const UserStore = createStore({
 
@@ -15,7 +14,7 @@ const UserStore = createStore({
     'LOAD_SESSION_USER_SUCCESS': 'loadSessionUserSuccess',
     'LOAD_SESSION_USER_FAIL': 'loadSessionUserFail',
     'LOAD_USERS_SUCCESS': 'loadUsersSuccess',
-    'LOAD_USERS_FAIL' : 'loadUsersFail',
+    'LOAD_USERS_FAIL': 'loadUsersFail',
     'IS_LOGGED_IN': 'isLoggedIn',
     'LOAD_KENNY_SUCCESS': 'loadKennySuccess',
     'UPDATE_USER_SUCCESS': 'updateUserSuccess',
@@ -39,7 +38,7 @@ const UserStore = createStore({
     this.loginUserImage = null;
   },
 
-  loadKennySuccess(res){
+  loadKennySuccess(res) {
     this.kenny = res;
     this.emitChange();
   },
@@ -48,60 +47,70 @@ const UserStore = createStore({
     return this.kenny;
   },
 
-  loadUsersSuccess(res){
+  loadUsersSuccess(res) {
     this.users = res;
     this.emitChange();
   },
 
-  loadUsersFail(){
-    const resObj = {
+  loadUsersFail() {
+    const response = {
       resCode: 404,
-      msg:'LOAD_USERS_FAIL'
-    }
+      msg: 'LOAD_USERS_FAIL'
+    };
     this.users = null;
-    this.emitChange(resObj)
+    this.emitChange(response);
   },
 
   registerSuccess(res) {
+    const response = {
+      msg: 'USER_REGISTER_SUCCESS',
+      stat: res.msg,
+      user: res.user
+    };
     this.currentUser = res.user;
     this.users.push(res.user);
     this.authenticated = true;
-    this.emitChange(res);
+    this.emitChange(response);
   },
 
   registerFail(res) {
+    const response = {
+      msg: 'USER_REGISTER_FAIL',
+      stat: res.msg,
+      user: res.user
+    };
     this.currentUser = null;
     this.authenticated = false;
-    this.emitChange(res);
+    this.emitChange(response);
   },
 
   loginSuccess(res) {
-    const resObj = {
+    const response = {
       msg: 'USER_LOGIN_SUCCESS'
-    }
+    };
     this.currentUser = res.user;
     this.authenticated = true;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   loginFail(res) {
-    const resObj = {
+    const response = {
       msg: 'USER_LOGIN_FAIL',
       errorMsg: res.auth.msg
-    }
+    };
     this.currentUser = null;
     this.authenticated = false;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
-  logoutSuccess(res) {
-    const resObj = {
+  logoutSuccess() {
+    const response = {
       resCode: 200,
       msg: 'LOGOUT_SUCCESS'
-    }
+    };
     this.currentUser = null;
     this.authenticated = false;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   isLoggedIn() {
@@ -125,9 +134,9 @@ const UserStore = createStore({
   },
 
   updateUserSuccess(res) {
-    const resObj ={msg: 'UPDATE_USER_SUCCESS'};
+    const response = { msg: 'UPDATE_USER_SUCCESS' };
     this.currentUser = res;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   changePasswordSuccess(res) {
@@ -145,27 +154,24 @@ const UserStore = createStore({
     return this.users.find(user => user.strId === userId);
   },
 
-  isThumbedUp(blog){
+  isThumbedUp(blog) {
     return blog.likers.indexOf(this.currentUser.strId) !== -1;
   },
 
-  isCurrentUser(userId){
+  isCurrentUser(userId) {
     let flag = false;
     if (this.currentUser && userId) {
       flag = this.currentUser.strId === userId;
-    }
-    else{
-      if (this.currentUser) {
-        flag = true;
-      }
+    } else if (this.currentUser) {
+      flag = true;
     }
     return flag;
   },
 
-  followUserSuccess(res){
-    const resObj = {
+  followUserSuccess(res) {
+    const response = {
       msg: 'FOLLOW_USER_SUCCESS'
-    }
+    };
     this.users.forEach((user, index) => {
       if (user.strId === res.thisUser.strId) {
         this.users[index].fans.push(res.currentUser);
@@ -174,66 +180,66 @@ const UserStore = createStore({
         this.users[index].focuses.push(res.thisUser);
         this.currentUser.focuses.push(res.thisUser);
       }
-    })
+    });
 
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   cancelFollowUserSuccess(res) {
-    const resObj = {
+    const response = {
       msg: 'CANCEL_FOLLOW_USER_SUCCESS'
-    }
+    };
     this.users.forEach((user, index) => {
       if (user.strId === res.thisUser.strId) {
         this.users[index].fans.forEach((fan, faIdx) => {
           if (fan.strId === res.currentUser.strId) {
             this.users[index].fans.splice(faIdx, 1);
           }
-        })
+        });
       }
       if (user.strId === res.currentUser.strId) {
         this.users[index].focuses.forEach((focus, fsIdx) => {
           if (focus.strId === res.thisUser.strId) {
             this.users[index].focuses.splice(fsIdx, 1);
           }
-        })
+        });
         this.currentUser.focuses.forEach((focus, fsIdx) => {
           if (focus.strId === res.thisUser.strId) {
             this.currentUser.focuses.splice(fsIdx, 1);
           }
-        })
+        });
       }
-    })
+    });
 
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   followUserWithSuccess(res) {
-    const resObj = {msg: 'FOLLOW_USER_SUCCESS'};
+    const response = { msg: 'FOLLOW_USER_SUCCESS' };
     const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
     this.currentUser.focuses.push(res.thisUser);
     this.users[usrIdx] = this.currentUser;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   cancelFollowUserWithSuccess(res) {
-    const resObj = {msg: 'CANCEL_FOLLOW_USER_SUCCESS'};
+    const response = { msg: 'CANCEL_FOLLOW_USER_SUCCESS' };
     const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
     this.currentUser.focuses.forEach((focus, fsIdx) => {
       if (focus.strId === res.thisUser.strId) {
         this.currentUser.focuses.splice(fsIdx, 1);
       }
-    })
+    });
     this.users[usrIdx] = this.currentUser;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   getLoginUserImageSuccess(res) {
-    const resObj= {
+    const response = {
       msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
-    }
+    };
     this.loginUserImage = res;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   getLoginUserloginUserImage() {
@@ -249,28 +255,28 @@ const UserStore = createStore({
   },
 
   editUserImage(image) {
-    const resObj= {
+    const response = {
       msg: 'EDIT_IMAGE_SUCCESS'
-    }
+    };
     this.currentUploadedImage = image;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   cancelEditUserImage() {
-    const resObj= {
+    const response = {
       msg: 'CANCEL_IMAGE_SUCCESS'
-    }
+    };
     this.currentUploadedImage = null;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   uploadImageSuccess(newuser) {
-    const resObj= {
+    const response = {
       msg: 'UPLOAD_IMAGE_SUCCESS'
-    }
+    };
     this.currentUploadedImage = null;
     this.currentUser.image_url = newuser.image_url;
-    this.emitChange(resObj);
+    this.emitChange(response);
   },
 
   dehydrate() {
@@ -281,7 +287,7 @@ const UserStore = createStore({
       loginUserImage: this.loginUserImage,
       users: this.users,
       kenny: this.kenny,
-    }
+    };
   },
 
   rehydrate(state) {

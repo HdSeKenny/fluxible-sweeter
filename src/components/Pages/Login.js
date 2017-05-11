@@ -4,7 +4,7 @@ import { routerShape } from 'react-router/lib/PropTypes';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { Input, ModalsFactory, Switch } from '../UI';
+import { Input, Switch, ModalsFactory } from '../UI';
 import { Row, Col } from '../UI/Layout';
 
 const Login = React.createClass({
@@ -20,7 +20,8 @@ const Login = React.createClass({
   propTypes: {
     onForgotPassword: PropTypes.func,
     openNavbarModals: PropTypes.func,
-    hideNavbarModals: PropTypes.func
+    hideNavbarModals: PropTypes.func,
+    switchOpenModal: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -41,15 +42,18 @@ const Login = React.createClass({
 
   onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      this.setState({ errorMessage: '' });
-      ModalsFactory.hide('loginModal');
-      sweetAlert.alertSuccessMessageWithCallback('Login success !', () => {
-        this.context.router.push('/');
-      });
+      sweetAlert.success(res.msg);
+      this.props.hideNavbarModals('loginModal');
+      this.context.router.push('/list');
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
+    }
+
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      sweetAlert.success(res.msg);
+      this.context.router.push('/');
     }
   },
 
@@ -82,8 +86,19 @@ const Login = React.createClass({
   },
 
   openSignupModal() {
-    this.props.hideNavbarModals('loginModal');
-    this.props.openNavbarModals('signupModal');
+    this.props.switchOpenModal('signupModal');
+
+    ModalsFactory.hide('loginModal');
+
+
+    // this.props.hideNavbarModals('loginModal');
+
+    // Click signup in login modal, it should hide login modal
+    // then open signup modal, but the 'modal-open' class will
+    // be deleted by login modal hide event
+    // setTimeout(() => {
+    //   $('body').addClass('modal-open');
+    // }, 500);
   },
 
   _renderEmailInput(email) {

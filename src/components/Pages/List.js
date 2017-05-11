@@ -47,14 +47,14 @@ const List = React.createClass({
     ];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({
         blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessage(res.msg);
+      sweetAlert.success(res.msg);
       this.setState({
         blogText: '',
         blogs: this.getStore(BlogStore).getAllBlogs()
