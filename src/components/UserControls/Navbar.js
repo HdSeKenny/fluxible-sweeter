@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link, routerShape } from 'react-router';
-import { sweetAlert, animations } from '../../utils';
+import { animations } from '../../utils';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
 import { ModalsFactory, Layout } from '../UI';
