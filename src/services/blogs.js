@@ -82,27 +82,30 @@ export default {
   },
 
   addBlog(req, resource, params, body, config, callback) {
-    MongoClient.connect(MongoUrl, function(err, db) {
+    MongoClient.connect(MongoUrl, (err, db) => {
       const Blog = db.collection('blogs');
       const User = db.collection('users');
       body.author = ObjectID(body.author);
       body.show_comments = false;
       body.likers = [];
       body.comments = [];
+      body.images = [];
+      body.tag = body.tag || 'moment';
+      body.description = body.description || '';
       Blog.insert(body, (err, result) => {
         if (result) {
           const blog = result.ops[0];
-          blog.strId = blog._id.toString();
+          blog.id_str = blog._id.toString();
           Blog.save(blog);
           User.findOne({ '_id': blog.author }, (err, user) => {
             if (user) {
               blog.author = user;
-              user.blogs.push(blog.strId);
+              user.blogs.push(blog.id_str);
               User.save(user);
             }
             db.close();
             callback(err, blog);
-          })
+          });
         } else {
           callback(err, null);
         }
@@ -132,16 +135,16 @@ export default {
     MongoClient.connect(MongoUrl, (err, db) => {
       const Blog = db.collection('blogs');
       Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
-        if (err) { console.log(`***** Find blog err: ${err}`); };
+        if (err) { console.log(`***** Find blog err: ${err}`); }
         if (blog) {
           blog.likers = blog.likers.filter(liker => liker !== body.currentUserId);
           Blog.save(blog, (err, result) => {
             Blog.findOne({ _id: blog._id }, (err, newBlog) => {
               callback(err, newBlog);
-            })
+            });
           });
         }
-      })
+      });
     });
   },
 
@@ -155,13 +158,13 @@ export default {
             user.blogs = user.blogs.filter(blog => blog !== params._id);
             User.save(user, (err, result) => {
               db.close();
-              callback(err, { deletedBlogId: params._id, result: result });
+              callback(err, { deletedBlogId: params._id, result });
             });
           } else {
             db.close();
-            callback(err, { deletedBlogId: params._id, result: result });
+            callback(err, { deletedBlogId: params._id, result });
           }
-        })
+        });
       });
     });
   },
@@ -180,9 +183,9 @@ export default {
               }
               db.close();
               callback(err, newBlog);
-            })
-          })
-        })
+            });
+          });
+        });
       }
     });
   },

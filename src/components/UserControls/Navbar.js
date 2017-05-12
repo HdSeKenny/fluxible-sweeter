@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import _ from 'lodash';
 import { Link, routerShape } from 'react-router';
-import { animations } from '../../utils';
+import { animations, jsUtils } from '../../utils';
 import { UserStore } from '../../stores';
 import { UserActions } from '../../actions';
 import { ModalsFactory, Layout } from '../UI';
@@ -59,14 +60,10 @@ const Navbar = React.createClass({
     }
   },
 
-  isActive(route) {
-    return (route === this.props.route) ? 'active' : '';
-  },
-
-  isHomeActive(route) {
-    const currentRoute = this.props.route;
-    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  isActive(routes) {
+    const path = jsUtils.splitUrlBySlash(this.props.route, routes.length);
+    const isActive = _.isEqual(routes.sort(), path.sort());
+    return isActive ? 'active' : '';
   },
 
   getRouteSlashPosition(string, word, index) {
@@ -150,17 +147,17 @@ const Navbar = React.createClass({
               <img src={brandImage} alt="brand" height="26" />
             </Link>
             <ul className="sweet-nav-menu sweet-nav-left">
-              <li className={`${this.isActive('/list')}`}>
+              <li className={this.isActive(['list'])}>
                 <Link to="/list">Home</Link>
               </li>
               {authenticated &&
-                <li className={this.isHomeActive('home')}>
+                <li className={this.isActive(['home', currentUser.username])}>
                   <Link to={`/${currentUser.username}/home`}>Personal</Link>
                 </li>
               }
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
-              <li className={this.isActive('about')}>
+              <li className={this.isActive(['about'])}>
                 <Link to="/about">About</Link>
               </li>
               {!authenticated &&

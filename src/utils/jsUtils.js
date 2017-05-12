@@ -6,36 +6,73 @@
  * @return {Boolean}
  */
 function isNumeric(n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function isString(str) {
-	return (typeof str === 'string') || (str instanceof String);
+  return (typeof str === 'string') || (str instanceof String);
 }
 
 function isUnEmptyString(str) {
-	return str && isString(str);
+  return str && isString(str);
 }
 
 /**
-* @str the string to be splitted
-* @separator the seprator, such as ',', '|', or ';'
-* @defaultValue the defaultValue when str is invalid
-*/
+ * @str the string to be splitted
+ * @separator the seprator, such as ',', '|', or ';'
+ * @defaultValue the defaultValue when str is invalid
+ */
 function strToArray(str, separator, defaultValue) {
-	return isUnEmptyString(str) ? str.split(separator) : defaultValue;
+  return isUnEmptyString(str) ? str.split(separator) : defaultValue;
 }
 
 function upperFirst(value) {
-  let str = value.split('');
+  const str = value.split('');
   str[0] = str[0].toUpperCase();
   return str.join('');
 }
 
-module.exports = {
+function shorten(s, n) {
+  return (s.length > n) ? `${s.substr(0, n - 1)} ...` : s;
+}
+
+/**
+ * Receive an url and split it with '/', the number is how many params returned,
+ * for example, url = '/kuanlu/home' number = 1, returned path will be ['home'],
+ * if number is 2, the returned path will be ['kuanlu', 'home']
+ *
+ * @param  {string} url
+ * @param  {number} number
+ * @return {array} path
+ */
+function splitUrlBySlash(url, number) {
+  const params = url.split('/');
+  const path = [];
+  let tmpNumer = 0;
+  let targetNumber = 1;
+
+  if (number && isNumeric(number)) {
+    targetNumber = number;
+  }
+
+  if (params.length) {
+    for (let i = params.length - 1; i >= 0; i--) {
+      if (tmpNumer < targetNumber) {
+        path.push(params[i]);
+        tmpNumer++;
+      }
+    }
+  }
+
+  return path;
+}
+
+export default {
   isNumeric,
   isString,
   isUnEmptyString,
   upperFirst,
-  strToArray
+  strToArray,
+  shorten,
+  splitUrlBySlash
 };

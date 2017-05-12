@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { MainSliders, PinItem, ModalsFactory } from '../UI';
+import { PinItem, ModalsFactory } from '../UI';
 import { Page } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 
@@ -113,18 +113,22 @@ const Home = React.createClass({
       <section className="">
         <p className="home-tag">
           {sectionTitle} >
-          <Link to="/list" className="view-all">.view all</Link>
+          <Link to="/list" className="view-all">.view more</Link>
         </p>
         <div className="pins-block">
-          {typedPins.map((pin, index) =>
-            <PinItem
-              key={index}
-              onSelect={(id) => this.onViewPinItem(id)}
-              pin={pin}
-              type={pin.type}
-              currentUser={currentUser}
-            />
-          )}
+          {typedPins.map((pin, index) => {
+            const specialClass = (index + 1) % 3 === 0 ? 'mr-0' : '';
+            return (
+              <PinItem
+                key={index}
+                onSelect={(id) => this.onViewPinItem(id)}
+                pin={pin}
+                type={pin.type}
+                currentUser={currentUser}
+                specialClass={specialClass}
+              />
+            );
+          })}
         </div>
       </section>
     );
@@ -138,9 +142,9 @@ const Home = React.createClass({
     const dateSortedPins = pins.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)));
     return (
       <article className="classification">
-        {this._renderPinSection('What\'s new', dateSortedPins)}
-        {this._renderPinSection('Hot Articles', thumbedSortedArticles)}
-        {this._renderPinSection('Good Sweets', thumbedSortedMoments)}
+        {this._renderPinSection('It\'s new', dateSortedPins)}
+        {this._renderPinSection('Hot articles', thumbedSortedArticles)}
+        {this._renderPinSection('Good sweets', thumbedSortedMoments)}
       </article>
     );
   },
@@ -149,7 +153,6 @@ const Home = React.createClass({
     const { blogs, selectedPin, currentUser } = this.state;
     return (
       <div className="home-page">
-        <MainSliders />
         <div className="main">
           {this._renderPinItems(blogs)}
         </div>

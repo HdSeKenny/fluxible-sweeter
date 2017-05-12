@@ -43,7 +43,7 @@ const Login = React.createClass({
   onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
       sweetAlert.success(res.msg);
-      this.props.hideNavbarModals('loginModal');
+      ModalsFactory.hide('loginModal');
       this.context.router.push('/list');
     }
 

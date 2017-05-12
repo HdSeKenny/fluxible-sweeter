@@ -150,18 +150,18 @@ const UserStore = createStore({
     return this.currentUser;
   },
 
-  getUserById(userId) {
-    return this.users.find(user => user.strId === userId);
+  getUserByUsername(username) {
+    return this.users.find(user => user.username === username);
   },
 
   isThumbedUp(blog) {
     return blog.likers.indexOf(this.currentUser.strId) !== -1;
   },
 
-  isCurrentUser(userId) {
+  isCurrentUser(username) {
     let flag = false;
-    if (this.currentUser && userId) {
-      flag = this.currentUser.strId === userId;
+    if (this.currentUser && username) {
+      flag = this.currentUser.username === username;
     } else if (this.currentUser) {
       flag = true;
     }

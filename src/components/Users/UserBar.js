@@ -2,10 +2,12 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import sweetAlert from '../../utils/sweetAlert';
+import _ from 'lodash';
+import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
+import { Row, Col } from '../UI/Layout';
 
 const UserBar = React.createClass({
 
@@ -55,22 +57,20 @@ const UserBar = React.createClass({
     }
   },
 
-  isActive(route) {
-    const currentRoute = this.props.path;
-    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  isActive(routes) {
+    const path = jsUtils.splitUrlBySlash(this.props.path, routes.length);
+    const isActive = _.isEqual(routes.sort(), path.sort());
+    return isActive ? 'active' : '';
   },
 
-  getRouteSlashPosition(string, word, index) {
-    return string.split(word, index).join(word).length;
-  },
-
-  onEditUserImage(user) {
-    const image = { userId: user._id, imageUrl: user.image_url };
+  onEditUserImage() {
+    const { currentUser } = this.state;
+    const image = { userId: currentUser._id, imageUrl: currentUser.image_url };
     this.executeAction(UserActions.EditUserImage, image);
   },
 
   onUploadImage(newImage) {
+    // eslint-disable-next-line
     const formData = new FormData();
     formData.append('file', newImage.file);
     const _this = this;
@@ -139,53 +139,40 @@ const UserBar = React.createClass({
     sweetAlert.alertWarningMessage('Login first please!');
   },
 
-  _renderCurrentUserNav(currentUser) {
-    return (
-      <div className="row nav">
-        <div className={`col-md-2 col-xs-2 well user-home-well ${this.isActive('home')}`}>
-          <Link to={`/${currentUser.username}/home`}><i className="fa fa-home"></i> Home</Link>
-        </div>
-        <div className={`col-md-2 col-xs-2 well ${this.isActive('user-blogs')}`}>
-          <Link to={`/${currentUser.username}/list`}><i className="fa fa-book"></i> Blogs</Link>
-        </div>
-        <div className={`col-md-2 col-xs-2 well ${this.isActive('user-follows')}`}>
-          <Link to={`/${currentUser.username}/following`}><i className="fa fa-flag"></i> Following</Link>
-        </div>
-        <div className={`col-md-2 col-xs-2 well ${this.isActive('user-messages')}`}>
-          <Link to={`/${currentUser.username}/messages`}><i className="fa fa-comment"></i> Messages</Link>
-        </div>
-        <div className={`col-md-2 col-xs-2 well ${this.isActive('user-settings')}`}>
-          <Link to={`/${currentUser.username}/info`}><i className="fa fa-cogs"></i> Settings</Link>
-        </div>
-        <div className={`col-md-2 col-xs-2 well ${this.isActive('user-more')}`}>
-          <Link to={`/${currentUser.username}/more`}><i className="fa fa-ellipsis-h"></i> More</Link>
-        </div>
-      </div>
-    );
-  },
+  _renderUserBarNavs(isCurrentUser, user) {
+    const { username } = user;
 
-  _renderOtherUsersNav(user) {
-    return (
-      <div className="row nav">
-        <div className={`col-md-3 col-xs-3 well user-home-well ${this.isActive('user-home')}`}>
-          <Link to={`/user-home/${user.username}/home`}><i className="fa fa-home"></i> Home</Link>
-        </div>
-        <div className={`col-md-3 col-xs-3 well ${this.isActive('user-blogs')}`}>
-          <Link to={`/user-blogs/${user.username}/list`}><i className="fa fa-book"></i> Blogs</Link>
-        </div>
-        <div className={`col-md-3 col-xs-3 well ${this.isActive('user-follows')}`}>
-          <Link to={`/user-follows/${user.username}`}><i className="fa fa-flag"></i> Following</Link>
-        </div>
-        <div className={`col-md-3 col-xs-3 well ${this.isActive('user-more')}`}>
-          <Link to={`/user-more/${user.username}`}><i className="fa fa-ellipsis-h"></i> More</Link>
-        </div>
-      </div>
-    );
+    const navs = {
+      Home: 'fa fa-home',
+      Blogs: 'fa fa-book',
+      Follows: 'fa fa-flag',
+      More: 'fa fa-ellipsis-h'
+    };
+
+    if (isCurrentUser) {
+      navs.Messages = 'fa fa-comment';
+      navs.Settings = 'fa fa-cogs';
+    }
+
+    const colSize = isCurrentUser ? '2' : '3';
+
+    return Object.keys(navs).map((navli, index) => {
+      const lowcaseNav = navli.toLowerCase();
+      const isActive = this.isActive([lowcaseNav]);
+      const classes = `${colSize} bar-nav ${isActive}`;
+      const url = `/${username}/${lowcaseNav}`;
+      const icon = navs[navli];
+      return (
+        <Col size={classes} key={index}>
+          <Link to={url}><i className={icon}></i> {navli}</Link>
+        </Col>
+      );
+    });
   },
 
   _renderUserInfo(isCurrentUser, user, isFollowed) {
     return (
-      <div className="row user-info">
+      <div className="">
         <h3 className="user-name"> {user.username}</h3>
         {isCurrentUser && <div className="user-btn"></div>}
         {!isCurrentUser &&
@@ -209,26 +196,14 @@ const UserBar = React.createClass({
 
   _renderUserImage(isCurrentUser, user, currentUser) {
     const defaultImageUrl = '/images/users/default-user.png';
-    const hasChangedImage = currentUser ? currentUser.image_url === defaultImageUrl : false;
+    const hasChangedImage = currentUser ? (currentUser.image_url === defaultImageUrl) : false;
+    const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return (
-      <div className="row user-img">
-        {isCurrentUser &&
-          <form accept="multipart/form-data" className="image-tooltip">
-            <img
-              alt="user"
-              className="current-user-image"
-              src={currentUser.image_url}
-              onClick={this.onEditUserImage.bind(this, currentUser)}
-            />
-            {hasChangedImage && <span className="tooltiptext">Click to change image</span>}
-          </form>
-        }
-        {!isCurrentUser &&
-          <form accept="multipart/form-data">
-            <img alt="user" className="user-image" src={user.image_url} />
-          </form>
-        }
-      </div>
+      <form accept="multipart/form-data" className={imageClass}>
+        {isCurrentUser && <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />}
+        {isCurrentUser && hasChangedImage && <span className="tooltiptext">Click to change image</span>}
+        {!isCurrentUser && <img alt="user" className="user-image" src={user.image_url} />}
+      </form>
     );
   },
 
@@ -236,16 +211,24 @@ const UserBar = React.createClass({
     const { isCurrentUser, user } = this.props;
     const { currentUploadedImage, isUploaded, currentUser } = this.state;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
+    const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {
       backgroundImage: `url(${user.background_image_url})`
     };
     return (
       <div className="user-bar">
-        <div className="user-background" style={userBackground}></div>
-        {this._renderUserImage(isCurrentUser, user, currentUser)}
-        {this._renderUserInfo(isCurrentUser, user, isFollowed)}
-        {isCurrentUser && this._renderCurrentUserNav(currentUser)}
-        {!isCurrentUser && this._renderOtherUsersNav(user)}
+        <div className="user-background" style={userBackground}>
+        <Row className="user-img">
+          {this._renderUserImage(isCurrentUser, user, currentUser)}
+        </Row>
+        <Row className="user-info">
+          {this._renderUserInfo(isCurrentUser, user, isFollowed)}
+        </Row>
+        <Row className="nav">
+          {this._renderUserBarNavs(isCurrentUser, displayUser)}
+        </Row>
+        </div>
+
         {currentUploadedImage && (
           <UserImageEditor
             show={currentUploadedImage !== null}

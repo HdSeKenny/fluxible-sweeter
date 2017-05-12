@@ -61,9 +61,10 @@ export default class ModalsFactory extends Component {
   }
   render() {
     const { size, modalref, title, ModalComponent, showHeaderAndFooter, showModal } = this.props;
-    const isLoginModal = modalref === 'loginModal';
-    const isSignupModal = modalref === 'signupModal';
-    const show = (isLoginModal || isSignupModal) ? showModal : true;
+    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal'];
+    const isNotPinItemModal = notPinItemModals.includes(modalref);
+    const show = isNotPinItemModal ? showModal : true;
+
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>

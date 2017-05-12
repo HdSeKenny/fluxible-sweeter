@@ -33,7 +33,8 @@ const List = React.createClass({
       blogs: this.getStore(BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {}
+      selectedPin: {},
+      showCreateModal: true
     };
   },
 
@@ -43,7 +44,8 @@ const List = React.createClass({
       'DELETE_COMMENT_SUCCESS',
       'THUMBS_UP_BLOG_SUCCESS',
       'CANCEL_THUMBS_UP_BLOG_SUCCESS',
-      'DELETE_BLOG_SUCCESS'
+      'DELETE_BLOG_SUCCESS',
+      'CREATE_BLOG_SUCCESS'
     ];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
@@ -54,15 +56,7 @@ const List = React.createClass({
     }
 
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.success(res.msg);
-      this.setState({
-        blogText: '',
-        blogs: this.getStore(BlogStore).getAllBlogs()
-      });
-    }
-
-    if (res.msg === 'LOGOUT_SUCCESS') {
-      // this.setState(this.getStateFromStores());
+      ModalsFactory.hide('createBlogModal');
     }
   },
 
@@ -112,11 +106,38 @@ const List = React.createClass({
 
   onViewPinItem(id) {
     const { blogs } = this.state;
-    this.setState({ selectedPin: blogs.find(p => p.id_str === id) });
+    const selectedPin = blogs.find(p => p.id_str === id);
+    this.setState({ selectedPin });
+
+    $('#pinModal').on('hidden.bs.modal', () => {
+      if (this.hidePinModal) {
+        this.hidePinModal();
+      }
+    });
+
     ModalsFactory.show('pinModal');
   },
 
+  hidePinModal() {
+    const listDom = $('.list-page');
+    if (listDom && listDom.length) {
+      this.setState({ selectedPin: {} });
+    }
+  },
+
+  hideCreateModal() {
+    this.setState({ showCreateModal: false });
+  },
+
   openCreateBlogModal() {
+    if (!this.state.showCreateModal) {
+      this.setState({ showCreateModal: true });
+    }
+    $('#createBlogModal').on('hidden.bs.modal', () => {
+      // eslint-disable-next-line
+      this.hideCreateModal && this.hideCreateModal();
+    });
+
     ModalsFactory.show('createBlogModal');
   },
 
@@ -232,7 +253,7 @@ const List = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs, selectedPin } = this.state;
+    const { currentUser, kenny, blogs, selectedPin, showCreateModal } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <article className="list-page">
@@ -250,8 +271,21 @@ const List = React.createClass({
         </section>
 
         <Layout.Page>
-          <ModalsFactory modalref="createBlogModal" title="Create a sweet !" ModalComponent={BlogModal} size="modal-md" showHeaderAndFooter={false} />
-          <ModalsFactory modalref="pinModal" large={true} pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
+          <ModalsFactory
+            modalref="createBlogModal"
+            title="Create a sweet !"
+            ModalComponent={BlogModal}
+            size="modal-md"
+            showHeaderAndFooter={false}
+            showModal={showCreateModal}
+            currentUser={currentUser} />
+
+          <ModalsFactory
+            modalref="pinModal"
+            large={true}
+            pin={selectedPin}
+            ModalComponent={PinItemModal}
+            showHeaderAndFooter={false} />
         </Layout.Page>
       </article>
     );

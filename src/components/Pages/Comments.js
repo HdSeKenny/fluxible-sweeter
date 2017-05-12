@@ -1,11 +1,10 @@
 /* eslint-disable all, camelcase */
 import React from 'react';
-import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { routerShape } from 'react-router';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert, format } from '../../utils';
 import { Row, Col } from '../UI/Layout';
 
 const Comments = React.createClass({
@@ -204,8 +203,9 @@ const Comments = React.createClass({
         {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         .map(comment => {
           const { id_str, commenter, created_at, show_replies } = comment;
-          const date = created_at ? created_at.toString() : null;
-          const commentDate = dateFormat(date, 'dddd, h:MM TT');
+          // const date = created_at ? created_at.toString() : null;
+          // const commentDate = dateFormat(date, 'dddd, h:MM TT');
+          const fromNow = format.fromNow(created_at);
           const user = this.getCommenter(commenter);
           const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
           const { username, image_url } = user;
@@ -222,7 +222,7 @@ const Comments = React.createClass({
                     </span> : {comment.commentText}
                   </h5>
                   <p className="comment-date">
-                    <small>{commentDate}</small>
+                    <small>{fromNow}</small>
                     <button className="reply-icon" onClick={() => this.showReplyTextarea(comment)}>
                       <i className="fa fa-reply"></i>
                     </button>

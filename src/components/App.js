@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { FullScreen } from './UI';
+import { MainSliders, FullScreen } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { Navbar, Footer } from './UserControls';
 
@@ -24,9 +24,11 @@ export default class App extends Component {
   render() {
     const route = this.props.location.pathname;
     const child = React.cloneElement(this.props.children);
+    const showMainSliders = child.type.displayName === 'Home';
     return (
       <FullScreen id="app">
         <Navbar route={route} />
+        <MainSliders show={showMainSliders} />
         <div className="content-pages">
           {child}
         </div>

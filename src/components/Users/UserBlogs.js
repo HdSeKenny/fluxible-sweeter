@@ -1,9 +1,8 @@
 import React from 'react';
-import dateFormat from 'dateformat';
 import { Link } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert, format } from '../../utils';
 import UserBar from './UserBar';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
@@ -197,12 +196,11 @@ const UserBlogs = React.createClass({
       <div>
         {displayBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         .map(blog => {
-          const dateString = blog.created_at.toString();
-          const blogDate = dateFormat(dateString);
+          const fromNow = format.fromNow(blog.created_at);
           if (blog.type === 'article') {
-            return this._renderArticle(blog, blogDate);
+            return this._renderArticle(blog, fromNow);
           } else {
-            return this._renderMicroBlog(blog, blogDate);
+            return this._renderMicroBlog(blog, fromNow);
           }
         })}
       </div>

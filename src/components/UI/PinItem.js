@@ -1,8 +1,7 @@
 /* eslint-disable all, camelcase */
 import React, { Component } from 'react';
 import { routerShape } from 'react-router';
-import moment from 'moment';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert, format, jsUtils } from '../../utils';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
@@ -20,7 +19,9 @@ export default class PinItem extends Component {
     pin: React.PropTypes.object,
     index: React.PropTypes.number,
     onSelect: React.PropTypes.func,
-    currentUser: React.PropTypes.object
+    currentUser: React.PropTypes.object,
+    disabledClick: React.PropTypes.bool,
+    specialClass: React.PropTypes.string
   };
 
   static statics = {
@@ -50,6 +51,10 @@ export default class PinItem extends Component {
 
   pinTextActions(pin) {
     const isMoment = pin.type !== 'article';
+    if (this.props.disabledClick) {
+      return;
+    }
+
     if (isMoment) {
       this.onViewPinItem();
     }
@@ -86,12 +91,15 @@ export default class PinItem extends Component {
   _renderPinHeader(pin) {
     const { author, created_at } = pin;
     const { image_url, firstName, lastName, username } = author;
-    const fromNow = moment(created_at).fromNow();
+    const fromNow = format.fromNow(created_at);
     return (
       <div className="pin-header">
         <div className="pin-moment-user" onClick={() => this.goToUserCenter(author)}>
           <span className="user-img pull-left mr-10"><img alt="pin" src={image_url} /></span>
-          <div className="author-name">{firstName} {lastName}<small className="from-now fr">{fromNow}</small></div>
+          <div className="author">
+            <span className="name">{firstName} {lastName}</span>
+            <small className="from-now fr">{fromNow}</small>
+          </div>
           <p className="text-muted text-xs mt-5">{username}</p>
         </div>
       </div>
@@ -104,8 +112,8 @@ export default class PinItem extends Component {
         <p className="pin-article-title">{pin.title}</p>
         <div className="">{this._renderTextPin(pin)}</div>
         <Row className="">
-          <Col size="5" className="p-0 body-user">{this._renderPinFooter(pin)}</Col>
-          <Col size="7" className="p-0 body-icons tar">{this._renderPinFooterIcons(pin)}</Col>
+          <Col size="6" className="p-0 body-user">{this._renderPinFooter(pin)}</Col>
+          <Col size="6" className="p-0 body-icons tar">{this._renderPinFooterIcons(pin)}</Col>
         </Row>
       </div>
     );
@@ -139,23 +147,27 @@ export default class PinItem extends Component {
   }
 
   _renderTextPin(pin) {
+    const displayText = jsUtils.shorten(pin.text, 70);
+    const { disabledClick } = this.props;
     return (
-      <div className="pin-body-text mt-15" onClick={() => this.pinTextActions(pin)}>
-        <p>{pin.text}</p>
+      <div className="pin-body-text mt-10" onClick={() => this.pinTextActions(pin)}>
+        {disabledClick ? <p>{pin.text}</p> : <p>{displayText}</p>}
       </div>
     );
   }
 
   _renderPinFooter(pin) {
-    const { author } = pin;
-    const fromNow = moment(pin.created_at).fromNow();
+    const { author, created_at } = pin;
+    const fromNow = format.fromNow(created_at);
 
     return (
       <div className="pin-article-user" onClick={() => this.goToUserCenter(author)}>
-        <span className="user-img pull-left mr-10" data-balloon="Go user center!" data-balloon-pos="left">
+        <span className="user-img pull-left mr-10" data-balloon="Go user center!" data-balloon-pos="top">
           <img alt="pin" src={author.image_url} />
         </span>
-        <div className="author-name">{author.firstName} {author.lastName}</div>
+        <div className="author">
+          <span className="name">{author.firstName} {author.lastName}</span>
+        </div>
         <p className="text-muted text-xs mt-5">{fromNow}</p>
       </div>
     );
@@ -197,13 +209,13 @@ export default class PinItem extends Component {
   }
 
   render() {
-    const { pin } = this.props;
+    const { pin, specialClass } = this.props;
     const isArticle = pin.type === 'article';
     return (
-      <div className="pin">
+      <div className={`pin ${specialClass}`}>
         {!isArticle && <div className="pin-heading text-uc p-0">{this._renderPinHeader(pin)}</div>}
         <div className="pin-body p-0">{this._renderPinBody(pin, isArticle)}</div>
-        {!isArticle && <div className="pin-footer p-0 tar">{this._renderPinFooterIcons(pin)}</div>}
+        {!isArticle && <div className="pin-footer p-0 tal">{this._renderPinFooterIcons(pin)}</div>}
       </div>
     );
   }

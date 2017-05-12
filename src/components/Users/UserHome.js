@@ -33,11 +33,11 @@ const UserHome = React.createClass({
   },
 
   getStatesFromStores() {
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId),
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
       singleUserBlogs: null,
       welcomeText: 'What happened today, Write a blog here !',
       blogText: ''
@@ -46,7 +46,7 @@ const UserHome = React.createClass({
 
   onChange(res) {
     const { user, isCurrentUser } = this.state;
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.success(res.msg);
       this.setState({ blogText: '' });
@@ -67,11 +67,11 @@ const UserHome = React.createClass({
     //   })
     // }
 
-    // this.setState({
-    //   currentUser: this.getStore(UserStore).getCurrentUser(),
-    //   user: this.getStore(UserStore).getUserById(userId),
-    //   isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
-    // });
+    this.setState({
+      currentUser: this.getStore(UserStore).getCurrentUser(),
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username)
+    });
   },
 
   handleBlogText(e) {

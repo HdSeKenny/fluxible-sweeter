@@ -1,9 +1,9 @@
 import React from 'react';
-import dateFormat from 'dateformat';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { routerShape } from 'react-router';
 import { BlogStore } from '../../stores';
 import { Comments } from '../Pages';
+import { format } from '../../utils';
 
 const Details = React.createClass({
 
@@ -41,8 +41,7 @@ const Details = React.createClass({
 
   render() {
     const { blog } = this.state;
-    const date = blog.created_at.toString();
-    const blogDate = dateFormat(date);
+    const fromNow = format.fromNow(blog.created_at);
     const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
     return (
       <article className="details-page">
@@ -55,7 +54,7 @@ const Details = React.createClass({
               {blog.author.username}
             </field>
             <field className="info-right">
-              {blogDate}
+              {fromNow}
             </field>
           </section>
           <section className="content">
