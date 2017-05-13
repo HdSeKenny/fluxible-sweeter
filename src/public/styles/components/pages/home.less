@@ -1,9 +1,7 @@
 .home-page {
   @media (min-width: 769px) {
     .main {
-      // width: @content-pages-width;
       margin: @content-pages-margin;
-      // padding: 0 0.5em;
       .vbox {
         min-height: 60em;
       }
@@ -11,16 +9,19 @@
   }
   .main {
     .classification {
-      section {
+      .pins-section {
         clear: both;
-        margin-top: 20px;
+        &:first-child {
+          .home-tag {
+            padding: 0 0 10px 0;
+          }
+        }
         .home-tag {
-          padding: 1.4em 0.4em 0.4em 0.4em;
-          font-size: 1.5em;
-          margin-top: 1em;
+          font-size: 18px;
           color: #333;
+          padding: 20px 0 10px 0;
           .view-all {
-            font-size: 1em;
+            font-size: 18px;
             font-style: italic;
             &:hover {
               color: @brand-primary;
@@ -34,9 +35,6 @@
             margin-right: 1%;
             display: inline-block;
             float: left;
-            // &:nth-child(3) {
-            //   margin-right: 0;
-            // }
           }
         }
       }

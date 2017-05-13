@@ -1,201 +1,265 @@
 
 .user-home {
-  .user-content {
+  .home-content {
     margin: 20px 0;
   }
-  .content-left {
+  .home-left {
     width: 25%;
     float: left;
-    .blog-tips {
-      padding: 15px 0;
-      font-size: 18px;
-      min-height: 50px;
-      text-align: center;
+    .user-home-left {
+      .blog-tips {
+        padding: 15px 0;
+        font-size: 13px;
+        border-radius: 3px;
+        background: #fff;
+        text-align: center;
+        .tip-li {
+          p {
+            font-size: 16px;
+            &:hover {
+              color: @brand-info;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+      .user-info {
+        .isCurrentUser {
+          margin-top: 10px;
+          border-radius: 3px;
+          background: #fff;
+        }
+        .isNotCurrentUser {
+          margin-top: 10px;
+          padding: 10px 25px;
+          background: #fff;
+          border-radius: 3px;
+          .row {
+            margin: 5px 0;
+            i {
+              margin-right: 10px;
+            }
+            .fa-user {
+              margin-left: 2px;
+            }
+            &:last-child {
+              margin-bottom: 10px;
+            }
+          }
+          .basic-info {
+            font-size: 15px;
+            .text {
+              .more {
+                color: @brand-info;
+                margin-top: 3px;
+                font-size: 12px;
+                float: right;
+                &:hover {
+                  color: @brand-primary;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+
+          &.fixed {
+            position: fixed;
+            top: 70px;
+            width: 19.5%;
+          }
+        }
+      }
+      .others {
+        margin-top: 10px;
+        border-radius: 3px;
+        min-height: 300px;
+        background: #fff;
+      }
     }
   }
 
 }
 
-.content-left .well {
-  background-color: #fff;
-  margin-bottom: 10px;
-  font-weight: normal;
+.home-left .well {
+  // background-color: #fff;
+  // margin-bottom: 10px;
+  // font-weight: normal;
 }
 
 
-.content-left .first-left-well .col-xs-4 {
+.home-left .first-left-well .col-xs-4 {
   border-right: 1px solid #ddd;
   padding-top: 0;
 }
 
-.content-left .first-left-well .col-xs-4:last-child {
+.home-left .first-left-well .col-xs-4:last-child {
   border: none;
 }
 
-.content-left .first-left-well a {
+.home-left .first-left-well a {
   color: #333;
   font-size: 20px;
   font-weight: 600;
 }
 
-.content-left .first-left-well p {
+.home-left .first-left-well p {
   color: gray;
   font-size: 15px;
   margin: 0 0 5px 2px;
   text-align: center;
 }
 
-.content-left .second-left-well {
+.home-left .second-left-well {
   padding: 20px;
 }
 
-.content-left .second-left-well .isCurrentUser {
+.home-left .second-left-well .isCurrentUser {
   min-height: 300px
 }
 
-.content-left .second-left-well .isCurrentUser li > a > i {
+.home-left .second-left-well .isCurrentUser li > a > i {
   margin-right: 15px;
   color: gray;
 }
 
-.content-left .second-left-well .isNotCurrentUser {
+.home-left .second-left-well .isNotCurrentUser {
   padding-left: 10px;
   min-height: 174px;
 }
 
-.content-left .second-left-well .basic-info {
+.home-left .second-left-well .basic-info {
   text-align: left;
   padding: 1px 0;
   font-size: 18px;
 }
 
-.content-left .second-left-well .basic-info h5 {
+.home-left .second-left-well .basic-info h5 {
   font-size: 18px;
   font-weight: 600;
 }
 
-.content-left .second-left-well .row {
+.home-left .second-left-well .row {
   margin-top: 10px;
   font-size: 15px;
   color: gray;
 }
 
-.content-left .second-left-well .info-field {
+.home-left .second-left-well .info-field {
   color: #00a9da;
   margin-left: 5px;
 }
 
-.content-left .second-left-well li {
+.home-left .second-left-well li {
   list-style: none;
   padding: 10px 0;
   margin: 5px 15px;
 }
 
-.content-left .second-left-well li a {
+.home-left .second-left-well li a {
   padding: 5px 30px;
   color: black;
   font-weight: 500;
   font-size: 15px;
 }
 
-.content-left .second-left-well a:hover {
+.home-left .second-left-well a:hover {
   text-decoration: none;
   color: #00a9da;
 }
 
-.content-left .second-left-well li > a > i {
+.home-left .second-left-well li > a > i {
   margin-right: 5px;
   color: gray
 }
 
-.content-left .second-left-well li.active {
+.home-left .second-left-well li.active {
   background: #F1F3FA;
 }
 
-.content-left .second-left-well li.active > a {
+.home-left .second-left-well li.active > a {
   color: #00a9da
 }
 
-.content-left .second-left-well li.active > a > i {
+.home-left .second-left-well li.active > a > i {
   color: #00a9da
 }
 
-.content-left .second-left-well li:hover {
+.home-left .second-left-well li:hover {
   background: #F1F3FA;
 }
 
-.content-left .second-left-well li:hover > a {
+.home-left .second-left-well li:hover > a {
   color: #00a9da
 }
 
-.content-left .second-left-well li:hover > a > i {
+.home-left .second-left-well li:hover > a > i {
   color: #00a9da
 }
 
 
 
-.content-mid .user-row {
+.home-mid .user-row {
   width: 100%;
   position: relative;
 }
 
-.content-mid .user-img img {
+.home-mid .user-img img {
   width: 55px;
   height: 55px;
   border-radius: 5px;
 }
 
-.content-mid .user-img {
+.home-mid .user-img {
   width: 8%;
   float: left;
 }
 
-.content-mid .user-info {
+.home-mid .user-info {
   width: 92%;
   float: right;
   margin-top: -3px;
 }
 
-.content-mid .user-info a {
+.home-mid .user-info a {
   color: #00a9da
 }
 
-.content-mid .user-info a:hover {
+.home-mid .user-info a:hover {
   color: #337ab7;
   text-decoration: none;
   outline: none;
 }
 
-.content-mid .user-info a:focus {
+.home-mid .user-info a:focus {
   text-decoration: none;
 }
 
-.content-mid .user-info p {
+.home-mid .user-info p {
   color: gray;
   font-size: 12px
 }
 
-.content-mid .blog-details {
+.home-mid .blog-details {
   width: 100%;
   padding: 0;
 }
 
-.content-mid .blog-details p {
+.home-mid .blog-details p {
   color: #555;
   font-weight: normal;
   line-height: 25px;
   font-size: 16px;
 }
 
-.content-mid .blog-details-title a:hover {
+.home-mid .blog-details-title a:hover {
   text-decoration: none;
 }
 
-.content-mid .blog-details-title h5 {
+.home-mid .blog-details-title h5 {
   font-size: 15px;
 }
 
-.content-mid .blog-details .blog-footer .col-xs-2 button {
+.home-mid .blog-details .blog-footer .col-xs-2 button {
   border: none;
   background: none;
   outline: none;
@@ -203,45 +267,45 @@
   font-size: 16px;
 }
 
-.content-mid .blog-details .blog-footer .col-xs-2 button:visit {}
+.home-mid .blog-details .blog-footer .col-xs-2 button:visit {}
 
-.content-mid .blog-details .blog-footer .col-xs-2 i {
+.home-mid .blog-details .blog-footer .col-xs-2 i {
   color: black
 }
 
-.content-mid .blog-details .blog-footer .col-xs-2 {
+.home-mid .blog-details .blog-footer .col-xs-2 {
   text-align: right;
   font-size: 16px;
 }
 
-.content-mid .blog-details .blog-footer .col-xs-2 i {
+.home-mid .blog-details .blog-footer .col-xs-2 i {
   margin-right: 10px;
 }
 
-.content-mid .blog-details .blog-footer .col-xs-2:last-child {
+.home-mid .blog-details .blog-footer .col-xs-2:last-child {
   margin-left: -10px;
 }
 
-.content-mid .blog-details .blog-footer {
+.home-mid .blog-details .blog-footer {
   margin-top: 20px;
 }
 
-.content-mid .blog-details .blog-footer a:hover {
+.home-mid .blog-details .blog-footer a:hover {
   text-decoration: none;
 }
 
-.content-mid .blog-details .blog-footer a:focus {
+.home-mid .blog-details .blog-footer a:focus {
   text-decoration: none;
 }
 
-.content-mid .well {
+.home-mid .well {
   background-color: #fff;
   margin-bottom: 10px;
   font-weight: normal;
   padding: 20px 25px;
 }
 
-.content-mid .blog-details .ellipsis-btn {
+.home-mid .blog-details .ellipsis-btn {
   background-color: #fff;
   color: white;
   padding: 16px;
@@ -250,12 +314,12 @@
   cursor: pointer;
 }
 
-.content-mid .blog-details .dropdown {
+.home-mid .blog-details .dropdown {
   position: relative;
   display: inline-block;
 }
 
-.content-mid .blog-details .dropdown-content {
+.home-mid .blog-details .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -265,7 +329,7 @@
   z-index: 999;
 }
 
-.content-mid .blog-details .dropdown-content a {
+.home-mid .blog-details .dropdown-content a {
   text-align: center;
   color: black;
   padding: 12px;
@@ -274,77 +338,70 @@
   display: block;
 }
 
-.content-mid .blog-details .dropdown-content a:hover {
+.home-mid .blog-details .dropdown-content a:hover {
   background-color: #f1f1f1
 }
 
-.content-mid .blog-details .dropdown:hover .dropdown-content {
+.home-mid .blog-details .dropdown:hover .dropdown-content {
   display: block;
 }
 
-.content-mid .blog-details .dropdown:hover .ellipsis-btn {
+.home-mid .blog-details .dropdown:hover .ellipsis-btn {
   background-color: #fff;
 }
 
-.content-right .well .col-xs-5,
-.col-xs-7 {
-  padding: 0;
-  margin: 0;
-}
-
-
-.content-right {
+.home-right {
   width: 73%;
   float: right;
   padding: 0;
 }
 
-.content-right .well {
+.home-right .well {
   background-color: #fff;
   margin-bottom: 10px;
   font-weight: normal;
 }
 
-.content-right .list-blogs .blog-title a {
+.home-right .list-blogs .blog-title a {
   color: #00a9da;
   word-wrap: break-word;
   font-size: 15px;
   font-weight: 400;
 }
 
-.content-right .list-blogs .blog-title a:hover {
+.home-right .list-blogs .blog-title a:hover {
   text-decoration: none;
 }
 
-.content-right .list-blogs .blog-title h6 {
+.home-right .list-blogs .blog-title h6 {
   color: #CCCCCC;
   font-size: 10px;
   margin: 0;
 }
 
-.content-right .list-blogs .blog-manage {
+.home-right .list-blogs .blog-manage {
   padding: 0;
 }
 
-.content-right .list-blogs .blog-manage button {
+.home-right .list-blogs .blog-manage button {
   font-weight: normal;
   margin-top: 22px;
 }
 
-.content-right .list-blogs .blog-manage .delete-btn {
+.home-right .list-blogs .blog-manage .delete-btn {
   float: right;
   margin-left: 10px;
 }
 
-.content-right .list-blogs.micro-blog {
+.home-right .list-blogs.micro-blog {
   border-left: 3px solid #00a9da
 }
 
-.content-right .list-blogs.article {
+.home-right .list-blogs.article {
   border-left: 3px solid black
 }
 
-.content-right .blog-details .ellipsis-btn {
+.home-right .blog-details .ellipsis-btn {
   background-color: #fff;
   color: white;
   padding: 16px;
@@ -353,12 +410,12 @@
   cursor: pointer;
 }
 
-.content-right .blog-details .dropdown {
+.home-right .blog-details .dropdown {
   position: relative;
   display: inline-block;
 }
 
-.content-right .blog-details .dropdown-content {
+.home-right .blog-details .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -368,7 +425,7 @@
   z-index: 999;
 }
 
-.content-right .blog-details .dropdown-content a {
+.home-right .blog-details .dropdown-content a {
   text-align: center;
   color: black;
   padding: 12px;
@@ -377,47 +434,47 @@
   display: block;
 }
 
-.content-right .blog-details .dropdown-content a:hover {
+.home-right .blog-details .dropdown-content a:hover {
   background-color: #f1f1f1
 }
 
-.content-right .blog-details .dropdown:hover .dropdown-content {
+.home-right .blog-details .dropdown:hover .dropdown-content {
   display: block;
 }
 
-.content-right .blog-details .dropdown:hover .ellipsis-btn {
+.home-right .blog-details .dropdown:hover .ellipsis-btn {
   background-color: #fff;
 }
 
-.content-right .create-well {
+.home-right .create-well {
   border-top: 3px solid #00a9da
 }
 
-.content-right .create-well .col-xs-7 p {
+.home-right .create-well .col-xs-7 p {
   color: #00a9da;
   margin-left: 2px;
 }
 
-.content-right .create-well .col-xs-5 {
+.home-right .create-well .col-xs-5 {
   text-align: right;
   color: gray;
   font-size: 12px;
   font-style: italic;
 }
 
-.content-right .create-well .len-span {
+.home-right .create-well .len-span {
   color: #00a9da;
   font-size: 18px;
   margin: 0 2px;
 }
 
-.content-right .create-well .len-span-red {
+.home-right .create-well .len-span-red {
   color: red;
   font-size: 18px;
   margin: 0 2px;
 }
 
-.content-right .create-well .textarea-row textarea {
+.home-right .create-well .textarea-row textarea {
   padding: 10px;
   margin: 5px 0;
   width: 100%;
@@ -429,91 +486,91 @@
   cursor: pointer;
 }
 
-.content-right .create-well .textarea-row textarea:focus {
+.home-right .create-well .textarea-row textarea:focus {
   border: 1px solid #00a9da;
   background-color: #fff
 }
 
-.content-right .create-well .textarea-row textarea:visit {
+.home-right .create-well .textarea-row textarea:visit {
   border: none;
 }
 
-.content-right .create-well .btn-row {
+.home-right .create-well .btn-row {
   text-align: right;
 }
 
-.content-right .create-well .btn-row .glyphicon {
+.home-right .create-well .btn-row .glyphicon {
   margin-right: 5px;
 }
 
-.content-right .create-well .btn-row button {
+.home-right .create-well .btn-row button {
   outline: none;
   border: none;
   margin-left: 10px;
 }
 
-.content-right .user-row {
+.home-right .user-row {
   width: 100%;
   position: relative;
 }
 
-.content-right .user-img img {
+.home-right .user-img img {
   width: 55px;
   height: 55px;
   border-radius: 5px;
 }
 
-.content-right .user-img {
+.home-right .user-img {
   width: 10%;
   float: left;
 }
 
-.content-right .user-info {
+.home-right .user-info {
   width: 90%;
   float: right;
   margin-top: -3px;
 }
 
-.content-right .user-info a {
+.home-right .user-info a {
   color: #00a9da
 }
 
-.content-right .user-info a:hover {
+.home-right .user-info a:hover {
   color: #337ab7;
   text-decoration: none;
   outline: none;
 }
 
-.content-right .user-info a:focus {
+.home-right .user-info a:focus {
   text-decoration: none;
 }
 
-.content-right .user-info p {
+.home-right .user-info p {
   color: gray;
   font-size: 12px
 }
 
-.content-right .blog-details {
+.home-right .blog-details {
   width: 100%;
   padding: 0;
 }
 
-.content-right .blog-details p {
+.home-right .blog-details p {
   color: #555;
   font-weight: normal;
   line-height: 25px;
   font-size: 16px;
 }
 
-.content-right .blog-details-title a:hover {
+.home-right .blog-details-title a:hover {
   text-decoration: none;
 }
 
-.content-right .blog-details-title h5 {
+.home-right .blog-details-title h5 {
   font-size: 15px;
 }
 
-.content-right .blog-details .blog-footer .col-xs-2 button {
+.home-right .blog-details .blog-footer .col-xs-2 button {
   border: none;
   background: none;
   outline: none;
@@ -521,33 +578,33 @@
   font-size: 16px;
 }
 
-.content-right .blog-details .blog-footer .col-xs-2 button:visit {}
+.home-right .blog-details .blog-footer .col-xs-2 button:visit {}
 
-.content-right .blog-details .blog-footer .col-xs-2 i {
+.home-right .blog-details .blog-footer .col-xs-2 i {
   color: black
 }
 
-.content-right .blog-details .blog-footer .col-xs-2 {
+.home-right .blog-details .blog-footer .col-xs-2 {
   text-align: right;
   font-size: 16px;
 }
 
-.content-right .blog-details .blog-footer .col-xs-2 i {
+.home-right .blog-details .blog-footer .col-xs-2 i {
   margin-right: 10px;
 }
 
-.content-right .blog-details .blog-footer .col-xs-2:last-child {
+.home-right .blog-details .blog-footer .col-xs-2:last-child {
   margin-left: -10px;
 }
 
-.content-right .blog-details .blog-footer {
+.home-right .blog-details .blog-footer {
   margin-top: 20px;
 }
 
-.content-right .blog-details .blog-footer a:hover {
+.home-right .blog-details .blog-footer a:hover {
   text-decoration: none;
 }
 
-.content-right .blog-details .blog-footer a:focus {
+.home-right .blog-details .blog-footer a:focus {
   text-decoration: none;
 }

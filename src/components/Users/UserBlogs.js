@@ -51,7 +51,7 @@ const UserBlogs = React.createClass({
 
   onChange(res) {
     const { currentUser } = this.state;
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
     if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
       sweetAlert.success(res.msg);
       // this.setState({displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id)});
@@ -78,14 +78,14 @@ const UserBlogs = React.createClass({
       sweetAlert.success(res.msg);
       this.setState({
         // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
-        displayBlogs: this.getStore(BlogStore).getBlogsByUserId(userId)
+        displayBlogs: this.getStore(BlogStore).getBlogsByUserId(username)
       });
     }
 
     this.setState({
       currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username)
     });
   },
 

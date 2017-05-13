@@ -27,10 +27,12 @@ const UserMore = React.createClass({
   },
 
   getStatesFromStores() {
+    const store = this.getStore(UserStore);
+    const { username } = this.props.params;
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(this.props.params.userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(this.props.params.userId),
+      currentUser: store.getCurrentUser(),
+      user: store.getUserByUsername(username),
+      isCurrentUser: store.isCurrentUser(username),
       loaded: false
     };
   },

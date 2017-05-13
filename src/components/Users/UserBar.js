@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import _ from 'lodash';
 import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
-import { Row, Col } from '../UI/Layout';
+import { Row, Col, Page } from '../UI/Layout';
+import { ModalsFactory } from '../UI';
 
 const UserBar = React.createClass({
 
@@ -34,9 +34,13 @@ const UserBar = React.createClass({
   },
 
   getStateFromStores() {
+    const store = this.getStore(UserStore);
+    const currentUploadedImage = store.getCurrentUploadedImage();
+    // const showImageModal = currentUploadedImage !== null;
     return {
-      currentUploadedImage: this.getStore(UserStore).getCurrentUploadedImage(),
-      currentUser: this.getStore(UserStore).getCurrentUser()
+      currentUploadedImage,
+      currentUser: store.getCurrentUser(),
+      showImageModal: false
     };
   },
 
@@ -53,6 +57,7 @@ const UserBar = React.createClass({
       if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
         sweetAlert.success(res.msg);
       }
+      console.log(res.msg);
       this.setState(this.getStateFromStores());
     }
   },
@@ -64,9 +69,28 @@ const UserBar = React.createClass({
   },
 
   onEditUserImage() {
-    const { currentUser } = this.state;
-    const image = { userId: currentUser._id, imageUrl: currentUser.image_url };
-    this.executeAction(UserActions.EditUserImage, image);
+    const { currentUser, showImageModal } = this.state;
+    const image = { userId: currentUser.is_str, imageUrl: currentUser.image_url };
+    this.executeAction(UserActions.EditUserImage, image, () => {
+      console.log('....');
+
+    });
+
+
+    // if (!showImageModal) {
+    //   this.setState({ showImageModal: true });
+    // }
+
+    // $('#uploadModal').on('hidden.bs.modal', () => {
+    //   // eslint-disable-next-line
+    //   this.hideImageModal && this.hideImageModal();
+    // });
+
+    // ModalsFactory.show('uploadModal');
+  },
+
+  hideImageModal() {
+    this.setState({ showImageModal: false });
   },
 
   onUploadImage(newImage) {
@@ -178,14 +202,14 @@ const UserBar = React.createClass({
         {!isCurrentUser &&
           <div className="user-btn">
             {!isFollowed &&
-              <Button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
+              <button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
                 <i className="fa fa-plus" /> Follow
-              </Button>}
+              </button>}
             {isFollowed &&
-              <Button className="cancel-follow-btn" onClick={this.onCancelFollowThisUser.bind(this, user)} >
+              <button className="cancel-follow-btn" onClick={this.onCancelFollowThisUser.bind(this, user)} >
                  Following
-              </Button>}
-            <Button className="message-btn" > Message</Button>
+              </button>}
+            <button className="message-btn" > Message</button>
           </div>
         }
       </div>
@@ -207,12 +231,13 @@ const UserBar = React.createClass({
 
   render() {
     const { isCurrentUser, user } = this.props;
-    const { currentUploadedImage, isUploaded, currentUser } = this.state;
+    const { currentUploadedImage, isUploaded, currentUser, showImageModal } = this.state;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {
       backgroundImage: `url(${user.background_image_url})`
     };
+
     return (
       <div className="user-bar">
         <div className="user-background" style={userBackground}>
@@ -227,18 +252,32 @@ const UserBar = React.createClass({
         <Row className="nav">
           {this._renderUserBarNavs(isCurrentUser, displayUser)}
         </Row>
-        {currentUploadedImage && (
-          <UserImageEditor
-            show={currentUploadedImage !== null}
+
+        <Page>
+          <ModalsFactory
+            modalref="uploadModal"
+            title="Upload an image !"
+            ModalComponent={UserImageEditor}
+            size="modal-md"
+            showHeaderAndFooter={false}
+            showModal={showImageModal}
             image={currentUploadedImage}
-            onSave={this.onUploadImage}
-            onCancel={this.onCancelUpload}
             isUploaded={isUploaded}
-          />
-        )}
+            currentUser={currentUser} />
+        </Page>
       </div>
     );
   }
 });
 
 export default UserBar;
+
+        // {currentUploadedImage && (
+        //   <UserImageEditor
+        //     show={currentUploadedImage !== null}
+        //     image={currentUploadedImage}
+        //     onSave={this.onUploadImage}
+        //     onCancel={this.onCancelUpload}
+        //     isUploaded={isUploaded}
+        //   />
+        // )}

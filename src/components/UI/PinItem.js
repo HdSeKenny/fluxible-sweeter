@@ -150,7 +150,7 @@ export default class PinItem extends Component {
     const displayText = jsUtils.shorten(pin.text, 70);
     const { disabledClick } = this.props;
     return (
-      <div className="pin-body-text mt-10" onClick={() => this.pinTextActions(pin)}>
+      <div className="pin-body-text mt-5" onClick={() => this.pinTextActions(pin)}>
         {disabledClick ? <p>{pin.text}</p> : <p>{displayText}</p>}
       </div>
     );

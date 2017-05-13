@@ -80,7 +80,7 @@ const UserHome = React.createClass({
 
   handleMicroBlog() {
     const newBlog = {
-      content: this.state.blogText,
+      text: this.state.blogText,
       created_at: new Date(),
       type: 'microblog',
       author: this.state.currentUser._id
@@ -158,8 +158,8 @@ const UserHome = React.createClass({
     return (
       <div className="user-home">
         <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
-        <div className="user-content">
-          <div className="content-left">
+        <div className="home-content">
+          <div className="home-left">
             <UserHomeNav
               path={pathname}
               isCurrentUser={isCurrentUser}
@@ -168,7 +168,7 @@ const UserHome = React.createClass({
               displayBlogs={displayBlogs}
             />
           </div>
-          <div className="content-right">
+          <div className="home-right">
             {isCurrentUser && this._renderUserCreateWell(currentUser, blogText, welcomeText)}
             <BlogsWell
               displayBlogs={displayBlogs}

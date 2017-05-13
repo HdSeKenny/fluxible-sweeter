@@ -15,6 +15,7 @@ export default class ModalsFactory extends Component {
     showHeaderAndFooter: React.PropTypes.bool,
     ModalComponent: React.PropTypes.func,
     hidePinModal: React.PropTypes.func,
+    showModal: React.PropTypes.bool
   };
 
   static show = (modalRef) => {
@@ -61,10 +62,9 @@ export default class ModalsFactory extends Component {
   }
   render() {
     const { size, modalref, title, ModalComponent, showHeaderAndFooter, showModal } = this.props;
-    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal'];
+    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal', 'uploadModal'];
     const isNotPinItemModal = notPinItemModals.includes(modalref);
     const show = isNotPinItemModal ? showModal : true;
-
     return (
       <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>

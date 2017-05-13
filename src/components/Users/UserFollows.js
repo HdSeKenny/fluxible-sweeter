@@ -30,11 +30,11 @@ const UserFollows = React.createClass({
   },
 
   getStatesFromStores() {
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username)
     };
   },
 
@@ -81,12 +81,7 @@ const UserFollows = React.createClass({
     const { currentUser, user, isCurrentUser } = this.state;
     return (
       <div className="user-follows">
-        <UserBar
-          path={pathname}
-          user={user}
-          isCurrentUser={isCurrentUser}
-          currentUser={currentUser}
-        />
+        <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
         <div className="follows-content">
           <div className="well follows-bg">
             <UserFollowsTabs

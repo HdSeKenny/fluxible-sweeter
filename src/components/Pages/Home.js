@@ -101,8 +101,8 @@ const Home = React.createClass({
   },
 
   hidePinModal() {
-    const homeDom = $('.home-page');
-    if (homeDom && homeDom.length) {
+    const homePage = $('.home-page');
+    if (homePage && homePage.length) {
       this.setState({ selectedPin: {} });
     }
   },
@@ -110,10 +110,9 @@ const Home = React.createClass({
   _renderPinSection(sectionTitle, typedPins) {
     const { currentUser } = this.state;
     return (
-      <section className="">
+      <section className="pins-section">
         <p className="home-tag">
-          {sectionTitle} >
-          <Link to="/list" className="view-all">.view more</Link>
+          {sectionTitle} > <Link to="/list" className="view-all">.view more</Link>
         </p>
         <div className="pins-block">
           {typedPins.map((pin, index) => {
@@ -153,9 +152,7 @@ const Home = React.createClass({
     const { blogs, selectedPin, currentUser } = this.state;
     return (
       <div className="home-page">
-        <div className="main">
-          {this._renderPinItems(blogs)}
-        </div>
+        <div className="main">{this._renderPinItems(blogs)}</div>
         <Page>
           <ModalsFactory
             modalref="pinModal"
@@ -163,8 +160,7 @@ const Home = React.createClass({
             pin={selectedPin}
             currentUser={currentUser}
             ModalComponent={PinItemModal}
-            showHeaderAndFooter={false}
-          />
+            showHeaderAndFooter={false} />
         </Page>
       </div>
     );
