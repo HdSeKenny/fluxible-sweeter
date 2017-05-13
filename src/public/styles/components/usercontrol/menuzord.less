@@ -3,7 +3,7 @@ Item name: sweet-nav - Responsive Megamenu
 Author: marcoarib - marco.arib@gmail.com
 License: http://codecanyon.net/licenses
 */
-@nav-wrap-width:      85em;
+@nav-wrap-width:      90em;
 @nav-height:          72px;
 @nav-li-height:       72px;
 
@@ -15,7 +15,7 @@ License: http://codecanyon.net/licenses
 @nav-purple:          #967adc;
 @nav-pink:            #d770ad;
 
-@nav-padding:         0 1em;
+@nav-padding:         0 2em;
 @nav-li-padding:      10px;
 @nav-li-margin:       0 15px;
 @nav-a-margin:        25px 0;
@@ -416,15 +416,15 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.green {
   .sweet-nav-menu{
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-green;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-green;
       }
     }
@@ -434,15 +434,15 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.red {
   .sweet-nav-menu{
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-red;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-red;
       }
     }
@@ -453,13 +453,13 @@ License: http://codecanyon.net/licenses
   .sweet-nav-menu{
     li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-orange;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-orange;
       }
     }
@@ -468,15 +468,15 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.yellow {
   .sweet-nav-menu{
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-yellow;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-yellow;
       }
     }
@@ -485,15 +485,15 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.purple {
   .sweet-nav-menu{
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-purple;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-purple;
       }
     }
@@ -503,15 +503,15 @@ License: http://codecanyon.net/licenses
 
 .sweet-nav.pink {
   .sweet-nav-menu {
-    li {
+    > li {
       &.active, &:hover {
-        a, span {
+        > a, > span {
           color: @nav-pink;
         }
       }
     }
     ul.dropdown li:hover {
-      a, span {
+      > a, > span {
         color: @nav-pink;
       }
     }
@@ -519,147 +519,147 @@ License: http://codecanyon.net/licenses
 }
 
 @media (max-width: 768px) {
-  .sweet-nav-responsive {
-    &.sweet-nav {
-      padding: 0;
+  .sweet-nav {
+    .sweet-nav-wrap {
+      padding: @nav-padding;
     }
-    .sweet-nav-brand {
-      margin: 8px 30px 10px 20px;
-      font-size: 20px;
-      line-height: 1.55;
-    }
-    .showhide {
-      margin: 0;
-    }
-    .sweet-nav-menu {
-      width: 100%;
-      float: left !important;
-      &.scrollable {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        .scrollable-fix {
-          display: block;
-        }
-      }
+    // .sweet-nav-brand {
+    //   margin: 8px 30px 10px 20px;
+    //   font-size: 20px;
+    //   line-height: 1.55;
+    // }
+    // .showhide {
+    //   margin: 0;
+    // }
+    // .sweet-nav-menu {
+    //   width: 100%;
+    //   float: left !important;
+    //   &.scrollable {
+    //     overflow-y: auto;
+    //     -webkit-overflow-scrolling: touch;
+    //     .scrollable-fix {
+    //       display: block;
+    //     }
+    //   }
 
-      li {
-        width: 100%;
-        display: block;
-        position: relative;
-        a, span {
-          width: 100%;
-          padding: 12px 20px;
-          display: block;
-          border-bottom: solid 1px #f0f0f0;
-        }
-        &:first-child {
-          a, span {
-            border-top: solid 1px #f0f0f0;
-          }
-        }
+    //   li {
+    //     width: 100%;
+    //     display: block;
+    //     position: relative;
+    //     a, span {
+    //       width: 100%;
+    //       padding: 12px 20px;
+    //       display: block;
+    //       border-bottom: solid 1px #f0f0f0;
+    //     }
+    //     &:first-child {
+    //       a, span {
+    //         border-top: solid 1px #f0f0f0;
+    //       }
+    //     }
 
-        .indicator {
-          width: 60px;
-          height: 45px;
-          position: absolute;
-          right: 0;
-          top: 0;
-          font-size: 22px;
-          text-align: center;
-          line-height: 43px;
-          border-left: solid 1px #f5f5f5;
-        }
+    //     .indicator {
+    //       width: 60px;
+    //       height: 45px;
+    //       position: absolute;
+    //       right: 0;
+    //       top: 0;
+    //       font-size: 22px;
+    //       text-align: center;
+    //       line-height: 43px;
+    //       border-left: solid 1px #f5f5f5;
+    //     }
 
-        ul.dropdown {
-          li {
-            .indicator {
-              height: 38px;
-              right: 0;
-              top: 0;
-              font-size: 18px;
-              line-height: 36px;
-            }
-          }
-        }
+    //     ul.dropdown {
+    //       li {
+    //         .indicator {
+    //           height: 38px;
+    //           right: 0;
+    //           top: 0;
+    //           font-size: 18px;
+    //           line-height: 36px;
+    //         }
+    //       }
+    //     }
 
-        .megamenu {
-          width: 100% !important;
-          left: 0 !important;
-          position: static;
-          border-top: none;
-          border-bottom: solid 1px #f0f0f0;
-          .megamenu-row {
-            margin-top: 0;
-            [class*="col"] {
-              float: none;
-              display: block;
-              width: 100% !important;
-              margin-left: 0;
-              margin-top: 15px;
-            }
-            &:first-child [class*="col"]:first-child {
-              margin-top: 0;
-            }
-          }
-        }
+    //     .megamenu {
+    //       width: 100% !important;
+    //       left: 0 !important;
+    //       position: static;
+    //       border-top: none;
+    //       border-bottom: solid 1px #f0f0f0;
+    //       .megamenu-row {
+    //         margin-top: 0;
+    //         [class*="col"] {
+    //           float: none;
+    //           display: block;
+    //           width: 100% !important;
+    //           margin-left: 0;
+    //           margin-top: 15px;
+    //         }
+    //         &:first-child [class*="col"]:first-child {
+    //           margin-top: 0;
+    //         }
+    //       }
+    //     }
 
-        .search {
-          form {
-            width: 100%;
-            margin: 4px 0;
-            padding: 10px 16px !important;
-            input[type="text"] {
-              width: 100%;
-            }
-          }
-        }
-      }
+    //     .search {
+    //       form {
+    //         width: 100%;
+    //         margin: 4px 0;
+    //         padding: 10px 16px !important;
+    //         input[type="text"] {
+    //           width: 100%;
+    //         }
+    //       }
+    //     }
+    //   }
 
-      ul.dropdown {
-        width: 100%;
-        left: 0;
-        position: static;
-        border: none;
-        background: #fff;
-        float: left;
-        li {
-          position: relative;
-          a, span {
-            border-bottom: solid 1px #f0f0f0;
-          }
-        }
-      }
+    //   ul.dropdown {
+    //     width: 100%;
+    //     left: 0;
+    //     position: static;
+    //     border: none;
+    //     background: #fff;
+    //     float: left;
+    //     li {
+    //       position: relative;
+    //       a, span {
+    //         border-bottom: solid 1px #f0f0f0;
+    //       }
+    //     }
+    //   }
 
-      &.sweet-nav-indented {
-        li {
-          ul.dropdown {
-            li {
-              a, span {
-                padding-left: 40px !important;
-              }
-              &:hover a {
-                padding-left: 50px !important;
-              }
-              ul.dropdown {
-                li {
-                  a, span {
-                    padding-left: 60px !important;
-                  }
-                  &:hover a {
-                    padding-left: 70px !important;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    .sweet-nav-tabs-nav {
-      width: 100%;
-    }
-    .sweet-nav-tabs-content {
-      width: 100%;
-    }
+    //   &.sweet-nav-indented {
+    //     li {
+    //       ul.dropdown {
+    //         li {
+    //           a, span {
+    //             padding-left: 40px !important;
+    //           }
+    //           &:hover a {
+    //             padding-left: 50px !important;
+    //           }
+    //           ul.dropdown {
+    //             li {
+    //               a, span {
+    //                 padding-left: 60px !important;
+    //               }
+    //               &:hover a {
+    //                 padding-left: 70px !important;
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // .sweet-nav-tabs-nav {
+    //   width: 100%;
+    // }
+    // .sweet-nav-tabs-content {
+    //   width: 100%;
+    // }
   }
 }

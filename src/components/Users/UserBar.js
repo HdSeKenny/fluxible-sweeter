@@ -179,15 +179,13 @@ const UserBar = React.createClass({
           <div className="user-btn">
             {!isFollowed &&
               <Button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
-                <Glyphicon glyph="heart" /> Follow
+                <i className="fa fa-plus" /> Follow
               </Button>}
             {isFollowed &&
               <Button className="cancel-follow-btn" onClick={this.onCancelFollowThisUser.bind(this, user)} >
-                <Glyphicon glyph="heart" /> Following
+                 Following
               </Button>}
-            <Button className="message-btn" >
-              <Glyphicon glyph="send" /> Message
-            </Button>
+            <Button className="message-btn" > Message</Button>
           </div>
         }
       </div>
@@ -218,17 +216,17 @@ const UserBar = React.createClass({
     return (
       <div className="user-bar">
         <div className="user-background" style={userBackground}>
-        <Row className="user-img">
-          {this._renderUserImage(isCurrentUser, user, currentUser)}
-        </Row>
-        <Row className="user-info">
-          {this._renderUserInfo(isCurrentUser, user, isFollowed)}
-        </Row>
+          <Row className="user-img">
+            {this._renderUserImage(isCurrentUser, user, currentUser)}
+          </Row>
+          <Row className="user-info">
+            {this._renderUserInfo(isCurrentUser, user, isFollowed)}
+          </Row>
+        </div>
+
         <Row className="nav">
           {this._renderUserBarNavs(isCurrentUser, displayUser)}
         </Row>
-        </div>
-
         {currentUploadedImage && (
           <UserImageEditor
             show={currentUploadedImage !== null}

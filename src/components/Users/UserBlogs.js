@@ -34,15 +34,18 @@ const UserBlogs = React.createClass({
   },
 
   getStatesFromStores() {
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
+    const userStore = this.getStore(UserStore);
+    const blogStore = this.getStore(BlogStore);
+    const user = userStore.getUserByUsername(username);
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      currentBlog: this.getStore(BlogStore).getCurrentBlog(),
-      // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
-      isUpdated: this.getStore(BlogStore).getIsUpdated(),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId),
-      displayBlogs: this.getStore(BlogStore).getBlogsByUserId(userId)
+      currentUser: userStore.getCurrentUser(),
+      user,
+      currentBlog: blogStore.getCurrentBlog(),
+      // deletedBlog: blogStore.getDeletedBlog(),
+      isUpdated: blogStore.getIsUpdated(),
+      isCurrentUser: userStore.isCurrentUser(username),
+      displayBlogs: blogStore.getBlogsByUserId(user.id_str)
     };
   },
 
