@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import _ from 'lodash';
+import $ from 'jquery';
 import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
@@ -37,11 +38,16 @@ const UserBar = React.createClass({
     const store = this.getStore(UserStore);
     const currentUploadedImage = store.getCurrentUploadedImage();
     // const showImageModal = currentUploadedImage !== null;
+    // const currentUser =  store.getCurrentUser();
     return {
       currentUploadedImage,
       currentUser: store.getCurrentUser(),
       showImageModal: false
     };
+  },
+
+  componentDidMount() {
+
   },
 
   onChange(res) {
@@ -57,7 +63,6 @@ const UserBar = React.createClass({
       if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
         sweetAlert.success(res.msg);
       }
-      console.log(res.msg);
       this.setState(this.getStateFromStores());
     }
   },
@@ -69,24 +74,18 @@ const UserBar = React.createClass({
   },
 
   onEditUserImage() {
-    const { currentUser, showImageModal } = this.state;
-    const image = { userId: currentUser.is_str, imageUrl: currentUser.image_url };
-    this.executeAction(UserActions.EditUserImage, image, () => {
-      console.log('....');
+    const { showImageModal } = this.state;
 
+    if (!showImageModal) {
+      this.setState({ showImageModal: true });
+    }
+
+    $('#uploadModal').on('hidden.bs.modal', () => {
+      // eslint-disable-next-line
+      this.hideImageModal && this.hideImageModal();
     });
 
-
-    // if (!showImageModal) {
-    //   this.setState({ showImageModal: true });
-    // }
-
-    // $('#uploadModal').on('hidden.bs.modal', () => {
-    //   // eslint-disable-next-line
-    //   this.hideImageModal && this.hideImageModal();
-    // });
-
-    // ModalsFactory.show('uploadModal');
+    ModalsFactory.show('uploadModal');
   },
 
   hideImageModal() {
@@ -196,11 +195,11 @@ const UserBar = React.createClass({
 
   _renderUserInfo(isCurrentUser, user, isFollowed) {
     return (
-      <div className="">
-        <h3 className="user-name"> {user.username}</h3>
+      <div className="mt-10">
+        <p className="user-name">{user.username}</p>
         {isCurrentUser && <div className="user-btn"></div>}
         {!isCurrentUser &&
-          <div className="user-btn">
+          <div className="user-btn mt-10">
             {!isFollowed &&
               <button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
                 <i className="fa fa-plus" /> Follow
@@ -217,7 +216,7 @@ const UserBar = React.createClass({
   },
 
   _renderUserImage(isCurrentUser, user, currentUser) {
-    const defaultImageUrl = '/images/users/default-user.png';
+    const defaultImageUrl = '/styles/images/users/default-user.png';
     const hasChangedImage = currentUser ? (currentUser.image_url === defaultImageUrl) : false;
     const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return (
@@ -231,7 +230,7 @@ const UserBar = React.createClass({
 
   render() {
     const { isCurrentUser, user } = this.props;
-    const { currentUploadedImage, isUploaded, currentUser, showImageModal } = this.state;
+    const { currentUser, showImageModal } = this.state;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {
@@ -259,10 +258,8 @@ const UserBar = React.createClass({
             title="Upload an image !"
             ModalComponent={UserImageEditor}
             size="modal-md"
-            showHeaderAndFooter={false}
+            showHeaderAndFooter={true}
             showModal={showImageModal}
-            image={currentUploadedImage}
-            isUploaded={isUploaded}
             currentUser={currentUser} />
         </Page>
       </div>
@@ -271,13 +268,3 @@ const UserBar = React.createClass({
 });
 
 export default UserBar;
-
-        // {currentUploadedImage && (
-        //   <UserImageEditor
-        //     show={currentUploadedImage !== null}
-        //     image={currentUploadedImage}
-        //     onSave={this.onUploadImage}
-        //     onCancel={this.onCancelUpload}
-        //     isUploaded={isUploaded}
-        //   />
-        // )}

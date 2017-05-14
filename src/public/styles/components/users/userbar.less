@@ -3,7 +3,7 @@
   .user-background {
     width: inherit;
     min-height: 180px;
-    padding: 20px;
+    padding: 30px 20px;
     background-repeat: no-repeat;
     .user-img {
       text-align: center;
@@ -18,14 +18,37 @@
         filter: alpha(opacity=0);
       }
       img {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
         border-radius: 50%;
+      }
+      .image-tooltip {
+        position: relative;
+        display: inline-block;
+      }
+
+      .image-tooltip input[type=file]:hover {
+        background: none;
+      }
+
+      .image-tooltip .tooltiptext {
+        visibility: visible;
+        width: 150px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
       }
     }
     .user-info {
       color: #fff;
       text-align: center;
+      .user-name {
+        font-size: 20px;
+      }
     }
     .user-btn  {
       .follow-btn {
@@ -114,34 +137,23 @@
       }
     }
   }
+  .image-editor {
+    margin: 10px 15px;
+    .upload-image {
+      .dashed {
+        border-right: 1px dashed gray;
+      }
+      .input-file {
+        width: 200px;
+        height: 200px;
+        margin-bottom: -200px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+      }
+    }
+    .editor-btns {
+      margin-top: 10px;
+    }
+  }
 }
-
-// .user-bar .dialog-window {
-//   width: 45%;
-// }
-
-// .user-bar .dialog-content {
-//   background-color: #fff;
-// }
-
-// .user-bar .modal-body .upload-image {
-//   text-align: center;
-// }
-
-// .user-bar .modal-body .upload-image img {
-//   width: 150px;
-//   height: 150px;
-// }
-
-// .user-bar .modal-body .upload-image input {
-//   margin: auto;
-// }
-
-// .user-bar .modal-body .upload-image .input-file {
-//   width: 150px;
-//   height: 150px;
-//   margin-bottom: -150px;
-//   cursor: pointer;
-//   opacity: 0;
-//   filter: alpha(opacity=0);
-// }

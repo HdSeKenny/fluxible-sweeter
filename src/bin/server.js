@@ -12,7 +12,6 @@ const mongodbPromises = mongodbConnection();
 Promise.all(mongodbPromises).then(() => {
 
   require('../express')(app);
-  require('../configs/routes')(app);
 
   setImmediate(() => {
     app.sweeter = server.listen(config.server.port, (err) => {
@@ -25,4 +24,5 @@ Promise.all(mongodbPromises).then(() => {
   throw new Error(err);
 });
 
-export default app;
+exports = module.exports = app;
+

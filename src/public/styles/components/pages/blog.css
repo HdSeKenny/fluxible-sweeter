@@ -255,27 +255,6 @@
   padding-right: 0;
 }
 
-.image-tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.image-tooltip input[type=file]:hover {
-  background: none;
-}
-
-.image-tooltip .tooltiptext {
-  visibility: visible;
-  width: 150px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
 
 
 /*.image-tooltip:hover .tooltiptext { visibility: visible;}*/

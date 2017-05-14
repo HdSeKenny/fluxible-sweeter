@@ -20,6 +20,8 @@ export default (app) => {
  * @param  {[type]}
  * @return {[type]}
  */
+
+ console.log('routes.......................');
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       const slashNumber = getSlashNumber(__dirname);
@@ -37,7 +39,8 @@ export default (app) => {
 
   const upload = multer({ storage }).single('file');
 
-  app.post('/api/:userId/changeProfileImage', (req, res) => {
+  app.post('/api/:userId/upload_profile_image', (req, res) => {
+    console.log(req.params.userId);
     MongoClient.connect(serverConfig.mongo.sweeter.url, (err, db) => {
       const userId = MongoClient.ObjectID(req.params.userId);
       const User = db.collection('users');

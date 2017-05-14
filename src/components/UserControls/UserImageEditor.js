@@ -1,100 +1,155 @@
 /* eslint-disable all */
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import { Row, Col } from '../UI/Layout';
+import { SlimEditor } from '../UI';
 
-const UserImageEditor = React.createClass({
+export default class UserImageEditor extends Component {
 
-  displayName: 'UserImageEditor',
+  static displayName = 'UserImageEditor';
 
-  propTypes: {
-    image: PropTypes.object.isRequired,
-    show: PropTypes.bool.isRequired,
+  static propTypes = {
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
-    isUploaded: PropTypes.bool,
-    uniqueValidations: PropTypes.object,
-    dialogWindowClassName: PropTypes.string
-  },
+    currentUser: PropTypes.object,
+  };
 
-  getInitialState() {
-    return {
-      image: this.props.image,
-      isUploaded: this.props.isUploaded
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: props.currentUser
     };
-  },
+  }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      image: newProps.image,
-      isUploaded: newProps.isUploaded
-    });
-  },
+  componentDidMount() {
+
+  }
 
   onCancelEdit() {
     this.props.onCancel();
-  },
+  }
+
+  didLoad(data) {
+    console.log('didLoad.....', data);
+    return true;
+  }
 
   onSubmitEdit() {
     this.props.onSave(this.state.image);
-  },
+  }
 
-  handleFile(e) {
-    // eslint-disable-next-line
-    const reader = new FileReader();
-    const file = e.target.files[0];
-    const { image } = this.state;
-    const newImage = {
-      userId: image.userId,
-      file
-    };
+  didSave(data) {
+    console.log('didSave...', data);
+  }
 
-    reader.onload = () => {
-      $('.user-image-modal').attr('src', e.target.result);
-    };
-    reader.readAsDataURL(file);
+  didUpload(err, data, res) {
+    console.log('didUpload...', data, res);
+  }
 
-    this.setState({ image: newImage });
-  },
+  didReceiveServerError(err, defaultError) {
+    console.log('tesdidReceiveServerError...', defaultError);
+    return defaultError;
+  }
+
+  didRemove(data) {
+    console.log('didRemove...', data);
+  }
+
+  didTransform(data) {
+
+    console.log('didTransform...', data);
+  }
+
+  didConfirm(data) {
+    console.log('didConfirm...', data);
+  }
+
+  didCancel() {
+    console.log('didCancel...');
+  }
+
+  willTransform(data, cb) {
+    console.log('willTransform...', data);
+
+    cb(data);
+  }
+  willSave(data, cb) {
+    console.log('willSave...', data);
+    cb(data);
+  }
+
+  willRemove(data, cb) {
+    console.log('willRemove...', data);
+
+    cb();
+  }
+
+  willRequest(xhr) {
+    console.log('xhr...', xhr);
+
+  }
+
+  onUpload() {
+    console.log(this);
+  }
+
 
   render() {
-    const { image } = this.state;
+    const { currentUser } = this.state;
+    const uploadImageApi = `/api/upload/${currentUser.id_str}`;
     return (
+
       <div className="image-editor">
-        <div className="upload-image">
-          <input type="file" className="input-file" name="userImg" onChange={this.handleFile} />
-          <img alt="user" className="user-image-modal" src={image.imageUrl} />
-        </div>
-        <div className="image-editor-btn">
-          <button onClick={this.onCancelEdit}>Cancel</button>
-          <button bsStyle="primary" onClick={this.onSubmitEdit}>Upload</button>
+        <SlimEditor
+          ratio="1:1"
+          download={true}
+          didLoad={this.didLoad}
+          service={uploadImageApi}
+          didUpload={this.didUpload}
+          didReceiveServerError={this.didReceiveServerError}
+          didRemove={this.didRemove}
+          didTransform={this.didTransform}
+          didCancel={this.didCancel}
+          willTransform={this.willTransform}
+          willSave={this.willSave}
+          willRequest={this.willRequest}
+          uploadBase64={false} >
+          <input type="file" name="slim" />
+        </SlimEditor>
+        <div className="editor-btns">
+          <button type="reset" className="btn  btn-default" onClick={this.onCancelEdit}>Cancel</button>
+          <button type="submit" className="btn btn-info" onClick={this.onUpload}>Upload</button>
         </div>
       </div>
     );
   }
-});
-
-export default UserImageEditor;
+}
 
 
-      // <Dialog showImmediately={this.props.show}
-      //     onClose={this.onCancelEdit}
-      //     close={true}
-      //     modal={true}
-      //     autoDetectWindowHeight={true}
-      //     autoScrollBodyContent={true}
-      //     dialogWindowClassName={this.props.dialogWindowClassName}
-      //     >
-      //     <Dialog.Header>
-      //         <div className='modal-header'>
-      //             <h4>Change your image</h4>
-      //         </div>
-      //     </Dialog.Header>
-      //     <Dialog.Content>
-      //         {this._renderModalBody(image)}
-      //     </Dialog.Content>
-      //     <Dialog.Footer>
-      //         <div className='modal-footer'>
-      //             <Button onClick={this.onCancelEdit}>Cancel</Button>
-      //             <Button bsStyle="primary" onClick={this.onSubmitEdit}>Upload</Button>
-      //         </div>
-      //     </Dialog.Footer>
-      // </Dialog>
+        // <Row className="upload-image">
+        //   <Col size="7 p-0 dashed">
+        //     <input type="file" className="input-file" name="userImg" onChange={this.handleFile} />
+        //     <img alt="user" className="user-image-modal" src={currentUser.image_url} />
+        //   </Col>
+        //   <Col size="5 p-0">
+        //   </Col>
+        // </Row>
+        // action={uploadImageApi} method="post" encType="multipart/form-data"
+        //   handleFile(e) {
+        // eslint-disable-next-line
+        //   const reader = new FileReader();
+        //   const { currentUser } = this.state;
+        //   const newImage = {
+        //     userId: currentUser.id_str,
+        //     file: e.target.files[0]
+        //   };
+
+        //   reader.readAsDataURL(e.target.files[0]);
+
+        //   reader.onload = (event) => {
+        //     this.setState({ loadedUrl: event.target.result });
+        //     $('.user-image-modal').attr('src', event.target.result);
+        //   };
+
+        //   this.setState({ image: newImage });
+        // }
+

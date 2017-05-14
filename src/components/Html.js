@@ -29,6 +29,7 @@ export default class Html extends Component {
           <link href={style} rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
           <link href="/styles/components/pages/blog.css" rel="stylesheet" />
+          <link href="/styles/css/slim.min.css" rel="stylesheet" />
         </head>
         <body>
           <div id="main" dangerouslySetInnerHTML={markupHtml}></div>
