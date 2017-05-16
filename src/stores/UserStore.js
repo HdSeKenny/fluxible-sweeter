@@ -274,7 +274,6 @@ const UserStore = createStore({
     const response = {
       msg: 'UPLOAD_IMAGE_SUCCESS'
     };
-    this.currentUploadedImage = null;
     this.currentUser.image_url = newuser.image_url;
     this.emitChange(response);
   },

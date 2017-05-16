@@ -54,7 +54,6 @@ const Navbar = React.createClass({
       'USER_REGISTER_FAIL',
       'USER_REGISTER_SUCCESS'
     ];
-
     if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
     }

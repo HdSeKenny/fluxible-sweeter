@@ -139,6 +139,11 @@
   }
   .image-editor {
     margin: 10px 15px;
+    .slim {
+      width: 340px;
+      height: 340px;
+      border-radius: 3px;
+    }
     .upload-image {
       .dashed {
         border-right: 1px dashed gray;
@@ -153,7 +158,17 @@
       }
     }
     .editor-btns {
-      margin-top: 10px;
+      margin-top: 20px;
+      .btn {
+        margin-right: 10px;
+        padding: 6px 20px;
+        // border: none;
+        outline: none;
+      }
     }
   }
+}
+
+#uploadModal .modal-dialog.modal-md {
+  width: 400px;
 }

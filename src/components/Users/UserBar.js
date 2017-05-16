@@ -62,6 +62,7 @@ const UserBar = React.createClass({
     if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.msg)) {
       if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
         sweetAlert.success(res.msg);
+        ModalsFactory.hide('uploadModal');
       }
       this.setState(this.getStateFromStores());
     }
