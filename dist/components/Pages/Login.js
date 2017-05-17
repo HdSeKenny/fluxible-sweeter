@@ -28,8 +28,6 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// var update = require('react-addons-update');
-
 const Login = _react2.default.createClass({
 
   displayName: 'Login',
@@ -41,7 +39,10 @@ const Login = _react2.default.createClass({
   },
 
   propTypes: {
-    onForgotPassword: _react.PropTypes.func
+    onForgotPassword: _react.PropTypes.func,
+    openNavbarModals: _react.PropTypes.func,
+    hideNavbarModals: _react.PropTypes.func,
+    switchOpenModal: _react.PropTypes.func
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -55,25 +56,23 @@ const Login = _react2.default.createClass({
   },
   getStateFromStores: function () {
     return {
-      userImg: this.getStore(_stores.UserStore).getLoginUserloginUserImage(),
       switchOn: false
     };
   },
   onChange: function (res) {
-    if (res.resMsg === 'USER_LOGIN_SUCCESS') {
-      this.setState({ errorMessage: '' });
+    if (res.msg === 'USER_LOGIN_SUCCESS') {
+      _sweetAlert2.default.success(res.msg);
       _UI.ModalsFactory.hide('loginModal');
-      _sweetAlert2.default.alertSuccessMessageWithCallback('Login success !', () => {
-        this.context.router.push('/');
-      });
+      this.context.router.push('/list');
     }
 
-    if (res.resMsg === 'USER_LOGIN_FAIL') {
+    if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
     }
 
-    if (res.resMsg === 'LOAD_LOGIN_USER_IMAGE_SUCCESS') {
-      this.setState({ userImg: this.getStore(_stores.UserStore).getLoginUserloginUserImage() });
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      _sweetAlert2.default.success(res.msg);
+      this.context.router.push('/');
     }
   },
   onLoginSubmit: function (e) {
@@ -100,16 +99,94 @@ const Login = _react2.default.createClass({
   onPasswordChange: function (e) {
     this.setState({ password: e.target.value });
   },
-  getLoginUserImage: function () {
-    const { email: email } = this.state;
-    this.executeAction(_actions.UserActions.GetLoginUserImage, { email: email });
-  },
-  openSignupModal: function (e) {
-    e.preventDefault();
+  openSignupModal: function () {
+    this.props.switchOpenModal('signupModal');
+
     _UI.ModalsFactory.hide('loginModal');
-    _UI.ModalsFactory.show('signupModal');
+
+    // this.props.hideNavbarModals('loginModal');
+
+    // Click signup in login modal, it should hide login modal
+    // then open signup modal, but the 'modal-open' class will
+    // be deleted by login modal hide event
+    // setTimeout(() => {
+    //   $('body').addClass('modal-open');
+    // }, 500);
+  },
+  _renderEmailInput: function (email) {
+    return _react2.default.createElement(_UI.Input, {
+      ref: 'emailRef',
+      autoComplete: 'off',
+      format: 'email',
+      icon: 'fa fa-user',
+      required: true,
+      errorMessage: 'Please verify your email',
+      placeholder: 'email',
+      value: email,
+      onFieldChange: this.onEmailChange
+    });
+  },
+  _renderPasswordInput: function (password) {
+    return _react2.default.createElement(_UI.Input, {
+      ref: 'loginRef',
+      autoComplete: 'off',
+      format: 'password',
+      icon: 'fa fa-lock',
+      required: true,
+      errorMessage: 'Password is required',
+      placeholder: 'password',
+      value: password,
+      onFieldChange: this.onPasswordChange
+    });
+  },
+  _renderForgotPassword: function () {
+    return _react2.default.createElement(
+      _Layout.Row,
+      null,
+      _react2.default.createElement(
+        _Layout.Col,
+        { size: '6', className: 'pl-0' },
+        _react2.default.createElement(_UI.Switch, { after: 'Remember me' })
+      ),
+      _react2.default.createElement(
+        _Layout.Col,
+        { size: '6', className: 'pr-0 tar' },
+        _react2.default.createElement(
+          'span',
+          { className: 'forgot-pw' },
+          'Forgot your password ?'
+        )
+      )
+    );
+  },
+  _renderLoginBtns: function () {
+    return _react2.default.createElement(
+      _Layout.Row,
+      null,
+      _react2.default.createElement(
+        _Layout.Col,
+        { size: '6', className: 'pl-0' },
+        _react2.default.createElement(
+          'button',
+          { type: 'submit', className: 'btn btn-info btn-login' },
+          'Login'
+        )
+      ),
+      _react2.default.createElement(
+        _Layout.Col,
+        { size: '6', className: 'pr-0 tar' },
+        _react2.default.createElement(
+          'span',
+          { onClick: this.openSignupModal, className: 'btn btn-primary btn-signup' },
+          'signup'
+        )
+      )
+    );
   },
   _renderOtherAuths: function () {
+    const twitterImg = '/styles/images/svg/twitter.svg';
+    const googleImg = '/styles/images/google+.png';
+    const githubImg = '/styles/images/github.png';
     return _react2.default.createElement(
       'div',
       { className: '' },
@@ -142,24 +219,23 @@ const Login = _react2.default.createClass({
         _react2.default.createElement(
           _Layout.Col,
           { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'twitter', className: '', src: 'styles/images/svg/twitter.svg' })
+          _react2.default.createElement('img', { alt: 'twitter', src: twitterImg })
         ),
         _react2.default.createElement(
           _Layout.Col,
           { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'google+', className: '', src: 'styles/images/google+.png' })
+          _react2.default.createElement('img', { alt: 'google+', src: googleImg })
         ),
         _react2.default.createElement(
           _Layout.Col,
           { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'github', className: '', src: 'styles/images/github.png' })
+          _react2.default.createElement('img', { alt: 'github', src: githubImg })
         )
       )
     );
   },
   render: function () {
     const { errorMessage: errorMessage, password: password, email: email } = this.state;
-
     return _react2.default.createElement(
       'section',
       { className: 'login-section mt-15 mr-15 ml-15' },
@@ -181,83 +257,29 @@ const Login = _react2.default.createClass({
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            _react2.default.createElement(_UI.Input, {
-              ref: 'emailRef',
-              autoComplete: 'off',
-              format: 'email',
-              icon: 'fa fa-user',
-              required: true,
-              errorMessage: 'Please verify your email',
-              placeholder: 'email',
-              value: email,
-              onFieldChange: this.onEmailChange
-            })
+            this._renderEmailInput(email)
           ),
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            _react2.default.createElement(_UI.Input, {
-              ref: 'loginRef',
-              autoComplete: 'off',
-              format: 'password',
-              icon: 'fa fa-lock',
-              required: true,
-              errorMessage: 'Password is required',
-              placeholder: 'password',
-              value: password,
-              onFieldChange: this.onPasswordChange
-            })
+            this._renderPasswordInput(password)
           ),
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            _react2.default.createElement(
-              _Layout.Row,
-              null,
-              _react2.default.createElement(
-                _Layout.Col,
-                { size: '6', className: 'pl-0' },
-                _react2.default.createElement(_UI.Switch, { after: 'Remember me' })
-              ),
-              _react2.default.createElement(
-                _Layout.Col,
-                { size: '6', className: 'pr-0 tar' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'forgot-pw' },
-                  'Forgot your password ?'
-                )
-              )
-            )
+            this._renderForgotPassword()
           ),
           _react2.default.createElement(
             'div',
             { className: 'form-group pt-10' },
-            _react2.default.createElement(
-              _Layout.Row,
-              null,
-              _react2.default.createElement(
-                _Layout.Col,
-                { size: '6', className: 'pl-0' },
-                _react2.default.createElement(
-                  'button',
-                  { type: 'submit', className: 'btn btn-info btn-block btn-login' },
-                  'Login'
-                )
-              ),
-              _react2.default.createElement(
-                _Layout.Col,
-                { size: '6', className: 'pr-0 tar' },
-                _react2.default.createElement(
-                  'button',
-                  { onClick: e => this.openSignupModal(e), className: 'btn btn-primary btn-block btn-signup' },
-                  'signup'
-                )
-              )
-            )
+            this._renderLoginBtns()
           )
         ),
-        this._renderOtherAuths()
+        _react2.default.createElement(
+          'div',
+          { className: '' },
+          this._renderOtherAuths()
+        )
       )
     );
   }

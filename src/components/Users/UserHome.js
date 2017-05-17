@@ -6,6 +6,7 @@ import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav } from '../LeftNavs';
 import { BlogsWell } from '../UI';
+import { BlogModal } from '../UserControls';
 import UserBar from './UserBar';
 import sweetAlert from '../../utils/sweetAlert';
 
@@ -111,35 +112,8 @@ const UserHome = React.createClass({
   _renderUserCreateWell(currentUser, blogText, welcomeText) {
     const isBlogTextLength = blogText.length > 140;
     return (
-      <div className="well create-well">
-        <div className="row">
-          <div className="col-xs-7">
-            <p>{welcomeText}</p>
-          </div>
-          <div className="col-xs-5">
-            {!isBlogTextLength &&
-              <p>You can still write <span className="len-span">{140 - blogText.length}</span> words</p>}
-            {isBlogTextLength &&
-              <p>You can't write words large than <span className="len-span-red">140</span> words</p>}
-          </div>
-        </div>
-        <div className="row textarea-row">
-          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
-        </div>
-        <div className="row btn-row">
-          <Button
-            disabled={isBlogTextLength || blogText.length === 0}
-            onClick={this.handleMicroBlog}
-            className="btn-primary create-btn"
-          >
-            <Glyphicon glyph="send" /> Create
-          </Button>
-          <Link to={`/user-blogs/${currentUser.strId}/add`}>
-            <Button className="btn-info create-btn" >
-              <Glyphicon glyph="pencil" /> Articles
-            </Button>
-          </Link>
-        </div>
+      <div className="create-blog">
+        <BlogModal />
       </div>
     );
   },
@@ -184,3 +158,33 @@ const UserHome = React.createClass({
 });
 
 export default UserHome;
+
+
+ // <div className="row">
+ //          <div className="col-xs-7">
+ //            <p>{welcomeText}</p>
+ //          </div>
+ //          <div className="col-xs-5">
+ //            {!isBlogTextLength &&
+ //              <p>You can still write <span className="len-span">{140 - blogText.length}</span> words</p>}
+ //            {isBlogTextLength &&
+ //              <p>You can't write words large than <span className="len-span-red">140</span> words</p>}
+ //          </div>
+ //        </div>
+ //        <div className="row textarea-row">
+ //          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
+ //        </div>
+ //        <div className="row btn-row">
+ //          <Button
+ //            disabled={isBlogTextLength || blogText.length === 0}
+ //            onClick={this.handleMicroBlog}
+ //            className="btn-primary create-btn"
+ //          >
+ //            <Glyphicon glyph="send" /> Create
+ //          </Button>
+ //          <Link to={`/user-blogs/${currentUser.strId}/add`}>
+ //            <Button className="btn-info create-btn" >
+ //              <Glyphicon glyph="pencil" /> Articles
+ //            </Button>
+ //          </Link>
+ //        </div>

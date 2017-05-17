@@ -1,9 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -32,7 +28,6 @@ const mongodbPromises = (0, _mongodb2.default)();
 Promise.all(mongodbPromises).then(() => {
 
   require('../express')(app);
-  require('../configs/routes')(app);
 
   setImmediate(() => {
     app.sweeter = server.listen(_server2.default.server.port, err => {
@@ -46,5 +41,4 @@ Promise.all(mongodbPromises).then(() => {
   throw new Error(err);
 });
 
-exports.default = app;
-module.exports = exports['default'];
+exports = module.exports = app;

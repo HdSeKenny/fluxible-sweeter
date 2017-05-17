@@ -133,8 +133,8 @@ exports.default = server => {
   fetchrPlugin.registerService(_services.users);
   fetchrPlugin.registerService(_services.comments);
 
+  server.use('/api/upload', require('./api/upload'));
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
-
   server.use((req, res) => {
     const context = _app2.default.createContext({
       req: req,

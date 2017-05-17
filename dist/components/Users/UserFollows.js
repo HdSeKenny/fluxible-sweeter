@@ -51,11 +51,11 @@ const UserFollows = _react2.default.createClass({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
-    const { userId: userId } = this.props.params;
+    const { username: username } = this.props.params;
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId)
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
     };
   },
   onChange: function () {
@@ -99,12 +99,7 @@ const UserFollows = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'user-follows' },
-      _react2.default.createElement(_UserBar2.default, {
-        path: pathname,
-        user: user,
-        isCurrentUser: isCurrentUser,
-        currentUser: currentUser
-      }),
+      _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
         { className: 'follows-content' },
@@ -122,7 +117,6 @@ const UserFollows = _react2.default.createClass({
     );
   }
 });
-// import { Link } from 'react-router';
-// import { Button, Glyphicon } from 'react-bootstrap';
+
 exports.default = UserFollows;
 module.exports = exports['default'];

@@ -21,7 +21,7 @@ export default class SlimEditor extends React.Component {
   }
 
   render() {
-
-    return <div className="slim">{this.props.children}</div>;
+    console.log(this.props.children);
+    return <div className="slim" >{this.props.children}</div>;
   }
 }

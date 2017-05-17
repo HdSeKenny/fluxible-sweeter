@@ -54,33 +54,16 @@ const Home = _react2.default.createClass({
       blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {},
-      showPinModal: true
+      selectedPin: {}
     };
   },
   onChange: function (res) {
-    // if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-    //   sweetAlert.alertSuccessMessage(res.resMsg);
-    //   this.setState(this.getStateFromStores());
-    // }
-
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
-      this.setState({
-        blogText: '',
-        blogs: this.getStore(_stores.BlogStore).getAllBlogs()
-      });
-    }
-
-    if (res.resMsg === 'LOGOUT_SUCCESS') {
-      // this.setState(this.getStateFromStores());
-    }
-
-    if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
+    const blogMessages = ['THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS'];
+    if (blogMessages.includes(res.msg)) {
+      _sweetAlert2.default.success(res.msg);
       this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
     }
   },
-  componentDidMount: function () {},
   handleBlogText: function (e) {
     this.setState({ blogText: e.target.value });
   },
@@ -118,87 +101,71 @@ const Home = _react2.default.createClass({
     this.setState({ selectedPin: selectedPin });
 
     $('#pinModal').on('hidden.bs.modal', () => {
-      this.hidePinModal();
+      if (this.hidePinModal) {
+        this.hidePinModal();
+      }
     });
 
     _UI.ModalsFactory.show('pinModal');
   },
   hidePinModal: function () {
-    this.setState({ selectedPin: {} });
-    $('#pinModal').modal('hide');
+    const homePage = $('.home-page');
+    if (homePage && homePage.length) {
+      this.setState({ selectedPin: {} });
+    }
   },
-  _renderPinItems: function (pins) {
-    const articles = pins.filter(pin => pin.type === 'article');
-    const moments = pins.filter(pin => pin.type === 'moment');
+  _renderPinSection: function (sectionTitle, typedPins) {
+    const { currentUser: currentUser } = this.state;
     return _react2.default.createElement(
-      'article',
-      { className: 'classification' },
+      'section',
+      { className: 'pins-section' },
       _react2.default.createElement(
-        'section',
-        { className: 'new-monments' },
+        'p',
+        { className: 'home-tag' },
+        sectionTitle,
+        ' > ',
         _react2.default.createElement(
-          'p',
-          { className: 'home-tag' },
-          'New sweets > ',
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/list', className: 'view-all' },
-            '.view all'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'pins-block' },
-          moments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, type: pin.type }))
+          _reactRouter.Link,
+          { to: '/list', className: 'view-all' },
+          '.view more'
         )
       ),
       _react2.default.createElement(
-        'section',
-        { className: 'articles' },
-        _react2.default.createElement(
-          'p',
-          { className: 'home-tag' },
-          'New articles > ',
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/list', className: 'view-all' },
-            '.view all'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'pins-block' },
-          articles.map((article, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: article, type: article.type }))
-        )
-      ),
-      _react2.default.createElement(
-        'section',
-        { className: 'hot-blogs' },
-        _react2.default.createElement(
-          'p',
-          { className: 'home-tag' },
-          'Hot sweets > ',
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/list', className: 'view-all' },
-            '.view all'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'pins-block' },
-          pins.sort((a, b) => b.likers.length - a.likers.length).map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, type: pin.type }))
-        )
+        'div',
+        { className: 'pins-block' },
+        typedPins.map((pin, index) => {
+          const specialClass = (index + 1) % 3 === 0 ? 'mr-0' : '';
+          return _react2.default.createElement(_UI.PinItem, {
+            key: index,
+            onSelect: id => this.onViewPinItem(id),
+            pin: pin,
+            type: pin.type,
+            currentUser: currentUser,
+            specialClass: specialClass
+          });
+        })
       )
     );
   },
+  _renderPinItems: function (pins) {
+    const articles = pins.filter(pin => pin.type === 'article');
+    const thumbedSortedArticles = articles.sort((a, b) => b.likers.length - a.likers.length);
+    const moments = pins.filter(pin => pin.type === 'moment');
+    const thumbedSortedMoments = moments.sort((a, b) => b.likers.length - a.likers.length);
+    const dateSortedPins = pins.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return _react2.default.createElement(
+      'article',
+      { className: 'classification' },
+      this._renderPinSection('It\'s new', dateSortedPins),
+      this._renderPinSection('Hot articles', thumbedSortedArticles),
+      this._renderPinSection('Good sweets', thumbedSortedMoments)
+    );
+  },
   render: function () {
-    const { blogs: blogs, selectedPin: selectedPin } = this.state;
-    // const displayUser = currentUser || kenny;
+    const { blogs: blogs, selectedPin: selectedPin, currentUser: currentUser } = this.state;
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
-      _react2.default.createElement(_UI.MainSliders, null),
       _react2.default.createElement(
         'div',
         { className: 'main' },
@@ -211,9 +178,9 @@ const Home = _react2.default.createClass({
           modalref: 'pinModal',
           hidePinModal: this.hidePinModal,
           pin: selectedPin,
+          currentUser: currentUser,
           ModalComponent: _UserControls.PinItemModal,
-          showHeaderAndFooter: false
-        })
+          showHeaderAndFooter: false })
       )
     );
   }

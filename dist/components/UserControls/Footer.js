@@ -12,13 +12,7 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _reactRouter = require('react-router');
-
-var _reactBootstrap = require('react-bootstrap');
-
 var _stores = require('../../stores');
-
-var _actions = require('../../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69,8 +63,8 @@ const Footer = _react2.default.createClass({
             null,
             '\xA9 2016 ',
             _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '' },
+              'span',
+              null,
               kenny.firstName,
               ' ',
               kenny.lastName

@@ -14,6 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * adding child context to react component
  */
 const CustomFluxibleComponent = _react2.default.createClass({
+
   displayName: 'CustomFluxibleComponent',
 
   propTypes: {

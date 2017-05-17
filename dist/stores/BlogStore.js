@@ -53,11 +53,11 @@ const BlogStore = (0, _createStore2.default)({
   },
 
 
-  /* Blogs comments */
+  // Blogs comments
   addCommentSuccess: function (res) {
     const resObj = { msg: 'COMMENT_SUCCESS', blogId: res.blogId, data: res };
     this.blogs.forEach((blog, index) => {
-      if (blog.strId === res.blogId) {
+      if (blog.id_str === res.blogId) {
         this.blogs[index].comments.push(res);
       }
     });
@@ -66,9 +66,9 @@ const BlogStore = (0, _createStore2.default)({
   deleteCommentSuccess: function (res) {
     const resObj = { msg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId, data: res.deletedCommentId };
     this.blogs.forEach((blog, bIdx) => {
-      if (blog.strId === res.blogId) {
+      if (blog.id_str === res.blogId) {
         blog.comments.forEach((comment, cIdx) => {
-          if (comment.strId === res.deletedCommentId) {
+          if (comment.id_str === res.deletedCommentId) {
             this.blogs[bIdx].comments.splice(cIdx, 1);
           }
         });
@@ -84,14 +84,14 @@ const BlogStore = (0, _createStore2.default)({
 
   addBlogSuccess: function (res) {
     const resObj = {
-      resMsg: 'CREATE_BLOG_SUCCESS'
+      msg: 'CREATE_BLOG_SUCCESS'
     };
     this.blogs.push(res);
     this.emitChange(resObj);
   },
   addBlogFail: function () {
     const resObj = {
-      resMsg: 'ADD_BLOG_FAIL'
+      msg: 'ADD_BLOG_FAIL'
     };
     this.emitChange(resObj);
   },
@@ -105,13 +105,13 @@ const BlogStore = (0, _createStore2.default)({
         if (isCurrentUser) {
           if (user.focuses.length > 0) {
             user.focuses.forEach(focus => {
-              if (blog.author.strId === focus.strId) {
+              if (blog.author.id_str === focus.id_str) {
                 displayUserBlogs.push(blog);
               }
             });
           }
         }
-        if (blog.author.strId === user.strId) {
+        if (blog.author.id_str === user.id_str) {
           displayUserBlogs.push(blog);
         }
       });
@@ -120,7 +120,7 @@ const BlogStore = (0, _createStore2.default)({
   },
   changeShowCommentsState: function (blog) {
     this.blogs.forEach((b, idx) => {
-      if (b.strId === blog.strId) {
+      if (b.id_str === blog.id_str) {
         this.blogs[idx].show_comments = blog.show_comments;
       }
     });
@@ -130,7 +130,7 @@ const BlogStore = (0, _createStore2.default)({
     const displayUserBlogs = [];
     if (this.blogs) {
       this.blogs.forEach(blog => {
-        if (blog.author.strId === userId) {
+        if (blog.author.id_str === userId) {
           displayUserBlogs.push(blog);
         }
       });
@@ -140,22 +140,18 @@ const BlogStore = (0, _createStore2.default)({
   deleteBlogSuccess: function (res) {
     const resObj = {
       resCode: 200,
-      resMsg: 'DELETE_BLOG_SUCCESS'
+      msg: 'DELETE_BLOG_SUCCESS'
     };
-    this.blogs = this.blogs.filter(blog => blog.strId !== res.deletedBlogId);
+    this.blogs = this.blogs.filter(blog => blog.id_str !== res.deletedBlogId);
     this.deletedBlog = null;
     this.emitChange(resObj);
   },
-
-
   deleteBlogFail: function (err) {
     this.emitChange(err);
   },
-
   getBlogById: function (blogId) {
-    return this.blogs.find(blog => blog.strId === blogId);
+    return this.blogs.find(blog => blog.id_str === blogId);
   },
-
   getSearchedBlogs: function (searchText) {
     const searchedBlogs = [];
     this.blogs.forEach(blog => {
@@ -163,10 +159,8 @@ const BlogStore = (0, _createStore2.default)({
         if (blog.title.toLocaleLowerCase().indexOf(searchText) !== -1 || blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
           searchedBlogs.push(blog);
         }
-      } else {
-        if (blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
-          searchedBlogs.push(blog);
-        }
+      } else if (blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
+        searchedBlogs.push(blog);
       }
     });
     return searchedBlogs;
@@ -174,15 +168,13 @@ const BlogStore = (0, _createStore2.default)({
   getSearchedBlogsWithUser: function (searchText, user) {
     const searchedBlogs = [];
     this.blogs.forEach(blog => {
-      if (blog.author.strId === user.strId) {
+      if (blog.author.id_str === user.id_str) {
         if (blog.title) {
           if (blog.title.toLocaleLowerCase().indexOf(searchText) !== -1 || blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
             searchedBlogs.push(blog);
           }
-        } else {
-          if (blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
-            searchedBlogs.push(blog);
-          }
+        } else if (blog.content.toLocaleLowerCase().indexOf(searchText) !== -1) {
+          searchedBlogs.push(blog);
         }
       }
     });
@@ -193,17 +185,15 @@ const BlogStore = (0, _createStore2.default)({
     return sortText === 'all blogs' ? this.blogs : this.blogs.filter(blog => blog.type === sortText);
   },
   getSortedBlogsWithUser: function (sortText, user) {
-    const thisUserBlogs = this.blogs.filter(blog => blog.author.strId === user.strId);
-    const sortedBlogs = this.blogs.filter(blog => blog.type === sortText && blog.author.strId === user.strId);
+    const thisUserBlogs = this.blogs.filter(blog => blog.author.id_str === user.id_str);
+    const sortedBlogs = this.blogs.filter(blog => blog.type === sortText && blog.author.id_str === user.id_str);
     return sortText === 'all blogs' ? thisUserBlogs : sortedBlogs;
   },
   editBlog: function (blog) {
     const resObj = {
-      resMsg: 'EDIT_BLOG'
+      msg: 'EDIT_BLOG'
     };
-    let currentBlog = _lodash2.default.find(this.blogs, item => {
-      return _lodash2.default.isEqual(item.strId, blog.strId);
-    });
+    const currentBlog = this.blogs.find(item => item.id_str === blog.id_str);
     this.currentBlog = currentBlog;
     this.deletedBlog = null;
     this.listKeyNumber += 1;
@@ -211,7 +201,7 @@ const BlogStore = (0, _createStore2.default)({
   },
   cancelEditBlog: function () {
     const resObj = {
-      resMsg: 'CANCEL_EDIT_BLOG'
+      msg: 'CANCEL_EDIT_BLOG'
     };
     this.currentBlog = null;
     this.emitChange(resObj);
@@ -228,13 +218,13 @@ const BlogStore = (0, _createStore2.default)({
   updateBlogSuccess: function (newBlog) {
     const blogs = _lodash2.default.cloneDeep(this.blogs);
     blogs.forEach((item, index) => {
-      if (_lodash2.default.isEqual(item.strId, newBlog.strId)) {
+      if (_lodash2.default.isEqual(item.id_str, newBlog.id_str)) {
         blogs[index] = newBlog;
       }
     });
     const resObj = {
       blogs: blogs,
-      resMsg: 'UPDATE_BLOG_SUCCESS'
+      msg: 'UPDATE_BLOG_SUCCESS'
     };
     this.currentBlog = null;
     this.blogs = blogs;
@@ -243,24 +233,24 @@ const BlogStore = (0, _createStore2.default)({
   },
   confirmDeleteBlog: function (blog) {
     const resObj = {
-      resMsg: 'CONFIRM_DELETE_BLOG'
+      msg: 'CONFIRM_DELETE_BLOG'
     };
     this.deletedBlog = blog;
     this.emitChange(resObj);
   },
   cancelDeleteBlog: function () {
     const resObj = {
-      resMsg: 'CANCEL_DELETE_BLOG'
+      msg: 'CANCEL_DELETE_BLOG'
     };
     this.deletedBlog = null;
     this.emitChange(resObj);
   },
   thumbsUpBlogSuccess: function (newBlog) {
     const resObj = {
-      resMsg: 'THUMBS_UP_BLOG_SUCCESS'
+      msg: 'THUMBS_UP_BLOG_SUCCESS'
     };
     this.blogs.forEach((blog, index) => {
-      if (blog.strId === newBlog.strId) {
+      if (blog.id_str === newBlog.id_str) {
         this.blogs[index].likers = newBlog.likers;
       }
     });
@@ -268,10 +258,10 @@ const BlogStore = (0, _createStore2.default)({
   },
   cancelThumbsUpBlogSuccess: function (newBlog) {
     const resObj = {
-      resMsg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS'
+      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS'
     };
     this.blogs.forEach((blog, index) => {
-      if (blog.strId === newBlog.strId) {
+      if (blog.id_str === newBlog.id_str) {
         this.blogs[index].likers = newBlog.likers;
       }
     });
@@ -279,7 +269,7 @@ const BlogStore = (0, _createStore2.default)({
   },
   uploadImageSuccess: function (newUser) {
     this.blogs.forEach((blog, idx) => {
-      if (blog.author.strId === newUser.strId) {
+      if (blog.author.id_str === newUser.id_str) {
         this.blogs[idx].author.image_url = newUser.image_url;
       }
     });

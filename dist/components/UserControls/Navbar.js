@@ -12,6 +12,10 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
@@ -54,46 +58,92 @@ const Navbar = _react2.default.createClass({
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
       grayUserImageUrl: '/styles/images/users/gray-user.png',
-      brandImage: 'styles/images/sweeter.png'
+      brandImage: '/styles/images/sweeter.png',
+      showLoginModal: true,
+      showSignupModal: true,
+      switchModal: {
+        modalRef: '',
+        state: false
+      }
     };
   },
   onChange: function (res) {
-    if (['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'].includes(res.resMsg)) {
-      _utils.sweetAlert.alertSuccessMessage(res.resMsg);
+    const accountMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'USER_REGISTER_FAIL', 'USER_REGISTER_SUCCESS'];
+    if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
     }
   },
-  isActive: function (route) {
-    return route === this.props.route ? 'active' : '';
-  },
-  isHomeActive: function (route) {
-    const currentRoute = this.props.route;
-    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  isActive: function (routes) {
+    const path = _utils.jsUtils.splitUrlBySlash(this.props.route, routes.length);
+    const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
+    return isActive ? 'active' : '';
   },
   getRouteSlashPosition: function (string, word, index) {
     return string.split(word, index).join(word).length;
   },
-  handleLogout: function (e) {
-    e.preventDefault();
+  handleLogout: function () {
     this.executeAction(_actions.UserActions.Logout);
   },
   componentDidMount: function () {
     _utils.animations.sticky_header('.sweet-nav');
   },
-  componentDidUpdate: function () {},
-  componentWillUnmount: function () {
-    _UI.ModalsFactory.hide('loginModal');
-    _UI.ModalsFactory.hide('signupModal');
+  openNavbarModals: function (modalRef) {
+    const isLoginModal = modalRef === 'loginModal';
+    const isSignupModal = modalRef === 'signupModal';
+    const { showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
+    if (isLoginModal && !showLoginModal) {
+      this.setState({ showLoginModal: true });
+    }
+
+    if (isSignupModal && !showSignupModal) {
+      this.setState({ showSignupModal: true });
+    }
+
+    _UI.ModalsFactory.show(modalRef);
+
+    $(`#${modalRef}`).on('hidden.bs.modal', () => {
+      const { switchModal: switchModal } = this.state;
+      if (this.hideNavbarModals) {
+        this.hideNavbarModals(modalRef);
+      }
+      if (switchModal.state) {
+        if (switchModal.modalRef === 'loginModal') {
+          this.setState({ showLoginModal: true });
+        }
+
+        if (switchModal.modalRef === 'signupModal') {
+          this.setState({ showSignupModal: true });
+        }
+
+        this.openNavbarModals(switchModal.modalRef);
+        this.setState({ switchModal: { modalRef: '', state: false } });
+      }
+    });
   },
-  openLoginModal: function () {
-    _UI.ModalsFactory.show('loginModal');
+  hideNavbarModals: function (modalRef) {
+    const isLoginModal = modalRef === 'loginModal';
+    const isSignupModal = modalRef === 'signupModal';
+    if (isLoginModal) {
+      this.setState({ showLoginModal: false });
+    }
+
+    if (isSignupModal) {
+      this.setState({ showSignupModal: false });
+    }
   },
-  openSignupModal: function () {
-    _UI.ModalsFactory.show('signupModal');
+  switchOpenModal: function (modalRef) {
+    this.setState({ switchModal: { modalRef: modalRef, state: true } });
   },
   render: function () {
-    const { authenticated: authenticated, currentUser: currentUser, grayUserImageUrl: grayUserImageUrl, brandImage: brandImage } = this.state;
+    const {
+      authenticated: authenticated,
+      currentUser: currentUser,
+      grayUserImageUrl: grayUserImageUrl,
+      brandImage: brandImage,
+      showLoginModal: showLoginModal,
+      showSignupModal: showSignupModal
+    } = this.state;
+
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
@@ -114,16 +164,16 @@ const Navbar = _react2.default.createClass({
             { className: 'sweet-nav-menu sweet-nav-left' },
             _react2.default.createElement(
               'li',
-              { className: `${this.isActive('/list')}` },
+              { className: this.isActive(['list']) },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/list' },
-                'Moments'
+                'Home'
               )
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: this.isHomeActive('home') },
+              { className: this.isActive(['home', currentUser.username]) },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: `/${currentUser.username}/home` },
@@ -136,20 +186,11 @@ const Navbar = _react2.default.createClass({
             { className: 'sweet-nav-menu sweet-nav-right' },
             _react2.default.createElement(
               'li',
-              { className: this.isActive('about') },
+              { className: this.isActive(['about']) },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/about' },
                 'About'
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              { className: this.isHomeActive('contact') },
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/contact' },
-                'Contact'
               )
             ),
             !authenticated && _react2.default.createElement(
@@ -164,7 +205,7 @@ const Navbar = _react2.default.createClass({
                   null,
                   _react2.default.createElement(
                     'span',
-                    { onClick: this.openLoginModal },
+                    { onClick: () => this.openNavbarModals('loginModal') },
                     'Log in'
                   )
                 ),
@@ -173,7 +214,7 @@ const Navbar = _react2.default.createClass({
                   null,
                   _react2.default.createElement(
                     'span',
-                    { onClick: this.openSignupModal },
+                    { onClick: () => this.openNavbarModals('signupModal') },
                     'Sign up'
                   )
                 )
@@ -206,10 +247,10 @@ const Navbar = _react2.default.createClass({
                 ),
                 _react2.default.createElement(
                   'li',
-                  { onClick: this.handleLogout },
+                  null,
                   _react2.default.createElement(
                     'span',
-                    null,
+                    { onClick: this.handleLogout },
                     'Logout'
                   )
                 )
@@ -221,8 +262,26 @@ const Navbar = _react2.default.createClass({
       _react2.default.createElement(
         _UI.Layout.Page,
         null,
-        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'loginModal', title: 'Login to account', ModalComponent: _Pages.Login, size: 'modal-md', showHeaderAndFooter: true }),
-        _react2.default.createElement(_UI.ModalsFactory, { modalref: 'signupModal', title: 'Sign up', ModalComponent: _Pages.Signup, size: 'modal-md', showHeaderAndFooter: true })
+        _react2.default.createElement(_UI.ModalsFactory, {
+          modalref: 'loginModal',
+          title: 'Login to account',
+          ModalComponent: _Pages.Login,
+          size: 'modal-md',
+          showHeaderAndFooter: true,
+          showModal: showLoginModal,
+          openNavbarModals: this.openNavbarModals,
+          hideNavbarModals: this.hideNavbarModals,
+          switchOpenModal: this.switchOpenModal }),
+        _react2.default.createElement(_UI.ModalsFactory, {
+          modalref: 'signupModal',
+          title: 'Create an account',
+          ModalComponent: _Pages.Signup,
+          size: 'modal-md',
+          showHeaderAndFooter: true,
+          showModal: showSignupModal,
+          openNavbarModals: this.openNavbarModals,
+          hideNavbarModals: this.hideNavbarModals,
+          switchOpenModal: this.switchOpenModal })
       )
     );
   }

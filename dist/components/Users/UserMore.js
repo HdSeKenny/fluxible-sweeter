@@ -43,10 +43,12 @@ const UserMore = _react2.default.createClass({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
+    const store = this.getStore(_stores.UserStore);
+    const { username: username } = this.props.params;
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(this.props.params.userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(this.props.params.userId),
+      currentUser: store.getCurrentUser(),
+      user: store.getUserByUsername(username),
+      isCurrentUser: store.isCurrentUser(username),
       loaded: false
     };
   },

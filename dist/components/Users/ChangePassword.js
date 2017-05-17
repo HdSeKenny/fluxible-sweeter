@@ -8,21 +8,19 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _UserBar = require('./UserBar');
-
-var _UserBar2 = _interopRequireDefault(_UserBar);
-
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _reactRouter = require('react-router');
+
+var _UserBar = require('./UserBar');
+
+var _UserBar2 = _interopRequireDefault(_UserBar);
+
 var _sweetAlert = require('../../utils/sweetAlert');
 
 var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
-
-var _reactRouter = require('react-router');
-
-var _reactBootstrap = require('react-bootstrap');
 
 var _actions = require('../../actions');
 
@@ -196,7 +194,7 @@ const ChangePassword = _react2.default.createClass({
                 { className: 'form-group' },
                 _react2.default.createElement(
                   'label',
-                  { className: 'col-sm-3 control-label' },
+                  { className: 'col-sm-3 control-label', htmlFor: 'old-password' },
                   'Old Password'
                 ),
                 _react2.default.createElement(
@@ -221,7 +219,7 @@ const ChangePassword = _react2.default.createClass({
                 { className: `form-group ${this.state.passwordValidate}` },
                 _react2.default.createElement(
                   'label',
-                  { className: 'col-sm-3 control-label' },
+                  { className: 'col-sm-3 control-label', htmlFor: 'new-password' },
                   'New Password'
                 ),
                 _react2.default.createElement(
@@ -246,7 +244,7 @@ const ChangePassword = _react2.default.createClass({
                 { className: `form-group ${this.state.confirmPasswordValidate}` },
                 _react2.default.createElement(
                   'label',
-                  { className: 'col-sm-3 control-label' },
+                  { className: 'col-sm-3 control-label', htmlFor: 'confirm-password' },
                   'Confirm Password'
                 ),
                 _react2.default.createElement(
@@ -269,12 +267,12 @@ const ChangePassword = _react2.default.createClass({
               _react2.default.createElement(
                 'div',
                 { className: 'form-group options' },
-                _react2.default.createElement('label', { className: 'col-sm-3 control-label' }),
+                _react2.default.createElement('label', { className: 'col-sm-3 control-label', htmlFor: 'confirm-btn' }),
                 _react2.default.createElement(
                   'div',
                   { className: 'col-sm-6' },
                   _react2.default.createElement(
-                    _reactBootstrap.Button,
+                    'button',
                     { className: 'btn btn-primary', onClick: this.onSubmitChangePassword },
                     'Confirm change'
                   )

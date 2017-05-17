@@ -8,14 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
-var _reactRouter = require('react-router');
-
-var _reactBootstrap = require('react-bootstrap');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const Tabs = _react2.default.createClass({
@@ -39,13 +31,13 @@ const Tabs = _react2.default.createClass({
   },
   _renderTitles: function () {
     function labels(child, index) {
-      let activeClass = this.state.selected === index ? 'active' : '';
+      const activeClass = this.state.selected === index ? 'active' : '';
       return _react2.default.createElement(
         'li',
         { key: index, className: activeClass },
         _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '#', onClick: this.handleClick.bind(this, index) },
+          'span',
+          { onClick: this.handleClick.bind(this, index) },
           child.props.label
         )
       );
@@ -64,8 +56,7 @@ const Tabs = _react2.default.createClass({
       this.props.children[this.state.selected]
     );
   },
-  handleClick: function (index, event) {
-    event.preventDefault();
+  handleClick: function (index) {
     this.setState({
       selected: index
     });

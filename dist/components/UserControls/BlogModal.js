@@ -8,9 +8,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _actions = require('../../actions');
+
 var _Layout = require('../UI/Layout');
 
 var _UI = require('../UI');
+
+var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19,12 +23,30 @@ class BlogModal extends _react.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: props.currentUser,
       welcomeText: "What's happening now ?",
       blogText: ''
     };
   }
 
-  closeCreateBlogModal() {
+  onCreateSweet() {
+    const { currentUser: currentUser, blogText: blogText } = this.state;
+    if (!currentUser) {
+      _utils.sweetAlert.alertWarningMessage('Login first !');
+      return;
+    }
+
+    const newBlog = {
+      text: blogText,
+      created_at: new Date(),
+      type: 'moment',
+      author: currentUser._id
+    };
+
+    this.context.executeAction(_actions.BlogActions.AddBlog, newBlog);
+  }
+
+  onCloseBlogModal() {
     _UI.ModalsFactory.hide('createBlogModal');
   }
 
@@ -35,29 +57,59 @@ class BlogModal extends _react.Component {
   _renderCreateBtns(isDisabled) {
     return _react2.default.createElement(
       'div',
-      { className: 'row btn-row' },
+      { className: '' },
       _react2.default.createElement(
         'button',
-        { type: 'button', disabled: isDisabled, className: 'btn btn-info', onClick: this.handleMicroBlog },
+        { disabled: isDisabled, className: 'btn btn-info', onClick: () => this.onCreateSweet() },
         'Create'
       ),
       _react2.default.createElement(
         'button',
-        { type: 'button', disabled: false, className: 'btn btn-primary', onClick: this.closeCreateBlogModal },
+        { className: 'btn btn-primary', onClick: () => this.onCloseBlogModal() },
         'Cancel'
       )
     );
   }
 
+  _renderCreateTips(isLimmitWords, blogTextLength) {
+    if (isLimmitWords) {
+      return _react2.default.createElement(
+        'p',
+        null,
+        'You can still write ',
+        _react2.default.createElement(
+          'span',
+          { className: 'len-span' },
+          140 - blogTextLength
+        ),
+        ' words'
+      );
+    } else {
+      return _react2.default.createElement(
+        'p',
+        null,
+        'Words can\'t be more than ',
+        _react2.default.createElement(
+          'span',
+          { className: 'len-span-red' },
+          '140'
+        ),
+        ' words'
+      );
+    }
+  }
+
   render() {
     const { welcomeText: welcomeText, blogText: blogText } = this.state;
-    const isDisabled = blogText.length > 140 || blogText.length === 0;
+    const blogTextLength = blogText.length;
+    const isDisabled = blogTextLength > 140 || blogTextLength === 0;
+    const isLimmitWords = blogTextLength < 141;
     return _react2.default.createElement(
       'div',
       { className: 'create-well' },
       _react2.default.createElement(
         _Layout.Row,
-        null,
+        { className: 'text-row' },
         _react2.default.createElement(
           _Layout.Col,
           { size: '12', className: 'p-0' },
@@ -66,43 +118,38 @@ class BlogModal extends _react.Component {
             { className: 'welcomeText' },
             welcomeText
           ),
-          blogText.length < 141 && _react2.default.createElement(
-            'p',
+          _react2.default.createElement(
+            'div',
             { className: 'create-tip mt-5' },
-            'You can still write ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span' },
-              140 - blogText.length
-            ),
-            ' words'
-          ),
-          blogText.length > 140 && _react2.default.createElement(
-            'p',
-            { className: 'create-tip mt-5' },
-            'Words can\'t be more than ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span-red' },
-              '140'
-            ),
-            ' words'
+            this._renderCreateTips(isLimmitWords, blogTextLength)
           )
         )
       ),
       _react2.default.createElement(
-        'div',
-        { className: 'row textarea-row' },
+        _Layout.Row,
+        { className: 'textarea-row' },
         _react2.default.createElement('textarea', { type: 'text', rows: '4', value: blogText, onChange: e => this.onChangeBlogText(e) })
       ),
-      this._renderCreateBtns(isDisabled)
+      _react2.default.createElement(
+        _Layout.Row,
+        { className: 'btn-row' },
+        this._renderCreateBtns(isDisabled)
+      )
     );
   }
 }
-exports.default = BlogModal;
-BlogModal.displayName = 'App';
+exports.default = BlogModal; /**
+                              * Copyright 2017, created by Kuan Lu
+                              * @ui BlogModal
+                              */
+
+BlogModal.displayName = 'BlogModal';
+BlogModal.contextTypes = {
+  executeAction: _react.PropTypes.func
+};
 BlogModal.propTypes = {
   location: _react.PropTypes.object,
-  children: _react.PropTypes.object
+  children: _react.PropTypes.object,
+  currentUser: _react.PropTypes.object
 };
 module.exports = exports['default'];

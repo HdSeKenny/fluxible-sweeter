@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _dateformat = require('dateformat');
-
-var _dateformat2 = _interopRequireDefault(_dateformat);
-
 var _reactRouter = require('react-router');
 
 var _reactBootstrap = require('react-bootstrap');
@@ -20,9 +16,7 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _utils = require('../../utils');
 
 var _UserBar = require('./UserBar');
 
@@ -63,27 +57,30 @@ const UserBlogs = _react2.default.createClass({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
-    const { userId: userId } = this.props.params;
+    const { username: username } = this.props.params;
+    const userStore = this.getStore(_stores.UserStore);
+    const blogStore = this.getStore(_stores.BlogStore);
+    const user = userStore.getUserByUsername(username);
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      currentBlog: this.getStore(_stores.BlogStore).getCurrentBlog(),
-      // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
-      isUpdated: this.getStore(_stores.BlogStore).getIsUpdated(),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId),
-      displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(userId)
+      currentUser: userStore.getCurrentUser(),
+      user: user,
+      currentBlog: blogStore.getCurrentBlog(),
+      // deletedBlog: blogStore.getDeletedBlog(),
+      isUpdated: blogStore.getIsUpdated(),
+      isCurrentUser: userStore.isCurrentUser(username),
+      displayBlogs: blogStore.getBlogsByUserId(user.id_str)
     };
   },
   onChange: function (res) {
     const { currentUser: currentUser } = this.state;
-    const { userId: userId } = this.props.params;
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    const { username: username } = this.props.params;
+    if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
       // this.setState({displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id)});
     }
 
-    if (res.resMsg === 'UPDATE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'UPDATE_BLOG_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
       this.setState({
         displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(currentUser._id),
         currentBlog: this.getStore(_stores.BlogStore).getCurrentBlog(),
@@ -91,26 +88,26 @@ const UserBlogs = _react2.default.createClass({
       });
     }
 
-    if (res.resMsg === 'EDIT_BLOG' || res.resMsg === 'CANCEL_EDIT_BLOG') {
+    if (res.msg === 'EDIT_BLOG' || res.msg === 'CANCEL_EDIT_BLOG') {
       this.setState({ currentBlog: this.getStore(_stores.BlogStore).getCurrentBlog() });
     }
 
-    if (res.resMsg === 'CONFIRM_DELETE_BLOG' || res.resMsg === 'CANCEL_DELETE_BLOG') {
+    if (res.msg === 'CONFIRM_DELETE_BLOG' || res.msg === 'CANCEL_DELETE_BLOG') {
       // this.setState({deletedBlog: this.getStore(BlogStore).getDeletedBlog()})
     }
 
-    if (res.resMsg === 'DELETE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'DELETE_BLOG_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
       this.setState({
         // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
-        displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(userId)
+        displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(username)
       });
     }
 
     this.setState({
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId)
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
     });
   },
   onEditBlog: function (blog) {
@@ -121,12 +118,12 @@ const UserBlogs = _react2.default.createClass({
   },
   onUpdateBlog: function (blog) {
     if (!blog.title) {
-      _sweetAlert2.default.alertErrorMessage('Please enter title !');
+      _utils.sweetAlert.alertErrorMessage('Please enter title !');
       return;
     }
 
     if (!blog.content) {
-      _sweetAlert2.default.alertErrorMessage('Please enter content');
+      _utils.sweetAlert.alertErrorMessage('Please enter content');
       return;
     }
     // eslint-disable-next-line no-param-reassign
@@ -134,7 +131,7 @@ const UserBlogs = _react2.default.createClass({
     this.executeAction(_actions.BlogActions.UpdateBlog, blog);
   },
   onDeleteBlog: function (blog) {
-    _sweetAlert2.default.alertConfirmMessage('', () => {
+    _utils.sweetAlert.alertConfirmMessage('', () => {
       this.executeAction(_actions.BlogActions.DeleteBlog, blog);
     });
   },
@@ -257,12 +254,11 @@ const UserBlogs = _react2.default.createClass({
       'div',
       null,
       displayBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(blog => {
-        const dateString = blog.created_at.toString();
-        const blogDate = (0, _dateformat2.default)(dateString);
+        const fromNow = _utils.format.fromNow(blog.created_at);
         if (blog.type === 'article') {
-          return this._renderArticle(blog, blogDate);
+          return this._renderArticle(blog, fromNow);
         } else {
-          return this._renderMicroBlog(blog, blogDate);
+          return this._renderMicroBlog(blog, fromNow);
         }
       })
     );

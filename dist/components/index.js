@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.List = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Register = exports.Login = exports.BlogsDetails = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
+exports.List = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
 
 var _NotFound2 = require('./NotFound');
 
@@ -21,17 +21,9 @@ var _AddBlog2 = require('./Users/AddBlog');
 
 var _AddBlog3 = _interopRequireDefault(_AddBlog2);
 
-var _BlogsDetails2 = require('./Pages/BlogsDetails');
+var _Details2 = require('./Pages/Details');
 
-var _BlogsDetails3 = _interopRequireDefault(_BlogsDetails2);
-
-var _Login2 = require('./Users/Login');
-
-var _Login3 = _interopRequireDefault(_Login2);
-
-var _Register2 = require('./Users/Register');
-
-var _Register3 = _interopRequireDefault(_Register2);
+var _Details3 = _interopRequireDefault(_Details2);
 
 var _UserHome2 = require('./Users/UserHome');
 
@@ -71,9 +63,7 @@ exports.NotFound = _NotFound3.default;
 exports.App = _App3.default;
 exports.Home = _Home3.default;
 exports.AddBlog = _AddBlog3.default;
-exports.BlogsDetails = _BlogsDetails3.default;
-exports.Login = _Login3.default;
-exports.Register = _Register3.default;
+exports.Details = _Details3.default;
 exports.UserHome = _UserHome3.default;
 exports.UserBlogs = _UserBlogs3.default;
 exports.UserInfo = _UserInfo3.default;

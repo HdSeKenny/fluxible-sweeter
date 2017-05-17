@@ -58,6 +58,12 @@
         max-width: 100%;
         vertical-align: middle;
         display: block;
+        &:hover {
+          cursor: pointer;
+          .author {
+            color: @brand-info;
+          }
+        }
       }
     }
     .text-xs {
@@ -65,18 +71,18 @@
       font-style: italic;
       color: gray;
     }
-    &:hover {
-      cursor: pointer;
-      .author-name {
-        color: @brand-info;
-      }
-    }
-    .author-name {
+    .author {
       display: block;
       line-height: 10px;
       font-size: 14px;
       color: #000000;
       padding-top: 0;
+      .name {
+        &:hover {
+          cursor: pointer;
+          color: @brand-info;
+        }
+      }
       .from-now {
         color: gray;
         font-size: 11px;
@@ -88,7 +94,7 @@
     .icon-span {
       color: #666666;
       font-size: 12px;
-      margin-right: 15px;
+      margin-right: 25px;
       display: inline-block;
       &:last-child {
         margin-right: 0;

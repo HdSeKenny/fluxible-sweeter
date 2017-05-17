@@ -12,12 +12,6 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _reactBootstrap = require('react-bootstrap');
-
 var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -169,12 +163,12 @@ const BlogEditor = _react2.default.createClass({
           'div',
           { className: 'modal-footer' },
           _react2.default.createElement(
-            _reactBootstrap.Button,
+            'button',
             { onClick: this.onCancelEdit },
             'Cancel'
           ),
           _react2.default.createElement(
-            _reactBootstrap.Button,
+            'button',
             { bsStyle: 'primary', onClick: this.onSubmitEdit },
             'Save'
           )

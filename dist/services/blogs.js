@@ -90,22 +90,25 @@ exports.default = {
     });
   },
   addBlog: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, function (err, db) {
+    _mongodb2.default.connect(MongoUrl, (err, db) => {
       const Blog = db.collection('blogs');
       const User = db.collection('users');
       body.author = ObjectID(body.author);
       body.show_comments = false;
       body.likers = [];
       body.comments = [];
+      body.images = [];
+      body.tag = body.tag || 'moment';
+      body.description = body.description || '';
       Blog.insert(body, (err, result) => {
         if (result) {
           const blog = result.ops[0];
-          blog.strId = blog._id.toString();
+          blog.id_str = blog._id.toString();
           Blog.save(blog);
           User.findOne({ '_id': blog.author }, (err, user) => {
             if (user) {
               blog.author = user;
-              user.blogs.push(blog.strId);
+              user.blogs.push(blog.id_str);
               User.save(user);
             }
             db.close();
@@ -123,7 +126,7 @@ exports.default = {
       Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
         if (err) {
           console.log(`***** Find blog err: ${err}`);
-        };
+        }
         if (blog) {
           blog.likers.push(body.currentUserId);
           Blog.save(blog, (err, result) => {
@@ -142,7 +145,7 @@ exports.default = {
       Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
         if (err) {
           console.log(`***** Find blog err: ${err}`);
-        };
+        }
         if (blog) {
           blog.likers = blog.likers.filter(liker => liker !== body.currentUserId);
           Blog.save(blog, (err, result) => {

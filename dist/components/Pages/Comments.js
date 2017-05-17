@@ -8,25 +8,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _dateformat = require('dateformat');
-
-var _dateformat2 = _interopRequireDefault(_dateformat);
-
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
 var _reactRouter = require('react-router');
 
-var _reactBootstrap = require('react-bootstrap');
-
 var _stores = require('../../stores');
 
 var _actions = require('../../actions');
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _utils = require('../../utils');
 
 var _Layout = require('../UI/Layout');
 
@@ -66,10 +58,10 @@ const Comments = _react2.default.createClass({
   onChange: function (res) {
     if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
       const { blog: blog } = this.state;
-      _sweetAlert2.default.alertSuccessMessage(res.msg);
+      _utils.sweetAlert.success(res.msg);
 
       if (res.msg === 'COMMENT_SUCCESS') {
-        blog.comments.push(res.data);
+        // blog.comments.push(res.data);
       }
 
       if (res.msg === 'DELETE_COMMENT_SUCCESS') {
@@ -86,7 +78,7 @@ const Comments = _react2.default.createClass({
     this.setState({ replyText: e.target.value });
   },
   checkLogin: function () {
-    _sweetAlert2.default.alertWarningMessage('Login first !');
+    _utils.sweetAlert.alertWarningMessage('Login first !');
     this.setState({ commentText: '' });
   },
   getBlogCommentsById: function (blogId) {
@@ -96,6 +88,11 @@ const Comments = _react2.default.createClass({
     return this.getStore(_stores.UserStore).getCommenter(userId);
   },
   onCommentBlog: function (blog) {
+    const { currentUser: currentUser } = this.state;
+    if (!currentUser) {
+      this.checkLogin();
+      return;
+    }
     const comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
@@ -123,15 +120,15 @@ const Comments = _react2.default.createClass({
     this.setState({ blogComments: blogComments });
   },
   onReplyComment: function () {
-    _sweetAlert2.default.alertInfoMessage('This is not finished !');
+    _utils.sweetAlert.alertInfoMessage('This is not finished !');
     this.setState({ replyText: '' });
   },
   onDeleteComment: function (comment) {
-    _sweetAlert2.default.alertConfirmMessage('', () => {
+    _utils.sweetAlert.alertConfirmMessage('', () => {
       this.executeAction(_actions.BlogActions.DeleteBlogComment, comment);
     });
   },
-  _GoToUserCenter: function (username) {
+  goToUserCenter: function (username) {
     $('#pinModal').modal('hide');
     this.context.router.push(`/${username}/home`);
   },
@@ -142,19 +139,21 @@ const Comments = _react2.default.createClass({
       _react2.default.createElement(
         _Layout.Col,
         { size: '9 pl-5 pr-0' },
-        _react2.default.createElement('textarea', { rows: '1', className: 'form-control', value: commentText, onChange: this.handleCommentText })
+        _react2.default.createElement('textarea', {
+          rows: '1',
+          className: 'form-control',
+          value: commentText,
+          onChange: this.handleCommentText })
       ),
       _react2.default.createElement(
         _Layout.Col,
         { size: '3 pr-5 pl-5' },
-        currentUser && _react2.default.createElement(
+        _react2.default.createElement(
           'button',
-          { className: 'btn btn-info fr', onClick: this.onCommentBlog.bind(this, blog), disabled: isCommentText },
-          ' Comment'
-        ),
-        !currentUser && _react2.default.createElement(
-          'button',
-          { className: 'btn btn-info fr', onClick: this.checkLogin, disabled: isCommentText },
+          {
+            className: 'btn btn-info fr',
+            onClick: this.onCommentBlog.bind(this, blog),
+            disabled: isCommentText },
           ' Comment'
         )
       )
@@ -162,46 +161,57 @@ const Comments = _react2.default.createClass({
   },
   _renderArticleTextarea: function (blog, isCommentText, currentUser, commentText) {
     return _react2.default.createElement(
-      'div',
-      { className: 'row comment-textarea' },
+      _Layout.Row,
+      { className: 'comment-textarea' },
       _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement('textarea', { rows: '4', className: 'form-control', value: commentText, onChange: this.handleCommentText })
+        _Layout.Row,
+        null,
+        _react2.default.createElement('textarea', {
+          rows: '3',
+          className: 'form-control',
+          value: commentText,
+          onChange: this.handleCommentText
+        })
       ),
       _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        currentUser && _react2.default.createElement(
+        _Layout.Row,
+        null,
+        _react2.default.createElement(
           'button',
-          { className: 'comment-btn', onClick: this.onCommentBlog.bind(this, blog), disabled: isCommentText },
-          ' Comment'
-        ),
-        !currentUser && _react2.default.createElement(
-          'button',
-          { className: 'comment-btn', onClick: this.checkLogin, disabled: isCommentText },
+          {
+            className: 'btn btn-info fr mt-15',
+            onClick: this.onCommentBlog.bind(this, blog),
+            disabled: isCommentText },
           ' Comment'
         )
       )
     );
   },
   _renderReplyTextarea: function (replyText, comment) {
+    const isDisabled = replyText.length === 0;
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'reply-row mt-10' },
-      _react2.default.createElement(_Layout.Col, { size: '1' }),
+      _react2.default.createElement(_Layout.Col, { size: '1 reply-empty' }),
       _react2.default.createElement(
         _Layout.Col,
         { size: '9' },
-        _react2.default.createElement('textarea', { rows: '1', className: 'form-control', value: replyText, onChange: this.handleReplyText })
+        _react2.default.createElement('textarea', {
+          rows: '1',
+          className: 'form-control',
+          value: replyText,
+          onChange: this.handleReplyText })
       ),
       _react2.default.createElement(
         _Layout.Col,
         { size: '2' },
         _react2.default.createElement(
           'button',
-          { className: 'btn btn-info reply-btn', onClick: this.onReplyComment.bind(this, comment), disabled: replyText.length === 0 },
-          'Reply'
+          {
+            className: 'btn btn-info reply-btn',
+            onClick: () => this.onReplyComment(this, comment),
+            disabled: isDisabled },
+          ' Reply'
         )
       )
     );
@@ -217,20 +227,23 @@ const Comments = _react2.default.createClass({
       isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText),
       !isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText),
       comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(comment => {
-        const date = comment.created_at ? comment.created_at.toString() : null;
-        const commentDate = (0, _dateformat2.default)(date, 'dddd, h:MM TT');
-        const commenter = this.getCommenter(comment.commenter);
-        const displayIcon = currentUser ? commenter.id_str === currentUser.id_str : false;
+        const { id_str: id_str, commenter: commenter, created_at: created_at, show_replies: show_replies } = comment;
+        // const date = created_at ? created_at.toString() : null;
+        // const commentDate = dateFormat(date, 'dddd, h:MM TT');
+        const fromNow = _utils.format.fromNow(created_at);
+        const user = this.getCommenter(commenter);
+        const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
+        const { username: username, image_url: image_url } = user;
         return _react2.default.createElement(
           'div',
-          { key: comment._id },
+          { key: id_str },
           _react2.default.createElement(
             _Layout.Row,
             { className: 'comment-row' },
             _react2.default.createElement(
               _Layout.Col,
               { size: '1 commenter-img p-0' },
-              _react2.default.createElement('img', { alt: 'commenter', src: commenter.image_url })
+              _react2.default.createElement('img', { alt: 'commenter', src: image_url })
             ),
             _react2.default.createElement(
               _Layout.Col,
@@ -240,8 +253,8 @@ const Comments = _react2.default.createClass({
                 { className: 'comment-text' },
                 _react2.default.createElement(
                   'span',
-                  { className: 'username', onClick: this._GoToUserCenter.bind(this, commenter.username) },
-                  commenter.username
+                  { className: 'username', onClick: () => this.goToUserCenter(username) },
+                  username
                 ),
                 ' : ',
                 comment.commentText
@@ -252,11 +265,11 @@ const Comments = _react2.default.createClass({
                 _react2.default.createElement(
                   'small',
                   null,
-                  commentDate
+                  fromNow
                 ),
                 _react2.default.createElement(
                   'button',
-                  { className: 'reply-icon', onClick: this.showReplyTextarea.bind(this, comment) },
+                  { className: 'reply-icon', onClick: () => this.showReplyTextarea(comment) },
                   _react2.default.createElement('i', { className: 'fa fa-reply' })
                 )
               )
@@ -264,15 +277,15 @@ const Comments = _react2.default.createClass({
             _react2.default.createElement(
               _Layout.Col,
               { size: '1 comment-thumbs' },
-              displayIcon && _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'trash', onClick: this.onDeleteComment.bind(this, comment) })
+              displayIcon && _react2.default.createElement('i', { className: 'fa fa-trash', onClick: () => this.onDeleteComment(comment) })
             )
           ),
-          comment.show_replies && this._renderReplyTextarea(replyText, comment)
+          _react2.default.createElement(_Layout.Row, { className: 'comment-icons' }),
+          show_replies && this._renderReplyTextarea(replyText, comment)
         );
       })
     );
   }
-});
-
+}); /* eslint-disable all, camelcase */
 exports.default = Comments;
 module.exports = exports['default'];

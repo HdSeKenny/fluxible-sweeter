@@ -24,6 +24,8 @@ var _LeftNavs = require('../LeftNavs');
 
 var _UI = require('../UI');
 
+var _UserControls = require('../UserControls');
+
 var _UserBar = require('./UserBar');
 
 var _UserBar2 = _interopRequireDefault(_UserBar);
@@ -57,11 +59,11 @@ const UserHome = _react2.default.createClass({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
-    const { userId: userId } = this.props.params;
+    const { username: username } = this.props.params;
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId),
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username),
       singleUserBlogs: null,
       welcomeText: 'What happened today, Write a blog here !',
       blogText: ''
@@ -69,19 +71,19 @@ const UserHome = _react2.default.createClass({
   },
   onChange: function (res) {
     const { user: user, isCurrentUser: isCurrentUser } = this.state;
-    const { userId: userId } = this.props.params;
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    const { username: username } = this.props.params;
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      _sweetAlert2.default.success(res.msg);
       this.setState({ blogText: '' });
     }
 
-    if (res.resMsg === 'COMMENT_SUCCESS' || res.resMsg === 'DELETE_COMMENT_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
+      _sweetAlert2.default.success(res.msg);
       const singleUserBlogs = this.getStore(_stores.BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-      this.setState({ singleUserBlogs: singleUserBlogs });
+      // this.setState({ singleUserBlogs });
     }
 
-    // if(res.resMsg === 'FOLLOW_USER_SUCCESS' || res.resMsg === 'CANCEL_FOLLOW_USER_SUCCESS'){
+    // if(res.msg === 'FOLLOW_USER_SUCCESS' || res.msg === 'CANCEL_FOLLOW_USER_SUCCESS'){
     //   this.setState({
     //     currentUser: this.getStore(UserStore).getCurrentUser(),
     //     user: this.getStore(UserStore).getUserById(userId),
@@ -91,8 +93,8 @@ const UserHome = _react2.default.createClass({
 
     this.setState({
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId)
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
     });
   },
   handleBlogText: function (e) {
@@ -100,7 +102,7 @@ const UserHome = _react2.default.createClass({
   },
   handleMicroBlog: function () {
     const newBlog = {
-      content: this.state.blogText,
+      text: this.state.blogText,
       created_at: new Date(),
       type: 'microblog',
       author: this.state.currentUser._id
@@ -128,75 +130,8 @@ const UserHome = _react2.default.createClass({
     const isBlogTextLength = blogText.length > 140;
     return _react2.default.createElement(
       'div',
-      { className: 'well create-well' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-7' },
-          _react2.default.createElement(
-            'p',
-            null,
-            welcomeText
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-5' },
-          !isBlogTextLength && _react2.default.createElement(
-            'p',
-            null,
-            'You can still write ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span' },
-              140 - blogText.length
-            ),
-            ' words'
-          ),
-          isBlogTextLength && _react2.default.createElement(
-            'p',
-            null,
-            'You can\'t write words large than ',
-            _react2.default.createElement(
-              'span',
-              { className: 'len-span-red' },
-              '140'
-            ),
-            ' words'
-          )
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row textarea-row' },
-        _react2.default.createElement('textarea', { type: 'text', rows: '3', value: blogText, onChange: this.handleBlogText })
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row btn-row' },
-        _react2.default.createElement(
-          _reactBootstrap.Button,
-          {
-            disabled: isBlogTextLength || blogText.length === 0,
-            onClick: this.handleMicroBlog,
-            className: 'btn-primary create-btn'
-          },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'send' }),
-          ' Create'
-        ),
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/user-blogs/${currentUser.strId}/add` },
-          _react2.default.createElement(
-            _reactBootstrap.Button,
-            { className: 'btn-info create-btn' },
-            _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
-            ' Articles'
-          )
-        )
-      )
+      { className: 'create-blog' },
+      _react2.default.createElement(_UserControls.BlogModal, null)
     );
   },
   render: function () {
@@ -216,10 +151,10 @@ const UserHome = _react2.default.createClass({
       _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
-        { className: 'user-content' },
+        { className: 'home-content' },
         _react2.default.createElement(
           'div',
-          { className: 'content-left' },
+          { className: 'home-left' },
           _react2.default.createElement(_LeftNavs.UserHomeNav, {
             path: pathname,
             isCurrentUser: isCurrentUser,
@@ -230,7 +165,7 @@ const UserHome = _react2.default.createClass({
         ),
         _react2.default.createElement(
           'div',
-          { className: 'content-right' },
+          { className: 'home-right' },
           isCurrentUser && this._renderUserCreateWell(currentUser, blogText, welcomeText),
           _react2.default.createElement(_UI.BlogsWell, {
             displayBlogs: displayBlogs,
@@ -245,4 +180,34 @@ const UserHome = _react2.default.createClass({
 });
 
 exports.default = UserHome;
+
+// <div className="row">
+//          <div className="col-xs-7">
+//            <p>{welcomeText}</p>
+//          </div>
+//          <div className="col-xs-5">
+//            {!isBlogTextLength &&
+//              <p>You can still write <span className="len-span">{140 - blogText.length}</span> words</p>}
+//            {isBlogTextLength &&
+//              <p>You can't write words large than <span className="len-span-red">140</span> words</p>}
+//          </div>
+//        </div>
+//        <div className="row textarea-row">
+//          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
+//        </div>
+//        <div className="row btn-row">
+//          <Button
+//            disabled={isBlogTextLength || blogText.length === 0}
+//            onClick={this.handleMicroBlog}
+//            className="btn-primary create-btn"
+//          >
+//            <Glyphicon glyph="send" /> Create
+//          </Button>
+//          <Link to={`/user-blogs/${currentUser.strId}/add`}>
+//            <Button className="btn-info create-btn" >
+//              <Glyphicon glyph="pencil" /> Articles
+//            </Button>
+//          </Link>
+//        </div>
+
 module.exports = exports['default'];

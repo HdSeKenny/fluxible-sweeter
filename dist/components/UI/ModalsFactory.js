@@ -59,14 +59,17 @@ class ModalsFactory extends _react.Component {
     );
   }
   render() {
-    const { size: size, modalref: modalref, title: title, ModalComponent: ModalComponent, showHeaderAndFooter: showHeaderAndFooter } = this.props;
+    const { size: size, modalref: modalref, title: title, ModalComponent: ModalComponent, showHeaderAndFooter: showHeaderAndFooter, showModal: showModal } = this.props;
+    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal', 'uploadModal'];
+    const isNotPinItemModal = notPinItemModals.includes(modalref);
+    const show = isNotPinItemModal ? showModal : true;
     return _react2.default.createElement(
       'div',
       { className: 'modal fade', id: modalref, tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
       _react2.default.createElement(
         'div',
         { className: `modal-dialog mt-80 ${size}` },
-        _react2.default.createElement(
+        show && _react2.default.createElement(
           'div',
           { className: 'modal-content' },
           showHeaderAndFooter && this._renderModalHeader(title),
@@ -86,7 +89,8 @@ ModalsFactory.propTypes = {
   title: _react2.default.PropTypes.string,
   showHeaderAndFooter: _react2.default.PropTypes.bool,
   ModalComponent: _react2.default.PropTypes.func,
-  hidePinModal: _react2.default.PropTypes.func
+  hidePinModal: _react2.default.PropTypes.func,
+  showModal: _react2.default.PropTypes.bool
 };
 
 ModalsFactory.show = modalRef => {

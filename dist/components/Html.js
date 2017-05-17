@@ -37,7 +37,8 @@ class Html extends _react.Component {
         _react2.default.createElement('link', { href: '/styles/bootstrap/css/font-awesome.min.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/ui/sweetalert.css', rel: 'stylesheet' }),
-        _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' })
+        _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' }),
+        _react2.default.createElement('link', { href: '/styles/css/slim.min.css', rel: 'stylesheet' })
       ),
       _react2.default.createElement(
         'body',

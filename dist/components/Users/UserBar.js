@@ -10,21 +10,29 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _reactBootstrap = require('react-bootstrap');
-
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _sweetAlert = require('../../utils/sweetAlert');
+var _lodash = require('lodash');
 
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _utils = require('../../utils');
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
 var _UserControls = require('../UserControls');
+
+var _Layout = require('../UI/Layout');
+
+var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,45 +60,63 @@ const UserBar = _react2.default.createClass({
     return this.getStateFromStores();
   },
   getStateFromStores: function () {
+    const store = this.getStore(_stores.UserStore);
+    const currentUploadedImage = store.getCurrentUploadedImage();
+    // const showImageModal = currentUploadedImage !== null;
+    // const currentUser =  store.getCurrentUser();
     return {
-      currentUploadedImage: this.getStore(_stores.UserStore).getCurrentUploadedImage(),
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser()
+      currentUploadedImage: currentUploadedImage,
+      currentUser: store.getCurrentUser(),
+      showImageModal: false
     };
   },
+  componentDidMount: function () {},
   onChange: function (res) {
-    if (res.resMsg === 'FOLLOW_USER_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'FOLLOW_USER_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
     }
 
-    if (res.resMsg === 'CANCEL_FOLLOW_USER_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
     }
 
-    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.resMsg)) {
-      if (res.resMsg === 'UPLOAD_IMAGE_SUCCESS') {
-        _sweetAlert2.default.alertSuccessMessage(res.resMsg);
+    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.msg)) {
+      if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
+        _utils.sweetAlert.success(res.msg);
+        _UI.ModalsFactory.hide('uploadModal');
       }
       this.setState(this.getStateFromStores());
     }
   },
-  isActive: function (route) {
-    const currentRoute = this.props.path;
-    const secondSlash = this.getRouteSlashPosition(currentRoute, '/', 2);
-    return route === currentRoute.substring(secondSlash + 1) ? 'active' : '';
+  isActive: function (routes) {
+    const path = _utils.jsUtils.splitUrlBySlash(this.props.path, routes.length);
+    const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
+    return isActive ? 'active' : '';
   },
-  getRouteSlashPosition: function (string, word, index) {
-    return string.split(word, index).join(word).length;
+  onEditUserImage: function () {
+    const { showImageModal: showImageModal } = this.state;
+
+    if (!showImageModal) {
+      this.setState({ showImageModal: true });
+    }
+
+    (0, _jquery2.default)('#uploadModal').on('hidden.bs.modal', () => {
+      // eslint-disable-next-line
+      this.hideImageModal && this.hideImageModal();
+    });
+
+    _UI.ModalsFactory.show('uploadModal');
   },
-  onEditUserImage: function (user) {
-    const image = { userId: user._id, imageUrl: user.image_url };
-    this.executeAction(_actions.UserActions.EditUserImage, image);
+  hideImageModal: function () {
+    this.setState({ showImageModal: false });
   },
   onUploadImage: function (newImage) {
+    // eslint-disable-next-line
     const formData = new FormData();
     formData.append('file', newImage.file);
     const _this = this;
 
-    $.ajax({
+    _jquery2.default.ajax({
       url: `/api/${newImage.userId}/changeProfileImage`,
       type: 'POST',
       data: formData,
@@ -146,205 +172,135 @@ const UserBar = _react2.default.createClass({
     this.executeAction(_actions.UserActions.CancelFollowThisUser, cancelFollowObj);
   },
   checkCurrentUser: function () {
-    _sweetAlert2.default.alertWarningMessage('Login first please!');
+    _utils.sweetAlert.alertWarningMessage('Login first please!');
   },
-  _renderCurrentUserNav: function (currentUser) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'row nav' },
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well user-home-well ${this.isActive('home')}` },
+  _renderUserBarNavs: function (isCurrentUser, user) {
+    const { username: username } = user;
+
+    const navs = {
+      Home: 'fa fa-home',
+      Blogs: 'fa fa-book',
+      Follows: 'fa fa-flag',
+      More: 'fa fa-ellipsis-h'
+    };
+
+    if (isCurrentUser) {
+      navs.Messages = 'fa fa-comment';
+      navs.Settings = 'fa fa-cogs';
+    }
+
+    const colSize = isCurrentUser ? '2' : '3';
+
+    return Object.keys(navs).map((navli, index) => {
+      const lowcaseNav = navli.toLowerCase();
+      const isActive = this.isActive([lowcaseNav]);
+      const classes = `${colSize} bar-nav ${isActive}`;
+      const url = `/${username}/${lowcaseNav}`;
+      const icon = navs[navli];
+      return _react2.default.createElement(
+        _Layout.Col,
+        { size: classes, key: index },
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: `/${currentUser.username}/home` },
-          _react2.default.createElement('i', { className: 'fa fa-home' }),
-          ' Home'
+          { to: url },
+          _react2.default.createElement('i', { className: icon }),
+          ' ',
+          navli
         )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well ${this.isActive('user-blogs')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/${currentUser.username}/list` },
-          _react2.default.createElement('i', { className: 'fa fa-book' }),
-          ' Blogs'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well ${this.isActive('user-follows')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/${currentUser.username}/following` },
-          _react2.default.createElement('i', { className: 'fa fa-flag' }),
-          ' Following'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well ${this.isActive('user-messages')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/${currentUser.username}/messages` },
-          _react2.default.createElement('i', { className: 'fa fa-comment' }),
-          ' Messages'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well ${this.isActive('user-settings')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/${currentUser.username}/info` },
-          _react2.default.createElement('i', { className: 'fa fa-cogs' }),
-          ' Settings'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-2 col-xs-2 well ${this.isActive('user-more')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/${currentUser.username}/more` },
-          _react2.default.createElement('i', { className: 'fa fa-ellipsis-h' }),
-          ' More'
-        )
-      )
-    );
-  },
-  _renderOtherUsersNav: function (user) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'row nav' },
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-3 col-xs-3 well user-home-well ${this.isActive('user-home')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/user-home/${user.username}/home` },
-          _react2.default.createElement('i', { className: 'fa fa-home' }),
-          ' Home'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-3 col-xs-3 well ${this.isActive('user-blogs')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/user-blogs/${user.username}/list` },
-          _react2.default.createElement('i', { className: 'fa fa-book' }),
-          ' Blogs'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-3 col-xs-3 well ${this.isActive('user-follows')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/user-follows/${user.username}` },
-          _react2.default.createElement('i', { className: 'fa fa-flag' }),
-          ' Following'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: `col-md-3 col-xs-3 well ${this.isActive('user-more')}` },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: `/user-more/${user.username}` },
-          _react2.default.createElement('i', { className: 'fa fa-ellipsis-h' }),
-          ' More'
-        )
-      )
-    );
+      );
+    });
   },
   _renderUserInfo: function (isCurrentUser, user, isFollowed) {
     return _react2.default.createElement(
       'div',
-      { className: 'row user-info' },
+      { className: 'mt-10' },
       _react2.default.createElement(
-        'h3',
+        'p',
         { className: 'user-name' },
-        ' ',
         user.username
       ),
       isCurrentUser && _react2.default.createElement('div', { className: 'user-btn' }),
       !isCurrentUser && _react2.default.createElement(
         'div',
-        { className: 'user-btn' },
+        { className: 'user-btn mt-10' },
         !isFollowed && _react2.default.createElement(
-          _reactBootstrap.Button,
+          'button',
           { className: 'follow-btn', onClick: this.onFollowThisUser.bind(this, user) },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
+          _react2.default.createElement('i', { className: 'fa fa-plus' }),
           ' Follow'
         ),
         isFollowed && _react2.default.createElement(
-          _reactBootstrap.Button,
+          'button',
           { className: 'cancel-follow-btn', onClick: this.onCancelFollowThisUser.bind(this, user) },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
-          ' Following'
+          'Following'
         ),
         _react2.default.createElement(
-          _reactBootstrap.Button,
+          'button',
           { className: 'message-btn' },
-          _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'send' }),
           ' Message'
         )
       )
     );
   },
   _renderUserImage: function (isCurrentUser, user, currentUser) {
-    const defaultImageUrl = '/images/users/default-user.png';
+    const defaultImageUrl = '/styles/images/users/default-user.png';
     const hasChangedImage = currentUser ? currentUser.image_url === defaultImageUrl : false;
+    const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return _react2.default.createElement(
-      'div',
-      { className: 'row user-img' },
-      isCurrentUser && _react2.default.createElement(
-        'form',
-        { accept: 'multipart/form-data', className: 'image-tooltip' },
-        _react2.default.createElement('img', {
-          alt: 'user',
-          className: 'current-user-image',
-          src: currentUser.image_url,
-          onClick: this.onEditUserImage.bind(this, currentUser)
-        }),
-        hasChangedImage && _react2.default.createElement(
-          'span',
-          { className: 'tooltiptext' },
-          'Click to change image'
-        )
+      'form',
+      { accept: 'multipart/form-data', className: imageClass },
+      isCurrentUser && _react2.default.createElement('img', { alt: 'user', className: 'current-user', src: currentUser.image_url, onClick: this.onEditUserImage }),
+      isCurrentUser && hasChangedImage && _react2.default.createElement(
+        'span',
+        { className: 'tooltiptext' },
+        'Click to change image'
       ),
-      !isCurrentUser && _react2.default.createElement(
-        'form',
-        { accept: 'multipart/form-data' },
-        _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
-      )
+      !isCurrentUser && _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
     );
   },
   render: function () {
     const { isCurrentUser: isCurrentUser, user: user } = this.props;
-    const { currentUploadedImage: currentUploadedImage, isUploaded: isUploaded, currentUser: currentUser } = this.state;
+    const { currentUser: currentUser, showImageModal: showImageModal } = this.state;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
+    const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {
       backgroundImage: `url(${user.background_image_url})`
     };
+
     return _react2.default.createElement(
       'div',
       { className: 'user-bar' },
-      _react2.default.createElement('div', { className: 'user-background', style: userBackground }),
-      this._renderUserImage(isCurrentUser, user, currentUser),
-      this._renderUserInfo(isCurrentUser, user, isFollowed),
-      isCurrentUser && this._renderCurrentUserNav(currentUser),
-      !isCurrentUser && this._renderOtherUsersNav(user),
-      currentUploadedImage && _react2.default.createElement(_UserControls.UserImageEditor, {
-        show: currentUploadedImage !== null,
-        image: currentUploadedImage,
-        onSave: this.onUploadImage,
-        onCancel: this.onCancelUpload,
-        isUploaded: isUploaded
-      })
+      _react2.default.createElement(
+        'div',
+        { className: 'user-background', style: userBackground },
+        _react2.default.createElement(
+          _Layout.Row,
+          { className: 'user-img' },
+          this._renderUserImage(isCurrentUser, user, currentUser)
+        ),
+        _react2.default.createElement(
+          _Layout.Row,
+          { className: 'user-info' },
+          this._renderUserInfo(isCurrentUser, user, isFollowed)
+        )
+      ),
+      _react2.default.createElement(
+        _Layout.Row,
+        { className: 'nav' },
+        this._renderUserBarNavs(isCurrentUser, displayUser)
+      ),
+      _react2.default.createElement(
+        _Layout.Page,
+        null,
+        _react2.default.createElement(_UI.ModalsFactory, {
+          modalref: 'uploadModal',
+          title: 'Upload an image !',
+          ModalComponent: _UserControls.UserImageEditor,
+          size: 'modal-md',
+          showHeaderAndFooter: true,
+          showModal: showImageModal,
+          currentUser: currentUser })
+      )
     );
   }
 });

@@ -68,8 +68,8 @@ const AddBlog = _react2.default.createClass({
   },
   onChange: function (res) {
     const { currentUser: currentUser } = this.state;
-    if (res.resMsg === 'CREATE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessageWithCallback(res.resMsg, () => {
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      _sweetAlert2.default.alertSuccessMessageWithCallback(res.msg, () => {
         this.context.router.push(`/user-blogs/${currentUser.strId}/list`);
       });
     }

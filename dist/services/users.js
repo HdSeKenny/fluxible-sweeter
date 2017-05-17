@@ -18,7 +18,8 @@ var _server2 = _interopRequireDefault(_server);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ObjectID = _mongodb2.default.ObjectID;
+const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign */
+
 const MongoUrl = _server2.default.mongo.sweeter.url;
 
 exports.default = {
@@ -43,7 +44,7 @@ exports.default = {
           }
         });
 
-        Promise.all(allPromises.map(ap => ap())).then(data => {
+        Promise.all(allPromises.map(ap => ap())).then(() => {
           callback(null, users);
         }).catch(err => {
           callback(err, null);
@@ -77,15 +78,15 @@ exports.default = {
           body.focuses = [];
           body.blogs = [];
           User.insert(body, (err, res) => {
-            const user = res.ops[0];
-            user.strId = user._id.toString();
-            User.save(user);
+            const insertedUser = res.ops[0];
+            insertedUser.id_str = insertedUser._id.toString();
+            User.save(insertedUser);
             db.close();
 
-            req.session.userId = user._id;
+            req.session.userId = insertedUser._id;
             req.session.authenticated = true;
             callback(err, {
-              user: user,
+              user: insertedUser,
               stat: true,
               msg: 'Create account success !'
             });
@@ -99,10 +100,10 @@ exports.default = {
       const User = db.collection('users');
       const ecryptedPassword = (0, _md2.default)(body.password);
       User.findOne({ email: body.email }, (err, user) => {
-        let auth = { msg: '', stat: false };
+        const auth = { msg: '', stat: false };
         if (err) {
           auth.msg = err;
-        };
+        }
         if (user) {
           if (ecryptedPassword === user.password) {
             auth.msg = 'Login success !';
@@ -156,7 +157,7 @@ exports.default = {
   readCurrentUser: function (req, resource, params, config, callback) {
     _mongodb2.default.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
-      let auth = { stat: false, msg: '' };
+      const auth = { stat: false, msg: '' };
       User.findOne({ _id: ObjectID(req.session.userId) }).then(user => {
         const allPromises = [];
         if (!user) {
@@ -178,7 +179,7 @@ exports.default = {
             });
           }
         }
-        Promise.all(allPromises.map(ap => ap())).then(data => {
+        Promise.all(allPromises.map(ap => ap())).then(() => {
           callback(null, { user: user, auth: auth });
         }).catch(err => {
           callback(err, { user: null, auth: auth });
@@ -198,17 +199,17 @@ exports.default = {
           User.findOne({ '_id': ObjectID(body._id) }, (err, newUser) => {
             const allPromises = [];
             if (newUser) {
-              if (newUser.fans.length > 0) {
+              if (newUser.fans.length) {
                 newUser.fans.forEach((fanId, faIdx) => {
                   allPromises.push(getFansPromiseWrapper(newUser, fanId, faIdx));
                 });
               }
-              if (newUser.focuses.length > 0) {
+              if (newUser.focuses.length) {
                 newUser.focuses.forEach((focusId, fsIdx) => {
                   allPromises.push(getFocusesPromiseWrapper(newUser, focusId, fsIdx));
                 });
               }
-              Promise.all(allPromises.map(ap => ap())).then(data => {
+              Promise.all(allPromises.map(ap => ap())).then(() => {
                 callback(null, newUser);
               }).catch(err => {
                 callback(err, null);

@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
-  alertSuccessMessage: msg => {
+  success: msg => {
     swal({
       title: convertMsg(msg),
       type: 'success',

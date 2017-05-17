@@ -42,6 +42,34 @@ const animations = {
         }
       });
     }
+  },
+  fixed_left_nav: function (element) {
+    if (_env2.default.CLIENT) {
+      const $window = $(window);
+      const $ele = $(element);
+      const { leftNav: leftNav } = _configs2.default.params;
+      const leftNavHeight = leftNav.left_nav_height;
+      const fadeSpeed = leftNav.fade_speed;
+      let isScroll = true;
+
+      $window.on('scroll', () => {
+        const scrollTop = $window.scrollTop();
+        if (scrollTop > leftNavHeight) {
+          if (isScroll === true) {
+            $ele.fadeOut(fadeSpeed, () => {
+              $ele.addClass('fixed').fadeIn(fadeSpeed);
+            });
+            isScroll = false;
+          }
+        } else if (isScroll === false) {
+          $ele.removeClass('fixed');
+          isScroll = true;
+        } else if ($ele.hasClass('fixed')) {
+          $ele.removeClass('fixed');
+          isScroll = true;
+        }
+      });
+    }
   }
 };
 
