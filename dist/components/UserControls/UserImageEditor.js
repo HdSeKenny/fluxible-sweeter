@@ -72,10 +72,7 @@ class UserImageEditor extends _react.Component {
     console.log('didRemove...', data);
   }
 
-  didTransform(self, data) {
-
-    console.log('didTransform...', data);
-  }
+  didTransform(self, data) {}
 
   didConfirm(self, data) {
     console.log('didConfirm...', data);
@@ -86,15 +83,11 @@ class UserImageEditor extends _react.Component {
   }
 
   willTransform(self, data, cb) {
-    console.log('willTransform...', data);
     cb(data);
   }
 
   willSave(self, data, cb) {
-    console.log('willSave...', data);
-
     self.setState({ imageData: data, isUploadDisable: false });
-
     cb(data);
   }
 
@@ -132,7 +125,6 @@ class UserImageEditor extends _react.Component {
       success: newUser => {
         _this.context.executeAction(_actions.UserActions.UploadImageSuccess, newUser);
         _this.context.executeAction(_actions.BlogActions.UploadImageSuccess, newUser);
-        _this.context.executeAction(_actions.UserActions.LoadSessionUser);
       }
     });
   }

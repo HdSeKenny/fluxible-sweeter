@@ -24,7 +24,7 @@ class BlogModal extends _react.Component {
     super(props);
     this.state = {
       currentUser: props.currentUser,
-      welcomeText: "What's happening now ?",
+      welcomeText: 'Create a sweet here !',
       blogText: ''
     };
   }
@@ -54,7 +54,15 @@ class BlogModal extends _react.Component {
     this.setState({ blogText: e.target.value });
   }
 
+  goToArticleCreatePage() {
+    const { currentUser: currentUser } = this.state;
+    if (!currentUser) {
+      return _utils.sweetAlert.alertWarningMessage('Login first!');
+    }
+  }
+
   _renderCreateBtns(isDisabled) {
+    const { isUserHome: isUserHome } = this.props;
     return _react2.default.createElement(
       'div',
       { className: '' },
@@ -63,10 +71,15 @@ class BlogModal extends _react.Component {
         { disabled: isDisabled, className: 'btn btn-info', onClick: () => this.onCreateSweet() },
         'Create'
       ),
-      _react2.default.createElement(
+      !isUserHome && _react2.default.createElement(
         'button',
         { className: 'btn btn-primary', onClick: () => this.onCloseBlogModal() },
         'Cancel'
+      ),
+      isUserHome && _react2.default.createElement(
+        'button',
+        { className: 'btn btn-primary', onClick: () => this.goToArticleCreatePage() },
+        'Article'
       )
     );
   }
@@ -150,6 +163,7 @@ BlogModal.contextTypes = {
 BlogModal.propTypes = {
   location: _react.PropTypes.object,
   children: _react.PropTypes.object,
-  currentUser: _react.PropTypes.object
+  currentUser: _react.PropTypes.object,
+  isUserHome: _react.PropTypes.bool
 };
 module.exports = exports['default'];

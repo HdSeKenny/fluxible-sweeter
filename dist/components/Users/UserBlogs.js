@@ -26,7 +26,7 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _LeftNavs = require('../LeftNavs');
+var _UserNavs = require('../UserNavs');
 
 var _UI = require('../UI');
 
@@ -247,7 +247,7 @@ const UserBlogs = _react2.default.createClass({
     );
   },
   _renderCurrentUserContentLeft: function (pathname, currentUser, displayBlogs) {
-    return _react2.default.createElement(_LeftNavs.UserBlogsNav, { path: pathname, currentUser: currentUser, displayBlogs: displayBlogs });
+    return _react2.default.createElement(_UserNavs.UserBlogsNav, { path: pathname, currentUser: currentUser, displayBlogs: displayBlogs });
   },
   _renderCurrentUserContentRight: function (displayBlogs) {
     return _react2.default.createElement(

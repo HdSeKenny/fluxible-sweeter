@@ -24,7 +24,6 @@ class SlimEditor extends _react2.default.Component {
   }
 
   render() {
-    console.log(this.props.children);
     return _react2.default.createElement(
       'div',
       { className: 'slim' },

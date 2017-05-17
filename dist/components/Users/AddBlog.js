@@ -24,7 +24,7 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _LeftNavs = require('../LeftNavs');
+var _UserNavs = require('../UserNavs');
 
 var _UserBar = require('./UserBar');
 
@@ -230,7 +230,7 @@ const AddBlog = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { className: 'content-left' },
-        _react2.default.createElement(_LeftNavs.UserBlogsNav, { path: pathname, user: currentUser, isCurrentUser: isCurrentUser })
+        _react2.default.createElement(_UserNavs.UserBlogsNav, { path: pathname, user: currentUser, isCurrentUser: isCurrentUser })
       ),
       _react2.default.createElement(
         'div',

@@ -26,7 +26,7 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _LeftNavs = require('../LeftNavs');
+var _UserNavs = require('../UserNavs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -173,7 +173,7 @@ const ChangePassword = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'settings-left' },
-          _react2.default.createElement(_LeftNavs.UserSettingsNav, { path: pathname })
+          _react2.default.createElement(_UserNavs.UserSettingsNav, { path: pathname })
         ),
         _react2.default.createElement(
           'div',

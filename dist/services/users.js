@@ -22,14 +22,77 @@ const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-rea
 
 const MongoUrl = _server2.default.mongo.sweeter.url;
 
+const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
+  _mongodb2.default.connect(MongoUrl, (err, db) => {
+    const User = db.collection('users');
+    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
+      if (err) {
+        return reject(err);
+      } else {
+        user.fans[faIdx] = fan;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
+  _mongodb2.default.connect(MongoUrl, (err, db) => {
+    const User = db.collection('users');
+    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
+      if (err) {
+        return reject(err);
+      } else {
+        user.focuses[fsIdx] = focus;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getBlogsPromise = (user, blogId, bgIdx) => new Promise((resolve, reject) => {
+  _mongodb2.default.connect(MongoUrl, (err, db) => {
+    const Blog = db.collection('blogs');
+    Blog.findOne({ _id: ObjectID(blogId) }, (err, blog) => {
+      if (err) {
+        return reject(err);
+      } else {
+        user.blogs[bgIdx] = blog;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getFansPromiseWrapper = (user, fanId, faIdx) => {
+  return () => {
+    return getFansPromise(user, fanId, faIdx);
+  };
+};
+
+const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
+  return () => {
+    return getFocusesPromise(user, focusId, fsIdx);
+  };
+};
+
+const getBlogsPromiseWrapper = (user, blogId, bgIdx) => {
+  return () => {
+    return getBlogsPromise(user, blogId, bgIdx);
+  };
+};
+
 exports.default = {
 
   name: 'users',
 
   loadUsers: function (req, resource, params, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
+    _mongodb2.default.connect(MongoUrl, (connectErr, db) => {
       const User = db.collection('users');
-      User.find().toArray((err, users) => {
+      User.find().toArray((loadUsersErr, users) => {
         const allPromises = [];
         users.forEach(user => {
           if (user.fans.length) {
@@ -42,12 +105,17 @@ exports.default = {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
             });
           }
+          if (user.blogs.length) {
+            user.blogs.forEach((blogId, bgIdx) => {
+              allPromises.push(getBlogsPromiseWrapper(user, blogId, bgIdx));
+            });
+          }
         });
 
         Promise.all(allPromises.map(ap => ap())).then(() => {
           callback(null, users);
-        }).catch(err => {
-          callback(err, null);
+        }).catch(loadUsersPromiseErr => {
+          callback(loadUsersPromiseErr, null);
         });
       });
     });
@@ -298,48 +366,5 @@ exports.default = {
       });
     });
   }
-};
-
-
-const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
-  _mongodb2.default.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
-      if (err) {
-        return reject(err);
-      } else {
-        user.fans[faIdx] = fan;
-      }
-      db.close();
-      resolve();
-    });
-  });
-});
-
-const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
-  _mongodb2.default.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
-      if (err) {
-        return reject(err);
-      } else {
-        user.focuses[fsIdx] = focus;
-      }
-      db.close();
-      resolve();
-    });
-  });
-});
-
-const getFansPromiseWrapper = (user, fanId, faIdx) => {
-  return () => {
-    return getFansPromise(user, fanId, faIdx);
-  };
-};
-
-const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
-  return () => {
-    return getFocusesPromise(user, focusId, fsIdx);
-  };
 };
 module.exports = exports['default'];

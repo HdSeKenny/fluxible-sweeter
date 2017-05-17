@@ -5,7 +5,7 @@
   "author": "Kenny",
   "scripts": {
     "prod": "grunt prod && node ./dist/bin/server.js",
-    "start": "node ./.tmp/bin/server.js",
+    "start": "NODE_ENV=production node ./dist/bin/server.js",
     "dev": "nodemon ./.tmp/bin/server.js"
   },
   "dependencies": {

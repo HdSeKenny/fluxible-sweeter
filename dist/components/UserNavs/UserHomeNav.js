@@ -27,7 +27,6 @@ const UserHomeNav = _react2.default.createClass({
 
   propTypes: {
     path: _react2.default.PropTypes.string,
-    isCurrentUser: _react2.default.PropTypes.bool,
     user: _react2.default.PropTypes.object,
     displayBlogs: _react2.default.PropTypes.array,
     currentUser: _react2.default.PropTypes.object
@@ -45,8 +44,9 @@ const UserHomeNav = _react2.default.createClass({
   goToUserPages: function (str) {
     this.context.router.push(str);
   },
-  _renderUserInfo: function (isCurrentUser, user) {
+  _renderUserInfo: function (user) {
     const { firstName: firstName, lastName: lastName, email: email, phone: phone, birthday: birthday, profession: profession, description: description } = user;
+    const isCurrentUser = user.id_str === this.props.currentUser.id_str;
     return _react2.default.createElement(
       'div',
       { className: 'isNotCurrentUser' },
@@ -135,7 +135,7 @@ const UserHomeNav = _react2.default.createClass({
     );
   },
   render: function () {
-    const { user: user, displayBlogs: displayBlogs, currentUser: currentUser, isCurrentUser: isCurrentUser } = this.props;
+    const { user: user, displayBlogs: displayBlogs, currentUser: currentUser } = this.props;
     const displayUser = user || currentUser;
     const { username: username, fans: fans, focuses: focuses } = displayUser;
     return _react2.default.createElement(
@@ -190,7 +190,7 @@ const UserHomeNav = _react2.default.createClass({
       _react2.default.createElement(
         _Layout.Row,
         { className: 'user-info' },
-        this._renderUserInfo(isCurrentUser, displayUser)
+        this._renderUserInfo(displayUser)
       ),
       _react2.default.createElement(_Layout.Row, { className: 'others' })
     );

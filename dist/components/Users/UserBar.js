@@ -46,7 +46,6 @@ const UserBar = _react2.default.createClass({
 
   propTypes: {
     path: _react2.default.PropTypes.string,
-    isCurrentUser: _react2.default.PropTypes.bool,
     user: _react2.default.PropTypes.object
   },
 
@@ -259,8 +258,9 @@ const UserBar = _react2.default.createClass({
     );
   },
   render: function () {
-    const { isCurrentUser: isCurrentUser, user: user } = this.props;
+    const { user: user } = this.props;
     const { currentUser: currentUser, showImageModal: showImageModal } = this.state;
+    const isCurrentUser = user.id_str === currentUser.id_str;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {

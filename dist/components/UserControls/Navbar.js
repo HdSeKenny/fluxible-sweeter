@@ -59,8 +59,8 @@ const Navbar = _react2.default.createClass({
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
       grayUserImageUrl: '/styles/images/users/gray-user.png',
       brandImage: '/styles/images/sweeter.png',
-      showLoginModal: true,
-      showSignupModal: true,
+      showLoginModal: false,
+      showSignupModal: false,
       switchModal: {
         modalRef: '',
         state: false
@@ -68,9 +68,14 @@ const Navbar = _react2.default.createClass({
     };
   },
   onChange: function (res) {
-    const accountMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'USER_REGISTER_FAIL', 'USER_REGISTER_SUCCESS'];
+    const accountMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'USER_REGISTER_FAIL', 'USER_REGISTER_SUCCESS', 'UPLOAD_IMAGE_SUCCESS'];
+
     if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
+    }
+
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      this.context.router.push('/');
     }
   },
   isActive: function (routes) {
@@ -135,19 +140,10 @@ const Navbar = _react2.default.createClass({
     this.setState({ switchModal: { modalRef: modalRef, state: true } });
   },
   render: function () {
-    const {
-      authenticated: authenticated,
-      currentUser: currentUser,
-      grayUserImageUrl: grayUserImageUrl,
-      brandImage: brandImage,
-      showLoginModal: showLoginModal,
-      showSignupModal: showSignupModal
-    } = this.state;
-
+    const { authenticated: authenticated, currentUser: currentUser, grayUserImageUrl: grayUserImageUrl, brandImage: brandImage, showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
-      _react2.default.createElement('header', { className: 'hidden-header' }),
       _react2.default.createElement(
         'header',
         { id: 'menuzord', className: 'sweet-nav blue' },
@@ -168,7 +164,7 @@ const Navbar = _react2.default.createClass({
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/list' },
-                'Home'
+                'List'
               )
             ),
             authenticated && _react2.default.createElement(

@@ -56,6 +56,7 @@ const UserStore = (0, _createStore2.default)({
   },
   loadUsersSuccess: function (res) {
     this.users = res;
+    console.log(res);
     this.emitChange();
   },
   loadUsersFail: function () {
@@ -145,6 +146,34 @@ const UserStore = (0, _createStore2.default)({
   },
   getUserByUsername: function (username) {
     return this.users.find(user => user.username === username);
+  },
+  getDisplayBlogsByUsername: function (username) {
+    const displayBlogs = [];
+    const thisUser = this.users.find(user => user.username === username);
+    const { currentUser: currentUser } = this;
+    const { focuses: focuses } = thisUser;
+    const isCurrentUser = currentUser ? currentUser.username === username : false;
+
+    thisUser.blogs.forEach(b => {
+      // eslint-disable-next-line no-param-reassign
+      b.author = thisUser;
+      displayBlogs.push(b);
+    });
+
+    if (isCurrentUser) {
+      focuses.forEach(focuse => {
+        const focuseUser = this.users.find(user => user.id_str === focuse.id_str);
+        if (focuseUser.blogs.length) {
+          focuseUser.blogs.forEach(b => {
+            // eslint-disable-next-line no-param-reassign
+            b.author = focuseUser;
+            displayBlogs.push(b);
+          });
+        }
+      });
+    }
+
+    return displayBlogs;
   },
   isThumbedUp: function (blog) {
     return blog.likers.indexOf(this.currentUser.strId) !== -1;
