@@ -5,7 +5,7 @@ import UserBar from './UserBar';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { UserSettingsNav } from '../LeftNavs';
+import { UserSettingsNav } from '../UserNavs';
 
 const ChangePassword = React.createClass({
 

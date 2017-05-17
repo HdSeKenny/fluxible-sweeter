@@ -20,14 +20,15 @@ export default class BlogModal extends Component {
   static propTypes = {
     location: PropTypes.object,
     children: PropTypes.object,
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
+    isUserHome: PropTypes.bool
   };
 
   constructor(props) {
     super(props);
     this.state = {
       currentUser: props.currentUser,
-      welcomeText: "What's happening now ?",
+      welcomeText: 'Create a sweet here !',
       blogText: ''
     };
   }
@@ -57,11 +58,20 @@ export default class BlogModal extends Component {
     this.setState({ blogText: e.target.value });
   }
 
+  goToArticleCreatePage() {
+    const { currentUser } = this.state;
+    if (!currentUser) {
+      return sweetAlert.alertWarningMessage('Login first!');
+    }
+  }
+
   _renderCreateBtns(isDisabled) {
+    const { isUserHome } = this.props;
     return (
       <div className="">
         <button disabled={isDisabled} className="btn btn-info" onClick={() => this.onCreateSweet()}>Create</button>
-        <button className="btn btn-primary" onClick={() => this.onCloseBlogModal()}>Cancel</button>
+        {!isUserHome && <button className="btn btn-primary" onClick={() => this.onCloseBlogModal()}>Cancel</button>}
+        {isUserHome && <button className="btn btn-primary" onClick={() => this.goToArticleCreatePage()}>Article</button>}
       </div>
     );
   }

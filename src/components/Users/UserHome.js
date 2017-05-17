@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
-import { UserHomeNav } from '../LeftNavs';
+import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { BlogsWell } from '../UI';
 import { BlogModal } from '../UserControls';
 import UserBar from './UserBar';
@@ -109,26 +109,18 @@ const UserHome = React.createClass({
     });
   },
 
-  _renderUserCreateWell(currentUser, blogText, welcomeText) {
-    const isBlogTextLength = blogText.length > 140;
+  _renderUserCreateWell(currentUser) {
     return (
       <div className="create-blog">
-        <BlogModal />
+        <BlogModal isUserHome={true} currentUser={currentUser} />
       </div>
     );
   },
 
   render() {
-    const {
-      currentUser,
-      blogText,
-      isCurrentUser,
-      user,
-      singleUserBlogs,
-      welcomeText
-    } = this.state;
-    const displayBlogs = this.getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs);
+    const { currentUser, isCurrentUser, user, singleUserBlogs } = this.state;
     const { pathname } = this.props.location;
+    const displayBlogs = this.getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs);
     return (
       <div className="user-home">
         <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
@@ -143,7 +135,7 @@ const UserHome = React.createClass({
             />
           </div>
           <div className="home-right">
-            {isCurrentUser && this._renderUserCreateWell(currentUser, blogText, welcomeText)}
+            <HomeRightNav path={pathname} />
             <BlogsWell
               displayBlogs={displayBlogs}
               changeShowCommentsState={this.changeShowCommentsState}

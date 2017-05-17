@@ -57,6 +57,10 @@ const Navbar = React.createClass({
     if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
     }
+
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      this.context.router.push('/');
+    }
   },
 
   isActive(routes) {
@@ -147,7 +151,7 @@ const Navbar = React.createClass({
             </Link>
             <ul className="sweet-nav-menu sweet-nav-left">
               <li className={this.isActive(['list'])}>
-                <Link to="/list">Home</Link>
+                <Link to="/list">List</Link>
               </li>
               {authenticated &&
                 <li className={this.isActive(['home', currentUser.username])}>

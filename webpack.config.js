@@ -23,7 +23,7 @@ module.exports = function makeWebpackConfig(options) {
   config.output = {
     // Absolute output directory
     // path: path.join(__dirname, '/src/public/build/'),
-    path: isProd ? `${__dirname}/dist/build/` : `${__dirname}/dist/`,
+    path: isProd ? `${__dirname}/dist/public/build/` : `${__dirname}/dist/`,
 
     // Uses webpack-dev-server in development
     publicPath: isProd ? '/' : `http://${env.hot_server_host}:${env.hot_server_port}/`,
@@ -130,7 +130,7 @@ module.exports = function makeWebpackConfig(options) {
             assets: {},
             cdnPath: this.options.output.publicPath
           };
-          const hostAddress = 'build/';
+          const hostAddress = '/build/';
           Object.keys(assets).forEach((key) => {
             const value = assets[key];
             const isArrayValue = _.isArray(value);

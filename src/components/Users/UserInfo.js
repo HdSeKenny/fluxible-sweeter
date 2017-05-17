@@ -5,7 +5,7 @@ import sweetAlert from '../../utils/sweetAlert';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { UserSettingsNav } from '../LeftNavs';
+import { UserSettingsNav } from '../UserNavs';
 import UserBar from './UserBar';
 
 const UserInfo = React.createClass({

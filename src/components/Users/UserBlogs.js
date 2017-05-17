@@ -6,7 +6,7 @@ import { sweetAlert, format } from '../../utils';
 import UserBar from './UserBar';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
-import { UserBlogsNav } from '../LeftNavs';
+import { UserBlogsNav } from '../UserNavs';
 import { BlogsWell } from '../UI';
 import { BlogEditor } from '../UserControls';
 

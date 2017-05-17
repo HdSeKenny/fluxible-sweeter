@@ -1,7 +1,5 @@
 node_modules
-src/configs/development.json
 npm-debug.log
 .idea
 .tmp
-dist
 

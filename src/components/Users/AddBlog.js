@@ -6,7 +6,7 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
-import { UserBlogsNav } from '../LeftNavs';
+import { UserBlogsNav } from '../UserNavs';
 import UserBar from './UserBar';
 
 const AddBlog = React.createClass({
