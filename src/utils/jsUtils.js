@@ -203,6 +203,12 @@ function base64ToBlob(dataURI, filename) {
   return blobToFile(createBlob(ab, mimeType), filename);
 }
 
+function sortByDate(arr) {
+  if (Array.isArray(arr)) {
+    return arr.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)));
+  }
+}
+
 export default {
   isNumeric,
   isString,
@@ -211,5 +217,6 @@ export default {
   strToArray,
   shorten,
   splitUrlBySlash,
-  base64ToBlob
+  base64ToBlob,
+  sortByDate
 };

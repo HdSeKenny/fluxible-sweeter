@@ -6,14 +6,81 @@ import serverConfig from '../configs/server';
 const ObjectID = MongoClient.ObjectID;
 const MongoUrl = serverConfig.mongo.sweeter.url;
 
+const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
+  MongoClient.connect(MongoUrl, (err, db) => {
+    const User = db.collection('users');
+    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
+      if (err) {
+        return reject(err);
+      }
+      else {
+        user.fans[faIdx] = fan;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
+  MongoClient.connect(MongoUrl, (err, db) => {
+    const User = db.collection('users');
+    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
+      if (err) {
+        return reject(err);
+      }
+      else {
+        user.focuses[fsIdx] = focus;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getBlogsPromise = (user, blogId, bgIdx) => new Promise((resolve, reject) => {
+  MongoClient.connect(MongoUrl, (err, db) => {
+    const Blog = db.collection('blogs');
+    Blog.findOne({ _id: ObjectID(blogId) }, (err, blog) => {
+      if (err) {
+        return reject(err);
+      }
+      else {
+        user.blogs[bgIdx] = blog;
+      }
+      db.close();
+      resolve();
+    });
+  });
+});
+
+const getFansPromiseWrapper = (user, fanId, faIdx) => {
+  return () => {
+    return getFansPromise(user, fanId, faIdx);
+  };
+};
+
+const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
+  return () => {
+    return getFocusesPromise(user, focusId, fsIdx);
+  };
+};
+
+const getBlogsPromiseWrapper = (user, blogId, bgIdx) => {
+  return () => {
+    return getBlogsPromise(user, blogId, bgIdx);
+  };
+};
+
+
 export default {
 
   name: 'users',
 
   loadUsers(req, resource, params, config, callback) {
-    MongoClient.connect(MongoUrl, (err, db) => {
+    MongoClient.connect(MongoUrl, (connectErr, db) => {
       const User = db.collection('users');
-      User.find().toArray((err, users) => {
+      User.find().toArray((loadUsersErr, users) => {
         const allPromises = [];
         users.forEach(user => {
           if (user.fans.length) {
@@ -26,13 +93,18 @@ export default {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
             });
           }
+          if (user.blogs.length) {
+            user.blogs.forEach((blogId, bgIdx) => {
+              allPromises.push(getBlogsPromiseWrapper(user, blogId, bgIdx));
+            });
+          }
         });
 
         Promise.all(allPromises.map(ap => ap())).then(() => {
           callback(null, users);
         })
-        .catch(err => {
-          callback(err, null);
+        .catch(loadUsersPromiseErr => {
+          callback(loadUsersPromiseErr, null);
         });
       });
     });
@@ -307,46 +379,3 @@ export default {
   }
 };
 
-const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
-  MongoClient.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
-      if (err) {
-        return reject(err);
-      }
-      else {
-        user.fans[faIdx] = fan;
-      }
-      db.close();
-      resolve();
-    });
-  });
-});
-
-const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
-  MongoClient.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
-      if (err) {
-        return reject(err);
-      }
-      else {
-        user.focuses[fsIdx] = focus;
-      }
-      db.close();
-      resolve();
-    });
-  });
-});
-
-const getFansPromiseWrapper = (user, fanId, faIdx) => {
-  return () => {
-    return getFansPromise(user, fanId, faIdx);
-  };
-};
-
-const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
-  return () => {
-    return getFocusesPromise(user, focusId, fsIdx);
-  };
-};

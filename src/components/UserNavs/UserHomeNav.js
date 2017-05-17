@@ -1,5 +1,5 @@
 import React from 'react';
-import { routerShape, Link } from 'react-router';
+import { routerShape } from 'react-router';
 import { Row, Col } from '../UI/Layout';
 import { animations } from '../../utils';
 
@@ -14,7 +14,6 @@ const UserHomeNav = React.createClass({
 
   propTypes: {
     path: React.PropTypes.string,
-    isCurrentUser: React.PropTypes.bool,
     user: React.PropTypes.object,
     displayBlogs: React.PropTypes.array,
     currentUser: React.PropTypes.object
@@ -36,8 +35,9 @@ const UserHomeNav = React.createClass({
     this.context.router.push(str);
   },
 
-  _renderUserInfo(isCurrentUser, user) {
+  _renderUserInfo(user) {
     const { firstName, lastName, email, phone, birthday, profession, description } = user;
+    const isCurrentUser = user.id_str === this.props.currentUser.id_str;
     return (
       <div className="isNotCurrentUser">
         <Row className="basic-info">
@@ -54,7 +54,7 @@ const UserHomeNav = React.createClass({
   },
 
   render() {
-    const { user, displayBlogs, currentUser, isCurrentUser } = this.props;
+    const { user, displayBlogs, currentUser } = this.props;
     const displayUser = user || currentUser;
     const { username, fans, focuses } = displayUser;
     return (
@@ -71,7 +71,7 @@ const UserHomeNav = React.createClass({
           </Col>
         </Row>
         <Row className="user-info">
-          {this._renderUserInfo(isCurrentUser, displayUser)}
+          {this._renderUserInfo(displayUser)}
         </Row>
         <Row className="others">
 

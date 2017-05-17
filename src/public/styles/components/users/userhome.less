@@ -81,17 +81,22 @@
   .home-right {
     width: 73%;
     float: right;
-    padding: 15px 30px;
-    background: #fff;
+    // padding: 15px 30px;
+
     border-radius: 3px;
     .home-right-nav {
+      background: #fff;
+      padding: 15px 20px;
+      .home-nav-lis {
+        margin-top: -1px;
+      }
       .btn {
         &.btn-default{
           margin-right: 30px;
           border: 1px solid #fff;
-          padding: 3px 0;
+          padding: 2px 0;
           font-size: 16px;
-          &:hover, &.active {
+          &:hover, &.on {
             color: @brand-info !important;
             background: #fff;
             border-bottom: 1px solid @brand-info;
@@ -107,11 +112,8 @@
         }
       }
     }
-    .create-blog {
-      padding: 10px 0;
-      margin-bottom: 10px;
-      background: #fff;
-      border-radius: 3px;
+    .pin {
+      padding: 15px 20px;
     }
   }
 }

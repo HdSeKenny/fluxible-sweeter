@@ -1,14 +1,12 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
-import { BlogActions } from '../../actions';
+import UserBar from './UserBar';
+// import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
-import { BlogsWell } from '../UI';
-import { BlogModal } from '../UserControls';
-import UserBar from './UserBar';
-import sweetAlert from '../../utils/sweetAlert';
+import { PinItem, ModalsFactory, Layout } from '../UI';
+import { PinItemModal } from '../UserControls';
+import { sweetAlert, jsUtils } from '../../utils';
 
 const UserHome = React.createClass({
 
@@ -38,25 +36,28 @@ const UserHome = React.createClass({
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       user: this.getStore(UserStore).getUserByUsername(username),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
+      displayBlogs: this.getStore(UserStore).getDisplayBlogsByUsername(username),
+      selectedPin: {},
       singleUserBlogs: null,
       welcomeText: 'What happened today, Write a blog here !',
-      blogText: ''
+      showCreateModal: false
     };
   },
 
   onChange(res) {
-    const { user, isCurrentUser } = this.state;
+    const { user, displayBlogs } = this.state;
     const { username } = this.props.params;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.success(res.msg);
-      this.setState({ blogText: '' });
+      displayBlogs.push(res.newBlog);
+      this.setState({ displayBlogs });
+      ModalsFactory.hide('createBlogModal');
     }
 
     if (res.msg === 'COMMENT_SUCCESS'
         || res.msg === 'DELETE_COMMENT_SUCCESS') {
       sweetAlert.success(res.msg);
-      const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
+      // const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
       // this.setState({ singleUserBlogs });
     }
 
@@ -68,80 +69,88 @@ const UserHome = React.createClass({
     //   })
     // }
 
-    this.setState({
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserByUsername(username),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(username)
+    // this.setState({
+    //   currentUser: this.getStore(UserStore).getCurrentUser(),
+    //   user: this.getStore(UserStore).getUserByUsername(username)
+    // });
+  },
+
+  // handleBlogText(e) {
+  //   this.setState({ blogText: e.target.value });
+  // },
+
+  // handleMicroBlog() {
+  //   const newBlog = {
+  //     text: this.state.blogText,
+  //     created_at: new Date(),
+  //     type: 'microblog',
+  //     author: this.state.currentUser._id
+  //   };
+
+  //   this.executeAction(BlogActions.AddBlog, newBlog);
+  // },
+
+  // getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs) {
+  //   let displayBlogs = singleUserBlogs;
+  //   if (!displayBlogs) {
+  //     displayBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
+  //   }
+  //   return displayBlogs;
+  // },
+
+  // changeShowCommentsState(displayBlogs) {
+  //   this.setState({ singleUserBlogs: displayBlogs });
+  // },
+
+  // changeBlogThumbsUpState() {
+  //   const { user, isCurrentUser } = this.state;
+  //   this.setState({
+  //     singleUserBlogs: this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user)
+  //   });
+  // },
+
+  onViewPinItem(id) {
+    const { displayBlogs } = this.state;
+    const selectedPin = displayBlogs.find(b => b.id_str === id);
+    this.setState({ selectedPin });
+
+    $('#pinModal').on('hidden.bs.modal', () => {
+      if (this.hidePinModal) {
+        this.hidePinModal();
+      }
     });
+
+    ModalsFactory.show('pinModal');
   },
 
-  handleBlogText(e) {
-    this.setState({ blogText: e.target.value });
-  },
-
-  handleMicroBlog() {
-    const newBlog = {
-      text: this.state.blogText,
-      created_at: new Date(),
-      type: 'microblog',
-      author: this.state.currentUser._id
-    };
-
-    this.executeAction(BlogActions.AddBlog, newBlog);
-  },
-
-  getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs) {
-    let displayBlogs = singleUserBlogs;
-    if (!displayBlogs) {
-      displayBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
+  hidePinModal() {
+    const userHomeDom = $('.user-home');
+    if (userHomeDom && userHomeDom.length) {
+      this.setState({ selectedPin: {} });
     }
-    return displayBlogs;
-  },
-
-  changeShowCommentsState(displayBlogs) {
-    this.setState({ singleUserBlogs: displayBlogs });
-  },
-
-  changeBlogThumbsUpState() {
-    const { user, isCurrentUser } = this.state;
-    this.setState({
-      singleUserBlogs: this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user)
-    });
-  },
-
-  _renderUserCreateWell(currentUser) {
-    return (
-      <div className="create-blog">
-        <BlogModal isUserHome={true} currentUser={currentUser} />
-      </div>
-    );
   },
 
   render() {
-    const { currentUser, isCurrentUser, user, singleUserBlogs } = this.state;
+    const { currentUser, user, displayBlogs, selectedPin } = this.state;
     const { pathname } = this.props.location;
-    const displayBlogs = this.getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs);
+    const sortedBlogs = jsUtils.sortByDate(displayBlogs);
     return (
       <div className="user-home">
-        <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
+        <UserBar path={pathname} user={user} currentUser={currentUser} />
         <div className="home-content">
           <div className="home-left">
-            <UserHomeNav
-              path={pathname}
-              isCurrentUser={isCurrentUser}
-              user={user}
-              currentUser={currentUser}
-              displayBlogs={displayBlogs}
-            />
+            <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
           </div>
           <div className="home-right">
-            <HomeRightNav path={pathname} />
-            <BlogsWell
-              displayBlogs={displayBlogs}
-              changeShowCommentsState={this.changeShowCommentsState}
-              changeBlogThumbsUpState={this.changeBlogThumbsUpState}
-              currentUser={currentUser}
-            />
+            <HomeRightNav path={pathname} currentUser={currentUser} />
+            <div className="home-blogs">
+              {sortedBlogs.map((blog, index) =>
+                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />
+              )}
+            </div>
+            <Layout.Page>
+              <ModalsFactory modalref="pinModal" pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
+            </Layout.Page>
           </div>
         </div>
       </div>
@@ -150,33 +159,3 @@ const UserHome = React.createClass({
 });
 
 export default UserHome;
-
-
- // <div className="row">
- //          <div className="col-xs-7">
- //            <p>{welcomeText}</p>
- //          </div>
- //          <div className="col-xs-5">
- //            {!isBlogTextLength &&
- //              <p>You can still write <span className="len-span">{140 - blogText.length}</span> words</p>}
- //            {isBlogTextLength &&
- //              <p>You can't write words large than <span className="len-span-red">140</span> words</p>}
- //          </div>
- //        </div>
- //        <div className="row textarea-row">
- //          <textarea type="text" rows="3" value={blogText} onChange={this.handleBlogText} />
- //        </div>
- //        <div className="row btn-row">
- //          <Button
- //            disabled={isBlogTextLength || blogText.length === 0}
- //            onClick={this.handleMicroBlog}
- //            className="btn-primary create-btn"
- //          >
- //            <Glyphicon glyph="send" /> Create
- //          </Button>
- //          <Link to={`/user-blogs/${currentUser.strId}/add`}>
- //            <Button className="btn-info create-btn" >
- //              <Glyphicon glyph="pencil" /> Articles
- //            </Button>
- //          </Link>
- //        </div>

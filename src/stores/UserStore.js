@@ -49,6 +49,7 @@ const UserStore = createStore({
 
   loadUsersSuccess(res) {
     this.users = res;
+    console.log(res);
     this.emitChange();
   },
 
@@ -152,6 +153,35 @@ const UserStore = createStore({
 
   getUserByUsername(username) {
     return this.users.find(user => user.username === username);
+  },
+
+  getDisplayBlogsByUsername(username) {
+    const displayBlogs = [];
+    const thisUser = this.users.find(user => user.username === username);
+    const { currentUser } = this;
+    const { focuses } = thisUser;
+    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
+
+    thisUser.blogs.forEach(b => {
+      // eslint-disable-next-line no-param-reassign
+      b.author = thisUser;
+      displayBlogs.push(b);
+    });
+
+    if (isCurrentUser) {
+      focuses.forEach(focuse => {
+        const focuseUser = this.users.find(user => user.id_str === focuse.id_str);
+        if (focuseUser.blogs.length) {
+          focuseUser.blogs.forEach(b => {
+            // eslint-disable-next-line no-param-reassign
+            b.author = focuseUser;
+            displayBlogs.push(b);
+          });
+        }
+      });
+    }
+
+    return displayBlogs;
   },
 
   isThumbedUp(blog) {

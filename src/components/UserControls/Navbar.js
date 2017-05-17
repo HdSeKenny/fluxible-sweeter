@@ -38,8 +38,8 @@ const Navbar = React.createClass({
       authenticated: this.getStore(UserStore).isAuthenticated(),
       grayUserImageUrl: '/styles/images/users/gray-user.png',
       brandImage: '/styles/images/sweeter.png',
-      showLoginModal: true,
-      showSignupModal: true,
+      showLoginModal: false,
+      showSignupModal: false,
       switchModal: {
         modalRef: '',
         state: false
@@ -52,8 +52,10 @@ const Navbar = React.createClass({
       'USER_LOGIN_SUCCESS',
       'LOGOUT_SUCCESS',
       'USER_REGISTER_FAIL',
-      'USER_REGISTER_SUCCESS'
+      'USER_REGISTER_SUCCESS',
+      'UPLOAD_IMAGE_SUCCESS'
     ];
+
     if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
     }
@@ -132,18 +134,9 @@ const Navbar = React.createClass({
   },
 
   render() {
-    const {
-      authenticated,
-      currentUser,
-      grayUserImageUrl,
-      brandImage,
-      showLoginModal,
-      showSignupModal
-    } = this.state;
-
+    const { authenticated, currentUser, grayUserImageUrl, brandImage, showLoginModal, showSignupModal } = this.state;
     return (
       <section className="menuzord-section">
-        <header className="hidden-header" />
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
             <Link to="/" className="sweet-nav-brand">

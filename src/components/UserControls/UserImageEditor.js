@@ -73,8 +73,6 @@ export default class UserImageEditor extends Component {
   }
 
   didTransform(self, data) {
-
-    console.log('didTransform...', data);
   }
 
   didConfirm(self, data) {
@@ -86,15 +84,11 @@ export default class UserImageEditor extends Component {
   }
 
   willTransform(self, data, cb) {
-    console.log('willTransform...', data);
     cb(data);
   }
 
   willSave(self, data, cb) {
-    console.log('willSave...', data);
-
     self.setState({ imageData: data, isUploadDisable: false });
-
     cb(data);
   }
 
@@ -132,7 +126,6 @@ export default class UserImageEditor extends Component {
       success: (newUser) => {
         _this.context.executeAction(UserActions.UploadImageSuccess, newUser);
         _this.context.executeAction(BlogActions.UploadImageSuccess, newUser);
-        _this.context.executeAction(UserActions.LoadSessionUser);
       }
     });
   }

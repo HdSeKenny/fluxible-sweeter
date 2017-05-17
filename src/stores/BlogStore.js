@@ -72,7 +72,8 @@ const BlogStore = createStore({
 
   addBlogSuccess(res) {
     const resObj = {
-      msg: 'CREATE_BLOG_SUCCESS'
+      msg: 'CREATE_BLOG_SUCCESS',
+      newBlog: res
     };
     this.blogs.push(res);
     this.emitChange(resObj);
