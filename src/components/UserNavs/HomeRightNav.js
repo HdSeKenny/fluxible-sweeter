@@ -53,10 +53,10 @@ export default class HomeRightNav extends Component {
   render() {
     const { currentUser, showCreateModal } = this.state;
     return (
-      <div className="home-right-nav mb-20">
+      <div className="home-right-nav mb-10">
         <Row>
           <Col size="6 pl-0 home-nav-lis">
-            <button className={`btn btn-default ${this.isActive(['home', currentUser.username])}`}>Moments</button>
+            <button className={`btn btn-default ${this.isActive([currentUser.username])}`}>Moments</button>
             <button className="btn btn-default">Articles</button>
             <button className="btn btn-default">Mine</button>
           </Col>
