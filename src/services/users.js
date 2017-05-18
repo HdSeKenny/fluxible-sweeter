@@ -235,14 +235,19 @@ export default {
           else {
             auth.stat = true;
             auth.msg = 'Authenticated success !';
-            if (user.fans.length >0) {
+            if (user.fans.length) {
               user.fans.forEach((fanId, faIdx) => {
                 allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
               });
             }
-            if (user.focuses.length > 0) {
+            if (user.focuses.length) {
               user.focuses.forEach((focusId, fsIdx) => {
                 allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
+              });
+            }
+            if (user.blogs.length) {
+              user.blogs.forEach((blogId, bgIdx) => {
+                allPromises.push(getBlogsPromiseWrapper(user, blogId, bgIdx));
               });
             }
           }

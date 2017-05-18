@@ -57,8 +57,8 @@ export default class HomeRightNav extends Component {
         <Row>
           <Col size="6 pl-0 home-nav-lis">
             <button className={`btn btn-default ${this.isActive([currentUser.username])}`}>Moments</button>
-            <button className="btn btn-default">Articles</button>
-            <button className="btn btn-default">Mine</button>
+            <button className={`btn btn-default ${this.isActive(['mine', currentUser.username])}`}>Mine</button>
+            <button className={`btn btn-default ${this.isActive(['create', currentUser.username])}`}>Add article</button>
           </Col>
           <Col size="3 pl-0 home-search">
             <input type="text" className="form-control" />

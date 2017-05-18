@@ -1,4 +1,5 @@
 import createStore from 'fluxible/addons/createStore';
+import _ from 'lodash';
 
 const UserStore = createStore({
 
@@ -155,22 +156,21 @@ const UserStore = createStore({
     return this.users.find(user => user.username === username);
   },
 
-  getDisplayBlogsByUsername(username) {
+  getBlogsWithUsername(isCurrentUser, username) {
     const displayBlogs = [];
-    const thisUser = this.users.find(user => user.username === username);
-    const { currentUser } = this;
-    const { focuses } = thisUser;
-    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
+    const users = _.cloneDeep(this.users);
+    const currentUser = _.cloneDeep(this.currentUser);
+    const thisUser = users.find(user => user.username === username);
 
-    thisUser.blogs.forEach(b => {
-      // eslint-disable-next-line no-param-reassign
-      b.author = thisUser;
-      displayBlogs.push(b);
-    });
+    if (isCurrentUser && currentUser) {
+      currentUser.blogs.forEach(b => {
+        // eslint-disable-next-line no-param-reassign
+        b.author = currentUser;
+        displayBlogs.push(b);
+      });
 
-    if (isCurrentUser) {
-      focuses.forEach(focuse => {
-        const focuseUser = this.users.find(user => user.id_str === focuse.id_str);
+      currentUser.focuses.forEach(focuse => {
+        const focuseUser = users.find(user => user.id_str === focuse.id_str);
         if (focuseUser.blogs.length) {
           focuseUser.blogs.forEach(b => {
             // eslint-disable-next-line no-param-reassign
@@ -178,6 +178,13 @@ const UserStore = createStore({
             displayBlogs.push(b);
           });
         }
+      });
+    }
+    else if (thisUser){
+      thisUser.blogs.forEach(b => {
+        // eslint-disable-next-line no-param-reassign
+        b.author = thisUser;
+        displayBlogs.push(b);
       });
     }
 

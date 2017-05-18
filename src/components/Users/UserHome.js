@@ -36,7 +36,7 @@ const UserHome = React.createClass({
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       user: this.getStore(UserStore).getUserByUsername(username),
-      displayBlogs: this.getStore(UserStore).getDisplayBlogsByUsername(username),
+      displayBlogs: this.getStore(UserStore).getBlogsWithUsername(username),
       selectedPin: {},
       singleUserBlogs: null,
       showCreateModal: false
@@ -64,7 +64,7 @@ const UserHome = React.createClass({
             <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
           </div>
           <div className="home-right">
-            <HomeRightNav path={pathname} currentUser={currentUser} />
+            {currentUser && <HomeRightNav path={pathname} currentUser={currentUser} />}
             <div className="right-pages">{this.props.children}</div>
           </div>
         </div>

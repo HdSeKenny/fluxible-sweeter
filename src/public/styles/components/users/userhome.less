@@ -93,13 +93,17 @@
       .btn {
         &.btn-default{
           margin-right: 30px;
-          border: 1px solid #fff;
-          padding: 2px 0;
+          border: 1.5px solid #fff;
+          padding: 2px 0 1px 0;
           font-size: 14px;
+          font-weight: 600;
+          background: #fff;
+          border-radius: none;
           &:hover, &.on {
             color: @brand-info !important;
             background: #fff;
-            border-bottom: 1px solid @brand-info;
+            border-bottom: 1.5px solid @brand-info;
+            transition: all 0.4s;
           }
         }
         &.sweet-btn {

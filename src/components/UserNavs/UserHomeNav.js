@@ -37,7 +37,8 @@ const UserHomeNav = React.createClass({
 
   _renderUserInfo(user) {
     const { firstName, lastName, email, phone, birthday, profession, description } = user;
-    const isCurrentUser = user.id_str === this.props.currentUser.id_str;
+    const { currentUser } = this.props;
+    const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     return (
       <div className="isNotCurrentUser">
         <Row className="basic-info">

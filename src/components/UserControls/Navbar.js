@@ -147,8 +147,8 @@ const Navbar = React.createClass({
                 <Link to="/list">List</Link>
               </li>
               {authenticated &&
-                <li className={this.isActive(['home', currentUser.username])}>
-                  <Link to={`/${currentUser.username}/home`}>Personal</Link>
+                <li className={this.isActive([currentUser.username])}>
+                  <Link to={`/${currentUser.username}`}>Personal</Link>
                 </li>
               }
             </ul>
@@ -170,7 +170,7 @@ const Navbar = React.createClass({
                 <li className="mr-0">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
-                    <li><Link to={`/${currentUser.username}/home`}>User center</Link></li>
+                    <li><Link to={`/${currentUser.username}`}>User center</Link></li>
                     <li><span>Settings</span></li>
                     <li><span onClick={this.handleLogout}>Logout</span></li>
                   </ul>

@@ -1,7 +1,7 @@
 {
   "assets": {
-    "style": "http://192.168.0.169:5858/main.css",
-    "main": "http://192.168.0.169:5858/main.js",
-    "common": "http://192.168.0.169:5858/common.js"
+    "style": "http://localhost:5858/main.css",
+    "main": "http://localhost:5858/main.js",
+    "common": "http://localhost:5858/common.js"
   }
 }

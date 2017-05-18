@@ -1,10 +1,12 @@
 export default {
-  success: (msg) => {
+  success: (msg, cb) => {
     swal({
       title: convertMsg(msg),
       type: 'success',
       confirmButtonColor: "#00a9da",
       timer: 2000
+    }, () => {
+      cb();
     });
   },
 

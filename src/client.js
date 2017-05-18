@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
+import jQuery from 'jquery';
 import 'babel-polyfill';
 import 'bootstrap/dist/js/bootstrap';
 import './polyfills';
@@ -11,6 +12,7 @@ import fetchData from './utils/fetchData';
 import './public/styles/main.less';
 
 window.React = React;
+window.jQuery = jQuery;
 
 const dehydratedState = window.__DATA__;
 let firstRender = true;

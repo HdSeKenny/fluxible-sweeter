@@ -178,6 +178,7 @@ export default class PinItem extends Component {
     const { likers, comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
     const faThumbsIcon = isThumbedUp ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up';
+    const thumbsUpBallon = isThumbedUp ? 'cancel this?' : 'thumbs up!';
     return (
       <div className="pin-footer-icons">
         <div
@@ -199,7 +200,7 @@ export default class PinItem extends Component {
         <div
           className="icon-span"
           onClick={() => this.onAddAndCancelThumbs(currentUser, pin, isThumbedUp)}
-          data-balloon="thumbs up!"
+          data-balloon={thumbsUpBallon}
           data-balloon-pos="top">
           <i className={faThumbsIcon} />
           <span className="ml-5">{likers.length}</span>

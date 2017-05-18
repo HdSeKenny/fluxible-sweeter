@@ -58,11 +58,9 @@ const UserBar = React.createClass({
       sweetAlert.success(res.msg);
     }
 
-    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.msg)) {
-      if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
-        sweetAlert.success(res.msg);
-        ModalsFactory.hide('uploadModal');
-      }
+    if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
+      sweetAlert.success(res.msg);
+      ModalsFactory.hide('uploadModal');
       this.setState(this.getStateFromStores());
     }
   },
@@ -231,7 +229,7 @@ const UserBar = React.createClass({
   render() {
     const { user } = this.props;
     const { currentUser, showImageModal } = this.state;
-    const isCurrentUser = user.id_str === currentUser.id_str;
+    const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {

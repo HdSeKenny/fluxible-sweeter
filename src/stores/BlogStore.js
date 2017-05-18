@@ -260,7 +260,8 @@ const BlogStore = createStore({
 
   thumbsUpBlogSuccess(newBlog) {
     const resObj = {
-      msg: 'THUMBS_UP_BLOG_SUCCESS'
+      msg: 'THUMBS_UP_BLOG_SUCCESS',
+      newBlog
     };
     this.blogs.forEach((blog, index) => {
       if (blog.id_str === newBlog.id_str) {
@@ -272,7 +273,8 @@ const BlogStore = createStore({
 
   cancelThumbsUpBlogSuccess(newBlog) {
     const resObj = {
-      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS'
+      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      newBlog
     };
     this.blogs.forEach((blog, index) => {
       if (blog.id_str === newBlog.id_str) {

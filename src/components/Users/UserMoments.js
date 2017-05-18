@@ -1,7 +1,5 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { UserBar, UserMoments } from '../Users';
-// import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { PinItemModal } from '../UserControls';
@@ -32,20 +30,23 @@ const UserHome = React.createClass({
 
   getStatesFromStores() {
     const { username } = this.props.params;
+    const store = this.getStore(UserStore);
+    const currentUser = store.getCurrentUser();
+    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserByUsername(username),
-      displayBlogs: this.getStore(UserStore).getDisplayBlogsByUsername(username),
-      selectedPin: {},
-      singleUserBlogs: null,
-      welcomeText: 'What happened today, Write a blog here !',
-      showCreateModal: false
+      currentUser,
+      isCurrentUser,
+      user: store.getUserByUsername(username),
+      displayBlogs: store.getBlogsWithUsername(isCurrentUser, username),
+      selectedPin: {}
     };
   },
 
   onChange(res) {
-    const { user, displayBlogs } = this.state;
     const { username } = this.props.params;
+    const store = this.getStore(UserStore);
+    const { displayBlogs } = this.state;
+
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.success(res.msg);
       displayBlogs.push(res.newBlog);
@@ -57,21 +58,27 @@ const UserHome = React.createClass({
         || res.msg === 'DELETE_COMMENT_SUCCESS') {
       sweetAlert.success(res.msg);
       // const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-      // this.setState({ singleUserBlogs });
+      // this.setState({ singleUserBlogs }); 'FOLLOW_USER_SUCCESS', 'CANCEL_FOLLOW_USER_SUCCESS',
     }
 
-    // if(res.msg === 'FOLLOW_USER_SUCCESS' || res.msg === 'CANCEL_FOLLOW_USER_SUCCESS'){
-    //   this.setState({
-    //     currentUser: this.getStore(UserStore).getCurrentUser(),
-    //     user: this.getStore(UserStore).getUserById(userId),
-    //     isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
-    //   })
-    // }
-
-    // this.setState({
-    //   currentUser: this.getStore(UserStore).getCurrentUser(),
-    //   user: this.getStore(UserStore).getUserByUsername(username)
-    // });
+    if (['THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS'].includes(res.msg)) {
+      sweetAlert.success(res.msg, () => {
+        const currentUser = store.getCurrentUser();
+        const isCurrentUser = currentUser.username === username;
+        const thumbedBlodIndex = displayBlogs.findIndex(blog => blog.id_str === res.newBlog.id_str);
+        if (thumbedBlodIndex !== -1) {
+          displayBlogs[thumbedBlodIndex].likers = res.newBlog.likers;
+        }
+        // const newBlogs = displayBlogs.forEach(blog => {
+        //   if (blog.id_str === res.newBlog.id_str) {
+        //     blog = res.newBlog;
+        //   }
+        // });
+        this.setState({
+          displayBlogs
+        });
+      });
+    }
   },
 
   onViewPinItem(id) {
@@ -96,8 +103,7 @@ const UserHome = React.createClass({
   },
 
   render() {
-    const { currentUser, user, displayBlogs, selectedPin } = this.state;
-    const { pathname } = this.props.location;
+    const { currentUser, displayBlogs, selectedPin } = this.state;
     const sortedBlogs = jsUtils.sortByDate(displayBlogs);
     return (
       <div className="user-moments">
