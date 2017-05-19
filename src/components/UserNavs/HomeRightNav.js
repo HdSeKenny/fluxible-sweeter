@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { routerShape } from 'react-router';
 import _ from 'lodash';
 import { Row, Col, Page } from '../UI/Layout';
 import { jsUtils } from '../../utils';
@@ -11,6 +12,7 @@ export default class HomeRightNav extends Component {
   static displayName = 'HomeRightNav';
 
   static contextTypes = {
+    router: routerShape.isRequired,
     executeAction: PropTypes.func
   };
 
@@ -50,15 +52,24 @@ export default class HomeRightNav extends Component {
     ModalsFactory.show('createBlogModal');
   }
 
+  goToThisUserPages(str) {
+    const { currentUser } = this.state;
+    this.context.router.push(`/${currentUser.username}${str}`);
+  }
+
   render() {
     const { currentUser, showCreateModal } = this.state;
+    const username = currentUser ? currentUser.username : '';
+    const momentClasses = `btn btn-default ${this.isActive([username])}`;
+    const mineClasses = `btn btn-default ${this.isActive(['mine', username])}`;
+    const createClass = `btn btn-default ${this.isActive(['create', username])}`;
     return (
       <div className="home-right-nav mb-10">
         <Row>
           <Col size="6 pl-0 home-nav-lis">
-            <button className={`btn btn-default ${this.isActive([currentUser.username])}`}>Moments</button>
-            <button className={`btn btn-default ${this.isActive(['mine', currentUser.username])}`}>Mine</button>
-            <button className={`btn btn-default ${this.isActive(['create', currentUser.username])}`}>Add article</button>
+            <button className={momentClasses} onClick={() => this.goToThisUserPages('')}>Moments</button>
+            <button className={mineClasses} onClick={() => this.goToThisUserPages('/mine')}>Mine</button>
+            <button className={createClass} onClick={() => this.goToThisUserPages('/create')}>Add article</button>
           </Col>
           <Col size="3 pl-0 home-search">
             <input type="text" className="form-control" />

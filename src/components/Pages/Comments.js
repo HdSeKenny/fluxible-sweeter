@@ -18,7 +18,8 @@ const Comments = React.createClass({
 
   propTypes: {
     blog: React.PropTypes.object,
-    isBlogsWell: React.PropTypes.bool
+    isBlogsWell: React.PropTypes.bool,
+    currentUser: React.PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -33,7 +34,7 @@ const Comments = React.createClass({
 
   getStatesFromStores() {
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
+      currentUser: this.props.currentUser,
       blog: this.props.blog,
       commentText: '',
       replyText: ''
@@ -42,18 +43,7 @@ const Comments = React.createClass({
 
   onChange(res) {
     if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
-      const { blog } = this.state;
-      sweetAlert.success(res.msg);
-
-      if (res.msg === 'COMMENT_SUCCESS') {
-        // blog.comments.push(res.data);
-      }
-
-      if (res.msg === 'DELETE_COMMENT_SUCCESS') {
-        blog.comments = blog.comments.filter(comment => comment.id_str !== res.data);
-      }
-
-      this.setState({ blog, commentText: '' });
+      this.setState({ commentText: '' });
     }
   },
 
@@ -79,11 +69,15 @@ const Comments = React.createClass({
   },
 
   onCommentBlog(blog) {
-    const { currentUser } = this.state;
+    const { currentUser, commentText } = this.state;
     if (!currentUser) {
-      this.checkLogin();
-      return;
+      return this.checkLogin();
     }
+
+    if (!commentText.trim()) {
+      return sweetAlert.alertErrorMessage('Invalid text!');
+    }
+
     const comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
@@ -125,7 +119,7 @@ const Comments = React.createClass({
 
   goToUserCenter(username) {
     $('#pinModal').modal('hide');
-    this.context.router.push(`/${username}/home`);
+    this.context.router.push(`/${username}`);
   },
 
   _renderBlogTextarea(blog, isCommentText, currentUser, commentText) {
@@ -203,8 +197,6 @@ const Comments = React.createClass({
         {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         .map(comment => {
           const { id_str, commenter, created_at, show_replies } = comment;
-          // const date = created_at ? created_at.toString() : null;
-          // const commentDate = dateFormat(date, 'dddd, h:MM TT');
           const fromNow = format.fromNow(created_at);
           const user = this.getCommenter(commenter);
           const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;

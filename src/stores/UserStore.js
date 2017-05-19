@@ -50,7 +50,6 @@ const UserStore = createStore({
 
   loadUsersSuccess(res) {
     this.users = res;
-    console.log(res);
     this.emitChange();
   },
 
@@ -180,7 +179,7 @@ const UserStore = createStore({
         }
       });
     }
-    else if (thisUser){
+    else if (thisUser) {
       thisUser.blogs.forEach(b => {
         // eslint-disable-next-line no-param-reassign
         b.author = thisUser;

@@ -90,27 +90,24 @@ const BlogStore = createStore({
     return this.blogs;
   },
 
-  getUserBlogsWithFocuses(isCurrentUser, user) {
-    const displayUserBlogs = [];
-    if (this.blogs) {
-      this.blogs.forEach(blog => {
-        if (isCurrentUser) {
-          if (user.focuses.length > 0) {
-            user.focuses.forEach(focus => {
-              if (blog.author.id_str === focus.id_str) {
-                displayUserBlogs.push(blog);
-              }
-            });
-          }
-        }
-        if (blog.author.id_str === user.id_str) {
-          displayUserBlogs.push(blog);
-        }
+  getBlogsWithUsername(currentUser, username) {
+    let displayBlogs = [];
+    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
+
+    if (isCurrentUser && currentUser) {
+      const currentUserBlogs = this.blogs.filter(blog => blog.author.id_str === currentUser.id_str);
+      displayBlogs = displayBlogs.concat(currentUserBlogs);
+      currentUser.focuses.forEach(focuse => {
+        const focuseUserBlogs = this.blogs.filter(blog => blog.author.id_str === focuse.id_str);
+        displayBlogs = displayBlogs.concat(focuseUserBlogs);
       });
     }
-    return displayUserBlogs;
-  },
+    else {
+      displayBlogs = this.blogs.filter(blog => blog.author.username === username);
+    }
 
+    return displayBlogs;
+  },
 
   changeShowCommentsState(blog) {
     this.blogs.forEach((b, idx) => {

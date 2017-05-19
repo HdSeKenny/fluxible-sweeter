@@ -1,12 +1,22 @@
+
+const convertMsg = (msg) => {
+  const strMsg = msg.split('_').join(' ').toLowerCase();
+  const firstLetter = strMsg.charAt(0).toUpperCase();
+  return `${firstLetter}${strMsg.substr(1)} !`;
+};
+
+
 export default {
   success: (msg, cb) => {
     swal({
       title: convertMsg(msg),
       type: 'success',
-      confirmButtonColor: "#00a9da",
+      confirmButtonColor: '#00a9da',
       timer: 2000
     }, () => {
-      cb();
+      if (cb) {
+        cb();
+      }
     });
   },
 
@@ -14,11 +24,11 @@ export default {
     swal({
       title: convertMsg(msg),
       type: 'success',
-      confirmButtonColor: "#00a9da",
+      confirmButtonColor: '#00a9da',
       timer: 2000
     }, () => {
       callback();
-    })
+    });
   },
 
   alertInfoMessage: (msg) => {
@@ -27,46 +37,40 @@ export default {
       text: convertMsg(msg),
       type: 'info',
       timer: 2000
-    })
+    });
   },
 
   alertErrorMessage: (msg) => {
     swal({
       title: convertMsg(msg),
-      type: "error",
-      confirmButtonColor: "#F27474",
+      type: 'error',
+      confirmButtonColor: '#F27474',
       timer: 2000
-    })
+    });
   },
 
   alertWarningMessage: (msg) => {
     swal({
       title: convertMsg(msg),
       type: 'warning',
-      confirmButtonColor: "#F8BB86"
-    })
+      confirmButtonColor: '#F8BB86'
+    });
   },
 
   alertConfirmMessage: (msg, callback) => {
     swal({
-      title: "Are you sure?",
-      type: "warning",
+      title: 'Are you sure?',
+      type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: 'Yes, delete it!',
       closeOnConfirm: false,
       showLoaderOnConfirm: true
     }, () => {
       setTimeout(() => {
         callback();
-      }, 1000);
+      }, 500);
     });
   }
-}
-
-const convertMsg = (msg) => {
-  const strMsg = msg.split('_').join(' ').toLowerCase();
-  const firstLetter = strMsg.charAt(0).toUpperCase();
-  return `${firstLetter}${strMsg.substr(1)} !`;
-}
+};
 

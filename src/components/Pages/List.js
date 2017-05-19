@@ -1,7 +1,7 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { Link } from 'react-router';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert, jsUtils } from '../../utils';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory, Layout } from '../UI';
@@ -34,7 +34,8 @@ const List = React.createClass({
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
-      showCreateModal: true
+      showCreateModal: false,
+      showPinModal: false
     };
   },
 
@@ -107,21 +108,20 @@ const List = React.createClass({
   onViewPinItem(id) {
     const { blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
-    this.setState({ selectedPin });
+    this.setState({ selectedPin, showPinModal: true });
 
     $('#pinModal').on('hidden.bs.modal', () => {
       if (this.hidePinModal) {
         this.hidePinModal();
       }
     });
-
     ModalsFactory.show('pinModal');
   },
 
   hidePinModal() {
     const listDom = $('.list-page');
     if (listDom && listDom.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
 
@@ -179,19 +179,12 @@ const List = React.createClass({
   },
 
   _renderAllPinItems(pins, currentUser) {
+    const sortedPins = jsUtils.sortByDate(pins);
     return (
       <div className="">
-        {pins.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
-          .map((pin, index) =>
-            <PinItem
-              key={index}
-              onSelect={(id) => this.onViewPinItem(id)}
-              pin={pin}
-              type={pin.type}
-              currentUser={currentUser}
-            />
-          )
-        }
+        {sortedPins.map((pin, index) =>
+          <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} currentUser={currentUser} />
+        )}
       </div>
     );
   },
@@ -253,7 +246,7 @@ const List = React.createClass({
   },
 
   render() {
-    const { currentUser, kenny, blogs, selectedPin, showCreateModal } = this.state;
+    const { currentUser, kenny, blogs, selectedPin, showCreateModal, showPinModal } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <article className="list-page">
@@ -284,8 +277,10 @@ const List = React.createClass({
             modalref="pinModal"
             large={true}
             pin={selectedPin}
+            showModal={showPinModal}
             ModalComponent={PinItemModal}
-            showHeaderAndFooter={false} />
+            showHeaderAndFooter={false}
+            currentUser={currentUser} />
         </Layout.Page>
       </article>
     );

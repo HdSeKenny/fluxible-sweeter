@@ -37,7 +37,7 @@ export default class PinItem extends Component {
 
   goToUserCenter(author) {
     $('#pinModal').modal('hide');
-    this.context.router.push(`/${author.username}/home`);
+    this.context.router.push(`/${author.username}`);
   }
 
   goToArticlePage(pin) {
@@ -212,6 +212,8 @@ export default class PinItem extends Component {
   render() {
     const { pin, specialClass } = this.props;
     const isArticle = pin.type === 'article';
+    console.log('PinItem render ======', pin.likers.length);
+
     return (
       <div className={`pin ${specialClass}`}>
         {!isArticle && <div className="pin-heading text-uc p-0">{this._renderPinHeader(pin)}</div>}

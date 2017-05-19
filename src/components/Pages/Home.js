@@ -33,20 +33,25 @@ const Home = React.createClass({
       blogs: this.getStore(BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {}
+      selectedPin: {},
+      showPinModal: false
     };
   },
 
   onChange(res) {
     const blogMessages = [
+      'CREATE_BLOG_SUCCESS',
+      'DELETE_BLOG_SUCCESS',
       'THUMBS_UP_BLOG_SUCCESS',
       'CANCEL_THUMBS_UP_BLOG_SUCCESS',
-      'CREATE_BLOG_SUCCESS',
-      'DELETE_BLOG_SUCCESS'
+      'COMMENT_SUCCESS',
+      'DELETE_COMMENT_SUCCESS'
     ];
+
     if (blogMessages.includes(res.msg)) {
-      sweetAlert.success(res.msg);
-      this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
+      sweetAlert.success(res.msg, () => {
+        this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
+      });
     }
   },
 
@@ -89,7 +94,7 @@ const Home = React.createClass({
   onViewPinItem(id) {
     const { blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
-    this.setState({ selectedPin });
+    this.setState({ selectedPin, showPinModal: true });
 
     $('#pinModal').on('hidden.bs.modal', () => {
       if (this.hidePinModal) {
@@ -103,7 +108,7 @@ const Home = React.createClass({
   hidePinModal() {
     const homePage = $('.home-page');
     if (homePage && homePage.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
 
@@ -149,15 +154,15 @@ const Home = React.createClass({
   },
 
   render() {
-    const { blogs, selectedPin, currentUser } = this.state;
+    const { blogs, selectedPin, currentUser, showPinModal } = this.state;
     return (
       <div className="home-page">
         <div className="main">{this._renderPinItems(blogs)}</div>
         <Page>
           <ModalsFactory
             modalref="pinModal"
-            hidePinModal={this.hidePinModal}
             pin={selectedPin}
+            showModal={showPinModal}
             currentUser={currentUser}
             ModalComponent={PinItemModal}
             showHeaderAndFooter={false} />

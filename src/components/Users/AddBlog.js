@@ -1,13 +1,10 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { routerShape } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert } from '../../utils';
 import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
-import { UserBlogsNav } from '../UserNavs';
-import UserBar from './UserBar';
+import { DraftEditor } from '../UserControls';
 
 const AddBlog = React.createClass({
 
@@ -34,11 +31,11 @@ const AddBlog = React.createClass({
   },
 
   getStateFromStores() {
-    const { userId } = this.props.params;
+    const { username } = this.props.params;
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(userId),
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
       title: '',
       content: ''
     };
@@ -139,27 +136,21 @@ const AddBlog = React.createClass({
   _rednerCreateBtns() {
     return (
       <div className="form-group btns">
-        <Button onClick={this.cancelAddBlog} className="cancel-btn">
-          <Glyphicon glyph="glyphicon glyphicon-remove" /> Cancel
-        </Button>
-        <Button type="submit" className="create-btn k-blue">
-          <Glyphicon glyph="pencil" /> Create
-        </Button>
+        <button type="reset" className="btn btn-default">Reset</button>
+        <button className="btn btn-primary">Create</button>
       </div>
     );
   },
 
   _renderAddBlogContent(title, content) {
     return (
-      <div className="well">
-        <div className="create-blog">
-          <h3>Write an article</h3>
-          <form onSubmit={this.handleSubmit} >
-            {this._renderArticleTitle(title)}
-            {this._renderArticleContent(content)}
-            {this._rednerCreateBtns()}
-          </form>
-        </div>
+      <div className="content">
+        <h3>Write an article</h3>
+        <form onSubmit={this.handleSubmit} >
+          {this._renderArticleTitle(title)}
+          {this._renderArticleContent(content)}
+          {this._rednerCreateBtns()}
+        </form>
       </div>
     );
   },
@@ -168,19 +159,8 @@ const AddBlog = React.createClass({
     const { user, currentUser, isCurrentUser, title, content } = this.state;
     const { pathname } = this.props.location;
     return (
-      <div className="add-blog-content">
-        <UserBar
-          path={pathname}
-          user={user}
-          isCurrentUser={isCurrentUser}
-          currentUser={currentUser}
-        />
-        <div className="content-left">
-          <UserBlogsNav path={pathname} user={currentUser} isCurrentUser={isCurrentUser} />
-        </div>
-        <div className="content-right">
-          {this._renderAddBlogContent(title, content)}
-        </div>
+      <div className="create-article-page">
+        {this._renderAddBlogContent(title, content)}
       </div>
     );
   }

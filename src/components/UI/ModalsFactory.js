@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from './Layout';
 
-const shallowCompare = require('react-addons-shallow-compare');
+// const shallowCompare = require('react-addons-shallow-compare');
 
 export default class ModalsFactory extends Component {
 
@@ -27,9 +27,10 @@ export default class ModalsFactory extends Component {
     $(`#${modalRef}`).modal('hide');
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(shallowCompare(this, nextProps, nextState));
+  //   return shallowCompare(this, nextProps, nextState);
+  // }
 
   _renderModalHeader(title) {
     return (
@@ -62,13 +63,10 @@ export default class ModalsFactory extends Component {
   }
   render() {
     const { size, modalref, title, ModalComponent, showHeaderAndFooter, showModal } = this.props;
-    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal', 'uploadModal'];
-    const isNotPinItemModal = notPinItemModals.includes(modalref);
-    const show = isNotPinItemModal ? showModal : true;
     return (
-      <div className="modal fade" id={modalref} tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div className="modal fade" id={modalref} tabIndex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
         <div className={`modal-dialog mt-80 ${size}`}>
-          {show &&
+          {showModal &&
             <div className="modal-content">
               {showHeaderAndFooter && this._renderModalHeader(title)}
               {this._renderModalBody(ModalComponent)}

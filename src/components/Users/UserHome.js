@@ -1,11 +1,10 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { UserBar } from '../Users';
-// import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { ModalsFactory } from '../UI';
-import { sweetAlert, jsUtils } from '../../utils';
+import { sweetAlert } from '../../utils';
 
 const UserHome = React.createClass({
 
@@ -33,13 +32,15 @@ const UserHome = React.createClass({
 
   getStatesFromStores() {
     const { username } = this.props.params;
+    const userStore = this.getStore(UserStore);
+    const blogStore = this.getStore(BlogStore);
+    const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
+    const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserByUsername(username),
-      displayBlogs: this.getStore(UserStore).getBlogsWithUsername(username),
-      selectedPin: {},
-      singleUserBlogs: null,
-      showCreateModal: false
+      currentUser,
+      user,
+      displayBlogs
     };
   },
 

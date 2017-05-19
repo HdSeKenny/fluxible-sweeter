@@ -146,6 +146,11 @@ const Navbar = React.createClass({
               <li className={this.isActive(['list'])}>
                 <Link to="/list">List</Link>
               </li>
+              <li className={this.isActive(['list'])}>
+                <span><i className="fa fa-download" aria-hidden="true"></i></span>
+              </li>
+
+
               {authenticated &&
                 <li className={this.isActive([currentUser.username])}>
                   <Link to={`/${currentUser.username}`}>Personal</Link>

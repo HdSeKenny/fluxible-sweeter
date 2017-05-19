@@ -15,16 +15,19 @@ import { Comments } from '../Pages';
 export default class PinItemModal extends Component {
 
   static propTypes = {
-    pin: React.PropTypes.object
+    pin: React.PropTypes.object,
+    currentUser: React.PropTypes.object,
+    showModal: React.PropTypes.bool
   };
 
   render() {
-    const { pin } = this.props;
-    if (pin.author) {
+    const { pin, currentUser, showModal } = this.props;
+    console.log('PinItemModal render...');
+    if (pin.author && showModal) {
       return (
         <section className="pin-item-modal mt-15 mb-20">
-          <PinItem pin={pin} type={pin.type} disabledClick={true} />
-          <Comments blog={pin} isBlogsWell={true} />
+          <PinItem pin={pin} disabledClick={true} currentUser={currentUser} />
+          <Comments blog={pin} isBlogsWell={true} currentUser={currentUser} />
         </section>
       );
     }

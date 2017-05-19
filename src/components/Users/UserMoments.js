@@ -30,53 +30,40 @@ const UserHome = React.createClass({
 
   getStatesFromStores() {
     const { username } = this.props.params;
-    const store = this.getStore(UserStore);
-    const currentUser = store.getCurrentUser();
-    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
+    const userStore = this.getStore(UserStore);
+    const blogStore = this.getStore(BlogStore);
+    const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
+    const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     return {
       currentUser,
-      isCurrentUser,
-      user: store.getUserByUsername(username),
-      displayBlogs: store.getBlogsWithUsername(isCurrentUser, username),
-      selectedPin: {}
+      user,
+      displayBlogs,
+      selectedPin: {},
+      showPinModal: false
     };
   },
 
   onChange(res) {
-    const { username } = this.props.params;
-    const store = this.getStore(UserStore);
-    const { displayBlogs } = this.state;
+    const successMessages = [
+      'CREATE_BLOG_SUCCESS',
+      'COMMENT_SUCCESS',
+      'DELETE_COMMENT_SUCCESS',
+      'THUMBS_UP_BLOG_SUCCESS',
+      'CANCEL_THUMBS_UP_BLOG_SUCCESS'
+    ];
 
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.success(res.msg);
-      displayBlogs.push(res.newBlog);
-      this.setState({ displayBlogs });
-      ModalsFactory.hide('createBlogModal');
-    }
+    if (successMessages.includes(res.msg)) {
+      const { username } = this.props.params;
+      const blogStore = this.getStore(BlogStore);
+      const currentUser = this.getStore(UserStore).getCurrentUser();
+      const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
 
-    if (res.msg === 'COMMENT_SUCCESS'
-        || res.msg === 'DELETE_COMMENT_SUCCESS') {
-      sweetAlert.success(res.msg);
-      // const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-      // this.setState({ singleUserBlogs }); 'FOLLOW_USER_SUCCESS', 'CANCEL_FOLLOW_USER_SUCCESS',
-    }
-
-    if (['THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS'].includes(res.msg)) {
       sweetAlert.success(res.msg, () => {
-        const currentUser = store.getCurrentUser();
-        const isCurrentUser = currentUser.username === username;
-        const thumbedBlodIndex = displayBlogs.findIndex(blog => blog.id_str === res.newBlog.id_str);
-        if (thumbedBlodIndex !== -1) {
-          displayBlogs[thumbedBlodIndex].likers = res.newBlog.likers;
+        if (res.msg === 'CREATE_BLOG_SUCCESS') {
+          ModalsFactory.hide('createBlogModal');
         }
-        // const newBlogs = displayBlogs.forEach(blog => {
-        //   if (blog.id_str === res.newBlog.id_str) {
-        //     blog = res.newBlog;
-        //   }
-        // });
-        this.setState({
-          displayBlogs
-        });
+        this.setState({ displayBlogs });
       });
     }
   },
@@ -84,7 +71,7 @@ const UserHome = React.createClass({
   onViewPinItem(id) {
     const { displayBlogs } = this.state;
     const selectedPin = displayBlogs.find(b => b.id_str === id);
-    this.setState({ selectedPin });
+    this.setState({ selectedPin, showPinModal: true });
 
     $('#pinModal').on('hidden.bs.modal', () => {
       if (this.hidePinModal) {
@@ -98,22 +85,26 @@ const UserHome = React.createClass({
   hidePinModal() {
     const userHomeDom = $('.user-home');
     if (userHomeDom && userHomeDom.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
 
   render() {
-    const { currentUser, displayBlogs, selectedPin } = this.state;
+    const { currentUser, displayBlogs, selectedPin, showPinModal } = this.state;
     const sortedBlogs = jsUtils.sortByDate(displayBlogs);
     return (
       <div className="user-moments">
         <div className="user-blogs">
-          {sortedBlogs.map((blog, index) =>
-            <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />
-          )}
+          {sortedBlogs.map((blog, index) => <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />)}
         </div>
         <Layout.Page>
-          <ModalsFactory modalref="pinModal" pin={selectedPin} ModalComponent={PinItemModal} showHeaderAndFooter={false} />
+          <ModalsFactory
+            modalref="pinModal"
+            pin={selectedPin}
+            ModalComponent={PinItemModal}
+            showHeaderAndFooter={false}
+            showModal={showPinModal}
+            currentUser={currentUser} />
         </Layout.Page>
       </div>
     );
