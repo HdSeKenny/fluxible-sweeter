@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import $ from 'jquery';
 import { sweetAlert, jsUtils } from '../../utils';
@@ -10,17 +12,17 @@ import { UserImageEditor } from '../UserControls';
 import { Row, Col, Page } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 
-const UserBar = React.createClass({
+const UserBar = CreateReactClass({
 
   displayName: 'UserBar',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    path: React.PropTypes.string,
-    user: React.PropTypes.object
+    path: PropTypes.string,
+    user: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -179,14 +181,20 @@ const UserBar = React.createClass({
 
     return Object.keys(navs).map((navli, index) => {
       const lowcaseNav = navli.toLowerCase();
-      const isActive = this.isActive([lowcaseNav]);
+      const isHome = lowcaseNav === 'home';
+      let isActive = false;
+      if (isHome) {
+        isActive = this.isActive([username]) || this.isActive(['create', username]) || this.isActive(['mine', username]);
+      }
+      else {
+        isActive = this.isActive([lowcaseNav, username]);
+      }
+
       const classes = `${colSize} bar-nav ${isActive}`;
-      const url = `/${username}/${lowcaseNav}`;
+      const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
       const icon = navs[navli];
       return (
-        <Col size={classes} key={index}>
-          <Link to={url}><i className={icon}></i> {navli}</Link>
-        </Col>
+        <Col size={classes} key={index}><Link to={url}><i className={icon}></i> {navli}</Link></Col>
       );
     });
   },
@@ -195,7 +203,6 @@ const UserBar = React.createClass({
     return (
       <div className="mt-10">
         <p className="user-name">{user.username}</p>
-        {isCurrentUser && <div className="user-btn"></div>}
         {!isCurrentUser &&
           <div className="user-btn mt-10">
             {!isFollowed &&

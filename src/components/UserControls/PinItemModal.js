@@ -8,21 +8,21 @@
  * @providesModule PinItemModal
  */
 
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { PinItem } from '../UI';
 import { Comments } from '../Pages';
 
-export default class PinItemModal extends Component {
+export default class PinItemModal extends React.Component {
 
   static propTypes = {
-    pin: React.PropTypes.object,
-    currentUser: React.PropTypes.object,
-    showModal: React.PropTypes.bool
+    pin: PropTypes.object,
+    currentUser: PropTypes.object,
+    showModal: PropTypes.bool
   };
 
   render() {
     const { pin, currentUser, showModal } = this.props;
-    console.log('PinItemModal render...');
     if (pin.author && showModal) {
       return (
         <section className="pin-item-modal mt-15 mb-20">

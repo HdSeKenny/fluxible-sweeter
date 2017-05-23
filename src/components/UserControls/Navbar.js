@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
+import CreateReactClass from 'create-react-class';
 import { Link, routerShape } from 'react-router';
 import { animations, jsUtils } from '../../utils';
 import { UserStore } from '../../stores';
@@ -8,7 +10,7 @@ import { UserActions } from '../../actions';
 import { ModalsFactory, Layout } from '../UI';
 import { Login, Signup } from '../Pages';
 
-const Navbar = React.createClass({
+const Navbar = CreateReactClass({
 
   displayName: 'Navbar',
 
@@ -146,10 +148,6 @@ const Navbar = React.createClass({
               <li className={this.isActive(['list'])}>
                 <Link to="/list">List</Link>
               </li>
-              <li className={this.isActive(['list'])}>
-                <span><i className="fa fa-download" aria-hidden="true"></i></span>
-              </li>
-
 
               {authenticated &&
                 <li className={this.isActive([currentUser.username])}>
@@ -158,6 +156,9 @@ const Navbar = React.createClass({
               }
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
+              <li>
+                <span className="icon"><i className="fa fa-download" aria-hidden="true"></i></span>
+              </li>
               <li className={this.isActive(['about'])}>
                 <Link to="/about">About</Link>
               </li>

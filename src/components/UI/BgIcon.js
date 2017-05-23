@@ -1,25 +1,21 @@
-var React = require('react');
-var classSet = require('classnames');
+import React from 'react';
+import classSet from 'classnames';
+import CreateReactClass from 'create-react-class';
 
-var BgIcon = React.createClass({
+const BgIcon = CreateReactClass({
 
-    getClassName: function () {
-        return classSet({
-            'bg-icon': true,
-        }, this.props.iconClassName, this.props.className)
-    },
+  getClassName() {
+    return classSet({
+      'bg-icon': true,
+    }, this.props.iconClassName, this.props.className);
+  },
 
-    render: function () {
-        var className = this.getClassName();
-        return (
-            <span
-                {...this.props}
-                className={className}
-                >
-                {this.props.children}
-            </span>
-        );
-    }
+  render() {
+    const className = this.getClassName();
+    return (
+      <span {...this.props} className={className} > { this.props.children } </span>
+    );
+  }
 });
 
-module.exports = BgIcon;
+export default BgIcon;

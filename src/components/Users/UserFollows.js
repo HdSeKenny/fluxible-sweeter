@@ -1,22 +1,24 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import sweetAlert from '../../utils/sweetAlert';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { sweetAlert } from '../../utils';
 import { UserFollowsTabs } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import UserBar from './UserBar';
 
-const UserFollows = React.createClass({
+const UserFollows = CreateReactClass({
 
   displayName: 'UserFollows',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
+    location: PropTypes.object,
+    params: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

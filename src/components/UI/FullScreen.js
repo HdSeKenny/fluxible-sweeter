@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classSet from 'classnames';
+import PropTypes from 'prop-types';
 
-export default class FullScreen extends Component {
+
+export default class FullScreen extends React.Component {
 
   static displayName = 'FullScreen';
 
   static propTypes = {
-    className: React.PropTypes.string,
-    scroll: React.PropTypes.bool,
-    children: React.PropTypes.array
+    className: PropTypes.string,
+    scroll: PropTypes.bool,
+    children: PropTypes.array
   };
 
   getClassName() {

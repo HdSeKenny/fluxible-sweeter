@@ -1,19 +1,21 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { UserStore } from '../../stores';
 import UserBar from './UserBar';
 
-const UserMore = React.createClass({
+const UserMore = CreateReactClass({
 
   displayName: 'UserMore',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    location: React.PropTypes.object
+    params: PropTypes.object,
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

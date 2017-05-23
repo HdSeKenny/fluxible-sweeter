@@ -5,15 +5,16 @@
  * ui - Switch
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import Update from 'react-addons-update';
+import PropTypes from 'prop-types';
 
-class Switch extends Component {
+class Switch extends React.Component {
 
   static propTypes = {
-    onChange: React.PropTypes.func,
-    on: React.PropTypes.bool,
-    className: React.PropTypes.string
+    onChange: PropTypes.func,
+    on: PropTypes.bool,
+    className: PropTypes.string
   };
 
   static defaultProps = {

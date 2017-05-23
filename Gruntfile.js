@@ -240,7 +240,7 @@ module.exports = function(grunt) {
       },
 
       express: {
-        files: ['src/configs/*.js', 'src/configs/*.json', 'src/services/*.js'],
+        files: ['src/configs/*.js', 'src/configs/*.json', 'src/services/*.js', 'src/*.js'],
         tasks: ['newer:babel:dev', 'newer:copy:dev', 'express:dev'],
         options: {
           spawn: false,

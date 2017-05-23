@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from './Layout';
 
 // const shallowCompare = require('react-addons-shallow-compare');
 
-export default class ModalsFactory extends Component {
+export default class ModalsFactory extends React.Component {
 
   static displayName = 'ModalsFactory';
 
   static propTypes = {
-    size: React.PropTypes.string,
-    factory: React.PropTypes.func,
-    modalref: React.PropTypes.string,
-    title: React.PropTypes.string,
-    showHeaderAndFooter: React.PropTypes.bool,
-    ModalComponent: React.PropTypes.func,
-    hidePinModal: React.PropTypes.func,
-    showModal: React.PropTypes.bool
+    size: PropTypes.string,
+    factory: PropTypes.func,
+    modalref: PropTypes.string,
+    title: PropTypes.string,
+    showHeaderAndFooter: PropTypes.bool,
+    ModalComponent: PropTypes.func,
+    hidePinModal: PropTypes.func,
+    showModal: PropTypes.bool
   };
 
   static show = (modalRef) => {

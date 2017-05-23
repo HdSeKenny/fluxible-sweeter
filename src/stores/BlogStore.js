@@ -287,7 +287,10 @@ const BlogStore = createStore({
         this.blogs[idx].author.image_url = newUser.image_url;
       }
     });
-    this.emitChange();
+
+    this.emitChange({
+      msg: 'BLOG_CHANGE_IMAGE_SUCCESS',
+    });
   },
 
   dehydrate() {

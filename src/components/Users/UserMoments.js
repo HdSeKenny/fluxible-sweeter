@@ -1,21 +1,23 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { UserStore, BlogStore } from '../../stores';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { PinItemModal } from '../UserControls';
 import { sweetAlert, jsUtils } from '../../utils';
 
-const UserHome = React.createClass({
+const UserHome = CreateReactClass({
 
   displayName: 'UserHome',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    location: React.PropTypes.object
+    params: PropTypes.object,
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -50,7 +52,8 @@ const UserHome = React.createClass({
       'COMMENT_SUCCESS',
       'DELETE_COMMENT_SUCCESS',
       'THUMBS_UP_BLOG_SUCCESS',
-      'CANCEL_THUMBS_UP_BLOG_SUCCESS'
+      'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      'BLOG_CHANGE_IMAGE_SUCCESS'
     ];
 
     if (successMessages.includes(res.msg)) {
@@ -58,13 +61,15 @@ const UserHome = React.createClass({
       const blogStore = this.getStore(BlogStore);
       const currentUser = this.getStore(UserStore).getCurrentUser();
       const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+      if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
+        sweetAlert.success(res.msg, () => {
+          if (res.msg === 'CREATE_BLOG_SUCCESS') {
+            ModalsFactory.hide('createBlogModal');
+          }
+        });
+      }
 
-      sweetAlert.success(res.msg, () => {
-        if (res.msg === 'CREATE_BLOG_SUCCESS') {
-          ModalsFactory.hide('createBlogModal');
-        }
-        this.setState({ displayBlogs });
-      });
+      this.setState({ displayBlogs });
     }
   },
 

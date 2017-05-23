@@ -1,15 +1,17 @@
 import React from 'react';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-const Tabs = React.createClass({
+const Tabs = CreateReactClass({
 
   displayName: 'Tabs',
 
   propTypes: {
-    selected: React.PropTypes.number,
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.element
-    ]).isRequired
+    selected: PropTypes.number,
+    children: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.element
+    ])
   },
 
   getDefaultProps() {

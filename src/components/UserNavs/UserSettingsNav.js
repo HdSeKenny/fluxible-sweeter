@@ -1,22 +1,24 @@
 import React from 'react';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { UserStore } from '../../stores';
 
-const UserSettingsNav = React.createClass({
+const UserSettingsNav = CreateReactClass({
 
   displayName: 'UserSettingsNav',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    path: React.PropTypes.object,
-    isCurrentUser: React.PropTypes.bool,
-    user: React.PropTypes.object,
-    displayBlogs: React.PropTypes.array,
-    currentUser: React.PropTypes.object
+    path: PropTypes.object,
+    isCurrentUser: PropTypes.bool,
+    user: PropTypes.object,
+    displayBlogs: PropTypes.array,
+    currentUser: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

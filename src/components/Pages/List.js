@@ -1,5 +1,7 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { sweetAlert, jsUtils } from '../../utils';
 import { BlogStore, UserStore } from '../../stores';
@@ -8,12 +10,12 @@ import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
 import { PinItemModal, BlogModal } from '../UserControls';
 
-const List = React.createClass({
+const List = CreateReactClass({
 
   displayName: 'List',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -147,10 +149,10 @@ const List = React.createClass({
       <div className="">
         <Row className="card-header">
           <Col size="3">
-            <Link to={`/${username}/home`}><img alt="user" src={image_url} /></Link>
+            <Link to={`/${username}`}><img alt="user" src={image_url} /></Link>
           </Col>
           <Col size="8">
-            <h3 className="m-0"><Link to={`/${username}/home`}>{username}</Link></h3>
+            <h3 className="m-0"><Link to={`/${username}`}>{username}</Link></h3>
             <h5>{profession}</h5>
           </Col>
         </Row>

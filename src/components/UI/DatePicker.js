@@ -1,12 +1,14 @@
 import React from 'react';
 import classSet from 'classnames';
-import dateTime from '../../utils/datetime'
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import dateTime from '../../utils/datetime';
 
-const DatePicker = React.createClass({
+const DatePicker = CreateReactClass({
 
     propTypes: {
-        datetype: React.PropTypes.array,
-        maxage: React.PropTypes.number
+        datetype: PropTypes.array,
+        maxage: PropTypes.number
     },
 
     getDefaultProps() {
@@ -54,7 +56,7 @@ const DatePicker = React.createClass({
             return date.format('mmddyyyy');
         }
     },
- 
+
     onMonthChange(e){
         var month = e.target.value;
         this.props.onChangeMonth({

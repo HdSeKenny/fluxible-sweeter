@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import sweetAlert from '../../utils/sweetAlert';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';
@@ -8,16 +9,16 @@ import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../UserNavs';
 import UserBar from './UserBar';
 
-const UserInfo = React.createClass({
+const UserInfo = CreateReactClass({
 
   displayName: 'UserInfo',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    location: React.PropTypes.object
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -409,9 +410,9 @@ const UserInfo = React.createClass({
       <div className="form-group options">
         <label className="col-sm-2 control-label">Options</label>
         <div className="col-sm-8">
-          {!editable && <Button className="btn btn-warning edit-btn" onClick={this.editInputValues} >Edit Info</Button>}
-          {editable && <Button className="btn btn-primary save-btn" onClick={this.handleNewInfo} >Save</Button>}
-          {editable && <Button className="btn btn-default cancel-btn" onClick={this.cancelEditInfo} >Cancel</Button>}
+          {!editable && <button className="btn btn-warning edit-btn" onClick={this.editInputValues} >Edit Info</button>}
+          {editable && <button className="btn btn-primary save-btn" onClick={this.handleNewInfo} >Save</button>}
+          {editable && <button className="btn btn-default cancel-btn" onClick={this.cancelEditInfo} >Cancel</button>}
         </div>
       </div>
     );

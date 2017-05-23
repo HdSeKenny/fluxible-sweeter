@@ -1,9 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { MainSliders, FullScreen } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { Navbar, Footer } from './UserControls';
 
-export default class App extends Component {
+export default class App extends React.Component {
 
   static displayName = 'App';
 

@@ -1,25 +1,27 @@
 /* eslint-disable all, camelcase */
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { routerShape } from 'react-router';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+// import { routerShape } from 'react-router';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { sweetAlert, format } from '../../utils';
 import { Row, Col } from '../UI/Layout';
 
-const Comments = React.createClass({
+const Comments = CreateReactClass({
 
   displayName: 'Comments',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
-    router: routerShape.isRequired
+    executeAction: PropTypes.func,
+    router: PropTypes.object
   },
 
   propTypes: {
-    blog: React.PropTypes.object,
-    isBlogsWell: React.PropTypes.bool,
-    currentUser: React.PropTypes.object
+    blog: PropTypes.object,
+    isBlogsWell: PropTypes.bool,
+    currentUser: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

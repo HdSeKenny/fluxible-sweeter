@@ -3,13 +3,14 @@
  * @ui BlogModal
  */
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
 
-export default class BlogModal extends Component {
+export default class BlogModal extends React.Component {
 
   static displayName = 'BlogModal';
 

@@ -1,21 +1,23 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { routerShape } from 'react-router';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { router } from 'react-router';
 import { BlogStore, UserStore } from '../../stores';
 import { Comments } from '../Pages';
 import { format } from '../../utils';
 
-const Details = React.createClass({
+const Details = CreateReactClass({
 
   displayName: 'Details',
 
   contextTypes: {
-    router: routerShape.isRequired,
-    executeAction: React.PropTypes.func
+    // router: routerShape.isRequired,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

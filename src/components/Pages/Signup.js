@@ -1,23 +1,25 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { routerShape } from 'react-router';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { router } from 'react-router';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import sweetAlert from '../../utils/sweetAlert';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 
-const Signup = React.createClass({
+const Signup = CreateReactClass({
 
   displayName: 'Signup',
 
   contextTypes: {
-    router: routerShape.isRequired,
-    executeAction: React.PropTypes.func.isRequired
+    // router: routerShape.isRequired,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
-    switchOpenModal: React.PropTypes.func
+    switchOpenModal: PropTypes.func
   },
 
   mixins: [FluxibleMixin],

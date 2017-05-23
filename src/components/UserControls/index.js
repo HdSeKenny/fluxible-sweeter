@@ -6,4 +6,3 @@ export Footer from './Footer';
 export Tabs from './Tabs';
 export BlogModal from './BlogModal';
 export PinItemModal from './PinItemModal';
-export DraftEditor from './DraftEditor';

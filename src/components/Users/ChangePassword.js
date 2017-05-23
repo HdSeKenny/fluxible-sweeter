@@ -1,23 +1,25 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { routerShape } from 'react-router';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { router } from 'react-router';
 import UserBar from './UserBar';
 import sweetAlert from '../../utils/sweetAlert';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../UserNavs';
 
-const ChangePassword = React.createClass({
+const ChangePassword = CreateReactClass({
 
   displayName: 'ChangePassword',
 
   contextTypes: {
-    router: routerShape.isRequired,
-    executeAction: React.PropTypes.func,
+    // router: routerShape.isRequired,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    location: React.PropTypes.object
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],

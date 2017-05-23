@@ -1,18 +1,18 @@
 import React from 'react';
 import _ from 'lodash';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { UserStore, BlogStore } from '../../stores';
-import { UserActions } from '../../actions';
-import { Button, Glyphicon } from 'react-bootstrap';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { UserStore, BlogStore } from '../../stores';
 import { Tabs, Pane } from '../UserControls';
 
-const HotBlogsTabs = React.createClass({
+const HotBlogsTabs = CreateReactClass({
 
   displayName: 'HotBlogsTabs',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   mixins: [FluxibleMixin],

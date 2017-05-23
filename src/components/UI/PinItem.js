@@ -1,27 +1,28 @@
 /* eslint-disable all, camelcase */
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { routerShape } from 'react-router';
 import { sweetAlert, format, jsUtils } from '../../utils';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 
-export default class PinItem extends Component {
+export default class PinItem extends React.Component {
 
   static displayName = 'PinItem';
 
   static contextTypes = {
     router: routerShape.isRequired,
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   };
 
   static propTypes = {
-    pin: React.PropTypes.object,
-    index: React.PropTypes.number,
-    onSelect: React.PropTypes.func,
-    currentUser: React.PropTypes.object,
-    disabledClick: React.PropTypes.bool,
-    specialClass: React.PropTypes.string
+    pin: PropTypes.object,
+    index: PropTypes.number,
+    onSelect: PropTypes.func,
+    currentUser: PropTypes.object,
+    disabledClick: PropTypes.bool,
+    specialClass: PropTypes.string
   };
 
   static statics = {
@@ -212,7 +213,6 @@ export default class PinItem extends Component {
   render() {
     const { pin, specialClass } = this.props;
     const isArticle = pin.type === 'article';
-    console.log('PinItem render ======', pin.likers.length);
 
     return (
       <div className={`pin ${specialClass}`}>

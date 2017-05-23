@@ -1,15 +1,16 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Button, Glyphicon } from 'react-bootstrap';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { UserStore } from '../../stores';
 import { Tabs, Pane } from '../UserControls';
 
-const UserFollowsTabs = React.createClass({
+const UserFollowsTabs = CreateReactClass({
 
   displayName: 'UserFollowsTabs',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -37,13 +38,13 @@ const UserFollowsTabs = React.createClass({
         if (focus.strId === user.strId) {
           isFollowed = true;
         }
-      })
+      });
     }
     return isFollowed;
   },
 
   _renderUserFollowing(currentUser, user) {
-    return(
+    return (
       <Tabs>
         <Pane label="Following">
           {this._renderUserFocuses(currentUser, user)}
@@ -55,17 +56,17 @@ const UserFollowsTabs = React.createClass({
           <center><h2>Friends - Not Finished !</h2></center>
         </Pane>
       </Tabs>
-    )
+    );
   },
 
   _renderUserFocuses(currentUser, user) {
     if (user.focuses.length > 0) {
-      return(
+      return (
         <div className="">
           {user.focuses.map(focus => {
             const isFollowed = this.isFollowedThisUser(currentUser, focus);
             const isFocusCurrentUser = currentUser ? focus.strId === currentUser.strId : false;
-            const focusObj = { type: 'FOCUS', user: focus}
+            const focusObj = { type: 'FOCUS', user: focus };
             return (
               <div key={focus._id} className="well following">
                 <div className="row">
@@ -78,24 +79,22 @@ const UserFollowsTabs = React.createClass({
                   </div>
                   <div className="col-xs-3 following-btn">
                     {currentUser && isFollowed &&
-                      <Button className="cancel-follow-btn"
-                        onClick={this.props.onCancelFollowThisUser.bind(null, focusObj)}>
-                        <Glyphicon glyph="heart"/> Following
-                      </Button>
+                      <button className="cancel-follow-btn" onClick={this.props.onCancelFollowThisUser.bind(null, focusObj)}>
+                        <i className="fa fa-heart" /> Following
+                      </button>
                     }
                     {currentUser && !isFollowed && !isFocusCurrentUser &&
-                      <Button className="follow-btn"
-                        onClick={this.props.onFollowThisUser.bind(null, focusObj)}>
-                        <Glyphicon glyph="heart"/> Follow
-                      </Button>
+                      <button className="follow-btn" onClick={this.props.onFollowThisUser.bind(null, focusObj)}>
+                        <i className="fa fa-heart" /> Follow
+                      </button>
                     }
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
-      )
+      );
     }
   },
 
@@ -119,24 +118,22 @@ const UserFollowsTabs = React.createClass({
                   </div>
                   <div className="col-xs-3 following-btn">
                     {currentUser && isFollowed &&
-                      <Button className="cancel-follow-btn"
-                        onClick={this.props.onCancelFollowThisUser.bind(null, fanObj)}>
-                        <Glyphicon glyph="heart"/> Following
-                      </Button>
+                      <button className="cancel-follow-btn" onClick={this.props.onCancelFollowThisUser.bind(null, fanObj)}>
+                        <i className="fa fa-heart"/> Following
+                      </button>
                     }
                     {currentUser && !isFollowed && !isFanCurrentUser &&
-                      <Button className="follow-btn"
-                        onClick={this.props.onFollowThisUser.bind(null, fanObj)}>
-                        <Glyphicon glyph="heart"/> Follow
-                      </Button>
+                      <button className="follow-btn" onClick={this.props.onFollowThisUser.bind(null, fanObj)}>
+                        <i className="fa fa-heart"/> Follow
+                      </button>
                     }
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
-      )
+      );
     }
   },
 

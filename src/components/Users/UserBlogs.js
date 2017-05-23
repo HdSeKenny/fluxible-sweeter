@@ -1,26 +1,25 @@
 import React from 'react';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { Button, Glyphicon } from 'react-bootstrap';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { sweetAlert, format } from '../../utils';
 import UserBar from './UserBar';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
-import { UserBlogsNav } from '../UserNavs';
-import { BlogsWell } from '../UI';
 import { BlogEditor } from '../UserControls';
 
-const UserBlogs = React.createClass({
+const UserBlogs = CreateReactClass({
 
   displayName: 'UserBlogs',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    location: React.PropTypes.object
+    params: PropTypes.object,
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -38,14 +37,16 @@ const UserBlogs = React.createClass({
     const userStore = this.getStore(UserStore);
     const blogStore = this.getStore(BlogStore);
     const user = userStore.getUserByUsername(username);
+    const currentUser = userStore.getCurrentUser();
+    const isCurrentUser = currentUser.username === username;
     return {
-      currentUser: userStore.getCurrentUser(),
+      currentUser,
       user,
       currentBlog: blogStore.getCurrentBlog(),
       // deletedBlog: blogStore.getDeletedBlog(),
       isUpdated: blogStore.getIsUpdated(),
-      isCurrentUser: userStore.isCurrentUser(username),
-      displayBlogs: blogStore.getBlogsByUserId(user.id_str)
+      isCurrentUser,
+      displayBlogs: blogStore.getBlogsWithUsername(currentUser, username)
     };
   },
 
@@ -152,9 +153,9 @@ const UserBlogs = React.createClass({
             </div>
           </div>
           <div className="col-xs-4 blog-manage">
-            <Button className="btn btn-danger btn-sm delete-btn" onClick={this.onDeleteBlog.bind(this, blog)}>
-              <Glyphicon glyph="trash" /> Delete
-            </Button>
+            <button className="btn btn-danger btn-sm delete-btn" onClick={this.onDeleteBlog.bind(this, blog)}>
+              <i className="fa fa-trash" /> Delete
+            </button>
           </div>
         </div>
       </div>
@@ -172,18 +173,18 @@ const UserBlogs = React.createClass({
             </div>
           </div>
           <div className="col-xs-4 blog-manage">
-            <Button
+            <button
               className="btn btn-danger btn-sm delete-btn"
               onClick={this.onDeleteBlog.bind(this, blog)}
             >
-              <Glyphicon glyph="trash" /> Delete
-            </Button>
-            <Button
+              <i className="fa fa-trash" /> Delete
+            </button>
+            <button
               className="btn btn-primary btn-sm delete-btn"
               onClick={this.onEditBlog.bind(this, blog)}
             >
-              <Glyphicon glyph="pencil" /> Edit
-            </Button>
+              <i className="fa fa-pencil" /> Edit
+            </button>
           </div>
         </div>
       </div>
@@ -242,28 +243,9 @@ const UserBlogs = React.createClass({
     const { pathname } = this.props.location;
     return (
       <div className="user-blogs-page">
-        <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
-        {!isCurrentUser &&
-          <div className="user-blogs-content">
-            <div className="content-mid">
-              {this._renderBlogsSearchBar()}
-              <BlogsWell
-                displayBlogs={displayBlogs}
-                changeShowCommentsState={this.changeShowCommentsState}
-                changeBlogThumbsUpState={this.changeBlogThumbsUpState}
-              />
-            </div>
-          </div>
-        }
         {isCurrentUser &&
-          <div className="user-blogs-content">
-            <div className="content-left">
-              {this._renderCurrentUserContentLeft(pathname, currentUser, displayBlogs)}
-            </div>
-            <div className="content-right">
-              {this._renderBlogsSearchBar()}
+          <div className="">
               {this._renderCurrentUserContentRight(displayBlogs)}
-            </div>
           </div>
         }
         {currentBlog && (

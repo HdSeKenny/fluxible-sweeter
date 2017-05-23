@@ -1,19 +1,11 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import {History, IndexLink, Link} from 'react-router';
-import {Button, Glyphicon} from 'react-bootstrap';
 
-const Pane = React.createClass({
+export default class Pane extends React.Component {
 
-    displayName: 'Pane',
+  static displayName = 'Pane';
 
-    render() {
-        return (
-          <div className="user-pane">
-              {this.props.children}
-          </div>
-        );
-    }
-});
+  render() {
+    return <div className="user-pane">{this.props.children}</div>;
+  }
+}
 
-export default Pane;

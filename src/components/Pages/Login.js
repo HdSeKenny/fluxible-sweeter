@@ -1,20 +1,22 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { routerShape } from 'react-router/lib/PropTypes';
-import sweetAlert from '../../utils/sweetAlert';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { routerShape } from 'react-router';
+import { sweetAlert, validations, jsUtils } from '../../utils';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { Input, Switch, ModalsFactory } from '../UI';
+import { SweetInput, Switch, ModalsFactory } from '../UI';
 import { Row, Col } from '../UI/Layout';
 
-const Login = React.createClass({
+const Login = CreateReactClass({
 
   displayName: 'Login',
 
   contextTypes: {
     router: routerShape.isRequired,
     config: PropTypes.object,
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func
   },
 
   propTypes: {
@@ -36,7 +38,9 @@ const Login = React.createClass({
 
   getStateFromStores() {
     return {
-      switchOn: false
+      switchOn: false,
+      emailErrorMessage: '',
+      passwordErrorMessage: ''
     };
   },
 
@@ -63,26 +67,62 @@ const Login = React.createClass({
     const creds = { email, password };
     const validateInfo = this.validateForm(creds);
     if (validateInfo) {
-      this.setState({ errorMessage: validateInfo });
+      this.setState({ errorMessage: validateInfo, emailErrorMessage: '', passwordErrorMessage: '' });
     } else {
       this.executeAction(UserActions.Login, creds);
     }
   },
 
   validateForm(creds) {
-    if (!creds.email) {
-      return 'Username is required';
-    } else if (!creds.password) {
-      return 'Password is required';
+    const emailValidation = this.validateEmail(creds.email);
+    const passwordValidation = this.validatePassword(creds.password);
+
+    return emailValidation.emailErrorMessage || passwordValidation.passwordErrorMessage;
+  },
+
+  validateEmail(email) {
+    const isUnEmpty = jsUtils.isUnEmptyString(email);
+    const isEmail = validations.isEmail(email);
+    const result = {
+      email,
+      emailErrorMessage: ''
+    };
+
+    if (!isUnEmpty) {
+      result.emailErrorMessage = 'Email is required!';
     }
+    else if (!isEmail) {
+      result.emailErrorMessage = 'Please check your email address!';
+    }
+
+    return result;
+  },
+
+  validatePassword(password) {
+    const isUnEmpty = jsUtils.isUnEmptyString(password);
+
+    const result = {
+      password,
+      passwordErrorMessage: ''
+    };
+
+    if (!isUnEmpty) {
+      result.passwordErrorMessage = 'Password is required!';
+    }
+
+    return result;
   },
 
   onEmailChange(e) {
-    this.setState({ email: e.target.value });
+    const email = e.target.value;
+    const result = this.validateEmail(email);
+    this.setState(result);
   },
 
   onPasswordChange(e) {
-    this.setState({ password: e.target.value });
+    const password = e.target.value;
+    const result = this.validatePassword(password);
+    this.setState(result);
   },
 
   openSignupModal() {
@@ -102,33 +142,35 @@ const Login = React.createClass({
   },
 
   _renderEmailInput(email) {
+    const { emailErrorMessage } = this.state;
     return (
-      <Input
+      <SweetInput
         ref="emailRef"
         autoComplete={'off'}
         format="email"
         icon="fa fa-user"
         required={true}
-        errorMessage="Please verify your email"
+        errorMessage={emailErrorMessage}
         placeholder="email"
         value={email}
-        onFieldChange={this.onEmailChange}
+        onChange={this.onEmailChange}
       />
     );
   },
 
   _renderPasswordInput(password) {
+    const { passwordErrorMessage } = this.state;
     return (
-      <Input
+      <SweetInput
         ref="loginRef"
         autoComplete={'off'}
         format="password"
         icon="fa fa-lock"
         required={true}
-        errorMessage="Password is required"
+        errorMessage={passwordErrorMessage}
         placeholder="password"
         value={password}
-        onFieldChange={this.onPasswordChange}
+        onChange={this.onPasswordChange}
       />
     );
   },

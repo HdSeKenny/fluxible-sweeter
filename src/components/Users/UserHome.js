@@ -1,23 +1,25 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
 
-const UserHome = React.createClass({
+const UserHome = CreateReactClass({
 
   displayName: 'UserHome',
 
   contextTypes: {
-    executeAction: React.PropTypes.func,
+    executeAction: PropTypes.func,
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    location: React.PropTypes.object,
-    children: React.PropTypes.object
+    params: PropTypes.object,
+    location: PropTypes.object,
+    children: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -45,18 +47,27 @@ const UserHome = React.createClass({
   },
 
   onChange(res) {
-    const { displayBlogs } = this.state;
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.success(res.msg);
-      displayBlogs.push(res.newBlog);
+    const { username } = this.props.params;
+    const userStore = this.getStore(UserStore);
+    const blogStore = this.getStore(BlogStore);
+    const currentUser = userStore.getCurrentUser();
+    const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+    const responseMessages = ['CREATE_BLOG_SUCCESS'];
+    if (responseMessages.includes(res.msg)) {
+      if (res.msg === 'CREATE_BLOG_SUCCESS') {
+        sweetAlert.success(res.msg, () => {
+          ModalsFactory.hide('createBlogModal');
+        });
+      }
+
       this.setState({ displayBlogs });
-      ModalsFactory.hide('createBlogModal');
     }
   },
 
   render() {
     const { currentUser, user, displayBlogs } = this.state;
     const { pathname } = this.props.location;
+    const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
     return (
       <div className="user-home">
         <UserBar path={pathname} user={user} currentUser={currentUser} />
@@ -65,7 +76,7 @@ const UserHome = React.createClass({
             <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
           </div>
           <div className="home-right">
-            {currentUser && <HomeRightNav path={pathname} currentUser={currentUser} />}
+            <HomeRightNav path={pathname} user={user} currentUser={currentUser} isCurrentUser={isCurrentUser} />
             <div className="right-pages">{this.props.children}</div>
           </div>
         </div>

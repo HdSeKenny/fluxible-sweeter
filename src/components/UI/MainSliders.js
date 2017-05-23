@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class MainSliders extends Component {
+export default class MainSliders extends React.Component {
 
   static propTypes = {
     show: PropTypes.bool

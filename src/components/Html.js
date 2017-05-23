@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
  */
-export default class Html extends Component {
+export default class Html extends React.Component {
 
   static displayName = 'Html';
 
   static propTypes = {
-    assets: React.PropTypes.object,
-    exposed: React.PropTypes.string,
-    markup: React.PropTypes.string,
+    assets: PropTypes.object,
+    exposed: PropTypes.string,
+    markup: PropTypes.string
   };
 
   render() {

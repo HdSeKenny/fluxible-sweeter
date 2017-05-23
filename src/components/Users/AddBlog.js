@@ -1,23 +1,27 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import Select from 'react-select';
 import { routerShape } from 'react-router';
 import { sweetAlert } from '../../utils';
 import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
-import { DraftEditor } from '../UserControls';
+import { DraftEditor } from '../../plugins';
+import { Row, Col } from '../UI/Layout';
 
-const AddBlog = React.createClass({
+const AddBlog = CreateReactClass({
 
   displayName: 'AddBlog',
 
   contextTypes: {
     router: routerShape.isRequired,
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    location: React.PropTypes.object
+    params: PropTypes.object,
+    location: PropTypes.object
   },
 
   mixins: [FluxibleMixin],
@@ -37,7 +41,8 @@ const AddBlog = React.createClass({
       user: this.getStore(UserStore).getUserByUsername(username),
       isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
       title: '',
-      content: ''
+      content: '',
+      tags: []
     };
   },
 
@@ -50,16 +55,24 @@ const AddBlog = React.createClass({
     }
   },
 
-  updateTitle(e) {
-    this.setState({ title: e.target.value });
-  },
-
   updateContent(e) {
     this.setState({ content: e.target.value });
   },
 
   cancelAddBlog() {
     this.setState({ title: '', content: '' });
+  },
+
+  onHandleTitle(e) {
+    this.setState({ title: e.target.value });
+  },
+
+  onHanleTagsChange(val) {
+    this.setState({ tagsOptions: val });
+  },
+
+  onHandleEditorState(editorState) {
+
   },
 
   handleSubmit(e) {
@@ -156,11 +169,55 @@ const AddBlog = React.createClass({
   },
 
   render() {
-    const { user, currentUser, isCurrentUser, title, content } = this.state;
+    const { user, currentUser, isCurrentUser, title, content, tags } = this.state;
     const { pathname } = this.props.location;
+    var options = [
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' },
+
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' },
+
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' },
+
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' },
+
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' },
+    ];
+
+
+
     return (
       <div className="create-article-page">
-        {this._renderAddBlogContent(title, content)}
+        <div className="draft-options">
+          <Row className="mb-10">
+            <Col size="7 pl-0 title-input">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Add a title.."
+                value={title}
+                onChange={this.onHandleTitle} />
+            </Col>
+            <Col size="5 pr-0">
+              <Select
+                name="form-field-name"
+                placeholder="Select or create tags"
+                value={tags}
+                options={options}
+                onChange={(val) => this.onHanleTagsChange(val)}
+                multi={true}
+                deleteRemoves={false} />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="draft-editor">
+          <DraftEditor onHandleEditorState={this.onHandleEditorState} />
+        </div>
       </div>
     );
   }

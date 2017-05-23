@@ -1,14 +1,15 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
-import { Dialog } from '../UI';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-const BlogEditor = React.createClass({
+const BlogEditor = CreateReactClass({
 
   displayName: 'BlogEditor',
 
   propTypes: {
-    blog: PropTypes.object.isRequired,
-    show: PropTypes.bool.isRequired,
+    blog: PropTypes.object,
+    show: PropTypes.bool,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
     isUpdated: PropTypes.bool,
@@ -18,12 +19,12 @@ const BlogEditor = React.createClass({
 
   mixins: [FluxibleMixin],
 
-  getInitialState(){
-    const {title} = this.props.blog;
-    const blogTitle = title.substring(3, title.length-3);
+  getInitialState() {
+    const { title } = this.props.blog;
+    const blogTitle = title.substring(3, title.length - 3);
     return {
       blog: this.props.blog,
-      blogTitle: blogTitle,
+      blogTitle,
       blogContent: this.props.blog.content,
       isUpdated: this.props.isUpdated
     };
@@ -36,8 +37,8 @@ const BlogEditor = React.createClass({
     });
   },
 
-  onCancelEdit(){
-      this.props.onCancel();
+  onCancelEdit() {
+    this.props.onCancel();
   },
 
   onSubmitEdit(){
@@ -91,30 +92,7 @@ const BlogEditor = React.createClass({
   render(){
     const {blogTitle, blogContent} = this.state;
     return (
-      <Dialog
-        showImmediately={this.props.show}
-        onClose={this.onCancelEdit}
-        close={true}
-        modal={true}
-        autoDetectWindowHeight={true}
-        autoScrollBodyContent={true}
-        dialogWindowClassName={this.props.dialogWindowClassName}
-       >
-      <Dialog.Header>
-        <div className='modal-header'>
-          <h3>Update this blog</h3>
-        </div>
-      </Dialog.Header>
-      <Dialog.Content>
-        {this._renderModalBody(blogTitle, blogContent)}
-      </Dialog.Content>
-      <Dialog.Footer>
-        <div className='modal-footer'>
-          <button onClick={this.onCancelEdit}>Cancel</button>
-          <button bsStyle="primary" onClick={this.onSubmitEdit}>Save</button>
-        </div>
-      </Dialog.Footer>
-      </Dialog>
+      <div />
     );
   }
 });

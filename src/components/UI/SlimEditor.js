@@ -5,6 +5,8 @@
 // Necessary React Modules
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
 
 // Slim (place slim CSS and module js file in same folder as this file)
 import { Slim } from '../../plugins';
@@ -13,7 +15,7 @@ import { Slim } from '../../plugins';
 export default class SlimEditor extends React.Component {
 
   static propTypes = {
-    children: React.PropTypes.object
+    children: PropTypes.object
   };
 
   componentDidMount() {

@@ -1,15 +1,17 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { UserStore } from '../../stores';
 
-const Footer = React.createClass({
+const Footer = CreateReactClass({
 
   displayName: 'Footer',
 
   mixins: [FluxibleMixin],
 
   contextTypes: {
-    config: React.PropTypes.object
+    config: PropTypes.object
   },
 
   statics: {

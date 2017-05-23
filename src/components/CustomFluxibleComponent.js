@@ -1,21 +1,22 @@
 import React from 'react';
-
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 /**
  * adding child context to react component
  */
-const CustomFluxibleComponent = React.createClass({
+const CustomFluxibleComponent = CreateReactClass({
 
   displayName: 'CustomFluxibleComponent',
 
   propTypes: {
-    context: React.PropTypes.object.isRequired,
-    children: React.PropTypes.object
+    context: PropTypes.object,
+    children: PropTypes.object
   },
 
   childContextTypes: {
-    executeAction: React.PropTypes.func.isRequired,
-    getStore: React.PropTypes.func.isRequired,
-    config: React.PropTypes.object
+    executeAction: PropTypes.func,
+    getStore: PropTypes.func,
+    config: PropTypes.object
   },
 
   /**

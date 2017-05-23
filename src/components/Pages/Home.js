@@ -1,5 +1,7 @@
 import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import sweetAlert from '../../utils/sweetAlert';
 import { BlogStore, UserStore } from '../../stores';
@@ -8,12 +10,12 @@ import { PinItem, ModalsFactory } from '../UI';
 import { Page } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 
-const Home = React.createClass({
+const Home = CreateReactClass({
 
   displayName: 'Home',
 
   contextTypes: {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   },
 
   mixins: [FluxibleMixin],

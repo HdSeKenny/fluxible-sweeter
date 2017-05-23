@@ -12,16 +12,12 @@ import serialize from 'serialize-javascript';
 import React from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
-import './polyfills';
+// import './polyfills';
 import createRoutes from './routes';
 import fetchData from './utils/fetchData';
 import app from './app';
 import CustomFluxibleComponent from './components/CustomFluxibleComponent';
-import {
-  blogs as BlogService,
-  users as UserService,
-  comments as CommentService
-} from './services';
+import { blogs as BlogService, users as UserService, comments as CommentService } from './services';
 import Html from './components/Html';
 import config from './configs';
 import assets from './utils/assets';
@@ -76,6 +72,7 @@ export default (server) => {
       authenticated: req.session.user && req.session.user.authenticated
     });
     const routes = createRoutes(context);
+
     match({ routes, location: req.url }, (error, redirectLocation, routerState) => {
       if (error) {
         res.send(500, error.message);

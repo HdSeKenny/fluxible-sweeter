@@ -1,22 +1,24 @@
 import React from 'react';
-import { routerShape } from 'react-router';
+import CreateReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+import { router } from 'react-router';
 import { Row, Col } from '../UI/Layout';
 import { animations } from '../../utils';
 
-const UserHomeNav = React.createClass({
+const UserHomeNav = CreateReactClass({
 
   displayName: 'UserHomeNav',
 
   contextTypes: {
-    router: routerShape.isRequired,
-    executeAction: React.PropTypes.func
+    // router: routerShape.isRequired,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
-    path: React.PropTypes.string,
-    user: React.PropTypes.object,
-    displayBlogs: React.PropTypes.array,
-    currentUser: React.PropTypes.object
+    path: PropTypes.string,
+    user: PropTypes.object,
+    displayBlogs: PropTypes.array,
+    currentUser: PropTypes.object
   },
 
   getInitialState() {
@@ -24,7 +26,7 @@ const UserHomeNav = React.createClass({
   },
 
   componentDidMount() {
-    animations.fixed_left_nav('.isNotCurrentUser');
+    animations.fixed_left_nav('.user-info-others');
   },
 
   isActive(route) {
@@ -62,21 +64,32 @@ const UserHomeNav = React.createClass({
       <div className="user-home-left">
         <Row className="blog-tips">
           <Col size="4 tip-li p-0" >
-            <p onClick={this.goToUserPages.bind(this, `/${username}/blogs`)}>{displayBlogs.length}</p><span>Blogs</span>
+            <p onClick={this.goToUserPages.bind(this, `/${username}/blogs`)}>
+              {displayBlogs.length}
+            </p>
+            <span>Blogs</span>
           </Col>
           <Col size="4 tip-li p-0">
-            <p onClick={this.goToUserPages.bind(this, `/${username}/follows`)}>{fans.length}</p><span>Fans</span>
+            <p onClick={this.goToUserPages.bind(this, `/${username}/follows`)}>
+              {fans.length}
+            </p>
+            <span>Fans</span>
           </Col>
           <Col size="4 tip-li p-0">
-            <p onClick={this.goToUserPages.bind(this, `/${username}/follows`)}>{focuses.length}</p><span>Focus</span>
+            <p onClick={this.goToUserPages.bind(this, `/${username}/follows`)}>
+              {focuses.length}
+            </p>
+            <span>Focus</span>
           </Col>
         </Row>
-        <Row className="user-info">
-          {this._renderUserInfo(displayUser)}
-        </Row>
-        <Row className="others">
+        <div className="user-info-others">
+          <Row className="user-info">
+            {this._renderUserInfo(displayUser)}
+          </Row>
+          <Row className="others">
 
-        </Row>
+          </Row>
+        </div>
       </div>
     );
   }

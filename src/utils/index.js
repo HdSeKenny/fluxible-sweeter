@@ -1,4 +1,4 @@
-export Validations from './inputValidations';
+export validations from './inputValidations';
 export sweetAlert from './sweetAlert';
 export animations from './animations';
 export format from './format';

@@ -13,29 +13,29 @@ module.exports = {
 
   name: 'AuthenticatePlugin',
 
-  plugContext: function (options) {
+  plugContext(options) {
     let authenticated = options.authenticated;
     let clearSessionStore = options.clearSessionStore;
     return {
-      plugActionContext: function (actionContext) {
+      plugActionContext(actionContext) {
         actionContext.authenticated = authenticated;
         actionContext.clearSessionStore = clearSessionStore;
       },
-      plugComponentContext: function (componentContext) {
+      plugComponentContext(componentContext) {
         componentContext.authenticated = authenticated;
         componentContext.clearSessionStore = clearSessionStore;
       },
-      plugStoreContext: function (storeContext) {
+      plugStoreContext(storeContext) {
         storeContext.authenticated = authenticated;
         storeContext.clearSessionStore = clearSessionStore;
       },
-      dehydrate: function () {
+      dehydrate() {
         return {
-          authenticated: authenticated
-          , clearSessionStore: clearSessionStore
+          authenticated,
+          clearSessionStore
         };
       },
-      rehydrate: function (state) {
+      rehydrate(state) {
         authenticated = state.authenticated;
         clearSessionStore = state.clearSessionStore;
       }

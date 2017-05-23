@@ -1,16 +1,15 @@
-/* eslint-disable all */
-import React, { PropTypes, Component } from 'react';
-// import { Row, Col } from '../UI/Layout';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { SlimEditor, ModalsFactory } from '../UI';
 import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 
-export default class UserImageEditor extends Component {
+export default class UserImageEditor extends React.Component {
 
   static displayName = 'UserImageEditor';
 
   static contextTypes = {
-    executeAction: React.PropTypes.func
+    executeAction: PropTypes.func
   };
 
   static propTypes = {
@@ -64,7 +63,13 @@ export default class UserImageEditor extends Component {
       processData: false,
       contentType: false,
       success: (newUser) => {
-        _this.context.executeAction(UserActions.UploadImageSuccess, newUser);
+        Promise.all([
+          _this.context.executeAction(UserActions.UploadImageSuccess, newUser),
+          _this.context.executeAction(BlogActions.UploadImageSuccess, newUser)
+        ])
+        .then(() => {
+          // do nothing
+        });
       }
     });
   }
