@@ -12,6 +12,14 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _actions = require('../../actions');
@@ -28,17 +36,17 @@ var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Signup = _react2.default.createClass({
+const Signup = (0, _createReactClass2.default)({
 
   displayName: 'Signup',
 
   contextTypes: {
-    router: _reactRouter.routerShape.isRequired,
-    executeAction: _react2.default.PropTypes.func.isRequired
+    // router: routerShape.isRequired,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    switchOpenModal: _react2.default.PropTypes.func
+    switchOpenModal: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],

@@ -8,6 +8,14 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
@@ -18,20 +26,20 @@ var _stores = require('../../stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserSettingsNav = _react2.default.createClass({
+const UserSettingsNav = (0, _createReactClass2.default)({
 
   displayName: 'UserSettingsNav',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    path: _react2.default.PropTypes.object,
-    isCurrentUser: _react2.default.PropTypes.bool,
-    user: _react2.default.PropTypes.object,
-    displayBlogs: _react2.default.PropTypes.array,
-    currentUser: _react2.default.PropTypes.object
+    path: _propTypes2.default.object,
+    isCurrentUser: _propTypes2.default.bool,
+    user: _propTypes2.default.object,
+    displayBlogs: _propTypes2.default.array,
+    currentUser: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],

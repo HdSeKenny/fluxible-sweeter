@@ -8,19 +8,25 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _datetime = require('../../utils/datetime');
 
 var _datetime2 = _interopRequireDefault(_datetime);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const DatePicker = _react2.default.createClass({
-    displayName: 'DatePicker',
-
+const DatePicker = (0, _createReactClass2.default)({
 
     propTypes: {
-        datetype: _react2.default.PropTypes.array,
-        maxage: _react2.default.PropTypes.number
+        datetype: _propTypes2.default.array,
+        maxage: _propTypes2.default.number
     },
 
     getDefaultProps: function () {

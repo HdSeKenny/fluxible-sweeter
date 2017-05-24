@@ -25,14 +25,15 @@ import serverConfig from './configs/server';
 
 export default (server) => {
   const env = server.get('env');
+
   // view engine setup
   server.set('views', path.join(__dirname, 'views'));
-  server.set('view engine', 'jade');
+  server.set('view engine', 'pug');
 
   if (serverConfig.server.logEnable && env !== 'production') {
-    server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+    server.use(morgan(':method :url :status :response-time ms'));
   }
-
   if (env === 'development') {
     server.use(express.static(path.join(serverConfig.server.root, '.tmp')));
   }
@@ -62,7 +63,7 @@ export default (server) => {
   fetchrPlugin.registerService(UserService);
   fetchrPlugin.registerService(CommentService);
 
-  server.use('/api/upload', require('./api/upload'));
+  server.use('/api/upload', require('./plugins/upload'));
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
   server.use((req, res) => {
     const context = app.createContext({

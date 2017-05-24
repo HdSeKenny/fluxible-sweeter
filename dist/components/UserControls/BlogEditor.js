@@ -12,22 +12,28 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _UI = require('../UI');
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const BlogEditor = _react2.default.createClass({
+const BlogEditor = (0, _createReactClass2.default)({
 
   displayName: 'BlogEditor',
 
   propTypes: {
-    blog: _react.PropTypes.object.isRequired,
-    show: _react.PropTypes.bool.isRequired,
-    onSave: _react.PropTypes.func,
-    onCancel: _react.PropTypes.func,
-    isUpdated: _react.PropTypes.bool,
-    uniqueValidations: _react.PropTypes.object,
-    dialogWindowClassName: _react.PropTypes.string
+    blog: _propTypes2.default.object,
+    show: _propTypes2.default.bool,
+    onSave: _propTypes2.default.func,
+    onCancel: _propTypes2.default.func,
+    isUpdated: _propTypes2.default.bool,
+    uniqueValidations: _propTypes2.default.object,
+    dialogWindowClassName: _propTypes2.default.string
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -127,54 +133,7 @@ const BlogEditor = _react2.default.createClass({
   },
   render: function () {
     const { blogTitle: blogTitle, blogContent: blogContent } = this.state;
-    return _react2.default.createElement(
-      _UI.Dialog,
-      {
-        showImmediately: this.props.show,
-        onClose: this.onCancelEdit,
-        close: true,
-        modal: true,
-        autoDetectWindowHeight: true,
-        autoScrollBodyContent: true,
-        dialogWindowClassName: this.props.dialogWindowClassName
-      },
-      _react2.default.createElement(
-        _UI.Dialog.Header,
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'modal-header' },
-          _react2.default.createElement(
-            'h3',
-            null,
-            'Update this blog'
-          )
-        )
-      ),
-      _react2.default.createElement(
-        _UI.Dialog.Content,
-        null,
-        this._renderModalBody(blogTitle, blogContent)
-      ),
-      _react2.default.createElement(
-        _UI.Dialog.Footer,
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'modal-footer' },
-          _react2.default.createElement(
-            'button',
-            { onClick: this.onCancelEdit },
-            'Cancel'
-          ),
-          _react2.default.createElement(
-            'button',
-            { bsStyle: 'primary', onClick: this.onSubmitEdit },
-            'Save'
-          )
-        )
-      )
-    );
+    return _react2.default.createElement('div', null);
   }
 });
 

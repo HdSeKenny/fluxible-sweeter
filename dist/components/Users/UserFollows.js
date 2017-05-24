@@ -12,9 +12,15 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _sweetAlert = require('../../utils/sweetAlert');
+var _createReactClass = require('create-react-class');
 
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _utils = require('../../utils');
 
 var _UI = require('../UI');
 
@@ -28,17 +34,17 @@ var _UserBar2 = _interopRequireDefault(_UserBar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserFollows = _react2.default.createClass({
+const UserFollows = (0, _createReactClass2.default)({
 
   displayName: 'UserFollows',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    location: _react2.default.PropTypes.object,
-    params: _react2.default.PropTypes.object
+    location: _propTypes2.default.object,
+    params: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -64,7 +70,7 @@ const UserFollows = _react2.default.createClass({
   onFollowThisUser: function (followUser) {
     const { currentUser: currentUser, user: user } = this.state;
     if (!currentUser) {
-      _sweetAlert2.default.alertErrorMessage('Login first please!');
+      _utils.sweetAlert.alertErrorMessage('Login first please!');
       return;
     }
 
@@ -80,7 +86,7 @@ const UserFollows = _react2.default.createClass({
   onCancelFollowThisUser: function (followUser) {
     const { currentUser: currentUser, user: user } = this.state;
     if (!currentUser) {
-      _sweetAlert2.default.alertErrorMessage('Login first please!');
+      _utils.sweetAlert.alertErrorMessage('Login first please!');
       return;
     }
 

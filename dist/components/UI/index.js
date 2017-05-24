@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.Input = exports.MainSliders = exports.UserFollowsTabs = exports.HotBlogsTabs = exports.BlogsWell = exports.Overlay = exports.ConfirmDialog = exports.Dialog = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
+exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.SweetInput = exports.MainSliders = exports.UserFollowsTabs = exports.HotBlogsTabs = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
 
 var _FullScreen2 = require('./FullScreen');
 
@@ -17,22 +17,6 @@ var _DatePicker2 = require('./DatePicker');
 
 var _DatePicker3 = _interopRequireDefault(_DatePicker2);
 
-var _Dialog2 = require('./Dialog');
-
-var _Dialog3 = _interopRequireDefault(_Dialog2);
-
-var _ConfirmDialog2 = require('./ConfirmDialog');
-
-var _ConfirmDialog3 = _interopRequireDefault(_ConfirmDialog2);
-
-var _Overlay2 = require('./Overlay');
-
-var _Overlay3 = _interopRequireDefault(_Overlay2);
-
-var _BlogsWell2 = require('./BlogsWell');
-
-var _BlogsWell3 = _interopRequireDefault(_BlogsWell2);
-
 var _HotBlogsTabs2 = require('./HotBlogsTabs');
 
 var _HotBlogsTabs3 = _interopRequireDefault(_HotBlogsTabs2);
@@ -45,9 +29,9 @@ var _MainSliders2 = require('./MainSliders');
 
 var _MainSliders3 = _interopRequireDefault(_MainSliders2);
 
-var _Input2 = require('./Input');
+var _SweetInput2 = require('./SweetInput');
 
-var _Input3 = _interopRequireDefault(_Input2);
+var _SweetInput3 = _interopRequireDefault(_SweetInput2);
 
 var _Layout2 = require('./Layout');
 
@@ -78,14 +62,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.FullScreen = _FullScreen3.default;
 exports.BgIcon = _BgIcon3.default;
 exports.DatePicker = _DatePicker3.default;
-exports.Dialog = _Dialog3.default;
-exports.ConfirmDialog = _ConfirmDialog3.default;
-exports.Overlay = _Overlay3.default;
-exports.BlogsWell = _BlogsWell3.default;
 exports.HotBlogsTabs = _HotBlogsTabs3.default;
 exports.UserFollowsTabs = _UserFollowsTabs3.default;
 exports.MainSliders = _MainSliders3.default;
-exports.Input = _Input3.default;
+exports.SweetInput = _SweetInput3.default;
 exports.Layout = _Layout3.default;
 exports.ModalsFactory = _ModalsFactory3.default;
 exports.Switch = _Switch3.default;

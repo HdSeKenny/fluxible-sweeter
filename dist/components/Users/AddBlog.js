@@ -12,39 +12,44 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactSelect = require('react-select');
+
+var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
 var _reactRouter = require('react-router');
 
-var _reactBootstrap = require('react-bootstrap');
-
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _utils = require('../../utils');
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _UserNavs = require('../UserNavs');
+var _plugins = require('../../plugins');
 
-var _UserBar = require('./UserBar');
-
-var _UserBar2 = _interopRequireDefault(_UserBar);
+var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import ReactDOM from 'react-dom';
-const AddBlog = _react2.default.createClass({
+const AddBlog = (0, _createReactClass2.default)({
 
   displayName: 'AddBlog',
 
   contextTypes: {
     router: _reactRouter.routerShape.isRequired,
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    params: _react2.default.PropTypes.object,
-    location: _react2.default.PropTypes.object
+    params: _propTypes2.default.object,
+    location: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -57,25 +62,23 @@ const AddBlog = _react2.default.createClass({
     return this.getStateFromStores();
   },
   getStateFromStores: function () {
-    const { userId: userId } = this.props.params;
+    const { username: username } = this.props.params;
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(userId),
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username),
       title: '',
-      content: ''
+      content: '',
+      tags: []
     };
   },
   onChange: function (res) {
     const { currentUser: currentUser } = this.state;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _sweetAlert2.default.alertSuccessMessageWithCallback(res.msg, () => {
+      _utils.sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
         this.context.router.push(`/user-blogs/${currentUser.strId}/list`);
       });
     }
-  },
-  updateTitle: function (e) {
-    this.setState({ title: e.target.value });
   },
   updateContent: function (e) {
     this.setState({ content: e.target.value });
@@ -83,18 +86,25 @@ const AddBlog = _react2.default.createClass({
   cancelAddBlog: function () {
     this.setState({ title: '', content: '' });
   },
+  onHandleTitle: function (e) {
+    this.setState({ title: e.target.value });
+  },
+  onHanleTagsChange: function (val) {
+    this.setState({ tagsOptions: val });
+  },
+  onHandleEditorState: function (editorState) {},
   handleSubmit: function (e) {
     e.preventDefault();
     const title = this.state.title;
     const content = this.state.content;
     const now = new Date();
     if (!title) {
-      _sweetAlert2.default.alertErrorMessage('Please enter title !');
+      _utils.sweetAlert.alertErrorMessage('Please enter title !');
       return;
     }
 
     if (!content) {
-      _sweetAlert2.default.alertErrorMessage('Please enter content !');
+      _utils.sweetAlert.alertErrorMessage('Please enter content !');
       return;
     }
 
@@ -180,62 +190,77 @@ const AddBlog = _react2.default.createClass({
       'div',
       { className: 'form-group btns' },
       _react2.default.createElement(
-        _reactBootstrap.Button,
-        { onClick: this.cancelAddBlog, className: 'cancel-btn' },
-        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'glyphicon glyphicon-remove' }),
-        ' Cancel'
+        'button',
+        { type: 'reset', className: 'btn btn-default' },
+        'Reset'
       ),
       _react2.default.createElement(
-        _reactBootstrap.Button,
-        { type: 'submit', className: 'create-btn k-blue' },
-        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
-        ' Create'
+        'button',
+        { className: 'btn btn-primary' },
+        'Create'
       )
     );
   },
   _renderAddBlogContent: function (title, content) {
     return _react2.default.createElement(
       'div',
-      { className: 'well' },
+      { className: 'content' },
       _react2.default.createElement(
-        'div',
-        { className: 'create-blog' },
-        _react2.default.createElement(
-          'h3',
-          null,
-          'Write an article'
-        ),
-        _react2.default.createElement(
-          'form',
-          { onSubmit: this.handleSubmit },
-          this._renderArticleTitle(title),
-          this._renderArticleContent(content),
-          this._rednerCreateBtns()
-        )
+        'h3',
+        null,
+        'Write an article'
+      ),
+      _react2.default.createElement(
+        'form',
+        { onSubmit: this.handleSubmit },
+        this._renderArticleTitle(title),
+        this._renderArticleContent(content),
+        this._rednerCreateBtns()
       )
     );
   },
   render: function () {
-    const { user: user, currentUser: currentUser, isCurrentUser: isCurrentUser, title: title, content: content } = this.state;
+    const { user: user, currentUser: currentUser, isCurrentUser: isCurrentUser, title: title, content: content, tags: tags } = this.state;
     const { pathname: pathname } = this.props.location;
+    var options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
+
     return _react2.default.createElement(
       'div',
-      { className: 'add-blog-content' },
-      _react2.default.createElement(_UserBar2.default, {
-        path: pathname,
-        user: user,
-        isCurrentUser: isCurrentUser,
-        currentUser: currentUser
-      }),
+      { className: 'create-article-page' },
       _react2.default.createElement(
         'div',
-        { className: 'content-left' },
-        _react2.default.createElement(_UserNavs.UserBlogsNav, { path: pathname, user: currentUser, isCurrentUser: isCurrentUser })
+        { className: 'draft-options' },
+        _react2.default.createElement(
+          _Layout.Row,
+          { className: 'mb-10' },
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '7 pl-0 title-input' },
+            _react2.default.createElement('input', {
+              type: 'text',
+              className: 'form-control',
+              placeholder: 'Add a title..',
+              value: title,
+              onChange: this.onHandleTitle })
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '5 pr-0' },
+            _react2.default.createElement(_reactSelect2.default, {
+              name: 'form-field-name',
+              placeholder: 'Select or create tags',
+              value: tags,
+              options: options,
+              onChange: val => this.onHanleTagsChange(val),
+              multi: true,
+              deleteRemoves: false })
+          )
+        )
       ),
       _react2.default.createElement(
         'div',
-        { className: 'content-right' },
-        this._renderAddBlogContent(title, content)
+        { className: 'draft-editor' },
+        _react2.default.createElement(_plugins.DraftEditor, { onHandleEditorState: this.onHandleEditorState })
       )
     );
   }

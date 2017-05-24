@@ -99,25 +99,22 @@ const BlogStore = (0, _createStore2.default)({
   getAllBlogs: function () {
     return this.blogs;
   },
-  getUserBlogsWithFocuses: function (isCurrentUser, user) {
-    const displayUserBlogs = [];
-    if (this.blogs) {
-      this.blogs.forEach(blog => {
-        if (isCurrentUser) {
-          if (user.focuses.length > 0) {
-            user.focuses.forEach(focus => {
-              if (blog.author.id_str === focus.id_str) {
-                displayUserBlogs.push(blog);
-              }
-            });
-          }
-        }
-        if (blog.author.id_str === user.id_str) {
-          displayUserBlogs.push(blog);
-        }
+  getBlogsWithUsername: function (currentUser, username) {
+    let displayBlogs = [];
+    const isCurrentUser = currentUser ? currentUser.username === username : false;
+
+    if (isCurrentUser && currentUser) {
+      const currentUserBlogs = this.blogs.filter(blog => blog.author.id_str === currentUser.id_str);
+      displayBlogs = displayBlogs.concat(currentUserBlogs);
+      currentUser.focuses.forEach(focuse => {
+        const focuseUserBlogs = this.blogs.filter(blog => blog.author.id_str === focuse.id_str);
+        displayBlogs = displayBlogs.concat(focuseUserBlogs);
       });
+    } else {
+      displayBlogs = this.blogs.filter(blog => blog.author.username === username);
     }
-    return displayUserBlogs;
+
+    return displayBlogs;
   },
   changeShowCommentsState: function (blog) {
     this.blogs.forEach((b, idx) => {
@@ -248,7 +245,8 @@ const BlogStore = (0, _createStore2.default)({
   },
   thumbsUpBlogSuccess: function (newBlog) {
     const resObj = {
-      msg: 'THUMBS_UP_BLOG_SUCCESS'
+      msg: 'THUMBS_UP_BLOG_SUCCESS',
+      newBlog: newBlog
     };
     this.blogs.forEach((blog, index) => {
       if (blog.id_str === newBlog.id_str) {
@@ -259,7 +257,8 @@ const BlogStore = (0, _createStore2.default)({
   },
   cancelThumbsUpBlogSuccess: function (newBlog) {
     const resObj = {
-      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS'
+      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      newBlog: newBlog
     };
     this.blogs.forEach((blog, index) => {
       if (blog.id_str === newBlog.id_str) {
@@ -274,7 +273,10 @@ const BlogStore = (0, _createStore2.default)({
         this.blogs[idx].author.image_url = newUser.image_url;
       }
     });
-    this.emitChange();
+
+    this.emitChange({
+      msg: 'BLOG_CHANGE_IMAGE_SUCCESS'
+    });
   },
   dehydrate: function () {
     return {

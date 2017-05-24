@@ -14,9 +14,13 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class FullScreen extends _react.Component {
+class FullScreen extends _react2.default.Component {
 
   getClassName() {
     return (0, _classnames2.default)({
@@ -37,8 +41,8 @@ class FullScreen extends _react.Component {
 exports.default = FullScreen;
 FullScreen.displayName = 'FullScreen';
 FullScreen.propTypes = {
-  className: _react2.default.PropTypes.string,
-  scroll: _react2.default.PropTypes.bool,
-  children: _react2.default.PropTypes.array
+  className: _propTypes2.default.string,
+  scroll: _propTypes2.default.bool,
+  children: _propTypes2.default.array
 };
 module.exports = exports['default'];

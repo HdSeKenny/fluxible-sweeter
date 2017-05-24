@@ -8,17 +8,22 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Layout = require('./Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const shallowCompare = require('react-addons-shallow-compare');
+// const shallowCompare = require('react-addons-shallow-compare');
 
-class ModalsFactory extends _react.Component {
+class ModalsFactory extends _react2.default.Component {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(shallowCompare(this, nextProps, nextState));
+  //   return shallowCompare(this, nextProps, nextState);
+  // }
 
   _renderModalHeader(title) {
     return _react2.default.createElement(
@@ -60,16 +65,13 @@ class ModalsFactory extends _react.Component {
   }
   render() {
     const { size: size, modalref: modalref, title: title, ModalComponent: ModalComponent, showHeaderAndFooter: showHeaderAndFooter, showModal: showModal } = this.props;
-    const notPinItemModals = ['loginModal', 'signupModal', 'createBlogModal', 'uploadModal'];
-    const isNotPinItemModal = notPinItemModals.includes(modalref);
-    const show = isNotPinItemModal ? showModal : true;
     return _react2.default.createElement(
       'div',
-      { className: 'modal fade', id: modalref, tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
+      { className: 'modal fade', id: modalref, tabIndex: '-1', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
       _react2.default.createElement(
         'div',
         { className: `modal-dialog mt-80 ${size}` },
-        show && _react2.default.createElement(
+        showModal && _react2.default.createElement(
           'div',
           { className: 'modal-content' },
           showHeaderAndFooter && this._renderModalHeader(title),
@@ -83,14 +85,14 @@ class ModalsFactory extends _react.Component {
 exports.default = ModalsFactory;
 ModalsFactory.displayName = 'ModalsFactory';
 ModalsFactory.propTypes = {
-  size: _react2.default.PropTypes.string,
-  factory: _react2.default.PropTypes.func,
-  modalref: _react2.default.PropTypes.string,
-  title: _react2.default.PropTypes.string,
-  showHeaderAndFooter: _react2.default.PropTypes.bool,
-  ModalComponent: _react2.default.PropTypes.func,
-  hidePinModal: _react2.default.PropTypes.func,
-  showModal: _react2.default.PropTypes.bool
+  size: _propTypes2.default.string,
+  factory: _propTypes2.default.func,
+  modalref: _propTypes2.default.string,
+  title: _propTypes2.default.string,
+  showHeaderAndFooter: _propTypes2.default.bool,
+  ModalComponent: _propTypes2.default.func,
+  hidePinModal: _propTypes2.default.func,
+  showModal: _propTypes2.default.bool
 };
 
 ModalsFactory.show = modalRef => {

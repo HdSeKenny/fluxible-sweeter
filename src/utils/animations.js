@@ -3,7 +3,7 @@ import configs from '../configs';
 
 const animations = {
   sticky_header(element) {
-    if (env.CLIENT) {
+    if (env.is_client) {
       const $window = $(window);
       const $nav = $(element);
       const { navbar } = configs.params;
@@ -33,7 +33,7 @@ const animations = {
   },
 
   fixed_left_nav(element) {
-    if (env.CLIENT) {
+    if (env.is_client) {
       const $window = $(window);
       const $ele = $(element);
       const { leftNav } = configs.params;

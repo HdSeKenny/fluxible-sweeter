@@ -12,6 +12,14 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _UserBar = require('./UserBar');
@@ -30,17 +38,17 @@ var _UserNavs = require('../UserNavs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ChangePassword = _react2.default.createClass({
+const ChangePassword = (0, _createReactClass2.default)({
 
   displayName: 'ChangePassword',
 
   contextTypes: {
-    router: _reactRouter.routerShape.isRequired,
-    executeAction: _react2.default.PropTypes.func
+    // router: routerShape.isRequired,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    location: _react2.default.PropTypes.object
+    location: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],

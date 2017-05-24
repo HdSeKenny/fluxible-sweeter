@@ -12,7 +12,13 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _reactBootstrap = require('react-bootstrap');
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _stores = require('../../stores');
 
@@ -20,12 +26,12 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserFollowsTabs = _react2.default.createClass({
+const UserFollowsTabs = (0, _createReactClass2.default)({
 
   displayName: 'UserFollowsTabs',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -121,17 +127,15 @@ const UserFollowsTabs = _react2.default.createClass({
                 'div',
                 { className: 'col-xs-3 following-btn' },
                 currentUser && isFollowed && _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { className: 'cancel-follow-btn',
-                    onClick: this.props.onCancelFollowThisUser.bind(null, focusObj) },
-                  _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
+                  'button',
+                  { className: 'cancel-follow-btn', onClick: this.props.onCancelFollowThisUser.bind(null, focusObj) },
+                  _react2.default.createElement('i', { className: 'fa fa-heart' }),
                   ' Following'
                 ),
                 currentUser && !isFollowed && !isFocusCurrentUser && _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { className: 'follow-btn',
-                    onClick: this.props.onFollowThisUser.bind(null, focusObj) },
-                  _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
+                  'button',
+                  { className: 'follow-btn', onClick: this.props.onFollowThisUser.bind(null, focusObj) },
+                  _react2.default.createElement('i', { className: 'fa fa-heart' }),
                   ' Follow'
                 )
               )
@@ -179,17 +183,15 @@ const UserFollowsTabs = _react2.default.createClass({
                 'div',
                 { className: 'col-xs-3 following-btn' },
                 currentUser && isFollowed && _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { className: 'cancel-follow-btn',
-                    onClick: this.props.onCancelFollowThisUser.bind(null, fanObj) },
-                  _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
+                  'button',
+                  { className: 'cancel-follow-btn', onClick: this.props.onCancelFollowThisUser.bind(null, fanObj) },
+                  _react2.default.createElement('i', { className: 'fa fa-heart' }),
                   ' Following'
                 ),
                 currentUser && !isFollowed && !isFanCurrentUser && _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { className: 'follow-btn',
-                    onClick: this.props.onFollowThisUser.bind(null, fanObj) },
-                  _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'heart' }),
+                  'button',
+                  { className: 'follow-btn', onClick: this.props.onFollowThisUser.bind(null, fanObj) },
+                  _react2.default.createElement('i', { className: 'fa fa-heart' }),
                   ' Follow'
                 )
               )

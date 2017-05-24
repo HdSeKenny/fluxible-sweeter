@@ -12,6 +12,14 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _stores = require('../../stores');
@@ -22,23 +30,23 @@ var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Details = _react2.default.createClass({
+const Details = (0, _createReactClass2.default)({
 
   displayName: 'Details',
 
   contextTypes: {
-    router: _reactRouter.routerShape.isRequired,
-    executeAction: _react2.default.PropTypes.func
+    // router: routerShape.isRequired,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    params: _react2.default.PropTypes.object
+    params: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
 
   statics: {
-    storeListeners: [_stores.BlogStore]
+    storeListeners: [_stores.BlogStore, _stores.UserStore]
   },
 
   getInitialState: function () {
@@ -47,12 +55,13 @@ const Details = _react2.default.createClass({
   getStatesFromStores: function () {
     const { blogId: blogId } = this.props.params;
     return {
-      blog: this.getStore(_stores.BlogStore).getBlogById(blogId)
+      blog: this.getStore(_stores.BlogStore).getBlogById(blogId),
+      currentUser: this.getStore(_stores.UserStore).getCurrentUser()
     };
   },
   onChange: function (res) {},
   render: function () {
-    const { blog: blog } = this.state;
+    const { blog: blog, currentUser: currentUser } = this.state;
     const fromNow = _utils.format.fromNow(blog.created_at);
     const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
     return _react2.default.createElement(
@@ -104,7 +113,7 @@ const Details = _react2.default.createClass({
             ' ',
             commentRefer
           ),
-          _react2.default.createElement(_Pages.Comments, { blog: blog, isBlogsWell: false })
+          _react2.default.createElement(_Pages.Comments, { blog: blog, currentUser: currentUser })
         )
       )
     );

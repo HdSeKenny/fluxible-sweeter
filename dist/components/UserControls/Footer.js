@@ -12,18 +12,26 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _stores = require('../../stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Footer = _react2.default.createClass({
+const Footer = (0, _createReactClass2.default)({
 
   displayName: 'Footer',
 
   mixins: [_FluxibleMixin2.default],
 
   contextTypes: {
-    config: _react2.default.PropTypes.object
+    config: _propTypes2.default.object
   },
 
   statics: {

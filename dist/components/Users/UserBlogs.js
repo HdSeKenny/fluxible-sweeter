@@ -8,9 +8,15 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = require('react-router');
+var _createReactClass = require('create-react-class');
 
-var _reactBootstrap = require('react-bootstrap');
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRouter = require('react-router');
 
 var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
@@ -26,25 +32,21 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _UserNavs = require('../UserNavs');
-
-var _UI = require('../UI');
-
 var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserBlogs = _react2.default.createClass({
+const UserBlogs = (0, _createReactClass2.default)({
 
   displayName: 'UserBlogs',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    params: _react2.default.PropTypes.object,
-    location: _react2.default.PropTypes.object
+    params: _propTypes2.default.object,
+    location: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -61,14 +63,16 @@ const UserBlogs = _react2.default.createClass({
     const userStore = this.getStore(_stores.UserStore);
     const blogStore = this.getStore(_stores.BlogStore);
     const user = userStore.getUserByUsername(username);
+    const currentUser = userStore.getCurrentUser();
+    const isCurrentUser = currentUser.username === username;
     return {
-      currentUser: userStore.getCurrentUser(),
+      currentUser: currentUser,
       user: user,
       currentBlog: blogStore.getCurrentBlog(),
       // deletedBlog: blogStore.getDeletedBlog(),
       isUpdated: blogStore.getIsUpdated(),
-      isCurrentUser: userStore.isCurrentUser(username),
-      displayBlogs: blogStore.getBlogsByUserId(user.id_str)
+      isCurrentUser: isCurrentUser,
+      displayBlogs: blogStore.getBlogsWithUsername(currentUser, username)
     };
   },
   onChange: function (res) {
@@ -183,9 +187,9 @@ const UserBlogs = _react2.default.createClass({
           'div',
           { className: 'col-xs-4 blog-manage' },
           _react2.default.createElement(
-            _reactBootstrap.Button,
+            'button',
             { className: 'btn btn-danger btn-sm delete-btn', onClick: this.onDeleteBlog.bind(this, blog) },
-            _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'trash' }),
+            _react2.default.createElement('i', { className: 'fa fa-trash' }),
             ' Delete'
           )
         )
@@ -225,21 +229,21 @@ const UserBlogs = _react2.default.createClass({
           'div',
           { className: 'col-xs-4 blog-manage' },
           _react2.default.createElement(
-            _reactBootstrap.Button,
+            'button',
             {
               className: 'btn btn-danger btn-sm delete-btn',
               onClick: this.onDeleteBlog.bind(this, blog)
             },
-            _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'trash' }),
+            _react2.default.createElement('i', { className: 'fa fa-trash' }),
             ' Delete'
           ),
           _react2.default.createElement(
-            _reactBootstrap.Button,
+            'button',
             {
               className: 'btn btn-primary btn-sm delete-btn',
               onClick: this.onEditBlog.bind(this, blog)
             },
-            _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'pencil' }),
+            _react2.default.createElement('i', { className: 'fa fa-pencil' }),
             ' Edit'
           )
         )
@@ -247,7 +251,7 @@ const UserBlogs = _react2.default.createClass({
     );
   },
   _renderCurrentUserContentLeft: function (pathname, currentUser, displayBlogs) {
-    return _react2.default.createElement(_UserNavs.UserBlogsNav, { path: pathname, currentUser: currentUser, displayBlogs: displayBlogs });
+    return _react2.default.createElement(UserBlogsNav, { path: pathname, currentUser: currentUser, displayBlogs: displayBlogs });
   },
   _renderCurrentUserContentRight: function (displayBlogs) {
     return _react2.default.createElement(
@@ -315,35 +319,10 @@ const UserBlogs = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'user-blogs-page' },
-      _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
-      !isCurrentUser && _react2.default.createElement(
-        'div',
-        { className: 'user-blogs-content' },
-        _react2.default.createElement(
-          'div',
-          { className: 'content-mid' },
-          this._renderBlogsSearchBar(),
-          _react2.default.createElement(_UI.BlogsWell, {
-            displayBlogs: displayBlogs,
-            changeShowCommentsState: this.changeShowCommentsState,
-            changeBlogThumbsUpState: this.changeBlogThumbsUpState
-          })
-        )
-      ),
       isCurrentUser && _react2.default.createElement(
         'div',
-        { className: 'user-blogs-content' },
-        _react2.default.createElement(
-          'div',
-          { className: 'content-left' },
-          this._renderCurrentUserContentLeft(pathname, currentUser, displayBlogs)
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'content-right' },
-          this._renderBlogsSearchBar(),
-          this._renderCurrentUserContentRight(displayBlogs)
-        )
+        { className: '' },
+        this._renderCurrentUserContentRight(displayBlogs)
       ),
       currentBlog && _react2.default.createElement(_UserControls.BlogEditor, {
         show: currentBlog !== null,

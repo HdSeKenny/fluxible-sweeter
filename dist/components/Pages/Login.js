@@ -12,11 +12,17 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _PropTypes = require('react-router/lib/PropTypes');
+var _createReactClass = require('create-react-class');
 
-var _sweetAlert = require('../../utils/sweetAlert');
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRouter = require('react-router');
+
+var _utils = require('../../utils');
 
 var _actions = require('../../actions');
 
@@ -28,21 +34,21 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Login = _react2.default.createClass({
+const Login = (0, _createReactClass2.default)({
 
   displayName: 'Login',
 
   contextTypes: {
-    router: _PropTypes.routerShape.isRequired,
-    config: _react.PropTypes.object,
-    executeAction: _react.PropTypes.func.isRequired
+    router: _reactRouter.routerShape.isRequired,
+    config: _propTypes2.default.object,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    onForgotPassword: _react.PropTypes.func,
-    openNavbarModals: _react.PropTypes.func,
-    hideNavbarModals: _react.PropTypes.func,
-    switchOpenModal: _react.PropTypes.func
+    onForgotPassword: _propTypes2.default.func,
+    openNavbarModals: _propTypes2.default.func,
+    hideNavbarModals: _propTypes2.default.func,
+    switchOpenModal: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -56,12 +62,14 @@ const Login = _react2.default.createClass({
   },
   getStateFromStores: function () {
     return {
-      switchOn: false
+      switchOn: false,
+      emailErrorMessage: '',
+      passwordErrorMessage: ''
     };
   },
   onChange: function (res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      _sweetAlert2.default.success(res.msg);
+      _utils.sweetAlert.success(res.msg);
       _UI.ModalsFactory.hide('loginModal');
       this.context.router.push('/list');
     }
@@ -71,7 +79,7 @@ const Login = _react2.default.createClass({
     }
 
     if (res.msg === 'LOGOUT_SUCCESS') {
-      _sweetAlert2.default.success(res.msg);
+      _utils.sweetAlert.success(res.msg);
       this.context.router.push('/');
     }
   },
@@ -81,23 +89,56 @@ const Login = _react2.default.createClass({
     const creds = { email: email, password: password };
     const validateInfo = this.validateForm(creds);
     if (validateInfo) {
-      this.setState({ errorMessage: validateInfo });
+      this.setState({ errorMessage: validateInfo, emailErrorMessage: '', passwordErrorMessage: '' });
     } else {
       this.executeAction(_actions.UserActions.Login, creds);
     }
   },
   validateForm: function (creds) {
-    if (!creds.email) {
-      return 'Username is required';
-    } else if (!creds.password) {
-      return 'Password is required';
+    const emailValidation = this.validateEmail(creds.email);
+    const passwordValidation = this.validatePassword(creds.password);
+
+    return emailValidation.emailErrorMessage || passwordValidation.passwordErrorMessage;
+  },
+  validateEmail: function (email) {
+    const isUnEmpty = _utils.jsUtils.isUnEmptyString(email);
+    const isEmail = _utils.validations.isEmail(email);
+    const result = {
+      email: email,
+      emailErrorMessage: ''
+    };
+
+    if (!isUnEmpty) {
+      result.emailErrorMessage = 'Email is required!';
+    } else if (!isEmail) {
+      result.emailErrorMessage = 'Please check your email address!';
     }
+
+    return result;
+  },
+  validatePassword: function (password) {
+    const isUnEmpty = _utils.jsUtils.isUnEmptyString(password);
+
+    const result = {
+      password: password,
+      passwordErrorMessage: ''
+    };
+
+    if (!isUnEmpty) {
+      result.passwordErrorMessage = 'Password is required!';
+    }
+
+    return result;
   },
   onEmailChange: function (e) {
-    this.setState({ email: e.target.value });
+    const email = e.target.value;
+    const result = this.validateEmail(email);
+    this.setState(result);
   },
   onPasswordChange: function (e) {
-    this.setState({ password: e.target.value });
+    const password = e.target.value;
+    const result = this.validatePassword(password);
+    this.setState(result);
   },
   openSignupModal: function () {
     this.props.switchOpenModal('signupModal');
@@ -114,29 +155,31 @@ const Login = _react2.default.createClass({
     // }, 500);
   },
   _renderEmailInput: function (email) {
-    return _react2.default.createElement(_UI.Input, {
+    const { emailErrorMessage: emailErrorMessage } = this.state;
+    return _react2.default.createElement(_UI.SweetInput, {
       ref: 'emailRef',
       autoComplete: 'off',
       format: 'email',
       icon: 'fa fa-user',
       required: true,
-      errorMessage: 'Please verify your email',
+      errorMessage: emailErrorMessage,
       placeholder: 'email',
       value: email,
-      onFieldChange: this.onEmailChange
+      onChange: this.onEmailChange
     });
   },
   _renderPasswordInput: function (password) {
-    return _react2.default.createElement(_UI.Input, {
+    const { passwordErrorMessage: passwordErrorMessage } = this.state;
+    return _react2.default.createElement(_UI.SweetInput, {
       ref: 'loginRef',
       autoComplete: 'off',
       format: 'password',
       icon: 'fa fa-lock',
       required: true,
-      errorMessage: 'Password is required',
+      errorMessage: passwordErrorMessage,
       placeholder: 'password',
       value: password,
-      onFieldChange: this.onPasswordChange
+      onChange: this.onPasswordChange
     });
   },
   _renderForgotPassword: function () {

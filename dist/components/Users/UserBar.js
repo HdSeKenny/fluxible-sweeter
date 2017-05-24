@@ -14,6 +14,14 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -36,17 +44,17 @@ var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserBar = _react2.default.createClass({
+const UserBar = (0, _createReactClass2.default)({
 
   displayName: 'UserBar',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    path: _react2.default.PropTypes.string,
-    user: _react2.default.PropTypes.object
+    path: _propTypes2.default.string,
+    user: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -79,11 +87,9 @@ const UserBar = _react2.default.createClass({
       _utils.sweetAlert.success(res.msg);
     }
 
-    if (['UPLOAD_IMAGE_SUCCESS', 'EDIT_IMAGE_SUCCESS', 'CANCEL_IMAGE_SUCCESS'].includes(res.msg)) {
-      if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
-        _utils.sweetAlert.success(res.msg);
-        _UI.ModalsFactory.hide('uploadModal');
-      }
+    if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
+      _utils.sweetAlert.success(res.msg);
+      _UI.ModalsFactory.hide('uploadModal');
       this.setState(this.getStateFromStores());
     }
   },
@@ -192,9 +198,16 @@ const UserBar = _react2.default.createClass({
 
     return Object.keys(navs).map((navli, index) => {
       const lowcaseNav = navli.toLowerCase();
-      const isActive = this.isActive([lowcaseNav]);
+      const isHome = lowcaseNav === 'home';
+      let isActive = false;
+      if (isHome) {
+        isActive = this.isActive([username]) || this.isActive(['create', username]) || this.isActive(['mine', username]);
+      } else {
+        isActive = this.isActive([lowcaseNav, username]);
+      }
+
       const classes = `${colSize} bar-nav ${isActive}`;
-      const url = `/${username}/${lowcaseNav}`;
+      const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
       const icon = navs[navli];
       return _react2.default.createElement(
         _Layout.Col,
@@ -218,7 +231,6 @@ const UserBar = _react2.default.createClass({
         { className: 'user-name' },
         user.username
       ),
-      isCurrentUser && _react2.default.createElement('div', { className: 'user-btn' }),
       !isCurrentUser && _react2.default.createElement(
         'div',
         { className: 'user-btn mt-10' },
@@ -260,7 +272,7 @@ const UserBar = _react2.default.createClass({
   render: function () {
     const { user: user } = this.props;
     const { currentUser: currentUser, showImageModal: showImageModal } = this.state;
-    const isCurrentUser = user.id_str === currentUser.id_str;
+    const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const userBackground = {

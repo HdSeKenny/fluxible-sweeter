@@ -12,11 +12,17 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _utils = require('../../utils');
 
 var _stores = require('../../stores');
 
@@ -30,12 +36,12 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Home = _react2.default.createClass({
+const Home = (0, _createReactClass2.default)({
 
   displayName: 'Home',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -48,21 +54,39 @@ const Home = _react2.default.createClass({
     return this.getStateFromStores();
   },
   getStateFromStores: function () {
+    const isMedium = _utils.mediaSize.getBrowserMediaInfo(true).media === 'medium';
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       kenny: this.getStore(_stores.UserStore).getKennyUser(),
       blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {}
+      selectedPin: {},
+      showPinModal: false,
+      isMedium: isMedium
     };
   },
   onChange: function (res) {
-    const blogMessages = ['THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS'];
+    const blogMessages = ['CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
+
     if (blogMessages.includes(res.msg)) {
-      _sweetAlert2.default.success(res.msg);
-      this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
+      _utils.sweetAlert.success(res.msg, () => {
+        this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
+      });
     }
+  },
+  getBrowserScreenInfo: function () {
+    const isMedium = _utils.mediaSize.getBrowserMediaInfo(true).media === 'medium';
+    this.setState({ isMedium: isMedium });
+  },
+  componentWillMount: function () {
+    this.getBrowserScreenInfo();
+  },
+  componentDidMount: function () {
+    window.addEventListener('resize', this.getBrowserScreenInfo);
+  },
+  componentWillUnmount: function () {
+    window.removeEventListener('resize', this.getBrowserScreenInfo);
   },
   handleBlogText: function (e) {
     this.setState({ blogText: e.target.value });
@@ -92,13 +116,13 @@ const Home = _react2.default.createClass({
     this.setState({ blogs: sortedBlogs });
   },
   checkCurrentUser: function () {
-    _sweetAlert2.default.alertWarningMessage('Login first !');
+    _utils.sweetAlert.alertWarningMessage('Login first !');
     this.setState({ blogText: '' });
   },
   onViewPinItem: function (id) {
     const { blogs: blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
-    this.setState({ selectedPin: selectedPin });
+    this.setState({ selectedPin: selectedPin, showPinModal: true });
 
     $('#pinModal').on('hidden.bs.modal', () => {
       if (this.hidePinModal) {
@@ -111,11 +135,13 @@ const Home = _react2.default.createClass({
   hidePinModal: function () {
     const homePage = $('.home-page');
     if (homePage && homePage.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
   _renderPinSection: function (sectionTitle, typedPins) {
-    const { currentUser: currentUser } = this.state;
+    const { currentUser: currentUser, isMedium: isMedium } = this.state;
+    const marginRightIndex = isMedium ? 2 : 3;
+
     return _react2.default.createElement(
       'section',
       { className: 'pins-section' },
@@ -134,7 +160,7 @@ const Home = _react2.default.createClass({
         'div',
         { className: 'pins-block' },
         typedPins.map((pin, index) => {
-          const specialClass = (index + 1) % 3 === 0 ? 'mr-0' : '';
+          const specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
           return _react2.default.createElement(_UI.PinItem, {
             key: index,
             onSelect: id => this.onViewPinItem(id),
@@ -162,7 +188,7 @@ const Home = _react2.default.createClass({
     );
   },
   render: function () {
-    const { blogs: blogs, selectedPin: selectedPin, currentUser: currentUser } = this.state;
+    const { blogs: blogs, selectedPin: selectedPin, currentUser: currentUser, showPinModal: showPinModal } = this.state;
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
@@ -176,8 +202,8 @@ const Home = _react2.default.createClass({
         null,
         _react2.default.createElement(_UI.ModalsFactory, {
           modalref: 'pinModal',
-          hidePinModal: this.hidePinModal,
           pin: selectedPin,
+          showModal: showPinModal,
           currentUser: currentUser,
           ModalComponent: _UserControls.PinItemModal,
           showHeaderAndFooter: false })

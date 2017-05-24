@@ -8,6 +8,10 @@ var _createStore = require('fluxible/addons/createStore');
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const UserStore = (0, _createStore2.default)({
@@ -56,7 +60,6 @@ const UserStore = (0, _createStore2.default)({
   },
   loadUsersSuccess: function (res) {
     this.users = res;
-    console.log(res);
     this.emitChange();
   },
   loadUsersFail: function () {
@@ -147,22 +150,21 @@ const UserStore = (0, _createStore2.default)({
   getUserByUsername: function (username) {
     return this.users.find(user => user.username === username);
   },
-  getDisplayBlogsByUsername: function (username) {
+  getBlogsWithUsername: function (isCurrentUser, username) {
     const displayBlogs = [];
-    const thisUser = this.users.find(user => user.username === username);
-    const { currentUser: currentUser } = this;
-    const { focuses: focuses } = thisUser;
-    const isCurrentUser = currentUser ? currentUser.username === username : false;
+    const users = _lodash2.default.cloneDeep(this.users);
+    const currentUser = _lodash2.default.cloneDeep(this.currentUser);
+    const thisUser = users.find(user => user.username === username);
 
-    thisUser.blogs.forEach(b => {
-      // eslint-disable-next-line no-param-reassign
-      b.author = thisUser;
-      displayBlogs.push(b);
-    });
+    if (isCurrentUser && currentUser) {
+      currentUser.blogs.forEach(b => {
+        // eslint-disable-next-line no-param-reassign
+        b.author = currentUser;
+        displayBlogs.push(b);
+      });
 
-    if (isCurrentUser) {
-      focuses.forEach(focuse => {
-        const focuseUser = this.users.find(user => user.id_str === focuse.id_str);
+      currentUser.focuses.forEach(focuse => {
+        const focuseUser = users.find(user => user.id_str === focuse.id_str);
         if (focuseUser.blogs.length) {
           focuseUser.blogs.forEach(b => {
             // eslint-disable-next-line no-param-reassign
@@ -170,6 +172,12 @@ const UserStore = (0, _createStore2.default)({
             displayBlogs.push(b);
           });
         }
+      });
+    } else if (thisUser) {
+      thisUser.blogs.forEach(b => {
+        // eslint-disable-next-line no-param-reassign
+        b.author = thisUser;
+        displayBlogs.push(b);
       });
     }
 

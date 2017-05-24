@@ -36,7 +36,6 @@ exports.default = app => {
    * @return {[type]}
    */
 
-  console.log('routes.......................');
   const storage = _multer2.default.diskStorage({
     destination: (req, file, cb) => {
       const slashNumber = getSlashNumber(__dirname);
@@ -55,7 +54,6 @@ exports.default = app => {
   const upload = (0, _multer2.default)({ storage: storage }).single('file');
 
   app.post('/api/:userId/upload_profile_image', (req, res) => {
-    console.log(req.params.userId);
     _mongodb2.default.connect(_server2.default.mongo.sweeter.url, (err, db) => {
       const userId = _mongodb2.default.ObjectID(req.params.userId);
       const User = db.collection('users');

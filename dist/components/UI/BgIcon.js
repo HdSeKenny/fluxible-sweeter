@@ -1,30 +1,42 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = require('react');
-var classSet = require('classnames');
-
-var BgIcon = React.createClass({
-    displayName: 'BgIcon',
-
-
-    getClassName: function () {
-        return classSet({
-            'bg-icon': true
-        }, this.props.iconClassName, this.props.className);
-    },
-
-    render: function () {
-        var className = this.getClassName();
-        return React.createElement(
-            'span',
-            _extends({}, this.props, {
-                className: className
-            }),
-            this.props.children
-        );
-    }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 
-module.exports = BgIcon;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const BgIcon = (0, _createReactClass2.default)({
+  getClassName: function () {
+    return (0, _classnames2.default)({
+      'bg-icon': true
+    }, this.props.iconClassName, this.props.className);
+  },
+  render: function () {
+    const className = this.getClassName();
+    return _react2.default.createElement(
+      'span',
+      _extends({}, this.props, { className: className }),
+      ' ',
+      this.props.children,
+      ' '
+    );
+  }
+});
+
+exports.default = BgIcon;
+module.exports = exports['default'];

@@ -10,6 +10,10 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _reactRouter = require('react-router');
 
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 require('babel-polyfill');
 
 require('bootstrap/dist/js/bootstrap');
@@ -37,6 +41,7 @@ require('./public/styles/main.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.React = _react2.default;
+window.jQuery = _jquery2.default;
 
 const dehydratedState = window.__DATA__;
 let firstRender = true;

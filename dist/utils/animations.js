@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const animations = {
   sticky_header: function (element) {
-    if (_env2.default.CLIENT) {
+    if (_env2.default.is_client) {
       const $window = $(window);
       const $nav = $(element);
       const { navbar: navbar } = _configs2.default.params;
@@ -44,7 +44,7 @@ const animations = {
     }
   },
   fixed_left_nav: function (element) {
-    if (_env2.default.CLIENT) {
+    if (_env2.default.is_client) {
       const $window = $(window);
       const $ele = $(element);
       const { leftNav: leftNav } = _configs2.default.params;

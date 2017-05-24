@@ -8,13 +8,17 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
  */
-class Html extends _react.Component {
+class Html extends _react2.default.Component {
 
   render() {
     const { assets: assets, markup: markup, exposed: exposed } = this.props;
@@ -56,8 +60,8 @@ class Html extends _react.Component {
 exports.default = Html;
 Html.displayName = 'Html';
 Html.propTypes = {
-  assets: _react2.default.PropTypes.object,
-  exposed: _react2.default.PropTypes.string,
-  markup: _react2.default.PropTypes.string
+  assets: _propTypes2.default.object,
+  exposed: _propTypes2.default.string,
+  markup: _propTypes2.default.string
 };
 module.exports = exports['default'];

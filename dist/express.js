@@ -56,8 +56,6 @@ var _server = require('react-dom/server');
 
 var _reactRouter = require('react-router');
 
-require('./polyfills');
-
 var _routes = require('./routes');
 
 var _routes2 = _interopRequireDefault(_routes);
@@ -96,14 +94,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = server => {
   const env = server.get('env');
+
   // view engine setup
   server.set('views', _path2.default.join(__dirname, 'views'));
-  server.set('view engine', 'jade');
+  server.set('view engine', 'pug');
 
   if (_server3.default.server.logEnable && env !== 'production') {
-    server.use((0, _morgan2.default)(':date[iso] :method :url :status :response-time ms'));
+    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+    server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
   }
-
   if (env === 'development') {
     server.use(_express2.default.static(_path2.default.join(_server3.default.server.root, '.tmp')));
   }
@@ -133,7 +132,7 @@ exports.default = server => {
   fetchrPlugin.registerService(_services.users);
   fetchrPlugin.registerService(_services.comments);
 
-  server.use('/api/upload', require('./api/upload'));
+  server.use('/api/upload', require('./plugins/upload'));
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
   server.use((req, res) => {
     const context = _app2.default.createContext({
@@ -143,6 +142,7 @@ exports.default = server => {
       authenticated: req.session.user && req.session.user.authenticated
     });
     const routes = (0, _routes2.default)(context);
+
     (0, _reactRouter.match)({ routes: routes, location: req.url }, (error, redirectLocation, routerState) => {
       if (error) {
         res.send(500, error.message);
@@ -166,5 +166,7 @@ exports.default = server => {
     });
   });
 };
+// import './polyfills';
+
 
 module.exports = exports['default'];

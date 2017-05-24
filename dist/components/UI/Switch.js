@@ -12,16 +12,13 @@ var _reactAddonsUpdate = require('react-addons-update');
 
 var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Copyright 2017 - developed by Kenny
- * All rights reserved.
- *
- * ui - Switch
- */
-
-class Switch extends _react.Component {
+class Switch extends _react2.default.Component {
 
   constructor(props) {
     super(props);
@@ -82,12 +79,17 @@ class Switch extends _react.Component {
       ) : ''
     );
   }
-}
+} /**
+   * Copyright 2017 - developed by Kenny
+   * All rights reserved.
+   *
+   * ui - Switch
+   */
 
 Switch.propTypes = {
-  onChange: _react2.default.PropTypes.func,
-  on: _react2.default.PropTypes.bool,
-  className: _react2.default.PropTypes.string
+  onChange: _propTypes2.default.func,
+  on: _propTypes2.default.bool,
+  className: _propTypes2.default.string
 };
 Switch.defaultProps = {
   on: false

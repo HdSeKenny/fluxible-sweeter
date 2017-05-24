@@ -31,10 +31,34 @@
         .pins-block {
           width: 100%;
           .pin {
-            width: 32.66666666%;
             margin-right: 1%;
             display: inline-block;
             float: left;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .pins-block {
+            .pin {
+              width: 49.5%;
+            }
+          }
+        }
+
+        @media (min-width: 1025px) {
+          .pins-block {
+            .pin {
+              width: 32.666666666%;
+            }
+          }
+        }
+
+        @media (max-width: 768px) {
+          .pins-block {
+            .pin {
+              margin-right: 0;
+              width: 100%;
+            }
           }
         }
       }

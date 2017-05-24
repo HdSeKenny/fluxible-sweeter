@@ -5,6 +5,7 @@
  */
 var React = require('react');
 var classSet = require('classnames');
+var PropTypes = require('prop-types');
 
 function isLeftClickEvent(event) {
     return event.button === 0;
@@ -16,15 +17,15 @@ function isModifiedEvent(event) {
 
 module.exports = {
     propTypes: {
-        activeClassName: React.PropTypes.string.isRequired,
-        disabled: React.PropTypes.bool,
-        to: React.PropTypes.string.isRequired,
-        params: React.PropTypes.object,
-        query: React.PropTypes.object,
-        onClick: React.PropTypes.func
+        activeClassName: PropTypes.string.isRequired,
+        disabled: PropTypes.bool,
+        to: PropTypes.string.isRequired,
+        params: PropTypes.object,
+        query: PropTypes.object,
+        onClick: PropTypes.func
     },
     contextTypes: {
-        router: React.PropTypes.func.isRequired
+        router: PropTypes.func.isRequired
     },
 
     getDefaultProps: function () {

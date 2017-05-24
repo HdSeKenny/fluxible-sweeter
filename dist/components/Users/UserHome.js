@@ -12,9 +12,15 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _UserBar = require('./UserBar');
+var _createReactClass = require('create-react-class');
 
-var _UserBar2 = _interopRequireDefault(_UserBar);
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _Users = require('../Users');
 
 var _stores = require('../../stores');
 
@@ -22,23 +28,22 @@ var _UserNavs = require('../UserNavs');
 
 var _UI = require('../UI');
 
-var _UserControls = require('../UserControls');
-
 var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserHome = _react2.default.createClass({
+const UserHome = (0, _createReactClass2.default)({
 
   displayName: 'UserHome',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    params: _react2.default.PropTypes.object,
-    location: _react2.default.PropTypes.object
+    params: _propTypes2.default.object,
+    location: _propTypes2.default.object,
+    children: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -52,108 +57,42 @@ const UserHome = _react2.default.createClass({
   },
   getStatesFromStores: function () {
     const { username: username } = this.props.params;
+    const userStore = this.getStore(_stores.UserStore);
+    const blogStore = this.getStore(_stores.BlogStore);
+    const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
+    const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserByUsername(username),
-      displayBlogs: this.getStore(_stores.UserStore).getDisplayBlogsByUsername(username),
-      selectedPin: {},
-      singleUserBlogs: null,
-      welcomeText: 'What happened today, Write a blog here !',
-      showCreateModal: false
+      currentUser: currentUser,
+      user: user,
+      displayBlogs: displayBlogs
     };
   },
   onChange: function (res) {
-    const { user: user, displayBlogs: displayBlogs } = this.state;
     const { username: username } = this.props.params;
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
-      displayBlogs.push(res.newBlog);
-      this.setState({ displayBlogs: displayBlogs });
-      _UI.ModalsFactory.hide('createBlogModal');
-    }
-
-    if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
-      // const singleUserBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-      // this.setState({ singleUserBlogs });
-    }
-
-    // if(res.msg === 'FOLLOW_USER_SUCCESS' || res.msg === 'CANCEL_FOLLOW_USER_SUCCESS'){
-    //   this.setState({
-    //     currentUser: this.getStore(UserStore).getCurrentUser(),
-    //     user: this.getStore(UserStore).getUserById(userId),
-    //     isCurrentUser: this.getStore(UserStore).isCurrentUser(userId)
-    //   })
-    // }
-
-    // this.setState({
-    //   currentUser: this.getStore(UserStore).getCurrentUser(),
-    //   user: this.getStore(UserStore).getUserByUsername(username)
-    // });
-  },
-
-
-  // handleBlogText(e) {
-  //   this.setState({ blogText: e.target.value });
-  // },
-
-  // handleMicroBlog() {
-  //   const newBlog = {
-  //     text: this.state.blogText,
-  //     created_at: new Date(),
-  //     type: 'microblog',
-  //     author: this.state.currentUser._id
-  //   };
-
-  //   this.executeAction(BlogActions.AddBlog, newBlog);
-  // },
-
-  // getUserBlogsWithFocuses(isCurrentUser, user, singleUserBlogs) {
-  //   let displayBlogs = singleUserBlogs;
-  //   if (!displayBlogs) {
-  //     displayBlogs = this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user);
-  //   }
-  //   return displayBlogs;
-  // },
-
-  // changeShowCommentsState(displayBlogs) {
-  //   this.setState({ singleUserBlogs: displayBlogs });
-  // },
-
-  // changeBlogThumbsUpState() {
-  //   const { user, isCurrentUser } = this.state;
-  //   this.setState({
-  //     singleUserBlogs: this.getStore(BlogStore).getUserBlogsWithFocuses(isCurrentUser, user)
-  //   });
-  // },
-
-  onViewPinItem: function (id) {
-    const { displayBlogs: displayBlogs } = this.state;
-    const selectedPin = displayBlogs.find(b => b.id_str === id);
-    this.setState({ selectedPin: selectedPin });
-
-    $('#pinModal').on('hidden.bs.modal', () => {
-      if (this.hidePinModal) {
-        this.hidePinModal();
+    const userStore = this.getStore(_stores.UserStore);
+    const blogStore = this.getStore(_stores.BlogStore);
+    const currentUser = userStore.getCurrentUser();
+    const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+    const responseMessages = ['CREATE_BLOG_SUCCESS'];
+    if (responseMessages.includes(res.msg)) {
+      if (res.msg === 'CREATE_BLOG_SUCCESS') {
+        _utils.sweetAlert.success(res.msg, () => {
+          _UI.ModalsFactory.hide('createBlogModal');
+        });
       }
-    });
 
-    _UI.ModalsFactory.show('pinModal');
-  },
-  hidePinModal: function () {
-    const userHomeDom = $('.user-home');
-    if (userHomeDom && userHomeDom.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ displayBlogs: displayBlogs });
     }
   },
   render: function () {
-    const { currentUser: currentUser, user: user, displayBlogs: displayBlogs, selectedPin: selectedPin } = this.state;
+    const { currentUser: currentUser, user: user, displayBlogs: displayBlogs } = this.state;
     const { pathname: pathname } = this.props.location;
-    const sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
+    const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
     return _react2.default.createElement(
       'div',
       { className: 'user-home' },
-      _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, currentUser: currentUser }),
+      _react2.default.createElement(_Users.UserBar, { path: pathname, user: user, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
         { className: 'home-content' },
@@ -165,22 +104,17 @@ const UserHome = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { className: 'home-right' },
-          _react2.default.createElement(_UserNavs.HomeRightNav, { path: pathname, currentUser: currentUser }),
+          _react2.default.createElement(_UserNavs.HomeRightNav, { path: pathname, user: user, currentUser: currentUser, isCurrentUser: isCurrentUser }),
           _react2.default.createElement(
             'div',
-            { className: 'home-blogs' },
-            sortedBlogs.map((blog, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: blog, currentUser: currentUser }))
-          ),
-          _react2.default.createElement(
-            _UI.Layout.Page,
-            null,
-            _react2.default.createElement(_UI.ModalsFactory, { modalref: 'pinModal', pin: selectedPin, ModalComponent: _UserControls.PinItemModal, showHeaderAndFooter: false })
+            { className: 'right-pages' },
+            this.props.children
           )
         )
       )
     );
   }
 });
-// import { BlogActions } from '../../actions';
+
 exports.default = UserHome;
 module.exports = exports['default'];

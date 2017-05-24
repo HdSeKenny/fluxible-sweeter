@@ -36,7 +36,7 @@ const createRoutes = context => {
     }
 
     // only load session to store on server side for isNotPublic visits
-    if (_env2.default.SERVER) {
+    if (_env2.default.is_server) {
       context.executeAction(_actions.UserActions.LoadKennyUser).then(() => {
         cb();
       });
@@ -56,9 +56,13 @@ const createRoutes = context => {
     _react2.default.createElement(_reactRouter.Route, { path: '/', component: _components.Home }),
     _react2.default.createElement(_reactRouter.Route, { path: 'list', component: _components.List }),
     _react2.default.createElement(_reactRouter.Route, { path: ':blogId/details', component: _components.Details }),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/home', component: _components.UserHome }),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/articles', component: _components.UserBlogs }),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/create', component: _components.AddBlog }),
+    _react2.default.createElement(
+      _reactRouter.Route,
+      { path: ':username', component: _components.UserHome },
+      _react2.default.createElement(_reactRouter.IndexRoute, { component: _components.UserMoments }),
+      _react2.default.createElement(_reactRouter.Route, { path: 'mine', component: _components.UserBlogs }),
+      _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _components.AddBlog })
+    ),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/info', component: _components.UserInfo }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/changepassword', component: _components.ChangePassword }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/more', component: _components.UserMore }),

@@ -8,24 +8,32 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * adding child context to react component
  */
-const CustomFluxibleComponent = _react2.default.createClass({
+const CustomFluxibleComponent = (0, _createReactClass2.default)({
 
   displayName: 'CustomFluxibleComponent',
 
   propTypes: {
-    context: _react2.default.PropTypes.object.isRequired,
-    children: _react2.default.PropTypes.object
+    context: _propTypes2.default.object,
+    children: _propTypes2.default.object
   },
 
   childContextTypes: {
-    executeAction: _react2.default.PropTypes.func.isRequired,
-    getStore: _react2.default.PropTypes.func.isRequired,
-    config: _react2.default.PropTypes.object
+    executeAction: _propTypes2.default.func,
+    getStore: _propTypes2.default.func,
+    config: _propTypes2.default.object
   },
 
   /**

@@ -8,6 +8,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _UI = require('../UI');
 
 var _utils = require('../../utils');
@@ -16,25 +20,11 @@ var _actions = require('../../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable all */
-class UserImageEditor extends _react.Component {
+class UserImageEditor extends _react2.default.Component {
 
   constructor(props) {
     super(props);
-
-    this.didLoad = this.didLoad.bind(null, this);
-    this.didSave = this.didSave.bind(null, this);
-    this.didUpload = this.didUpload.bind(null, this);
-    this.didReceiveServerError = this.didReceiveServerError.bind(null, this);
-    this.didRemove = this.didRemove.bind(null, this);
-    this.didTransform = this.didTransform.bind(null, this);
-    this.didConfirm = this.didConfirm.bind(null, this);
-    this.didCancel = this.didCancel.bind(null, this);
-    this.willTransform = this.willTransform.bind(null, this);
     this.willSave = this.willSave.bind(null, this);
-    this.willRemove = this.willRemove.bind(null, this);
-    this.willRequest = this.willRequest.bind(null, this);
-
     this.state = {
       currentUser: props.currentUser,
       imageData: null,
@@ -50,55 +40,9 @@ class UserImageEditor extends _react.Component {
     this.props.onSave(this.state.image);
   }
 
-  didLoad(self, data) {
-    console.log('didLoad.....', data);
-    return true;
-  }
-
-  didSave(self, data) {
-    console.log('didSave...', data);
-  }
-
-  didUpload(self, err, data, res) {
-    console.log('didUpload...', data, res);
-  }
-
-  didReceiveServerError(self, err, defaultError) {
-    console.log('tesdidReceiveServerError...', defaultError);
-    return defaultError;
-  }
-
-  didRemove(self, data) {
-    console.log('didRemove...', data);
-  }
-
-  didTransform(self, data) {}
-
-  didConfirm(self, data) {
-    console.log('didConfirm...', data);
-  }
-
-  didCancel() {
-    console.log('didCancel...');
-  }
-
-  willTransform(self, data, cb) {
-    cb(data);
-  }
-
   willSave(self, data, cb) {
     self.setState({ imageData: data, isUploadDisable: false });
     cb(data);
-  }
-
-  willRemove(self, data, cb) {
-    console.log('willRemove...', data);
-
-    cb();
-  }
-
-  willRequest(self, xhr) {
-    console.log('xhr...', xhr);
   }
 
   onUploadImage() {
@@ -123,8 +67,9 @@ class UserImageEditor extends _react.Component {
       processData: false,
       contentType: false,
       success: newUser => {
-        _this.context.executeAction(_actions.UserActions.UploadImageSuccess, newUser);
-        _this.context.executeAction(_actions.BlogActions.UploadImageSuccess, newUser);
+        Promise.all([_this.context.executeAction(_actions.UserActions.UploadImageSuccess, newUser), _this.context.executeAction(_actions.BlogActions.UploadImageSuccess, newUser)]).then(() => {
+          // do nothing
+        });
       }
     });
   }
@@ -137,20 +82,7 @@ class UserImageEditor extends _react.Component {
       { className: 'image-editor' },
       _react2.default.createElement(
         _UI.SlimEditor,
-        {
-          ratio: '1:1',
-          download: true,
-          didLoad: this.didLoad
-          // service={uploadImageApi}
-          , didUpload: this.didUpload,
-          didReceiveServerError: this.didReceiveServerError,
-          didRemove: this.didRemove,
-          didTransform: this.didTransform,
-          didCancel: this.didCancel,
-          willTransform: this.willTransform,
-          willSave: this.willSave,
-          willRequest: this.willRequest,
-          uploadBase64: false },
+        { ratio: '1:1', download: true, willSave: this.willSave, uploadBase64: false },
         _react2.default.createElement('input', { type: 'file', name: 'slim' })
       ),
       _react2.default.createElement(
@@ -171,15 +103,13 @@ class UserImageEditor extends _react.Component {
   }
 }
 exports.default = UserImageEditor;
-// import { Row, Col } from '../UI/Layout';
-
 UserImageEditor.displayName = 'UserImageEditor';
 UserImageEditor.contextTypes = {
-  executeAction: _react2.default.PropTypes.func
+  executeAction: _propTypes2.default.func
 };
 UserImageEditor.propTypes = {
-  onSave: _react.PropTypes.func,
-  onCancel: _react.PropTypes.func,
-  currentUser: _react.PropTypes.object
+  onSave: _propTypes2.default.func,
+  onCancel: _propTypes2.default.func,
+  currentUser: _propTypes2.default.object
 };
 module.exports = exports['default'];

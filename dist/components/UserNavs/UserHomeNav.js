@@ -8,6 +8,14 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _Layout = require('../UI/Layout');
@@ -16,27 +24,27 @@ var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserHomeNav = _react2.default.createClass({
+const UserHomeNav = (0, _createReactClass2.default)({
 
   displayName: 'UserHomeNav',
 
   contextTypes: {
-    router: _reactRouter.routerShape.isRequired,
-    executeAction: _react2.default.PropTypes.func
+    // router: routerShape.isRequired,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    path: _react2.default.PropTypes.string,
-    user: _react2.default.PropTypes.object,
-    displayBlogs: _react2.default.PropTypes.array,
-    currentUser: _react2.default.PropTypes.object
+    path: _propTypes2.default.string,
+    user: _propTypes2.default.object,
+    displayBlogs: _propTypes2.default.array,
+    currentUser: _propTypes2.default.object
   },
 
   getInitialState: function () {
     return {};
   },
   componentDidMount: function () {
-    _utils.animations.fixed_left_nav('.isNotCurrentUser');
+    _utils.animations.fixed_left_nav('.user-info-others');
   },
   isActive: function (route) {
     return route === this.props.path ? 'active' : '';
@@ -46,7 +54,8 @@ const UserHomeNav = _react2.default.createClass({
   },
   _renderUserInfo: function (user) {
     const { firstName: firstName, lastName: lastName, email: email, phone: phone, birthday: birthday, profession: profession, description: description } = user;
-    const isCurrentUser = user.id_str === this.props.currentUser.id_str;
+    const { currentUser: currentUser } = this.props;
+    const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     return _react2.default.createElement(
       'div',
       { className: 'isNotCurrentUser' },
@@ -188,11 +197,15 @@ const UserHomeNav = _react2.default.createClass({
         )
       ),
       _react2.default.createElement(
-        _Layout.Row,
-        { className: 'user-info' },
-        this._renderUserInfo(displayUser)
-      ),
-      _react2.default.createElement(_Layout.Row, { className: 'others' })
+        'div',
+        { className: 'user-info-others' },
+        _react2.default.createElement(
+          _Layout.Row,
+          { className: 'user-info' },
+          this._renderUserInfo(displayUser)
+        ),
+        _react2.default.createElement(_Layout.Row, { className: 'others' })
+      )
     );
   }
 });

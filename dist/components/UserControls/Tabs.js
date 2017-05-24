@@ -8,15 +8,23 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Tabs = _react2.default.createClass({
+const Tabs = (0, _createReactClass2.default)({
 
   displayName: 'Tabs',
 
   propTypes: {
-    selected: _react2.default.PropTypes.number,
-    children: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.array, _react2.default.PropTypes.element]).isRequired
+    selected: _propTypes2.default.number,
+    children: _propTypes2.default.oneOfType([_propTypes2.default.array, _propTypes2.default.element])
   },
 
   getDefaultProps: function () {

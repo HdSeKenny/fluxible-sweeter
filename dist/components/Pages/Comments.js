@@ -12,7 +12,13 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _reactRouter = require('react-router');
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _stores = require('../../stores');
 
@@ -24,18 +30,21 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Comments = _react2.default.createClass({
+// import { routerShape } from 'react-router';
+/* eslint-disable all, camelcase */
+const Comments = (0, _createReactClass2.default)({
 
   displayName: 'Comments',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func,
-    router: _reactRouter.routerShape.isRequired
+    executeAction: _propTypes2.default.func,
+    router: _propTypes2.default.object
   },
 
   propTypes: {
-    blog: _react2.default.PropTypes.object,
-    isBlogsWell: _react2.default.PropTypes.bool
+    blog: _propTypes2.default.object,
+    isBlogsWell: _propTypes2.default.bool,
+    currentUser: _propTypes2.default.object
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -49,7 +58,7 @@ const Comments = _react2.default.createClass({
   },
   getStatesFromStores: function () {
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
+      currentUser: this.props.currentUser,
       blog: this.props.blog,
       commentText: '',
       replyText: ''
@@ -57,18 +66,7 @@ const Comments = _react2.default.createClass({
   },
   onChange: function (res) {
     if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
-      const { blog: blog } = this.state;
-      _utils.sweetAlert.success(res.msg);
-
-      if (res.msg === 'COMMENT_SUCCESS') {
-        // blog.comments.push(res.data);
-      }
-
-      if (res.msg === 'DELETE_COMMENT_SUCCESS') {
-        blog.comments = blog.comments.filter(comment => comment.id_str !== res.data);
-      }
-
-      this.setState({ blog: blog, commentText: '' });
+      this.setState({ commentText: '' });
     }
   },
   handleCommentText: function (e) {
@@ -88,11 +86,15 @@ const Comments = _react2.default.createClass({
     return this.getStore(_stores.UserStore).getCommenter(userId);
   },
   onCommentBlog: function (blog) {
-    const { currentUser: currentUser } = this.state;
+    const { currentUser: currentUser, commentText: commentText } = this.state;
     if (!currentUser) {
-      this.checkLogin();
-      return;
+      return this.checkLogin();
     }
+
+    if (!commentText.trim()) {
+      return _utils.sweetAlert.alertErrorMessage('Invalid text!');
+    }
+
     const comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
@@ -130,7 +132,7 @@ const Comments = _react2.default.createClass({
   },
   goToUserCenter: function (username) {
     $('#pinModal').modal('hide');
-    this.context.router.push(`/${username}/home`);
+    this.context.router.push(`/${username}`);
   },
   _renderBlogTextarea: function (blog, isCommentText, currentUser, commentText) {
     return _react2.default.createElement(
@@ -228,8 +230,6 @@ const Comments = _react2.default.createClass({
       !isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText),
       comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(comment => {
         const { id_str: id_str, commenter: commenter, created_at: created_at, show_replies: show_replies } = comment;
-        // const date = created_at ? created_at.toString() : null;
-        // const commentDate = dateFormat(date, 'dddd, h:MM TT');
         const fromNow = _utils.format.fromNow(created_at);
         const user = this.getCommenter(commenter);
         const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
@@ -286,6 +286,7 @@ const Comments = _react2.default.createClass({
       })
     );
   }
-}); /* eslint-disable all, camelcase */
+});
+
 exports.default = Comments;
 module.exports = exports['default'];

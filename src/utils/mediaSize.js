@@ -1,16 +1,16 @@
 import env from './env';
-var MediaSize = {
+const MediaSize = {
   SMALL: 350,
   MEDIUM: 768,
   LARGE: 1024
 };
-var Media = {
+const Media = {
   SMALL: 'small',
   MEDIUM: 'medium',
   LARGE: 'large'
 };
 
-var OS = {
+const OS = {
   Windows: 'Win',
   MacOS: 'Mac',
   UNIX: 'X11',
@@ -56,8 +56,8 @@ function getBrowserMediaInfo(isInnerWidth) {
     deviceSize: MediaSize.LARGE,
     media: Media.LARGE
   };
-  if (env.CLIENT) {
-    let width = isInnerWidth ? window.innerWidth : window.screen.width;
+  if (env.is_client) {
+    const width = isInnerWidth ? window.innerWidth : window.screen.width;
     if (width > MediaSize.LARGE) {
       media = {
         deviceSize: MediaSize.LARGE,
@@ -88,6 +88,10 @@ function isEdgeBrowser() {
   return /edge\/\d+/i.test(navigator.userAgent);
 }
 
+function isOperatingSystem(OSName) {
+  return navigator.appVersion.indexOf(OSName) > -1;
+}
+
 function getScrollBarWidth() {
   if (isEdgeBrowser()) {
     return 12;
@@ -96,26 +100,115 @@ function getScrollBarWidth() {
     return 8;
   }
   else {
-    //for firefox some run on MAC browser
-    if(isOperatingSystem(OS.MacOS)){
+    // for firefox some run on MAC browser
+    if (isOperatingSystem(OS.MacOS)) {
       return 0;
     }
     return 17;
   }
 }
 
-function isOperatingSystem(OSName) {
-  return navigator.appVersion.indexOf(OSName) > -1;
+
+/**
+ * getScreenMediaInfo
+ * @param  {object} devices
+ * @return {string}
+ */
+function getScreenMediaInfo(devices) {
+  return env.is_client ? getBrowserMediaInfo(true).media : getMediaFromDevicesInfo(devices).media;
+}
+
+/**
+ * getScreen the screen size: small, medium or large
+ * @param  {Boolean} isInnerWidth [description]
+ * @return {[type]}               [description]
+ */
+function getScreen(devices) {
+  const media = getScreenMediaInfo(devices);
+  const isIOS = devices && devices.os === 'iOS';
+
+  let isHorizontalScreen = false;
+  let isNativeScaling = false;
+  if (env.is_client) {
+    const { innerWidth, outerWidth, screen } = window;
+    isHorizontalScreen = [90, -90].includes(window.orientation);
+    if (isIOS) {
+      // iOS devices: screen.width and screen.height will never change, not matter it is portrait or landscape mode
+      isNativeScaling = isHorizontalScreen ? screen.height !== innerWidth : screen.width !== innerWidth;
+    } else {
+      // other devices screen.width and screen.height will switch, when rotating between landscape and portrait mode
+      const possibleScreenWidth = [document.documentElement && document.documentElement.clientWidth, screen.width];
+      isNativeScaling = !(possibleScreenWidth.includes(innerWidth) || possibleScreenWidth.includes(outerWidth));
+    }
+  }
+
+  return {
+    isSmallScreen: media === Media.SMALL,
+    isMediumScreen: media === Media.MEDIUM,
+    isLargeScreen: media === Media.LARGE,
+    isIOS,
+    isHorizontalScreen,
+    isNativeScaling
+  };
+}
+
+/**
+ * getDevice the real device type: mobile, tablet or desktop
+ * @param  {object} devices this.context.devices from mobileDetect
+ * @return {object}
+ */
+function getDevice(devices) {
+  const deviceObj = {
+    isMobileDevice: false,
+    isTabletDevice: false,
+    isDesktopDevice: false
+  };
+
+  if (devices.pc) {
+    deviceObj.isDesktopDevice = true;
+  } else if (devices.tablet) {
+    deviceObj.isTabletDevice = true;
+  } else if (devices.phone) {
+    deviceObj.isMobileDevice = true;
+  }
+
+  return deviceObj;
+}
+
+/**
+ * enableMobileNativeScaling for phone/tablet, enable native scale
+ * @param  {[object]} devices
+ */
+function enableMobileNativeScaling(devices) {
+  if (env.is_client && !getDevice(devices).isDesktopDevice) {
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1');
+  }
+}
+
+/**
+ * disableMobileNativeScaling for phone/tablet, disable native scale
+ * @param  {[object]} devices
+ */
+function disableMobileNativeScaling(devices) {
+  if (env.is_client && !getDevice(devices).isDesktopDevice) {
+    document.querySelector('meta[name="viewport"]')
+      .setAttribute('content', 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1');
+  }
 }
 
 module.exports = {
-  MediaSize: MediaSize,
-  Media: Media,
-  OS: OS,
-  getMediaFromDevicesInfo: getMediaFromDevicesInfo,
-  getBrowserMediaInfo: getBrowserMediaInfo,
-  isBrowseBaseOnWebkit: isBrowseBaseOnWebkit,
-  isEdgeBrowser: isEdgeBrowser,
-  isOperatingSystem: isOperatingSystem,
-  getScrollBarWidth: getScrollBarWidth
+  MediaSize,
+  Media,
+  OS,
+  getMediaFromDevicesInfo,
+  getBrowserMediaInfo,
+  isBrowseBaseOnWebkit,
+  isEdgeBrowser,
+  isOperatingSystem,
+  getScrollBarWidth,
+  getDevice,
+  getScreen,
+  getScreenMediaInfo,
+  enableMobileNativeScaling,
+  disableMobileNativeScaling
 };

@@ -12,11 +12,17 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _utils = require('../../utils');
 
 var _stores = require('../../stores');
 
@@ -30,12 +36,12 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const List = _react2.default.createClass({
+const List = (0, _createReactClass2.default)({
 
   displayName: 'List',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -55,14 +61,15 @@ const List = _react2.default.createClass({
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
-      showCreateModal: true
+      showCreateModal: false,
+      showPinModal: false
     };
   },
   onChange: function (res) {
     const thumbsAndCommentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS'];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      _sweetAlert2.default.success(res.msg);
+      _utils.sweetAlert.success(res.msg);
       this.setState({
         blogs: this.getStore(_stores.BlogStore).getAllBlogs()
       });
@@ -100,7 +107,7 @@ const List = _react2.default.createClass({
     this.setState({ blogs: sortedBlogs });
   },
   checkCurrentUser: function () {
-    _sweetAlert2.default.alertWarningMessage('Login first !');
+    _utils.sweetAlert.alertWarningMessage('Login first !');
     this.setState({ blogText: '' });
   },
   changeShowCommentsState: function () {
@@ -112,20 +119,19 @@ const List = _react2.default.createClass({
   onViewPinItem: function (id) {
     const { blogs: blogs } = this.state;
     const selectedPin = blogs.find(p => p.id_str === id);
-    this.setState({ selectedPin: selectedPin });
+    this.setState({ selectedPin: selectedPin, showPinModal: true });
 
     $('#pinModal').on('hidden.bs.modal', () => {
       if (this.hidePinModal) {
         this.hidePinModal();
       }
     });
-
     _UI.ModalsFactory.show('pinModal');
   },
   hidePinModal: function () {
     const listDom = $('.list-page');
     if (listDom && listDom.length) {
-      this.setState({ selectedPin: {} });
+      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
   hideCreateModal: function () {
@@ -155,7 +161,7 @@ const List = _react2.default.createClass({
           { size: '3' },
           _react2.default.createElement(
             _reactRouter.Link,
-            { to: `/${username}/home` },
+            { to: `/${username}` },
             _react2.default.createElement('img', { alt: 'user', src: image_url })
           )
         ),
@@ -167,7 +173,7 @@ const List = _react2.default.createClass({
             { className: 'm-0' },
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: `/${username}/home` },
+              { to: `/${username}` },
               username
             )
           ),
@@ -241,16 +247,11 @@ const List = _react2.default.createClass({
     );
   },
   _renderAllPinItems: function (pins, currentUser) {
+    const sortedPins = _utils.jsUtils.sortByDate(pins);
     return _react2.default.createElement(
       'div',
       { className: '' },
-      pins.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((pin, index) => _react2.default.createElement(_UI.PinItem, {
-        key: index,
-        onSelect: id => this.onViewPinItem(id),
-        pin: pin,
-        type: pin.type,
-        currentUser: currentUser
-      }))
+      sortedPins.map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser }))
     );
   },
   _renderSearchBlock: function () {
@@ -331,7 +332,7 @@ const List = _react2.default.createClass({
     );
   },
   render: function () {
-    const { currentUser: currentUser, kenny: kenny, blogs: blogs, selectedPin: selectedPin, showCreateModal: showCreateModal } = this.state;
+    const { currentUser: currentUser, kenny: kenny, blogs: blogs, selectedPin: selectedPin, showCreateModal: showCreateModal, showPinModal: showPinModal } = this.state;
     const displayUser = currentUser || kenny;
     return _react2.default.createElement(
       'article',
@@ -368,8 +369,10 @@ const List = _react2.default.createClass({
           modalref: 'pinModal',
           large: true,
           pin: selectedPin,
+          showModal: showPinModal,
           ModalComponent: _UserControls.PinItemModal,
-          showHeaderAndFooter: false })
+          showHeaderAndFooter: false,
+          currentUser: currentUser })
       )
     );
   }

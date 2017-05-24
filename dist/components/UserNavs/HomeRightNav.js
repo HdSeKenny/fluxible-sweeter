@@ -8,9 +8,15 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
+
+var _reactRouter = require('react-router');
 
 var _Layout = require('../UI/Layout');
 
@@ -22,7 +28,7 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class HomeRightNav extends _react.Component {
+class HomeRightNav extends _react2.default.Component {
 
   constructor(props) {
     super(props);
@@ -54,11 +60,22 @@ class HomeRightNav extends _react.Component {
     _UI.ModalsFactory.show('createBlogModal');
   }
 
+  goToThisUserPages(str) {
+    const { currentUser: currentUser } = this.state;
+    this.context.router.push(`/${currentUser.username}${str}`);
+  }
+
   render() {
     const { currentUser: currentUser, showCreateModal: showCreateModal } = this.state;
+    const { isCurrentUser: isCurrentUser, user: user } = this.props;
+    const username = user ? user.username : '';
+    const isCreateArticlePage = this.isActive(['create', username]);
+    const momentClasses = `btn btn-default ${this.isActive([username])}`;
+    const mineClasses = `btn btn-default ${this.isActive(['mine', username])}`;
+    const createClass = `btn btn-default ${isCreateArticlePage}`;
     return _react2.default.createElement(
       'div',
-      { className: 'home-right-nav mb-20' },
+      { className: 'home-right-nav mb-10' },
       _react2.default.createElement(
         _Layout.Row,
         null,
@@ -67,18 +84,18 @@ class HomeRightNav extends _react.Component {
           { size: '6 pl-0 home-nav-lis' },
           _react2.default.createElement(
             'button',
-            { className: `btn btn-default ${this.isActive(['home', currentUser.username])}` },
+            { className: momentClasses, onClick: () => this.goToThisUserPages('') },
             'Moments'
           ),
-          _react2.default.createElement(
+          isCurrentUser && _react2.default.createElement(
             'button',
-            { className: 'btn btn-default' },
-            'Articles'
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-default' },
+            { className: mineClasses, onClick: () => this.goToThisUserPages('/mine') },
             'Mine'
+          ),
+          isCurrentUser && _react2.default.createElement(
+            'button',
+            { className: createClass, onClick: () => this.goToThisUserPages('/create') },
+            'Add article'
           )
         ),
         _react2.default.createElement(
@@ -94,9 +111,9 @@ class HomeRightNav extends _react.Component {
             { className: 'btn btn-info sweet-btn', onClick: () => this.openCreateBlogModal() },
             'Sweet'
           ),
-          _react2.default.createElement(
+          !isCreateArticlePage && _react2.default.createElement(
             'button',
-            { className: 'btn btn-primary sweet-btn ml-10' },
+            { className: 'btn btn-primary sweet-btn ml-10', onClick: () => this.goToThisUserPages('/create') },
             'Article'
           )
         )
@@ -119,11 +136,12 @@ class HomeRightNav extends _react.Component {
 exports.default = HomeRightNav;
 HomeRightNav.displayName = 'HomeRightNav';
 HomeRightNav.contextTypes = {
-  executeAction: _react.PropTypes.func
+  router: _reactRouter.routerShape.isRequired,
+  executeAction: _propTypes2.default.func
 };
 HomeRightNav.propTypes = {
-  location: _react.PropTypes.object,
-  path: _react.PropTypes.string,
-  currentUser: _react.PropTypes.object
+  location: _propTypes2.default.object,
+  path: _propTypes2.default.string,
+  currentUser: _propTypes2.default.object
 };
 module.exports = exports['default'];

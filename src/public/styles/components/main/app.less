@@ -25,11 +25,24 @@ body {
 }
 
 .content-pages {
-  width: @content-pages-width;
   flex: 0 0 auto;
-  margin: @content-pages-margin;
-  padding: @content-pages-padding;
   position: relative;
+}
+
+@media (min-width: 1201px) {
+  .content-pages {
+    width: @content-pages-width;
+    margin: @content-pages-margin;
+    padding: @content-pages-padding;
+  }
+}
+
+@media (max-width: 1200px) {
+  .content-pages {
+    // width: @content-pages-width;
+    // margin: @content-pages-margin;
+    padding: @content-pages-padding;
+  }
 }
 
 .footer {

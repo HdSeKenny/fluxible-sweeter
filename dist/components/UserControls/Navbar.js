@@ -12,9 +12,17 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
+
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
 var _reactRouter = require('react-router');
 
@@ -30,18 +38,18 @@ var _Pages = require('../Pages');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Navbar = _react2.default.createClass({
+const Navbar = (0, _createReactClass2.default)({
 
   displayName: 'Navbar',
 
   contextTypes: {
     router: _reactRouter.routerShape.isRequired,
-    config: _react.PropTypes.object,
-    executeAction: _react.PropTypes.func
+    config: _propTypes2.default.object,
+    executeAction: _propTypes2.default.func
   },
 
   propTypes: {
-    route: _react.PropTypes.string
+    route: _propTypes2.default.string
   },
 
   mixins: [_FluxibleMixin2.default],
@@ -169,10 +177,10 @@ const Navbar = _react2.default.createClass({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: this.isActive(['home', currentUser.username]) },
+              { className: this.isActive([currentUser.username]) },
               _react2.default.createElement(
                 _reactRouter.Link,
-                { to: `/${currentUser.username}/home` },
+                { to: `/${currentUser.username}` },
                 'Personal'
               )
             )
@@ -180,6 +188,15 @@ const Navbar = _react2.default.createClass({
           _react2.default.createElement(
             'ul',
             { className: 'sweet-nav-menu sweet-nav-right' },
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                'span',
+                { className: 'icon' },
+                _react2.default.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' })
+              )
+            ),
             _react2.default.createElement(
               'li',
               { className: this.isActive(['about']) },
@@ -228,7 +245,7 @@ const Navbar = _react2.default.createClass({
                   null,
                   _react2.default.createElement(
                     _reactRouter.Link,
-                    { to: `/${currentUser.username}/home` },
+                    { to: `/${currentUser.username}` },
                     'User center'
                   )
                 ),

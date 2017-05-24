@@ -33,7 +33,7 @@ const createRoutes = (context) => {
     }
 
     // only load session to store on server side for isNotPublic visits
-    if (env.SERVER) {
+    if (env.is_server) {
       context.executeAction(UserActions.LoadKennyUser).then(() => {
         cb();
       });

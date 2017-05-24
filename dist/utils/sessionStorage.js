@@ -36,7 +36,7 @@ var store = {};
 var stringify = JSON.stringify;
 var parse = JSON.parse;
 
-if (_env2.default.CLIENT) {
+if (_env2.default.is_client) {
     baseStorage = window.Storage;
     store = window.sessionStorage;
 } else {

@@ -8,6 +8,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _UI = require('./UI');
 
 var _actions = require('../actions');
@@ -16,7 +20,7 @@ var _UserControls = require('./UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class App extends _react.Component {
+class App extends _react2.default.Component {
 
   render() {
     const route = this.props.location.pathname;
@@ -39,8 +43,8 @@ class App extends _react.Component {
 exports.default = App;
 App.displayName = 'App';
 App.propTypes = {
-  location: _react.PropTypes.object,
-  children: _react.PropTypes.object
+  location: _propTypes2.default.object,
+  children: _propTypes2.default.object
 };
 
 App.fetchData = (context, params, query, done) => {

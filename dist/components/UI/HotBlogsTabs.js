@@ -16,24 +16,28 @@ var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
 
 var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
 
-var _stores = require('../../stores');
+var _createReactClass = require('create-react-class');
 
-var _actions = require('../../actions');
+var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
-var _reactBootstrap = require('react-bootstrap');
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRouter = require('react-router');
+
+var _stores = require('../../stores');
 
 var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const HotBlogsTabs = _react2.default.createClass({
+const HotBlogsTabs = (0, _createReactClass2.default)({
 
   displayName: 'HotBlogsTabs',
 
   contextTypes: {
-    executeAction: _react2.default.PropTypes.func
+    executeAction: _propTypes2.default.func
   },
 
   mixins: [_FluxibleMixin2.default],

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.List = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
+exports.List = exports.UserMoments = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
 
 var _NotFound2 = require('./NotFound');
 
@@ -53,6 +53,10 @@ var _UserFollows2 = require('./Users/UserFollows');
 
 var _UserFollows3 = _interopRequireDefault(_UserFollows2);
 
+var _UserMoments2 = require('./Users/UserMoments');
+
+var _UserMoments3 = _interopRequireDefault(_UserMoments2);
+
 var _List2 = require('./Pages/List');
 
 var _List3 = _interopRequireDefault(_List2);
@@ -71,4 +75,5 @@ exports.ChangePassword = _ChangePassword3.default;
 exports.UserMore = _UserMore3.default;
 exports.UserMessages = _UserMessages3.default;
 exports.UserFollows = _UserFollows3.default;
+exports.UserMoments = _UserMoments3.default;
 exports.List = _List3.default;

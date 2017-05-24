@@ -8,6 +8,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _actions = require('../../actions');
 
 var _Layout = require('../UI/Layout');
@@ -18,7 +22,12 @@ var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class BlogModal extends _react.Component {
+/**
+ * Copyright 2017, created by Kuan Lu
+ * @ui BlogModal
+ */
+
+class BlogModal extends _react2.default.Component {
 
   constructor(props) {
     super(props);
@@ -151,19 +160,15 @@ class BlogModal extends _react.Component {
     );
   }
 }
-exports.default = BlogModal; /**
-                              * Copyright 2017, created by Kuan Lu
-                              * @ui BlogModal
-                              */
-
+exports.default = BlogModal;
 BlogModal.displayName = 'BlogModal';
 BlogModal.contextTypes = {
-  executeAction: _react.PropTypes.func
+  executeAction: _propTypes2.default.func
 };
 BlogModal.propTypes = {
-  location: _react.PropTypes.object,
-  children: _react.PropTypes.object,
-  currentUser: _react.PropTypes.object,
-  isUserHome: _react.PropTypes.bool
+  location: _propTypes2.default.object,
+  children: _propTypes2.default.object,
+  currentUser: _propTypes2.default.object,
+  isUserHome: _propTypes2.default.bool
 };
 module.exports = exports['default'];

@@ -26,7 +26,7 @@ var store = {};
 var stringify = JSON.stringify
 var parse = JSON.parse
 
-if (env.CLIENT) {
+if (env.is_client) {
     baseStorage = window.Storage;
     store = window.sessionStorage;
 }

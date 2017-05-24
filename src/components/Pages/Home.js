@@ -3,7 +3,7 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import sweetAlert from '../../utils/sweetAlert';
+import { sweetAlert, mediaSize } from '../../utils';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory } from '../UI';
@@ -29,6 +29,7 @@ const Home = CreateReactClass({
   },
 
   getStateFromStores() {
+    const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       kenny: this.getStore(UserStore).getKennyUser(),
@@ -36,7 +37,8 @@ const Home = CreateReactClass({
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
-      showPinModal: false
+      showPinModal: false,
+      isMedium,
     };
   },
 
@@ -55,6 +57,23 @@ const Home = CreateReactClass({
         this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
       });
     }
+  },
+
+  getBrowserScreenInfo() {
+    const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
+    this.setState({ isMedium });
+  },
+
+  componentWillMount() {
+    this.getBrowserScreenInfo();
+  },
+
+  componentDidMount() {
+    window.addEventListener('resize', this.getBrowserScreenInfo);
+  },
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getBrowserScreenInfo);
   },
 
   handleBlogText(e) {
@@ -115,7 +134,9 @@ const Home = CreateReactClass({
   },
 
   _renderPinSection(sectionTitle, typedPins) {
-    const { currentUser } = this.state;
+    const { currentUser, isMedium } = this.state;
+    const marginRightIndex = isMedium ? 2 : 3;
+
     return (
       <section className="pins-section">
         <p className="home-tag">
@@ -123,7 +144,7 @@ const Home = CreateReactClass({
         </p>
         <div className="pins-block">
           {typedPins.map((pin, index) => {
-            const specialClass = (index + 1) % 3 === 0 ? 'mr-0' : '';
+            const specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
             return (
               <PinItem
                 key={index}

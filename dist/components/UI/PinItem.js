@@ -8,6 +8,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
@@ -20,8 +24,7 @@ var _stores = require('../../stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable all, camelcase */
-class PinItem extends _react.Component {
+class PinItem extends _react2.default.Component {
 
   constructor(props) {
     super(props);
@@ -32,7 +35,7 @@ class PinItem extends _react.Component {
 
   goToUserCenter(author) {
     $('#pinModal').modal('hide');
-    this.context.router.push(`/${author.username}/home`);
+    this.context.router.push(`/${author.username}`);
   }
 
   goToArticlePage(pin) {
@@ -235,6 +238,7 @@ class PinItem extends _react.Component {
     const { likers: likers, comments: comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
     const faThumbsIcon = isThumbedUp ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up';
+    const thumbsUpBallon = isThumbedUp ? 'cancel this?' : 'thumbs up!';
     return _react2.default.createElement(
       'div',
       { className: 'pin-footer-icons' },
@@ -271,7 +275,7 @@ class PinItem extends _react.Component {
         {
           className: 'icon-span',
           onClick: () => this.onAddAndCancelThumbs(currentUser, pin, isThumbedUp),
-          'data-balloon': 'thumbs up!',
+          'data-balloon': thumbsUpBallon,
           'data-balloon-pos': 'top' },
         _react2.default.createElement('i', { className: faThumbsIcon }),
         _react2.default.createElement(
@@ -286,6 +290,7 @@ class PinItem extends _react.Component {
   render() {
     const { pin: pin, specialClass: specialClass } = this.props;
     const isArticle = pin.type === 'article';
+
     return _react2.default.createElement(
       'div',
       { className: `pin ${specialClass}` },
@@ -307,19 +312,20 @@ class PinItem extends _react.Component {
     );
   }
 }
-exports.default = PinItem;
+exports.default = PinItem; /* eslint-disable all, camelcase */
+
 PinItem.displayName = 'PinItem';
 PinItem.contextTypes = {
   router: _reactRouter.routerShape.isRequired,
-  executeAction: _react2.default.PropTypes.func
+  executeAction: _propTypes2.default.func
 };
 PinItem.propTypes = {
-  pin: _react2.default.PropTypes.object,
-  index: _react2.default.PropTypes.number,
-  onSelect: _react2.default.PropTypes.func,
-  currentUser: _react2.default.PropTypes.object,
-  disabledClick: _react2.default.PropTypes.bool,
-  specialClass: _react2.default.PropTypes.string
+  pin: _propTypes2.default.object,
+  index: _propTypes2.default.number,
+  onSelect: _propTypes2.default.func,
+  currentUser: _propTypes2.default.object,
+  disabledClick: _propTypes2.default.bool,
+  specialClass: _propTypes2.default.string
 };
 PinItem.statics = {
   storeListeners: [_stores.UserStore, _stores.BlogStore]
