@@ -38,12 +38,11 @@ const UserBlogs = CreateReactClass({
     const blogStore = this.getStore(BlogStore);
     const user = userStore.getUserByUsername(username);
     const currentUser = userStore.getCurrentUser();
-    const isCurrentUser = currentUser.username === username;
+    const isCurrentUser = currentUser ? (currentUser.username === username) : false;
     return {
       currentUser,
       user,
       currentBlog: blogStore.getCurrentBlog(),
-      // deletedBlog: blogStore.getDeletedBlog(),
       isUpdated: blogStore.getIsUpdated(),
       isCurrentUser,
       displayBlogs: blogStore.getBlogsWithUsername(currentUser, username)
@@ -191,11 +190,8 @@ const UserBlogs = CreateReactClass({
     );
   },
 
-  _renderCurrentUserContentLeft(pathname, currentUser, displayBlogs) {
-    return <UserBlogsNav path={pathname} currentUser={currentUser} displayBlogs={displayBlogs} />;
-  },
-
   _renderCurrentUserContentRight(displayBlogs) {
+    console.log('displayBlogs', displayBlogs);
     return (
       <div>
         {displayBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
