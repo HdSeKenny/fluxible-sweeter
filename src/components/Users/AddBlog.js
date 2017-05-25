@@ -36,10 +36,11 @@ const AddBlog = CreateReactClass({
 
   getStateFromStores() {
     const { username } = this.props.params;
+    const store = this.getStore(UserStore);
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      user: this.getStore(UserStore).getUserByUsername(username),
-      isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
+      currentUser: store.getCurrentUser(),
+      user: store.getUserByUsername(username),
+      isCurrentUser: store.isCurrentUser(username),
       title: '',
       content: '',
       tags: []
@@ -47,20 +48,11 @@ const AddBlog = CreateReactClass({
   },
 
   onChange(res) {
-    const { currentUser } = this.state;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
-        this.context.router.push(`/user-blogs/${currentUser.strId}/list`);
+      sweetAlert.success(res.msg, () => {
+        this.context.router.push(`${res.id_str}/details`);
       });
     }
-  },
-
-  updateContent(e) {
-    this.setState({ content: e.target.value });
-  },
-
-  cancelAddBlog() {
-    this.setState({ title: '', content: '' });
   },
 
   onHandleTitle(e) {
@@ -68,33 +60,32 @@ const AddBlog = CreateReactClass({
   },
 
   onHanleTagsChange(val) {
-    this.setState({ tagsOptions: val });
+    this.setState({ tags: val });
   },
 
-  onHandleEditorState(editorState) {
-
-  },
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const title = this.state.title;
-    const content = this.state.content;
+  onCreateArticle(editorState) {
+    const { editorContent, plainText } = editorState;
+    const { title, tags, currentUser } = this.state;
     const now = new Date();
-    if (!title) {
-      sweetAlert.alertErrorMessage('Please enter title !');
-      return;
+    if (!title.trim()) {
+      return sweetAlert.alertErrorMessage('Please enter title !');
     }
 
-    if (!content) {
-      sweetAlert.alertErrorMessage('Please enter content !');
-      return;
+    if (!plainText.trim()) {
+      return sweetAlert.alertErrorMessage('Please enter content !');
+    }
+
+    if (!tags.length) {
+      return sweetAlert.alertErrorMessage('Please choose a tag !');
     }
 
     const newBlog = {
       type: 'article',
-      title: `<< ${title.trim()} >>`,
-      content,
-      author: this.state.currentUser._id,
+      title: `${title.trim()}`,
+      content: editorContent,
+      plainText,
+      author: currentUser.id_str,
+      tags,
       created_at: now
     };
 
@@ -125,45 +116,6 @@ const AddBlog = CreateReactClass({
             />
           </div>
         </div>
-      </div>
-    );
-  },
-
-  _renderArticleContent(content) {
-    return (
-      <div className="form-group">
-        <textarea
-          type="text"
-          ref="blogContent"
-          className="form-control"
-          value={content}
-          rows="20"
-          placeholder="Write content here.."
-          onChange={this.updateContent}
-          autoFocus
-        />
-      </div>
-    );
-  },
-
-  _rednerCreateBtns() {
-    return (
-      <div className="form-group btns">
-        <button type="reset" className="btn btn-default">Reset</button>
-        <button className="btn btn-primary">Create</button>
-      </div>
-    );
-  },
-
-  _renderAddBlogContent(title, content) {
-    return (
-      <div className="content">
-        <h3>Write an article</h3>
-        <form onSubmit={this.handleSubmit} >
-          {this._renderArticleTitle(title)}
-          {this._renderArticleContent(content)}
-          {this._rednerCreateBtns()}
-        </form>
       </div>
     );
   },
@@ -204,7 +156,6 @@ const AddBlog = CreateReactClass({
             </Col>
             <Col size="5 pr-0">
               <Select
-                name="form-field-name"
                 placeholder="Select or create tags"
                 value={tags}
                 options={options}
@@ -216,7 +167,7 @@ const AddBlog = CreateReactClass({
         </div>
 
         <div className="draft-editor">
-          <DraftEditor onHandleEditorState={this.onHandleEditorState} />
+          <DraftEditor onCreateArticle={this.onCreateArticle} />
         </div>
       </div>
     );

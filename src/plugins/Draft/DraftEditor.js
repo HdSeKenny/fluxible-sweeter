@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
-
-// import DraftStyleButton from './DraftStyleButton';
+// import {stateToHTML} from 'draft-js-export-html';
 import BlockStyleControls from './BlockStyleControls';
 import InlineStyleControls from './InlineStyleControls';
 
 export default class DraftEditor extends React.Component {
 
   static propTypes = {
-    onToggle: PropTypes.func
+    onToggle: PropTypes.func,
+    onCreateArticle: PropTypes.func
   };
 
   constructor(props) {
@@ -29,10 +28,9 @@ export default class DraftEditor extends React.Component {
 
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-
-      console.log(stateToHTML(editorState.getCurrentContent()));
-      this.props.onHandleEditorState(this.refs.editor.refs.editor.innerHTML);
-      this.setState({ editorState });
+      // console.log(JSON.stringify());
+      const plainText = editorState.getCurrentContent().getPlainText();
+      this.setState({ editorState, plainText });
     };
 
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
@@ -74,6 +72,13 @@ export default class DraftEditor extends React.Component {
     );
   }
 
+  createArticle() {
+    const { editorState } = this.state;
+    const editorContent = convertToRaw(editorState.getCurrentContent());
+    const plainText = editorState.getCurrentContent().getPlainText();
+    this.props.onCreateArticle({ editorContent, plainText });
+  }
+
   getBlockStyle(block) {
     switch (block.getType()) {
       case 'blockquote': return 'RichEditor-blockquote';
@@ -95,24 +100,28 @@ export default class DraftEditor extends React.Component {
     }
 
     return (
-      <div className="RichEditor-root">
-        <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
-        <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
-        <div className={className} onClick={this.focus}>
-          <Editor
-            blockStyleFn={(block) => this.getBlockStyle(block)}
-            customStyleMap={styleMap}
-            editorState={editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.onChange}
-            onTab={this.onTab}
-            placeholder="Write an article..."
-            ref="editor"
-            spellCheck={true}
-          />
+      <div className="DraftEditor">
+        <div className="RichEditor-root">
+          <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
+          <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
+          <div className={className} onClick={this.focus}>
+            <Editor
+              blockStyleFn={(block) => this.getBlockStyle(block)}
+              customStyleMap={styleMap}
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              onTab={this.onTab}
+              placeholder="Write an article..."
+              ref="editor"
+              spellCheck={true}
+            />
+          </div>
         </div>
-        <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
-
+        <div className="btns mt-15 tar">
+          <button className="btn btn-primary mr-10" onClick={() => this.createArticle()}>Create</button>
+          <button className="btn btn-default">Reset</button>
+        </div>
       </div>
     );
   }

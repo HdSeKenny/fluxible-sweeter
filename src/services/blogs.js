@@ -90,7 +90,6 @@ export default {
       body.likers = [];
       body.comments = [];
       body.images = [];
-      body.tag = body.tag || 'moment';
       body.description = body.description || '';
       Blog.insert(body, (err, result) => {
         if (result) {
