@@ -2,16 +2,20 @@ import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
+import { routerShape } from 'react-router';
+import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { BlogStore, UserStore } from '../../stores';
 import { Comments } from '../Pages';
 import { format } from '../../utils';
+// import { ImagePreloader } from '../../plugins/ImagePreloader';
+import { Row, Col } from '../UI/Layout';
 
 const Details = CreateReactClass({
 
   displayName: 'Details',
 
   contextTypes: {
+    router: routerShape.isRequired,
     executeAction: PropTypes.func
   },
 
@@ -49,28 +53,97 @@ const Details = CreateReactClass({
 
   },
 
+  goToUserCenter(username) {
+    this.context.router.push(`/${username}`);
+  },
+
+  _renderArticleHeader(title) {
+    return (
+      <div className="article-header">
+        <Row className="">
+          <Col size="11 title p-0"><p>{title}</p></Col>
+          <Col size="1 p-0 tar">
+            <span className="icon">
+              <i className="fa fa-download" aria-hidden="true"></i>
+            </span>
+          </Col>
+        </Row>
+      </div>
+    );
+  },
+
+  _renderDraftEditorContent(blog, styleMap) {
+    const isContent = blog.content && typeof blog.content === 'object';
+    if (isContent) {
+      const parsedContent = convertFromRaw(blog.content);
+      const editorState = EditorState.createWithContent(parsedContent);
+      return (
+        <section className="content RichEditor-editor m-0">
+          <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} />
+        </section>
+      );
+    }
+    else {
+      return (
+        <section className="content"><p>{blog.text}</p></section>
+      );
+    }
+  },
+
+  _renderArticleUserInfo(blog, author) {
+    const fromNow = format.fromNow(blog.created_at);
+    const avatar = React.createElement('img', {
+      src: author.image_url,
+      alt: 'article-user',
+      width: '40',
+      height: '40',
+      onClick: () => this.goToUserCenter(author.username)
+    });
+
+    // const preloadUrlObject = {
+    //   preload: author.image_url,
+    //   content: author.image_url
+    //   <ImagePreloader className="custom-image" src={preloadUrlObject} key="image-preloader" />
+    // };
+
+    return (
+      <Row className="info mt-10">
+        <Col size="6 info-left">
+          <Col size="1 p-0">{avatar}</Col>
+          <Col size="10">
+            <Row className="username">
+              <span onClick={() => this.goToUserCenter(author.username)}>
+                {author.username}
+              </span>
+            </Row>
+            <Row className="real-name">{author.firstName} {author.lastName}</Row>
+          </Col>
+        </Col>
+        <Col size="6 info-right">{fromNow}</Col>
+      </Row>
+    );
+  },
+
+  _renderArticleComments(blog, currentUser) {
+    const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
+    return (
+      <div className="comments">
+        <hr /><h3>{blog.comments.length} {commentRefer}</h3>
+        <Comments blog={blog} currentUser={currentUser} />
+      </div>
+    );
+  },
+
   render() {
     const { blog, currentUser, styleMap } = this.state;
-    const fromNow = format.fromNow(blog.created_at);
-    const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
-    const parsedContent = convertFromRaw(blog.content);
-
+    const { author } = blog;
     return (
       <article className="details-page">
         <section className="details">
-          <section className="title"><p>{blog.title}</p></section>
-          <section className="info">
-            <field className="info-left">{blog.author.username}</field>
-            <field className="info-right">{fromNow}</field>
-          </section>
-          <section className="content"><p>{blog.text}</p></section>
-          <div className="comments">
-            <hr />
-            <h3>{blog.comments.length} {commentRefer}</h3>
-            <Comments blog={blog} currentUser={currentUser} />
-          </div>
-
-          <Editor editorState={EditorState.createWithContent(parsedContent)} customStyleMap={styleMap} readOnly={true} />
+          {this._renderArticleHeader(blog.title)}
+          {this._renderArticleUserInfo(blog, author)}
+          {this._renderDraftEditorContent(blog, styleMap)}
+          {this._renderArticleComments(blog, currentUser)}
         </section>
       </article>
     );

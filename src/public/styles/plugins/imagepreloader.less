@@ -1,0 +1,33 @@
+@color-react: #61dafb;
+@color-white: #fcfcfc;
+@color-black: #222;
+
+.lt-image {
+  position: relative;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    &.preload {
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      opacity: 1;
+      filter: blur(10px);
+      transition: opacity .3s;
+    }
+  }
+  &._loaded {
+    &::before {
+      opacity: 0;
+    }
+    img {
+      &.preload {
+        opacity: 0;
+      }
+    }
+  }
+}
+

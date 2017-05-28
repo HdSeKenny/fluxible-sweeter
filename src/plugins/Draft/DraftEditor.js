@@ -23,7 +23,8 @@ export default class DraftEditor extends React.Component {
           fontSize: 16,
           padding: 2,
         },
-      }
+      },
+      showEditor: false
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -86,8 +87,13 @@ export default class DraftEditor extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // eslint-disable-next-line
+    this.setState({ showEditor: true });
+  }
+
   render() {
-    const { editorState, styleMap } = this.state;
+    const { editorState, styleMap, showEditor } = this.state;
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -105,17 +111,21 @@ export default class DraftEditor extends React.Component {
           <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
           <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
           <div className={className} onClick={this.focus}>
-            <Editor
-              blockStyleFn={(block) => this.getBlockStyle(block)}
-              customStyleMap={styleMap}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              onChange={this.onChange}
-              onTab={this.onTab}
-              placeholder="Write an article..."
-              ref="editor"
-              spellCheck={true}
-            />
+            {showEditor &&
+              <Editor
+                editorKey="b_editor"
+                dataOffsetKey="b_editor"
+                blockStyleFn={(block) => this.getBlockStyle(block)}
+                customStyleMap={styleMap}
+                editorState={editorState}
+                handleKeyCommand={this.handleKeyCommand}
+                onChange={this.onChange}
+                onTab={this.onTab}
+                placeholder="Write an article..."
+                ref="editor"
+                spellCheck={true}
+              />
+            }
           </div>
         </div>
         <div className="btns mt-15 tar">

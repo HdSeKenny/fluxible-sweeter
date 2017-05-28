@@ -9,6 +9,7 @@ import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
+import { CustomMentionEditor } from '../../plugins/Draft';
 
 export default class BlogModal extends React.Component {
 
@@ -103,6 +104,7 @@ export default class BlogModal extends React.Component {
           <textarea type="text" rows="4" value={blogText} onChange={(e) => this.onChangeBlogText(e)} />
         </Row>
         <Row className="btn-row">{this._renderCreateBtns(isDisabled)}</Row>
+        <CustomMentionEditor />
       </div>
     );
   }

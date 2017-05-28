@@ -154,14 +154,12 @@ const Navbar = CreateReactClass({
                   <Link to={`/${currentUser.username}`}>Personal</Link>
                 </li>
               }
-            </ul>
-            <ul className="sweet-nav-menu sweet-nav-right">
-              <li>
-                <span className="icon"><i className="fa fa-download" aria-hidden="true"></i></span>
-              </li>
+
               <li className={this.isActive(['about'])}>
                 <Link to="/about">About</Link>
               </li>
+            </ul>
+            <ul className="sweet-nav-menu sweet-nav-right">
               {!authenticated &&
                 <li className="mr-0">
                   <img alt="gray-user" src={grayUserImageUrl} />

@@ -141,6 +141,9 @@ const Login = CreateReactClass({
     // }, 500);
   },
 
+  componentDidMount() {
+  },
+
   _renderEmailInput(email) {
     const { emailErrorMessage } = this.state;
     return (

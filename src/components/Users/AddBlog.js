@@ -1,8 +1,8 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { routerShape } from 'react-router';
 import { sweetAlert } from '../../utils';
 import { BlogActions } from '../../actions';
@@ -50,7 +50,8 @@ const AddBlog = CreateReactClass({
   onChange(res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
       sweetAlert.success(res.msg, () => {
-        this.context.router.push(`${res.id_str}/details`);
+        const newBlogId = res.newBlog.id_str;
+        this.context.router.push(`${newBlogId}/details`);
       });
     }
   },
@@ -83,7 +84,7 @@ const AddBlog = CreateReactClass({
       type: 'article',
       title: `${title.trim()}`,
       content: editorContent,
-      plainText,
+      text: plainText,
       author: currentUser.id_str,
       tags,
       created_at: now
@@ -92,56 +93,12 @@ const AddBlog = CreateReactClass({
     this.executeAction(BlogActions.AddBlog, newBlog);
   },
 
-  _renderArticleTitle(title) {
-    return (
-      <div className="form-group">
-        <div className="row">
-          <div className="col-xs-3">
-            <select className="form-control">
-              <option>IT</option>
-              <option>Sport</option>
-              <option>Life</option>
-              <option>Story</option>
-            </select>
-          </div>
-          <div className="col-xs-9">
-            <input
-              type="text"
-              ref="blogTitle"
-              className="form-control"
-              value={title}
-              placeholder="Write title here.."
-              onChange={this.updateTitle}
-              autoFocus
-            />
-          </div>
-        </div>
-      </div>
-    );
-  },
-
   render() {
-    const { user, currentUser, isCurrentUser, title, content, tags } = this.state;
-    const { pathname } = this.props.location;
-    var options = [
+    const { title, tags } = this.state;
+    const options = [
       { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' },
-
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' },
-
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' },
-
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' },
-
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' },
+      { value: 'two', label: 'Two' }
     ];
-
-
-
     return (
       <div className="create-article-page">
         <div className="draft-options">
@@ -156,6 +113,7 @@ const AddBlog = CreateReactClass({
             </Col>
             <Col size="5 pr-0">
               <Select
+                instanceId="s"
                 placeholder="Select or create tags"
                 value={tags}
                 options={options}
