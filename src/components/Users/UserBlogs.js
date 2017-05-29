@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import { sweetAlert, format } from '../../utils';
-import UserBar from './UserBar';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
-import { BlogEditor } from '../UserControls';
 
 const UserBlogs = CreateReactClass({
 
@@ -132,15 +130,6 @@ const UserBlogs = CreateReactClass({
     this.setState({ displayBlogs: sortedBlogs });
   },
 
-  changeShowCommentsState() {
-    const { userId } = this.props.params;
-    this.setState({ displayBlogs: this.getStore(BlogStore).getBlogsByUserId(userId) });
-  },
-
-  changeBlogThumbsUpState() {
-    this.setState(this.getStatesFromStores());
-  },
-
   _renderMicroBlog(blog, blogDate) {
     return (
       <div key={blog._id} className="well list-blogs micro-blog">
@@ -191,7 +180,6 @@ const UserBlogs = CreateReactClass({
   },
 
   _renderCurrentUserContentRight(displayBlogs) {
-    console.log('displayBlogs', displayBlogs);
     return (
       <div>
         {displayBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -207,25 +195,6 @@ const UserBlogs = CreateReactClass({
     );
   },
 
-  _renderBlogsSearchBar() {
-    return (
-      <div className="well search-bar">
-        <div className="row">
-          <div className="col-xs-9 search-query">
-            <input type="text" className="form-control" placeholder="Search" onChange={this.onSearchBlog} />
-            <i className="fa fa-search"></i>
-          </div>
-          <div className="col-xs-3 sort-by">
-            <select className="form-control" onChange={this.sortByType}>
-              <option>All blogs</option>
-              <option>Microblog</option>
-              <option>Article</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    );
-  },
 
   render() {
     const {
@@ -244,15 +213,6 @@ const UserBlogs = CreateReactClass({
               {this._renderCurrentUserContentRight(displayBlogs)}
           </div>
         }
-        {currentBlog && (
-          <BlogEditor
-            show={currentBlog !== null}
-            blog={currentBlog}
-            onSave={this.onUpdateBlog}
-            onCancel={this.onCancelEdit}
-            isUpdated={isUpdated}
-          />
-        )}
       </div>
     );
   }

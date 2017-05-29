@@ -51,7 +51,7 @@ function splitUrlBySlash(url, number) {
   const params = url.split('/');
   const path = [];
   let tmpNumer = 0;
-  let targetNumber = 1;
+  let targetNumber = params.length;
 
   if (number && isNumeric(number)) {
     targetNumber = number;

@@ -73,6 +73,12 @@ const Navbar = CreateReactClass({
     return isActive ? 'active' : '';
   },
 
+  userCenterActive(username) {
+    const path = jsUtils.splitUrlBySlash(this.props.route);
+    const isActive = path.includes(username);
+    return isActive ? 'active' : '';
+  },
+
   getRouteSlashPosition(string, word, index) {
     return string.split(word, index).join(word).length;
   },
@@ -150,7 +156,7 @@ const Navbar = CreateReactClass({
               </li>
 
               {authenticated &&
-                <li className={this.isActive([currentUser.username])}>
+                <li className={this.userCenterActive(currentUser.username)}>
                   <Link to={`/${currentUser.username}`}>Personal</Link>
                 </li>
               }
