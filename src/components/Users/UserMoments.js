@@ -95,12 +95,18 @@ const UserHome = CreateReactClass({
   },
 
   render() {
-    const { currentUser, displayBlogs, selectedPin, showPinModal } = this.state;
+    const { currentUser, selectedPin, displayBlogs, showPinModal } = this.state;
+    const { searchText } = this.props;
+    const trimedSearchText = searchText ? searchText.trim() : '';
     const sortedBlogs = jsUtils.sortByDate(displayBlogs);
+    const searchedBlogs = jsUtils.searchFromArray(sortedBlogs, searchText);
+    const finalDisplayBlogs = (searchedBlogs.length || trimedSearchText) ? searchedBlogs : sortedBlogs;
     return (
       <div className="user-moments">
         <div className="user-blogs">
-          {sortedBlogs.map((blog, index) => <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />)}
+          {finalDisplayBlogs.map((blog, index) =>
+            <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />)
+          }
         </div>
         <Layout.Page>
           <ModalsFactory

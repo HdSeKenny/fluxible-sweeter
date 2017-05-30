@@ -19,7 +19,8 @@ export default class HomeRightNav extends React.Component {
     path: PropTypes.string,
     currentUser: PropTypes.object,
     user: PropTypes.object,
-    isCurrentUser: PropTypes.bool
+    isCurrentUser: PropTypes.bool,
+    onSearchBlogs: PropTypes.func
   };
 
   constructor(props) {
@@ -40,6 +41,12 @@ export default class HomeRightNav extends React.Component {
     this.context.router.push(`/${user.username}${str}`);
   }
 
+  onSearchBlogs(e) {
+    const searchText = e.target.value.toLocaleLowerCase();
+    const trimedTextWithoutSpace = searchText ? searchText.trim().replace(/\s/g, '') : '';
+    this.props.onSearchBlogs(trimedTextWithoutSpace);
+  }
+
   render() {
     const { isCurrentUser, user } = this.props;
     const username = user ? user.username : '';
@@ -47,6 +54,7 @@ export default class HomeRightNav extends React.Component {
     const momentClasses = `btn btn-default ${this.isActive([username])}`;
     const mineClasses = `btn btn-default ${this.isActive(['mine', username])}`;
     const createClass = `btn btn-default ${isCreateArticlePage}`;
+
     return (
       <div className="home-right-nav mb-10">
         <Row>
@@ -61,7 +69,7 @@ export default class HomeRightNav extends React.Component {
           </Col>
           {!isCreateArticlePage &&
             <div className="">
-              <Col size="3 pl-0 home-search"><input type="text" className="form-control" /></Col>
+              <Col size="3 pl-0 home-search"><input type="text" className="form-control" onChange={(e) => this.onSearchBlogs(e)} /></Col>
               <Col size="1 p-0 tar">
                 <select className="home-select form-control">
                   <option>life</option>

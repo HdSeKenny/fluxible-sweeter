@@ -2,11 +2,12 @@ import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { ModalsFactory } from '../UI';
-import { sweetAlert } from '../../utils';
+import { sweetAlert, jsUtils } from '../../utils';
 
 const UserHome = CreateReactClass({
 
@@ -38,11 +39,15 @@ const UserHome = CreateReactClass({
     const blogStore = this.getStore(BlogStore);
     const currentUser = userStore.getCurrentUser();
     const user = userStore.getUserByUsername(username);
+    const isCurrentUser = userStore.isCurrentUser(username);
     const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+    const currentUserBlogs = blogStore.getCurrentUserBlogs(isCurrentUser, currentUser);
     return {
       currentUser,
       user,
-      displayBlogs
+      displayBlogs,
+      currentUserBlogs,
+      searchedBlogs: []
     };
   },
 
@@ -64,10 +69,25 @@ const UserHome = CreateReactClass({
     }
   },
 
+  onSearchBlogs(searchText) {
+    const { pathname } = this.props.location;
+    const { currentUserBlogs, displayBlogs } = this.state;
+    const routes = jsUtils.splitUrlBySlash(pathname);
+    const isMine = routes.includes('mine');
+    const sourceBlogs = isMine ? _.cloneDeep(currentUserBlogs) : _.cloneDeep(displayBlogs);
+    const searchedBlogs = jsUtils.searchFromArray(sourceBlogs, searchText);
+    this.setState({ searchedBlogs, searchText });
+  },
+
   render() {
-    const { currentUser, user, displayBlogs } = this.state;
+    const { currentUser, user, displayBlogs, searchedBlogs, currentUserBlogs, searchText } = this.state;
     const { pathname } = this.props.location;
     const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
+    const trimedSearchText = searchText ? searchText.trim() : '';
+    const displayMineBlogs = (searchedBlogs.length || trimedSearchText) ? searchedBlogs : currentUserBlogs;
+    const searchBlogsData = Object.assign({}, { displayMineBlogs, searchText });
+    const child = React.cloneElement(this.props.children, searchBlogsData);
+
     return (
       <div className="user-home">
         <UserBar path={pathname} user={user} currentUser={currentUser} />
@@ -76,8 +96,13 @@ const UserHome = CreateReactClass({
             <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
           </div>
           <div className="home-right">
-            <HomeRightNav path={pathname} user={user} currentUser={currentUser} isCurrentUser={isCurrentUser} />
-            <div className="right-pages">{this.props.children}</div>
+            <HomeRightNav
+              path={pathname}
+              user={user}
+              currentUser={currentUser}
+              isCurrentUser={isCurrentUser}
+              onSearchBlogs={this.onSearchBlogs} />
+            <div className="right-pages">{child}</div>
           </div>
         </div>
       </div>

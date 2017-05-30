@@ -206,7 +206,28 @@ function base64ToBlob(dataURI, filename) {
 function sortByDate(arr) {
   if (Array.isArray(arr)) {
     return arr.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)));
+  } else {
+    return [];
   }
+}
+
+function searchFromArray(arr, text) {
+  const searched = [];
+  if (Array.isArray(arr)) {
+    arr.forEach(a => {
+      const textLowerCase = a.text.toLocaleLowerCase().replace(/\s/g,'');
+      if (a.title) {
+        const titleLowerCase = a.title.toLocaleLowerCase().replace(/\s/g,'');
+        if (titleLowerCase.includes(text) || textLowerCase.includes(text)) {
+          searched.push(a);
+        }
+      } else if (textLowerCase.includes(text)) {
+        searched.push(a);
+      }
+    });
+  }
+
+  return searched;
 }
 
 export default {
@@ -218,5 +239,6 @@ export default {
   shorten,
   splitUrlBySlash,
   base64ToBlob,
-  sortByDate
+  sortByDate,
+  searchFromArray
 };

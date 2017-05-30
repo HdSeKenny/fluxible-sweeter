@@ -38,25 +38,6 @@
   cursor: pointer;
 }
 
-.add-blog-page .add-blog-title {
-  font-size: 25px;
-  font-weight: 600;
-  margin: 40px 0;
-}
-
-.add-blog-page .create-blog {
-  color: black;
-  font-style: bold;
-  font-weight: 500;
-}
-
-
-.user-tabs {
-  background: #fff;
-  border-radius: 3px;
-  padding: 5px;
-}
-
 .tabs-labels {
   margin: 0;
   padding: 0px;
@@ -99,23 +80,6 @@
   min-height: 500px;
 }
 
-// .hot-blogs .hot-blog-row {
-//   margin-top: 5px;
-// }
-// .hot-blogs .hot-blog-row .col-xs-3 {
-//   text-align: right;
-// }
-// .hot-blogs .hot-blog-row .col-xs-3 .fa-heart-o {
-//   margin-right: 6px;
-// }
-.user-page-loading {
-  min-height: 752px;
-}
-
-.user-blogs-content {
-  width: 1048px;
-  min-height: 450px;
-}
 
 .k-blue {
   background-color: #337ab7;
@@ -182,8 +146,6 @@
   padding-right: 0;
 }
 
-
-/*.image-tooltip:hover .tooltiptext { visibility: visible;}*/
 
 .settings-content {
   width: 1048px;
