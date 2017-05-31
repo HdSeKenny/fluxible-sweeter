@@ -1,8 +1,7 @@
 {
   "assets": {
-    "main": "/build/main.5550d46cc31d2693c037.js",
-    "style": "/build/main.acbeb33c5b05d8783ad0.css",
-    "common": "/build/common.acbeb33c5b05d8783ad0.js"
-  },
-  "cdnPath": "/"
+    "style": "http://localhost:8080/main.css",
+    "main": "http://localhost:8080/main.js",
+    "common": "http://localhost:8080/common.js"
+  }
 }

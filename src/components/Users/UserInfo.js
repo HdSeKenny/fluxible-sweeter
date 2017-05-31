@@ -2,12 +2,11 @@ import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sweetAlert from '../../utils/sweetAlert';
+import UserBar from './UserBar';
+import { sweetAlert } from '../../utils';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { UserSettingsNav } from '../UserNavs';
-import UserBar from './UserBar';
 
 const UserInfo = CreateReactClass({
 
@@ -301,7 +300,7 @@ const UserInfo = CreateReactClass({
       newUser.phone = phone;
     }
 
-    if (isFirstName && isLastName && isUsername && isEmail && isPhone && isProfession && isBirthday){
+    if (isFirstName && isLastName && isUsername && isEmail && isPhone && isProfession && isBirthday) {
       this.executeAction(UserActions.UpdateUserInfo, newUser);
     } else {
       sweetAlert.alertErrorMessage('Update failed !');
@@ -312,7 +311,7 @@ const UserInfo = CreateReactClass({
     const { firstNameValidate, lastNameValidate, firstName, lastName } = this.state;
     return (
       <div className={`form-group ${firstNameValidate}`}>
-        <label className="col-sm-2 control-label">Name</label>
+        <label className="col-sm-1 control-label" htmlFor="name">Name</label>
         <div className="col-sm-4">
           {editable && <input type="text" className="form-control" value={firstName} onChange={this.handleFirstName} />}
           {!editable && <p>{currentUser.firstName} {currentUser.lastName}</p>}
@@ -330,7 +329,7 @@ const UserInfo = CreateReactClass({
     const { username, usernameValidate } = this.state;
     return (
       <div className={`form-group ${usernameValidate}`}>
-        <label className="col-sm-2 control-label">Username</label>
+        <label className="col-sm-1 control-label" htmlFor="username">Username</label>
         <div className="col-sm-8">
           {editable && <input type="text" className="form-control" value={username} onChange={this.handleUsername} />}
           {editable && <p className="help-block"> {this.state.usernameMsg}</p>}
@@ -344,11 +343,11 @@ const UserInfo = CreateReactClass({
     const { email, emailValidate } = this.state;
     return (
       <div className={`form-group ${emailValidate}`}>
-        <label className="col-sm-2 control-label">Email</label>
+        <label className="col-sm-1 control-label" htmlFor="email">Email</label>
         <div className="col-sm-8">
           {editable && <input type="email" className="form-control"value={email} onChange={this.handleEmail} />}
           {editable && <p className="help-block"> {this.state.emailMsg}</p>}
-          {!editable && <p><a href="#">{currentUser.email}</a></p>}
+          {!editable && <p><span>{currentUser.email}</span></p>}
         </div>
       </div>
     );
@@ -358,7 +357,7 @@ const UserInfo = CreateReactClass({
     const { phone, phoneValidate } = this.state;
     return (
       <div className={`form-group ${phoneValidate}`}>
-        <label className="col-sm-2 control-label">Phone</label>
+        <label className="col-sm-1 control-label" htmlFor="phone">Phone</label>
         <div className="col-sm-8">
           {editable && <input type="text" className="form-control" value={phone} onChange={this.handlePhone} />}
           {editable && <p className="help-block"> {this.state.phoneMsg}</p>}
@@ -373,7 +372,7 @@ const UserInfo = CreateReactClass({
     const { birthdayValidate } = this.state;
     return (
       <div className={`form-group ${birthdayValidate}`}>
-        <label className="col-sm-2 control-label">Birthday</label>
+        <label className="col-sm-1 control-label" htmlFor="birthday">Birthday</label>
         <div className="col-sm-8">
           {editable &&
             <DatePicker
@@ -394,7 +393,7 @@ const UserInfo = CreateReactClass({
     const { profession, professionValidate } = this.state;
     return (
       <div className={`form-group ${professionValidate}`}>
-        <label className="col-sm-2 control-label">Profession</label>
+        <label className="col-sm-1 control-label" htmlFor="profession">Profession</label>
         <div className="col-sm-8">
           {editable && <input type="text" className="form-control" value={profession} onChange={this.handleProfession} />}
           {editable && <p className="help-block"> {this.state.professionMsg}</p>}
@@ -408,7 +407,7 @@ const UserInfo = CreateReactClass({
   _renderOptionsGroup(editable) {
     return (
       <div className="form-group options">
-        <label className="col-sm-2 control-label">Options</label>
+        <label className="col-sm-1 control-label" htmlFor="options">Options</label>
         <div className="col-sm-8">
           {!editable && <button className="btn btn-warning edit-btn" onClick={this.editInputValues} >Edit Info</button>}
           {editable && <button className="btn btn-primary save-btn" onClick={this.handleNewInfo} >Save</button>}
@@ -424,23 +423,16 @@ const UserInfo = CreateReactClass({
     return (
       <div className="user-settings">
         <UserBar path={pathname} user={currentUser} isCurrentUser={true} currentUser={currentUser} />
-        <div className="settings-content">
-          <div className="settings-left">
-            <UserSettingsNav path={pathname} />
-          </div>
-          <div className="settings-right">
-            <div className="form-horizontal">
-              <div className="well personal-info">
-                <h2>Personal information</h2>
-                {this._renderNameGroup(currentUser, editable)}
-                {this._renderUserNameGroup(currentUser, editable)}
-                {this._renderEmailGroup(currentUser, editable)}
-                {this._renderPhoneGroup(currentUser, editable)}
-                {this._renderBirthdayGroup(currentUser, editable)}
-                {this._renderProfessionGroup(currentUser, editable)}
-                {this._renderOptionsGroup(editable)}
-              </div>
-            </div>
+        <div className="settings-content form-horizontal">
+          <div className="well personal-info">
+            <h2>Personal information</h2>
+            {this._renderNameGroup(currentUser, editable)}
+            {this._renderUserNameGroup(currentUser, editable)}
+            {this._renderEmailGroup(currentUser, editable)}
+            {this._renderPhoneGroup(currentUser, editable)}
+            {this._renderBirthdayGroup(currentUser, editable)}
+            {this._renderProfessionGroup(currentUser, editable)}
+            {this._renderOptionsGroup(editable)}
           </div>
         </div>
       </div>

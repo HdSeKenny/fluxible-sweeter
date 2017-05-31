@@ -166,18 +166,18 @@ const UserBar = CreateReactClass({
     const { username } = user;
 
     const navs = {
-      Home: 'fa fa-home',
-      Blogs: 'fa fa-book',
-      Follows: 'fa fa-flag',
-      More: 'fa fa-ellipsis-h'
+      Home: { label: 'Home', icon: 'fa fa-home' },
+      Follows: { label: 'Follows', icon: 'fa fa-heart' },
+      Messages: { label: 'Messages', icon: 'fa fa-comments-o' },
+      Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
+      Settings: {
+        label: isCurrentUser ? 'Settings' : 'Personal',
+        icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
+      },
+      More: { label: 'More', icon: 'fa fa-ellipsis-h' }
     };
 
-    if (isCurrentUser) {
-      navs.Messages = 'fa fa-comment';
-      navs.Settings = 'fa fa-cogs';
-    }
-
-    const colSize = isCurrentUser ? '2' : '3';
+    const colSize = '2';
 
     return Object.keys(navs).map((navli, index) => {
       const lowcaseNav = navli.toLowerCase();
@@ -192,9 +192,10 @@ const UserBar = CreateReactClass({
 
       const classes = `${colSize} bar-nav ${isActive}`;
       const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
-      const icon = navs[navli];
+      const icon = navs[navli].icon;
+      const label = navs[navli].label;
       return (
-        <Col size={classes} key={index}><Link to={url}><i className={icon}></i> {navli}</Link></Col>
+        <Col size={classes} key={index}><Link to={url}><i className={icon}></i> {label}</Link></Col>
       );
     });
   },
@@ -244,7 +245,7 @@ const UserBar = CreateReactClass({
     };
 
     return (
-      <div className="user-bar">
+      <div className="user-bar mb-20">
         <div className="user-background" style={userBackground}>
           <Row className="user-img">
             {this._renderUserImage(isCurrentUser, user, currentUser)}

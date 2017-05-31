@@ -91,19 +91,17 @@ const UserHome = CreateReactClass({
     return (
       <div className="user-home">
         <UserBar path={pathname} user={user} currentUser={currentUser} />
-        <div className="home-content">
-          <div className="home-left">
-            <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
-          </div>
-          <div className="home-right">
-            <HomeRightNav
-              path={pathname}
-              user={user}
-              currentUser={currentUser}
-              isCurrentUser={isCurrentUser}
-              onSearchBlogs={this.onSearchBlogs} />
-            <div className="right-pages">{child}</div>
-          </div>
+        <div className="home-left">
+          <UserHomeNav path={pathname} user={user} currentUser={currentUser} displayBlogs={displayBlogs} />
+        </div>
+        <div className="home-right">
+          <HomeRightNav
+            path={pathname}
+            user={user}
+            currentUser={currentUser}
+            isCurrentUser={isCurrentUser}
+            onSearchBlogs={this.onSearchBlogs} />
+          <div className="right-pages">{child}</div>
         </div>
       </div>
     );

@@ -14,8 +14,6 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _draftJs = require('draft-js');
 
-var _draftJsExportHtml = require('draft-js-export-html');
-
 var _BlockStyleControls = require('./BlockStyleControls');
 
 var _BlockStyleControls2 = _interopRequireDefault(_BlockStyleControls);
@@ -26,7 +24,7 @@ var _InlineStyleControls2 = _interopRequireDefault(_InlineStyleControls);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import DraftStyleButton from './DraftStyleButton';
+// import {stateToHTML} from 'draft-js-export-html';
 class DraftEditor extends _react2.default.Component {
 
   constructor(props) {
@@ -45,10 +43,9 @@ class DraftEditor extends _react2.default.Component {
 
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => {
-
-      console.log((0, _draftJsExportHtml.stateToHTML)(editorState.getCurrentContent()));
-      this.props.onHandleEditorState(this.refs.editor.refs.editor.innerHTML);
-      this.setState({ editorState: editorState });
+      // console.log(JSON.stringify());
+      const plainText = editorState.getCurrentContent().getPlainText();
+      this.setState({ editorState: editorState, plainText: plainText });
     };
 
     this.handleKeyCommand = command => this._handleKeyCommand(command);
@@ -80,6 +77,13 @@ class DraftEditor extends _react2.default.Component {
     this.onChange(_draftJs.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
   }
 
+  createArticle() {
+    const { editorState: editorState } = this.state;
+    const editorContent = (0, _draftJs.convertToRaw)(editorState.getCurrentContent());
+    const plainText = editorState.getCurrentContent().getPlainText();
+    this.props.onCreateArticle({ editorContent: editorContent, plainText: plainText });
+  }
+
   getBlockStyle(block) {
     switch (block.getType()) {
       case 'blockquote':
@@ -104,34 +108,48 @@ class DraftEditor extends _react2.default.Component {
 
     return _react2.default.createElement(
       'div',
-      { className: 'RichEditor-root' },
-      _react2.default.createElement(_BlockStyleControls2.default, { editorState: editorState, onToggle: this.toggleBlockType }),
-      _react2.default.createElement(_InlineStyleControls2.default, { editorState: editorState, onToggle: this.toggleInlineStyle }),
+      { className: 'DraftEditor' },
       _react2.default.createElement(
         'div',
-        { className: className, onClick: this.focus },
-        _react2.default.createElement(_draftJs.Editor, {
-          blockStyleFn: block => this.getBlockStyle(block),
-          customStyleMap: styleMap,
-          editorState: editorState,
-          handleKeyCommand: this.handleKeyCommand,
-          onChange: this.onChange,
-          onTab: this.onTab,
-          placeholder: 'Write an article...',
-          ref: 'editor',
-          spellCheck: true
-        })
+        { className: 'RichEditor-root' },
+        _react2.default.createElement(_BlockStyleControls2.default, { editorState: editorState, onToggle: this.toggleBlockType }),
+        _react2.default.createElement(_InlineStyleControls2.default, { editorState: editorState, onToggle: this.toggleInlineStyle }),
+        _react2.default.createElement(
+          'div',
+          { className: className, onClick: this.focus },
+          _react2.default.createElement(_draftJs.Editor, {
+            blockStyleFn: block => this.getBlockStyle(block),
+            customStyleMap: styleMap,
+            editorState: editorState,
+            handleKeyCommand: this.handleKeyCommand,
+            onChange: this.onChange,
+            onTab: this.onTab,
+            placeholder: 'Write an article...',
+            ref: 'editor',
+            spellCheck: true
+          })
+        )
       ),
       _react2.default.createElement(
         'div',
-        null,
-        JSON.stringify((0, _draftJs.convertToRaw)(editorState.getCurrentContent()))
+        { className: 'btns mt-15 tar' },
+        _react2.default.createElement(
+          'button',
+          { className: 'btn btn-primary mr-10', onClick: () => this.createArticle() },
+          'Create'
+        ),
+        _react2.default.createElement(
+          'button',
+          { className: 'btn btn-default' },
+          'Reset'
+        )
       )
     );
   }
 }
 exports.default = DraftEditor;
 DraftEditor.propTypes = {
-  onToggle: _propTypes2.default.func
+  onToggle: _propTypes2.default.func,
+  onCreateArticle: _propTypes2.default.func
 };
 module.exports = exports['default'];

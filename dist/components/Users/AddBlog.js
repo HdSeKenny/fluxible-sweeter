@@ -63,56 +63,52 @@ const AddBlog = (0, _createReactClass2.default)({
   },
   getStateFromStores: function () {
     const { username: username } = this.props.params;
+    const store = this.getStore(_stores.UserStore);
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserByUsername(username),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username),
+      currentUser: store.getCurrentUser(),
+      user: store.getUserByUsername(username),
+      isCurrentUser: store.isCurrentUser(username),
       title: '',
       content: '',
       tags: []
     };
   },
   onChange: function (res) {
-    const { currentUser: currentUser } = this.state;
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _utils.sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
-        this.context.router.push(`/user-blogs/${currentUser.strId}/list`);
+      _utils.sweetAlert.success(res.msg, () => {
+        this.context.router.push(`${res.id_str}/details`);
       });
     }
-  },
-  updateContent: function (e) {
-    this.setState({ content: e.target.value });
-  },
-  cancelAddBlog: function () {
-    this.setState({ title: '', content: '' });
   },
   onHandleTitle: function (e) {
     this.setState({ title: e.target.value });
   },
   onHanleTagsChange: function (val) {
-    this.setState({ tagsOptions: val });
+    this.setState({ tags: val });
   },
-  onHandleEditorState: function (editorState) {},
-  handleSubmit: function (e) {
-    e.preventDefault();
-    const title = this.state.title;
-    const content = this.state.content;
+  onCreateArticle: function (editorState) {
+    const { editorContent: editorContent, plainText: plainText } = editorState;
+    const { title: title, tags: tags, currentUser: currentUser } = this.state;
     const now = new Date();
-    if (!title) {
-      _utils.sweetAlert.alertErrorMessage('Please enter title !');
-      return;
+    if (!title.trim()) {
+      return _utils.sweetAlert.alertErrorMessage('Please enter title !');
     }
 
-    if (!content) {
-      _utils.sweetAlert.alertErrorMessage('Please enter content !');
-      return;
+    if (!plainText.trim()) {
+      return _utils.sweetAlert.alertErrorMessage('Please enter content !');
+    }
+
+    if (!tags.length) {
+      return _utils.sweetAlert.alertErrorMessage('Please choose a tag !');
     }
 
     const newBlog = {
       type: 'article',
-      title: `<< ${title.trim()} >>`,
-      content: content,
-      author: this.state.currentUser._id,
+      title: `${title.trim()}`,
+      content: editorContent,
+      plainText: plainText,
+      author: currentUser.id_str,
+      tags: tags,
       created_at: now
     };
 
@@ -169,56 +165,6 @@ const AddBlog = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderArticleContent: function (content) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'form-group' },
-      _react2.default.createElement('textarea', {
-        type: 'text',
-        ref: 'blogContent',
-        className: 'form-control',
-        value: content,
-        rows: '20',
-        placeholder: 'Write content here..',
-        onChange: this.updateContent,
-        autoFocus: true
-      })
-    );
-  },
-  _rednerCreateBtns: function () {
-    return _react2.default.createElement(
-      'div',
-      { className: 'form-group btns' },
-      _react2.default.createElement(
-        'button',
-        { type: 'reset', className: 'btn btn-default' },
-        'Reset'
-      ),
-      _react2.default.createElement(
-        'button',
-        { className: 'btn btn-primary' },
-        'Create'
-      )
-    );
-  },
-  _renderAddBlogContent: function (title, content) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'content' },
-      _react2.default.createElement(
-        'h3',
-        null,
-        'Write an article'
-      ),
-      _react2.default.createElement(
-        'form',
-        { onSubmit: this.handleSubmit },
-        this._renderArticleTitle(title),
-        this._renderArticleContent(content),
-        this._rednerCreateBtns()
-      )
-    );
-  },
   render: function () {
     const { user: user, currentUser: currentUser, isCurrentUser: isCurrentUser, title: title, content: content, tags: tags } = this.state;
     const { pathname: pathname } = this.props.location;
@@ -247,7 +193,6 @@ const AddBlog = (0, _createReactClass2.default)({
             _Layout.Col,
             { size: '5 pr-0' },
             _react2.default.createElement(_reactSelect2.default, {
-              name: 'form-field-name',
               placeholder: 'Select or create tags',
               value: tags,
               options: options,
@@ -260,7 +205,7 @@ const AddBlog = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'div',
         { className: 'draft-editor' },
-        _react2.default.createElement(_plugins.DraftEditor, { onHandleEditorState: this.onHandleEditorState })
+        _react2.default.createElement(_plugins.DraftEditor, { onCreateArticle: this.onCreateArticle })
       )
     );
   }

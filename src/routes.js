@@ -59,7 +59,7 @@ const createRoutes = (context) => {
         <Route path="create" component={AddBlog} />
       </Route>
 
-      <Route path=":username/info" component={UserInfo} />
+      <Route path=":username/settings" component={UserInfo} />
       <Route path=":username/changepassword" component={ChangePassword} />
 
       <Route path=":username/more" component={UserMore} />

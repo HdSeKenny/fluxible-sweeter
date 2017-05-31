@@ -64,12 +64,11 @@ const UserBlogs = (0, _createReactClass2.default)({
     const blogStore = this.getStore(_stores.BlogStore);
     const user = userStore.getUserByUsername(username);
     const currentUser = userStore.getCurrentUser();
-    const isCurrentUser = currentUser.username === username;
+    const isCurrentUser = currentUser ? currentUser.username === username : false;
     return {
       currentUser: currentUser,
       user: user,
       currentBlog: blogStore.getCurrentBlog(),
-      // deletedBlog: blogStore.getDeletedBlog(),
       isUpdated: blogStore.getIsUpdated(),
       isCurrentUser: isCurrentUser,
       displayBlogs: blogStore.getBlogsWithUsername(currentUser, username)
@@ -250,10 +249,8 @@ const UserBlogs = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderCurrentUserContentLeft: function (pathname, currentUser, displayBlogs) {
-    return _react2.default.createElement(UserBlogsNav, { path: pathname, currentUser: currentUser, displayBlogs: displayBlogs });
-  },
   _renderCurrentUserContentRight: function (displayBlogs) {
+    console.log('displayBlogs', displayBlogs);
     return _react2.default.createElement(
       'div',
       null,
