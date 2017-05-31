@@ -251,7 +251,9 @@ const UserBar = CreateReactClass({
       backgroundImage: `url(${background})`
     };
 
-    env.is_client && this.preloadBackgroundImage(background);
+    // preload image
+    if (env.is_client) this.preloadBackgroundImage(background);
+
     return (
       <div className="user-bar mb-20">
         <div className="user-background" style={userBackground}>

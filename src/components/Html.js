@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import env from '../utils/env';
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
@@ -38,6 +38,9 @@ export default class Html extends React.Component {
           <script src={common}></script>
           <script src={main}></script>
           <script src="/styles/js/sweetalert.min.js"></script>
+          <script src="/styles/js/revolution/jquery.themepunch.enablelog.js"></script>
+          <script src="/styles/js/revolution/jquery.themepunch.tools.min.js"></script>
+          <script src="/styles/js/revolution/jquery.themepunch.revolution.js"></script>
           {essentials && <script src={essentials}></script>}
         </body>
       </html>
