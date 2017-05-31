@@ -1,8 +1,8 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import UserBar from './UserBar';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { sweetAlert } from '../../utils';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';

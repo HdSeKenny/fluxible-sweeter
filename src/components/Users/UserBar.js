@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import $ from 'jquery';
+import { Link } from 'react-router';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
