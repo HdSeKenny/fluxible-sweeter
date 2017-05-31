@@ -5,7 +5,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { sweetAlert, jsUtils } from '../../utils';
+import { sweetAlert, jsUtils, env } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
@@ -162,6 +162,12 @@ const UserBar = CreateReactClass({
     sweetAlert.alertWarningMessage('Login first please!');
   },
 
+  preloadBackgroundImage(background) {
+    // eslint-disable-next-line
+    const newImage = new Image();
+    newImage.src = background;
+  },
+
   _renderUserBarNavs(isCurrentUser, user) {
     const { username } = user;
 
@@ -240,10 +246,12 @@ const UserBar = CreateReactClass({
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
+    const background = user.background_image_url;
     const userBackground = {
-      backgroundImage: `url(${user.background_image_url})`
+      backgroundImage: `url(${background})`
     };
 
+    env.is_client && this.preloadBackgroundImage(background);
     return (
       <div className="user-bar mb-20">
         <div className="user-background" style={userBackground}>

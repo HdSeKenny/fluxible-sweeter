@@ -45,7 +45,8 @@ const Details = CreateReactClass({
           fontSize: 16,
           padding: 2,
         },
-      }
+      },
+      showEditor: false
     };
   },
 
@@ -53,17 +54,33 @@ const Details = CreateReactClass({
 
   },
 
+  componentDidMount() {
+    // eslint-disable-next-line
+    this.setState({ showEditor: true });
+  },
+
   goToUserCenter(username) {
     this.context.router.push(`/${username}`);
   },
 
-  _renderArticleHeader(title) {
+  downloadToPdf(blog) {
+    const data = {
+      id_str: blog.id_str,
+      html: document.documentElement.outerHTML
+    };
+
+    $.post('/api/download', data, () => {
+
+    });
+  },
+
+  _renderArticleHeader(blog) {
     return (
       <div className="article-header">
         <Row className="">
-          <Col size="11 title p-0"><p>{title}</p></Col>
+          <Col size="11 title p-0"><p>{blog.title}</p></Col>
           <Col size="1 p-0 tar">
-            <span className="icon">
+            <span className="icon" onClick={() => this.downloadToPdf(blog)}>
               <i className="fa fa-download" aria-hidden="true"></i>
             </span>
           </Col>
@@ -135,14 +152,14 @@ const Details = CreateReactClass({
   },
 
   render() {
-    const { blog, currentUser, styleMap } = this.state;
+    const { blog, currentUser, styleMap, showEditor } = this.state;
     const { author } = blog;
     return (
       <article className="details-page">
         <section className="details">
-          {this._renderArticleHeader(blog.title)}
+          {this._renderArticleHeader(blog)}
           {this._renderArticleUserInfo(blog, author)}
-          {this._renderDraftEditorContent(blog, styleMap)}
+          {showEditor && this._renderDraftEditorContent(blog, styleMap)}
           {this._renderArticleComments(blog, currentUser)}
         </section>
       </article>

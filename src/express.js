@@ -22,6 +22,7 @@ import Html from './components/Html';
 import config from './configs';
 import assets from './utils/assets';
 import serverConfig from './configs/server';
+import htmlToPdf from './plugins/pdfDownloader/HtmlToPdf';
 
 export default (server) => {
   const env = server.get('env');
@@ -64,6 +65,7 @@ export default (server) => {
   fetchrPlugin.registerService(CommentService);
 
   server.use('/api/upload', require('./plugins/upload'));
+  server.use('/api/download', htmlToPdf);
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
   server.use((req, res) => {
     const context = app.createContext({
