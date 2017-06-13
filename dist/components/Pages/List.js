@@ -251,13 +251,13 @@ const List = (0, _createReactClass2.default)({
     return _react2.default.createElement(
       'div',
       { className: '' },
-      sortedPins.map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser }))
+      sortedPins.map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser, readMore: false }))
     );
   },
   _renderSearchBlock: function () {
     return _react2.default.createElement(
       'section',
-      { className: 'search-block' },
+      { className: 'search-block mb-15' },
       _react2.default.createElement(
         'div',
         { className: 'search-block-header' },
@@ -348,7 +348,7 @@ const List = (0, _createReactClass2.default)({
         { className: 'right' },
         _react2.default.createElement(
           'div',
-          { className: 'right-user-card' },
+          { className: 'right-user-card mb-15' },
           this._renderUserCardInfo(displayUser),
           this._renderUserCardFooter(displayUser)
         ),

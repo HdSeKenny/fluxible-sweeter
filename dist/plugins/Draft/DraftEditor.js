@@ -38,7 +38,8 @@ class DraftEditor extends _react2.default.Component {
           fontSize: 16,
           padding: 2
         }
-      }
+      },
+      showEditor: false
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -93,8 +94,13 @@ class DraftEditor extends _react2.default.Component {
     }
   }
 
+  componentDidMount() {
+    // eslint-disable-next-line
+    this.setState({ showEditor: true });
+  }
+
   render() {
-    const { editorState: editorState, styleMap: styleMap } = this.state;
+    const { editorState: editorState, styleMap: styleMap, showEditor: showEditor } = this.state;
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -117,7 +123,9 @@ class DraftEditor extends _react2.default.Component {
         _react2.default.createElement(
           'div',
           { className: className, onClick: this.focus },
-          _react2.default.createElement(_draftJs.Editor, {
+          showEditor && _react2.default.createElement(_draftJs.Editor, {
+            editorKey: 'b_editor',
+            dataOffsetKey: 'b_editor',
             blockStyleFn: block => this.getBlockStyle(block),
             customStyleMap: styleMap,
             editorState: editorState,

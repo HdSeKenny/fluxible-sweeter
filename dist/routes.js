@@ -63,7 +63,7 @@ const createRoutes = context => {
       _react2.default.createElement(_reactRouter.Route, { path: 'mine', component: _components.UserBlogs }),
       _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _components.AddBlog })
     ),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/info', component: _components.UserInfo }),
+    _react2.default.createElement(_reactRouter.Route, { path: ':username/settings', component: _components.UserInfo }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/changepassword', component: _components.ChangePassword }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/more', component: _components.UserMore }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/messages', component: _components.UserMessages }),

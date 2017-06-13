@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -20,21 +16,19 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _sweetAlert = require('../../utils/sweetAlert');
+var _UserBar = require('./UserBar');
 
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _UserBar2 = _interopRequireDefault(_UserBar);
+
+var _fluxibleAddonsReact = require('fluxible-addons-react');
+
+var _utils = require('../../utils');
 
 var _UI = require('../UI');
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
-
-var _UserNavs = require('../UserNavs');
-
-var _UserBar = require('./UserBar');
-
-var _UserBar2 = _interopRequireDefault(_UserBar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50,7 +44,7 @@ const UserInfo = (0, _createReactClass2.default)({
     location: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore]
@@ -312,7 +306,7 @@ const UserInfo = (0, _createReactClass2.default)({
     if (isFirstName && isLastName && isUsername && isEmail && isPhone && isProfession && isBirthday) {
       this.executeAction(_actions.UserActions.UpdateUserInfo, newUser);
     } else {
-      _sweetAlert2.default.alertErrorMessage('Update failed !');
+      _utils.sweetAlert.alertErrorMessage('Update failed !');
     }
   },
   _renderNameGroup: function (currentUser, editable) {
@@ -322,7 +316,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${firstNameValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'name' },
         'Name'
       ),
       _react2.default.createElement(
@@ -363,7 +357,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${usernameValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'username' },
         'Username'
       ),
       _react2.default.createElement(
@@ -391,7 +385,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${emailValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'email' },
         'Email'
       ),
       _react2.default.createElement(
@@ -408,8 +402,8 @@ const UserInfo = (0, _createReactClass2.default)({
           'p',
           null,
           _react2.default.createElement(
-            'a',
-            { href: '#' },
+            'span',
+            null,
             currentUser.email
           )
         )
@@ -423,7 +417,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${phoneValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'phone' },
         'Phone'
       ),
       _react2.default.createElement(
@@ -456,7 +450,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${birthdayValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'birthday' },
         'Birthday'
       ),
       _react2.default.createElement(
@@ -493,7 +487,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: `form-group ${professionValidate}` },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'profession' },
         'Profession'
       ),
       _react2.default.createElement(
@@ -525,7 +519,7 @@ const UserInfo = (0, _createReactClass2.default)({
       { className: 'form-group options' },
       _react2.default.createElement(
         'label',
-        { className: 'col-sm-2 control-label' },
+        { className: 'col-sm-1 control-label', htmlFor: 'options' },
         'Options'
       ),
       _react2.default.createElement(
@@ -558,35 +552,22 @@ const UserInfo = (0, _createReactClass2.default)({
       _react2.default.createElement(_UserBar2.default, { path: pathname, user: currentUser, isCurrentUser: true, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
-        { className: 'settings-content' },
+        { className: 'settings-content form-horizontal' },
         _react2.default.createElement(
           'div',
-          { className: 'settings-left' },
-          _react2.default.createElement(_UserNavs.UserSettingsNav, { path: pathname })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'settings-right' },
+          { className: 'well personal-info' },
           _react2.default.createElement(
-            'div',
-            { className: 'form-horizontal' },
-            _react2.default.createElement(
-              'div',
-              { className: 'well personal-info' },
-              _react2.default.createElement(
-                'h2',
-                null,
-                'Personal information'
-              ),
-              this._renderNameGroup(currentUser, editable),
-              this._renderUserNameGroup(currentUser, editable),
-              this._renderEmailGroup(currentUser, editable),
-              this._renderPhoneGroup(currentUser, editable),
-              this._renderBirthdayGroup(currentUser, editable),
-              this._renderProfessionGroup(currentUser, editable),
-              this._renderOptionsGroup(editable)
-            )
-          )
+            'h2',
+            null,
+            'Personal information'
+          ),
+          this._renderNameGroup(currentUser, editable),
+          this._renderUserNameGroup(currentUser, editable),
+          this._renderEmailGroup(currentUser, editable),
+          this._renderPhoneGroup(currentUser, editable),
+          this._renderBirthdayGroup(currentUser, editable),
+          this._renderProfessionGroup(currentUser, editable),
+          this._renderOptionsGroup(editable)
         )
       )
     );

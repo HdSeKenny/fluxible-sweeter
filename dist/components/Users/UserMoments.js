@@ -106,15 +106,19 @@ const UserHome = (0, _createReactClass2.default)({
     }
   },
   render: function () {
-    const { currentUser: currentUser, displayBlogs: displayBlogs, selectedPin: selectedPin, showPinModal: showPinModal } = this.state;
+    const { currentUser: currentUser, selectedPin: selectedPin, displayBlogs: displayBlogs, showPinModal: showPinModal } = this.state;
+    const { searchText: searchText } = this.props;
+    const trimedSearchText = searchText ? searchText.trim() : '';
     const sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
+    const searchedBlogs = _utils.jsUtils.searchFromArray(sortedBlogs, searchText);
+    const finalDisplayBlogs = searchedBlogs.length || trimedSearchText ? searchedBlogs : sortedBlogs;
     return _react2.default.createElement(
       'div',
       { className: 'user-moments' },
       _react2.default.createElement(
         'div',
         { className: 'user-blogs' },
-        sortedBlogs.map((blog, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: blog, currentUser: currentUser }))
+        finalDisplayBlogs.map((blog, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: blog, currentUser: currentUser }))
       ),
       _react2.default.createElement(
         _UI.Layout.Page,

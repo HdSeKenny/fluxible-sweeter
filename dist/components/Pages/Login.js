@@ -154,6 +154,7 @@ const Login = (0, _createReactClass2.default)({
     //   $('body').addClass('modal-open');
     // }, 500);
   },
+  componentDidMount: function () {},
   _renderEmailInput: function (email) {
     const { emailErrorMessage: emailErrorMessage } = this.state;
     return _react2.default.createElement(_UI.SweetInput, {

@@ -91,6 +91,11 @@ const Navbar = (0, _createReactClass2.default)({
     const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
     return isActive ? 'active' : '';
   },
+  userCenterActive: function (username) {
+    const path = _utils.jsUtils.splitUrlBySlash(this.props.route);
+    const isActive = path.includes(username);
+    return isActive ? 'active' : '';
+  },
   getRouteSlashPosition: function (string, word, index) {
     return string.split(word, index).join(word).length;
   },
@@ -177,24 +182,11 @@ const Navbar = (0, _createReactClass2.default)({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: this.isActive([currentUser.username]) },
+              { className: this.userCenterActive(currentUser.username) },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: `/${currentUser.username}` },
                 'Personal'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'ul',
-            { className: 'sweet-nav-menu sweet-nav-right' },
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'icon' },
-                _react2.default.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' })
               )
             ),
             _react2.default.createElement(
@@ -205,7 +197,11 @@ const Navbar = (0, _createReactClass2.default)({
                 { to: '/about' },
                 'About'
               )
-            ),
+            )
+          ),
+          _react2.default.createElement(
+            'ul',
+            { className: 'sweet-nav-menu sweet-nav-right' },
             !authenticated && _react2.default.createElement(
               'li',
               { className: 'mr-0' },

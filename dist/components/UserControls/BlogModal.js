@@ -20,12 +20,9 @@ var _UI = require('../UI');
 
 var _utils = require('../../utils');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _Draft = require('../../plugins/Draft');
 
-/**
- * Copyright 2017, created by Kuan Lu
- * @ui BlogModal
- */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class BlogModal extends _react2.default.Component {
 
@@ -156,11 +153,16 @@ class BlogModal extends _react2.default.Component {
         _Layout.Row,
         { className: 'btn-row' },
         this._renderCreateBtns(isDisabled)
-      )
+      ),
+      _react2.default.createElement(_Draft.CustomMentionEditor, null)
     );
   }
 }
-exports.default = BlogModal;
+exports.default = BlogModal; /**
+                              * Copyright 2017, created by Kuan Lu
+                              * @ui BlogModal
+                              */
+
 BlogModal.displayName = 'BlogModal';
 BlogModal.contextTypes = {
   executeAction: _propTypes2.default.func

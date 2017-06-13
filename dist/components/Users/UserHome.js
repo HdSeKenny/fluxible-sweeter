@@ -20,6 +20,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _Users = require('../Users');
 
 var _stores = require('../../stores');
@@ -61,11 +65,15 @@ const UserHome = (0, _createReactClass2.default)({
     const blogStore = this.getStore(_stores.BlogStore);
     const currentUser = userStore.getCurrentUser();
     const user = userStore.getUserByUsername(username);
+    const isCurrentUser = userStore.isCurrentUser(username);
     const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+    const currentUserBlogs = blogStore.getCurrentUserBlogs(isCurrentUser, currentUser);
     return {
       currentUser: currentUser,
       user: user,
-      displayBlogs: displayBlogs
+      displayBlogs: displayBlogs,
+      currentUserBlogs: currentUserBlogs,
+      searchedBlogs: []
     };
   },
   onChange: function (res) {
@@ -85,31 +93,46 @@ const UserHome = (0, _createReactClass2.default)({
       this.setState({ displayBlogs: displayBlogs });
     }
   },
+  onSearchBlogs: function (searchText) {
+    const { pathname: pathname } = this.props.location;
+    const { currentUserBlogs: currentUserBlogs, displayBlogs: displayBlogs } = this.state;
+    const routes = _utils.jsUtils.splitUrlBySlash(pathname);
+    const isMine = routes.includes('mine');
+    const sourceBlogs = isMine ? _lodash2.default.cloneDeep(currentUserBlogs) : _lodash2.default.cloneDeep(displayBlogs);
+    const searchedBlogs = _utils.jsUtils.searchFromArray(sourceBlogs, searchText);
+    this.setState({ searchedBlogs: searchedBlogs, searchText: searchText });
+  },
   render: function () {
-    const { currentUser: currentUser, user: user, displayBlogs: displayBlogs } = this.state;
+    const { currentUser: currentUser, user: user, displayBlogs: displayBlogs, searchedBlogs: searchedBlogs, currentUserBlogs: currentUserBlogs, searchText: searchText } = this.state;
     const { pathname: pathname } = this.props.location;
     const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
+    const trimedSearchText = searchText ? searchText.trim() : '';
+    const displayMineBlogs = searchedBlogs.length || trimedSearchText ? searchedBlogs : currentUserBlogs;
+    const searchBlogsData = Object.assign({}, { displayMineBlogs: displayMineBlogs, searchText: searchText });
+    const child = _react2.default.cloneElement(this.props.children, searchBlogsData);
+
     return _react2.default.createElement(
       'div',
       { className: 'user-home' },
       _react2.default.createElement(_Users.UserBar, { path: pathname, user: user, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
-        { className: 'home-content' },
+        { className: 'home-left' },
+        _react2.default.createElement(_UserNavs.UserHomeNav, { path: pathname, user: user, currentUser: currentUser, displayBlogs: displayBlogs })
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'home-right' },
+        _react2.default.createElement(_UserNavs.HomeRightNav, {
+          path: pathname,
+          user: user,
+          currentUser: currentUser,
+          isCurrentUser: isCurrentUser,
+          onSearchBlogs: this.onSearchBlogs }),
         _react2.default.createElement(
           'div',
-          { className: 'home-left' },
-          _react2.default.createElement(_UserNavs.UserHomeNav, { path: pathname, user: user, currentUser: currentUser, displayBlogs: displayBlogs })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'home-right' },
-          _react2.default.createElement(_UserNavs.HomeRightNav, { path: pathname, user: user, currentUser: currentUser, isCurrentUser: isCurrentUser }),
-          _react2.default.createElement(
-            'div',
-            { className: 'right-pages' },
-            this.props.children
-          )
+          { className: 'right-pages' },
+          child
         )
       )
     );

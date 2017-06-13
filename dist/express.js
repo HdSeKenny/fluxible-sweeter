@@ -90,8 +90,13 @@ var _server2 = require('./configs/server');
 
 var _server3 = _interopRequireDefault(_server2);
 
+var _HtmlToPdf = require('./plugins/pdfDownloader/HtmlToPdf');
+
+var _HtmlToPdf2 = _interopRequireDefault(_HtmlToPdf);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import './polyfills';
 exports.default = server => {
   const env = server.get('env');
 
@@ -133,6 +138,7 @@ exports.default = server => {
   fetchrPlugin.registerService(_services.comments);
 
   server.use('/api/upload', require('./plugins/upload'));
+  server.use('/api/download', _HtmlToPdf2.default);
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
   server.use((req, res) => {
     const context = _app2.default.createContext({
@@ -166,7 +172,5 @@ exports.default = server => {
     });
   });
 };
-// import './polyfills';
-
 
 module.exports = exports['default'];

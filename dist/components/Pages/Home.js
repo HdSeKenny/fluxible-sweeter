@@ -167,7 +167,9 @@ const Home = (0, _createReactClass2.default)({
             pin: pin,
             type: pin.type,
             currentUser: currentUser,
-            specialClass: specialClass
+            specialClass: specialClass,
+            showImage: true,
+            readMore: true
           });
         })
       )

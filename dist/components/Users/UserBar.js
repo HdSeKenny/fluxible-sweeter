@@ -8,12 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = require('react-router');
-
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -29,6 +23,10 @@ var _lodash2 = _interopRequireDefault(_lodash);
 var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
+
+var _reactRouter = require('react-router');
+
+var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _utils = require('../../utils');
 
@@ -57,7 +55,7 @@ const UserBar = (0, _createReactClass2.default)({
     user: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore]
@@ -179,22 +177,27 @@ const UserBar = (0, _createReactClass2.default)({
   checkCurrentUser: function () {
     _utils.sweetAlert.alertWarningMessage('Login first please!');
   },
+  preloadBackgroundImage: function (background) {
+    // eslint-disable-next-line
+    const newImage = new Image();
+    newImage.src = background;
+  },
   _renderUserBarNavs: function (isCurrentUser, user) {
     const { username: username } = user;
 
     const navs = {
-      Home: 'fa fa-home',
-      Blogs: 'fa fa-book',
-      Follows: 'fa fa-flag',
-      More: 'fa fa-ellipsis-h'
+      Home: { label: 'Home', icon: 'fa fa-home' },
+      Follows: { label: 'Follows', icon: 'fa fa-heart' },
+      Messages: { label: 'Messages', icon: 'fa fa-comments-o' },
+      Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
+      Settings: {
+        label: isCurrentUser ? 'Settings' : 'Personal',
+        icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
+      },
+      More: { label: 'More', icon: 'fa fa-ellipsis-h' }
     };
 
-    if (isCurrentUser) {
-      navs.Messages = 'fa fa-comment';
-      navs.Settings = 'fa fa-cogs';
-    }
-
-    const colSize = isCurrentUser ? '2' : '3';
+    const colSize = '2';
 
     return Object.keys(navs).map((navli, index) => {
       const lowcaseNav = navli.toLowerCase();
@@ -208,7 +211,8 @@ const UserBar = (0, _createReactClass2.default)({
 
       const classes = `${colSize} bar-nav ${isActive}`;
       const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
-      const icon = navs[navli];
+      const icon = navs[navli].icon;
+      const label = navs[navli].label;
       return _react2.default.createElement(
         _Layout.Col,
         { size: classes, key: index },
@@ -217,7 +221,7 @@ const UserBar = (0, _createReactClass2.default)({
           { to: url },
           _react2.default.createElement('i', { className: icon }),
           ' ',
-          navli
+          label
         )
       );
     });
@@ -226,12 +230,12 @@ const UserBar = (0, _createReactClass2.default)({
     return _react2.default.createElement(
       'div',
       { className: 'mt-10' },
-      _react2.default.createElement(
+      user && _react2.default.createElement(
         'p',
         { className: 'user-name' },
         user.username
       ),
-      !isCurrentUser && _react2.default.createElement(
+      !isCurrentUser && user && _react2.default.createElement(
         'div',
         { className: 'user-btn mt-10' },
         !isFollowed && _react2.default.createElement(
@@ -266,7 +270,7 @@ const UserBar = (0, _createReactClass2.default)({
         { className: 'tooltiptext' },
         'Click to change image'
       ),
-      !isCurrentUser && _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
+      !isCurrentUser && user && _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
     );
   },
   render: function () {
@@ -275,13 +279,17 @@ const UserBar = (0, _createReactClass2.default)({
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
+    const background = user ? user.background_image_url : '';
     const userBackground = {
-      backgroundImage: `url(${user.background_image_url})`
+      backgroundImage: `url(${background})`
     };
+
+    // preload image
+    if (_utils.env.is_client) this.preloadBackgroundImage(background);
 
     return _react2.default.createElement(
       'div',
-      { className: 'user-bar' },
+      { className: 'user-bar mb-20' },
       _react2.default.createElement(
         'div',
         { className: 'user-background', style: userBackground },
@@ -299,7 +307,7 @@ const UserBar = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Row,
         { className: 'nav' },
-        this._renderUserBarNavs(isCurrentUser, displayUser)
+        user && this._renderUserBarNavs(isCurrentUser, displayUser)
       ),
       _react2.default.createElement(
         _Layout.Page,

@@ -51,10 +51,12 @@ const UserMessages = (0, _createReactClass2.default)({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
+    const { username: username } = this.props.params;
+    const store = this.getStore(_stores.UserStore);
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserById(this.props.params.userId),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(this.props.params.userId),
+      currentUser: store.getCurrentUser(),
+      user: store.getUserByUsername(username),
+      isCurrentUser: store.isCurrentUser(),
       loaded: false
     };
   },

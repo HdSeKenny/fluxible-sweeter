@@ -116,6 +116,18 @@ const BlogStore = (0, _createStore2.default)({
 
     return displayBlogs;
   },
+  getCurrentUserBlogs: function (isCurrentUser, currentUser) {
+    const blogs = [];
+    if (isCurrentUser && currentUser) {
+      this.blogs.forEach(blog => {
+        if (blog.author.id_str === currentUser.id_str) {
+          blogs.push(blog);
+        }
+      });
+    }
+
+    return blogs;
+  },
   changeShowCommentsState: function (blog) {
     this.blogs.forEach((b, idx) => {
       if (b.id_str === blog.id_str) {

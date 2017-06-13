@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -23,6 +19,8 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _reactRouter = require('react-router');
 
@@ -52,7 +50,7 @@ const AddBlog = (0, _createReactClass2.default)({
     location: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore, _stores.BlogStore]
@@ -76,7 +74,8 @@ const AddBlog = (0, _createReactClass2.default)({
   onChange: function (res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
       _utils.sweetAlert.success(res.msg, () => {
-        this.context.router.push(`${res.id_str}/details`);
+        const newBlogId = res.newBlog.id_str;
+        this.context.router.push(`${newBlogId}/details`);
       });
     }
   },
@@ -106,7 +105,7 @@ const AddBlog = (0, _createReactClass2.default)({
       type: 'article',
       title: `${title.trim()}`,
       content: editorContent,
-      plainText: plainText,
+      text: plainText,
       author: currentUser.id_str,
       tags: tags,
       created_at: now
@@ -114,62 +113,9 @@ const AddBlog = (0, _createReactClass2.default)({
 
     this.executeAction(_actions.BlogActions.AddBlog, newBlog);
   },
-  _renderArticleTitle: function (title) {
-    return _react2.default.createElement(
-      'div',
-      { className: 'form-group' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3' },
-          _react2.default.createElement(
-            'select',
-            { className: 'form-control' },
-            _react2.default.createElement(
-              'option',
-              null,
-              'IT'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Sport'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Life'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Story'
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-9' },
-          _react2.default.createElement('input', {
-            type: 'text',
-            ref: 'blogTitle',
-            className: 'form-control',
-            value: title,
-            placeholder: 'Write title here..',
-            onChange: this.updateTitle,
-            autoFocus: true
-          })
-        )
-      )
-    );
-  },
   render: function () {
-    const { user: user, currentUser: currentUser, isCurrentUser: isCurrentUser, title: title, content: content, tags: tags } = this.state;
-    const { pathname: pathname } = this.props.location;
-    var options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }, { value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
-
+    const { title: title, tags: tags } = this.state;
+    const options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
     return _react2.default.createElement(
       'div',
       { className: 'create-article-page' },
@@ -193,6 +139,7 @@ const AddBlog = (0, _createReactClass2.default)({
             _Layout.Col,
             { size: '5 pr-0' },
             _react2.default.createElement(_reactSelect2.default, {
+              instanceId: 's',
               placeholder: 'Select or create tags',
               value: tags,
               options: options,

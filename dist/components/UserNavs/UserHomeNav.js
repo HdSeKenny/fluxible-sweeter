@@ -29,7 +29,7 @@ const UserHomeNav = (0, _createReactClass2.default)({
   displayName: 'UserHomeNav',
 
   contextTypes: {
-    // router: routerShape.isRequired,
+    router: _reactRouter.routerShape.isRequired,
     executeAction: _propTypes2.default.func
   },
 

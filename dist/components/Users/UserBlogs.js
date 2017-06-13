@@ -18,21 +18,15 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRouter = require('react-router');
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
+var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _utils = require('../../utils');
-
-var _UserBar = require('./UserBar');
-
-var _UserBar2 = _interopRequireDefault(_UserBar);
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _UserControls = require('../UserControls');
+var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,10 +43,10 @@ const UserBlogs = (0, _createReactClass2.default)({
     location: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
-    storeListeners: [_stores.BlogStore, _stores.UserStore]
+    storeListeners: [_stores.UserStore]
   },
 
   getInitialState: function () {
@@ -61,64 +55,17 @@ const UserBlogs = (0, _createReactClass2.default)({
   getStatesFromStores: function () {
     const { username: username } = this.props.params;
     const userStore = this.getStore(_stores.UserStore);
-    const blogStore = this.getStore(_stores.BlogStore);
     const user = userStore.getUserByUsername(username);
     const currentUser = userStore.getCurrentUser();
-    const isCurrentUser = currentUser ? currentUser.username === username : false;
+    const isCurrentUser = userStore.isCurrentUser();
+
     return {
       currentUser: currentUser,
       user: user,
-      currentBlog: blogStore.getCurrentBlog(),
-      isUpdated: blogStore.getIsUpdated(),
-      isCurrentUser: isCurrentUser,
-      displayBlogs: blogStore.getBlogsWithUsername(currentUser, username)
+      isCurrentUser: isCurrentUser
     };
   },
-  onChange: function (res) {
-    const { currentUser: currentUser } = this.state;
-    const { username: username } = this.props.params;
-    if (res.msg === 'COMMENT_SUCCESS' || res.msg === 'DELETE_COMMENT_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
-      // this.setState({displayBlogs: this.getStore(BlogStore).getBlogsByUserId(currentUser._id)});
-    }
-
-    if (res.msg === 'UPDATE_BLOG_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
-      this.setState({
-        displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(currentUser._id),
-        currentBlog: this.getStore(_stores.BlogStore).getCurrentBlog(),
-        isUpdated: this.getStore(_stores.BlogStore).getIsUpdated()
-      });
-    }
-
-    if (res.msg === 'EDIT_BLOG' || res.msg === 'CANCEL_EDIT_BLOG') {
-      this.setState({ currentBlog: this.getStore(_stores.BlogStore).getCurrentBlog() });
-    }
-
-    if (res.msg === 'CONFIRM_DELETE_BLOG' || res.msg === 'CANCEL_DELETE_BLOG') {
-      // this.setState({deletedBlog: this.getStore(BlogStore).getDeletedBlog()})
-    }
-
-    if (res.msg === 'DELETE_BLOG_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
-      this.setState({
-        // deletedBlog: this.getStore(BlogStore).getDeletedBlog(),
-        displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(username)
-      });
-    }
-
-    this.setState({
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      user: this.getStore(_stores.UserStore).getUserByUsername(username),
-      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
-    });
-  },
-  onEditBlog: function (blog) {
-    this.executeAction(_actions.BlogActions.EditBlog, blog);
-  },
-  onCancelEdit: function () {
-    this.executeAction(_actions.BlogActions.CancelEditBlog);
-  },
+  onChange: function () {},
   onUpdateBlog: function (blog) {
     if (!blog.title) {
       _utils.sweetAlert.alertErrorMessage('Please enter title !');
@@ -129,8 +76,7 @@ const UserBlogs = (0, _createReactClass2.default)({
       _utils.sweetAlert.alertErrorMessage('Please enter content');
       return;
     }
-    // eslint-disable-next-line no-param-reassign
-    blog.title = `<< ${blog.title} >>`;
+
     this.executeAction(_actions.BlogActions.UpdateBlog, blog);
   },
   onDeleteBlog: function (blog) {
@@ -138,196 +84,86 @@ const UserBlogs = (0, _createReactClass2.default)({
       this.executeAction(_actions.BlogActions.DeleteBlog, blog);
     });
   },
-  onSearchBlog: function (e) {
-    const searchText = e.target.value.toLocaleLowerCase();
-    const { user: user } = this.state;
-    const searchedBlogs = this.getStore(_stores.BlogStore).getSearchedBlogsWithUser(searchText, user);
-    this.setState({ displayBlogs: searchedBlogs });
-  },
-  sortByType: function (e) {
-    const sortText = e.target.value.toLocaleLowerCase();
-    const { user: user } = this.state;
-    const sortedBlogs = this.getStore(_stores.BlogStore).getSortedBlogsWithUser(sortText, user);
-    this.setState({ displayBlogs: sortedBlogs });
-  },
-  changeShowCommentsState: function () {
-    const { userId: userId } = this.props.params;
-    this.setState({ displayBlogs: this.getStore(_stores.BlogStore).getBlogsByUserId(userId) });
-  },
-  changeBlogThumbsUpState: function () {
-    this.setState(this.getStatesFromStores());
-  },
-  _renderMicroBlog: function (blog, blogDate) {
+  _renderCurrentUserContentRight: function (displayBlogs) {
+    const sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
     return _react2.default.createElement(
       'div',
-      { key: blog._id, className: 'well list-blogs micro-blog' },
+      { className: 'list-blogs' },
       _react2.default.createElement(
         'div',
-        { className: 'row' },
+        { className: 'tips mb-10' },
         _react2.default.createElement(
-          'div',
-          { className: 'col-xs-8' },
-          _react2.default.createElement(
-            'div',
-            { className: 'blog-title' },
-            _react2.default.createElement(
-              'h5',
-              null,
-              blog.content
-            ),
-            _react2.default.createElement(
-              'h6',
-              null,
-              blogDate
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-4 blog-manage' },
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-danger btn-sm delete-btn', onClick: this.onDeleteBlog.bind(this, blog) },
-            _react2.default.createElement('i', { className: 'fa fa-trash' }),
-            ' Delete'
-          )
+          'span',
+          { 'data-balloon': '\'A\': article, \'S\': sweet', 'data-balloon-pos': 'right' },
+          _react2.default.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
         )
-      )
-    );
-  },
-  _renderArticle: function (blog, blogDate) {
-    return _react2.default.createElement(
-      'div',
-      { key: blog._id, className: 'well list-blogs article' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-8' },
+      ),
+      sortedBlogs.map((blog, index) => {
+        const fromNow = _utils.format.fromNow(blog.created_at);
+        const isArticle = blog.type === 'article';
+        const text = _utils.jsUtils.shorten(blog.text, 40);
+        return _react2.default.createElement(
+          _Layout.Row,
+          { key: index, className: 'mb-10' },
           _react2.default.createElement(
-            'div',
-            { className: 'blog-title' },
-            _react2.default.createElement(
-              'h4',
-              null,
+            _Layout.Col,
+            { size: '1 type' },
+            isArticle ? 'A' : 'S'
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '7 p-0' },
+            isArticle && _react2.default.createElement(
+              'p',
+              { className: 'title' },
               _react2.default.createElement(
                 _reactRouter.Link,
-                { to: `/blog-details/${blog._id}` },
+                { to: `/${blog.id_str}/details` },
                 blog.title
               )
             ),
+            !isArticle && _react2.default.createElement(
+              'p',
+              { className: 'text' },
+              text
+            ),
             _react2.default.createElement(
-              'h6',
-              null,
-              blogDate
+              'p',
+              { className: 'date' },
+              fromNow
             )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-4 blog-manage' },
-          _react2.default.createElement(
-            'button',
-            {
-              className: 'btn btn-danger btn-sm delete-btn',
-              onClick: this.onDeleteBlog.bind(this, blog)
-            },
-            _react2.default.createElement('i', { className: 'fa fa-trash' }),
-            ' Delete'
           ),
           _react2.default.createElement(
-            'button',
-            {
-              className: 'btn btn-primary btn-sm delete-btn',
-              onClick: this.onEditBlog.bind(this, blog)
-            },
-            _react2.default.createElement('i', { className: 'fa fa-pencil' }),
-            ' Edit'
-          )
-        )
-      )
-    );
-  },
-  _renderCurrentUserContentRight: function (displayBlogs) {
-    console.log('displayBlogs', displayBlogs);
-    return _react2.default.createElement(
-      'div',
-      null,
-      displayBlogs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(blog => {
-        const fromNow = _utils.format.fromNow(blog.created_at);
-        if (blog.type === 'article') {
-          return this._renderArticle(blog, fromNow);
-        } else {
-          return this._renderMicroBlog(blog, fromNow);
-        }
-      })
-    );
-  },
-  _renderBlogsSearchBar: function () {
-    return _react2.default.createElement(
-      'div',
-      { className: 'well search-bar' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-9 search-query' },
-          _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search', onChange: this.onSearchBlog }),
-          _react2.default.createElement('i', { className: 'fa fa-search' })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'col-xs-3 sort-by' },
-          _react2.default.createElement(
-            'select',
-            { className: 'form-control', onChange: this.sortByType },
-            _react2.default.createElement(
-              'option',
-              null,
-              'All blogs'
+            _Layout.Col,
+            { size: '4 tar pr-0 option-btns' },
+            isArticle && _react2.default.createElement(
+              'button',
+              { className: 'btn btn-warning btn-sm', onClick: () => this.onEditBlog(blog) },
+              _react2.default.createElement('i', { className: 'fa fa-pencil' }),
+              ' Edit'
             ),
             _react2.default.createElement(
-              'option',
-              null,
-              'Microblog'
-            ),
-            _react2.default.createElement(
-              'option',
-              null,
-              'Article'
+              'button',
+              { className: 'btn btn-danger btn-sm ml-10', onClick: () => this.onDeleteBlog(blog) },
+              _react2.default.createElement('i', { className: 'fa fa-trash' }),
+              ' Delete'
             )
           )
-        )
-      )
+        );
+      })
     );
   },
   render: function () {
-    const {
-      currentUser: currentUser,
-      isCurrentUser: isCurrentUser,
-      displayBlogs: displayBlogs,
-      user: user,
-      currentBlog: currentBlog,
-      isUpdated: isUpdated
-    } = this.state;
-    const { pathname: pathname } = this.props.location;
+    const { isCurrentUser: isCurrentUser } = this.state;
+    const { displayMineBlogs: displayMineBlogs } = this.props;
     return _react2.default.createElement(
       'div',
-      { className: 'user-blogs-page' },
-      isCurrentUser && _react2.default.createElement(
+      { className: '' },
+      isCurrentUser ? _react2.default.createElement(
         'div',
-        { className: '' },
-        this._renderCurrentUserContentRight(displayBlogs)
-      ),
-      currentBlog && _react2.default.createElement(_UserControls.BlogEditor, {
-        show: currentBlog !== null,
-        blog: currentBlog,
-        onSave: this.onUpdateBlog,
-        onCancel: this.onCancelEdit,
-        isUpdated: isUpdated
-      })
+        { className: 'user-blogs-page' },
+        this._renderCurrentUserContentRight(displayMineBlogs)
+      ) : _react2.default.createElement('div', null)
     );
   }
 });

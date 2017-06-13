@@ -27,22 +27,29 @@ class Html extends _react2.default.Component {
     const exposedHtml = { __html: exposed };
     return _react2.default.createElement(
       'html',
-      { lang: 'en' },
+      { lang: 'en', className: 'no-js' },
       _react2.default.createElement(
         'head',
         null,
         _react2.default.createElement('meta', { charSet: 'utf-8' }),
+        _react2.default.createElement('meta', { httpEquiv: 'X-UA-Compatible', content: 'IE=edge' }),
         _react2.default.createElement(
           'title',
           null,
           'Sweeter'
         ),
+        _react2.default.createElement('meta', { name: 'author', content: 'Kenny' }),
         _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
         _react2.default.createElement('link', { href: '/styles/bootstrap/css/font-awesome.min.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/ui/sweetalert.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' }),
-        _react2.default.createElement('link', { href: '/styles/css/slim.min.css', rel: 'stylesheet' })
+        _react2.default.createElement('link', { href: '/styles/css/slim.min.css', rel: 'stylesheet' }),
+        _react2.default.createElement('link', { href: '/assets/js/revolution/rs-plugin/css/settings.css', rel: 'stylesheet', media: 'screen' }),
+        _react2.default.createElement('link', { href: '/assets/revolution/css/layers.css', rel: 'stylesheet' }),
+        _react2.default.createElement('link', { href: '/assets/revolution/css/navigation.css', rel: 'stylesheet' }),
+        _react2.default.createElement('script', { src: '/styles/js/jquery.min.js' }),
+        _react2.default.createElement('script', { src: '/styles/js/bootstrap.min.js' })
       ),
       _react2.default.createElement(
         'body',
@@ -52,6 +59,17 @@ class Html extends _react2.default.Component {
         _react2.default.createElement('script', { src: common }),
         _react2.default.createElement('script', { src: main }),
         _react2.default.createElement('script', { src: '/styles/js/sweetalert.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/jquery.themepunch.tools.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/jquery.themepunch.revolution.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.actions.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.carousel.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.kenburn.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.layeranimation.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.migration.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.navigation.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.parallax.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.slideanims.min.js' }),
+        _react2.default.createElement('script', { src: '/assets/revolution/js/extensions/revolution.extension.video.min.js' }),
         essentials && _react2.default.createElement('script', { src: essentials })
       )
     );

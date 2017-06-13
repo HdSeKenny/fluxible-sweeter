@@ -56,7 +56,7 @@ function splitUrlBySlash(url, number) {
   const params = url.split('/');
   const path = [];
   let tmpNumer = 0;
-  let targetNumber = 1;
+  let targetNumber = params.length;
 
   if (number && isNumeric(number)) {
     targetNumber = number;
@@ -210,7 +210,28 @@ function base64ToBlob(dataURI, filename) {
 function sortByDate(arr) {
   if (Array.isArray(arr)) {
     return arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  } else {
+    return [];
   }
+}
+
+function searchFromArray(arr, text) {
+  const searched = [];
+  if (Array.isArray(arr)) {
+    arr.forEach(a => {
+      const textLowerCase = a.text.toLocaleLowerCase().replace(/\s/g, '');
+      if (a.title) {
+        const titleLowerCase = a.title.toLocaleLowerCase().replace(/\s/g, '');
+        if (titleLowerCase.includes(text) || textLowerCase.includes(text)) {
+          searched.push(a);
+        }
+      } else if (textLowerCase.includes(text)) {
+        searched.push(a);
+      }
+    });
+  }
+
+  return searched;
 }
 
 exports.default = {
@@ -222,6 +243,7 @@ exports.default = {
   shorten: shorten,
   splitUrlBySlash: splitUrlBySlash,
   base64ToBlob: base64ToBlob,
-  sortByDate: sortByDate
+  sortByDate: sortByDate,
+  searchFromArray: searchFromArray
 };
 module.exports = exports['default'];
