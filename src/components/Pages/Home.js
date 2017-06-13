@@ -153,6 +153,8 @@ const Home = CreateReactClass({
                 type={pin.type}
                 currentUser={currentUser}
                 specialClass={specialClass}
+                showImage={true}
+                readMore={true}
               />
             );
           })}

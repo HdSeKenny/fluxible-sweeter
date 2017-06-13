@@ -209,8 +209,8 @@ const UserBar = CreateReactClass({
   _renderUserInfo(isCurrentUser, user, isFollowed) {
     return (
       <div className="mt-10">
-        <p className="user-name">{user.username}</p>
-        {!isCurrentUser &&
+        {user && <p className="user-name">{user.username}</p>}
+        {!isCurrentUser && user &&
           <div className="user-btn mt-10">
             {!isFollowed &&
               <button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
@@ -235,7 +235,7 @@ const UserBar = CreateReactClass({
       <form accept="multipart/form-data" className={imageClass}>
         {isCurrentUser && <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />}
         {isCurrentUser && hasChangedImage && <span className="tooltiptext">Click to change image</span>}
-        {!isCurrentUser && <img alt="user" className="user-image" src={user.image_url} />}
+        {!isCurrentUser && user && <img alt="user" className="user-image" src={user.image_url} />}
       </form>
     );
   },
@@ -246,7 +246,7 @@ const UserBar = CreateReactClass({
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
-    const background = user.background_image_url;
+    const background = user ? user.background_image_url : '';
     const userBackground = {
       backgroundImage: `url(${background})`
     };
@@ -266,7 +266,7 @@ const UserBar = CreateReactClass({
         </div>
 
         <Row className="nav">
-          {this._renderUserBarNavs(isCurrentUser, displayUser)}
+          {user && this._renderUserBarNavs(isCurrentUser, displayUser)}
         </Row>
 
         <Page>

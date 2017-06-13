@@ -72,10 +72,10 @@ module.exports = function makeWebpackConfig(options) {
     new ExtractTextPlugin({ filename: isProd ? '[name].[hash].css' : '[name].css', disable: false, allChunks: true }),
 
     // Set jquery for global, used for bootstrap
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
-    }),
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery'
+    // }),
 
     // LoaderOptionsPlugin
     new webpack.LoaderOptionsPlugin({

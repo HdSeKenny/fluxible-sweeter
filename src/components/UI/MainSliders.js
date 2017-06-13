@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import jQuery from 'jquery';
+import animations from '../../utils/animations';
 
 export default class MainSliders extends React.Component {
 
@@ -10,7 +10,41 @@ export default class MainSliders extends React.Component {
 
   constructor(props) {
     super(props);
+    const dataCustominMap = {
+      x: 0,
+      y: 0,
+      z: 0,
+      rotationX: 0,
+      rotationY: 0,
+      rotationZ: 0,
+      scaleX: 0.5,
+      scaleY: 0.5,
+      skewX: 0,
+      skewY: 0,
+      opacity: 0,
+      transformPerspective: 0,
+      transformOrigin: '50% 50%',
+    };
+
+    const dataCustomoutMap = {
+      x: 0,
+      y: 0,
+      z: 0,
+      rotationX: 0,
+      rotationY: 0,
+      rotationZ: 0,
+      scaleX: 0.75,
+      scaleY: 0.75,
+      skewX: 0,
+      skewY: 0,
+      opacity: 0,
+      transformPerspective: 600,
+      transformOrigin: '50% 50%',
+    };
+
     this.state = {
+
+      dataCustomout: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       sliders: [
         '/styles/images/sliders/font-end.png',
         '/styles/images/sliders/reactjs.png',
@@ -21,114 +55,69 @@ export default class MainSliders extends React.Component {
   }
 
   componentDidMount() {
-    jQuery(document).ready(() => {
-      jQuery('.tp-banner').show().revolution({
-        dottedOverlay: 'none',
-        delay: 3000,
-        startwidth: 1270,
-        startheight: 650,
-        hideThumbs: 200,
-        thumbWidth: 100,
-        thumbHeight: 50,
-        thumbAmount: 5,
-
-        navigationType: 'off',
-        navigationArrows: 'solo',
-        navigationStyle: 'preview4',
-
-        touchenabled: 'on',
-        onHoverStop: 'on',
-
-        swipe_velocity: 0.7,
-        swipe_min_touches: 1,
-        swipe_max_touches: 1,
-        drag_block_vertical: false,
-
-        parallax: 'mouse',
-        parallaxBgFreeze: 'on',
-        parallaxLevels: [7, 4, 3, 2, 5, 4, 3, 2, 1, 0],
-
-        keyboardNavigation: 'off',
-
-        navigationHAlign: 'center',
-        navigationVAlign: 'bottom',
-        navigationHOffset: 0,
-        navigationVOffset: 20,
-
-        soloArrowLeftHalign: 'left',
-        soloArrowLeftValign: 'center',
-        soloArrowLeftHOffset: 20,
-        soloArrowLeftVOffset: 0,
-
-        soloArrowRightHalign: 'right',
-        soloArrowRightValign: 'center',
-        soloArrowRightHOffset: 20,
-        soloArrowRightVOffset: 0,
-
-        shadow: 0,
-        fullWidth: 'off',
-        fullScreen: 'on',
-
-        spinner: 'spinner4',
-
-        stopLoop: 'off',
-        stopAfterLoops: -1,
-        stopAtSlide: -1,
-
-        shuffle: 'off',
-
-        autoHeight: 'off',
-        forceFullWidth: 'off',
-        hideThumbsOnMobile: 'off',
-        hideNavDelayOnMobile: 1500,
-        hideBulletsOnMobile: 'off',
-        hideArrowsOnMobile: 'off',
-        hideThumbsUnderResolution: 0,
-
-        hideSliderAtLimit: 0,
-        hideCaptionAtLimit: 0,
-        hideAllCaptionAtLilmit: 0,
-        startWithSlide: 0,
-        fullScreenOffsetContainer: '.header'
-      });
+    animations.main_sliders(() => {
+      $('.tp-banner-container').removeClass('hidden');
     });
   }
 
   render() {
-    const { show } = this.props;
-    const { sliders } = this.state;
+    const { sliders, dataCustomout } = this.state;
 
-    if (!show) { return null; }
 
     return (
-
-          <div className="tp-banner-container">
-            <div className="tp-banner">
-              <ul>
-                {sliders.map((slider, index) => {
-                  return (
-                    <li
-                      data-transition="random-static"
-                      data-slotamount="2"
-                      data-masterspeed="2000"
-                      data-thumb={slider}
-                      data-saveperformance="on"
-                      data-title="..."
-                      className="rav-1" key={index}>
-                      <img
-                        src={slider}
-                        alt={`slider-${index}`}
-                        data-bgposition="center top"
-                        data-bgfit="normal"
-                        data-bgrepeat="no-repeat" />
-                    </li>
-                  );
-                })}
-              </ul>
-              <div className="tp-bannertimer tp-bottom"></div>
-            </div>
+      <div className="main-sliders">
+        <div className="tp-banner-container hidden">
+          <div className="tp-banner">
+            <div className="tp-bannertimer"></div>
+            <ul>
+              <li data-transition="fade" data-slotamount="7" data-masterspeed="700">
+                <div
+                  className="tp-caption customin customout"
+                  data-x="50"
+                  data-hoffset="100"
+                  data-y="110"
+                  data-voffset="0"
+                  data-customin="x:50;y:150;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.5;scaleY:0.5;skewX:0;skewY:0;opacity:0;transformPerspective:0;transformOrigin:50% 50%;"
+                  data-customout={dataCustomout}
+                  data-speed="800"
+                  data-start="700"
+                  data-easing="Power4.easeOut"
+                  data-endspeed="800"
+                  data-endeasing="Power4.easeIn">
+                  <img src="/assets/revolution/images/woman.png" alt="woman" data-ww="230px" data-hh="280px" data-no-retina />
+                </div>
+                <div
+                  className="tp-caption large_bold_white customin customout start"
+                  data-x="400"
+                  data-hoffset="0"
+                  data-y="100"
+                  data-customin="x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;"
+                  data-customout={dataCustomout}
+                  data-speed="1000"
+                  data-start="500"
+                  data-easing="Back.easeInOut"
+                  data-endspeed="300">Sweeter Blog
+                </div>
+                <div
+                  className="tp-caption medium_bold_white skewfromrightshort customin customout"
+                  data-x="440"
+                  data-y="180"
+                  data-customin="x:50;y:150;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.5;scaleY:0.5;skewX:0;skewY:0;opacity:0;transformPerspective:0;transformOrigin:50% 50%;"
+                  data-customout={dataCustomout}
+                  data-speed="3000"
+                  data-start="1500"
+                  data-easing="Back.easeOut"
+                  data-endspeed="3000"
+                  data-endeasing="Power4.easeIn"
+                  data-captionhidden="on">Developer: Kenny
+                </div>
+              </li>
+              <li data-transition="fade" data-slotamount="7" data-masterspeed="1500">
+              </li>
+            </ul>
           </div>
-
+        </div>
+      </div>
     );
   }
 }

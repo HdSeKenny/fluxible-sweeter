@@ -1,7 +1,10 @@
 .pin {
   padding: 15px;
-  margin-bottom: 10px;
   background: #fff;
+  &:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: box-shadow 0.3s ease-in-out;
+  }
   .pin-heading {
     .pin-header {
       .text-xs {
@@ -22,27 +25,32 @@
       }
     }
     .pin-image {
+      margin: -15px -15px 0 -15px;
       img {
         width: 100%;
-        max-height: 100px;
+        max-height: 150px;
       }
     }
-    .pin-body-text {
-      p {
-        min-height: 42px;
-        word-break: break-all;
-        font-size: 14px;
-        &:hover {
-          cursor: pointer;
-          color: @brand-info;
-        }
+    .pin-body-text p {
+      &.article {
+        min-height: 24px;
+      }
+
+      &.moment {
+        min-height: 46px;
+      }
+
+      word-break: break-all;
+      font-size: 14px;
+      &:hover {
+        cursor: pointer;
+        color: @brand-info;
       }
     }
     .body-icons {
       margin-top: 10px;
     }
   }
-
   .pin-footer {
     .pin-footer-icons {
       padding-top: 4px;
@@ -89,13 +97,15 @@
       }
     }
   }
-
   .pin-footer-icons {
     .icon-span {
       color: #666666;
       font-size: 12px;
       margin-right: 25px;
       display: inline-block;
+      &.read-more {
+        color: @brand-info;
+      }
       &:last-child {
         margin-right: 0;
       }

@@ -1,0 +1,118 @@
+/*************************
+       1700px
+*************************/    
+@media (max-width: 1700px) {
+ 
+} 
+
+@media (max-width: 1500px) {
+ 
+}
+
+@media (max-width: 1400px) {
+.rev-slider-2 a.button.button-black span { padding: 8px 10px !important; } 
+.rev-slider-2 a.button span { padding: 8px 10px !important; }
+.rev-slider-3 a.button.button-black i { width: 30px !important; }
+.rev-slider-3 a.button.button-black span { padding: 10px !important; } 
+.rev-slider-3 a.button i { width: 30px !important; } 
+.rev-slider-3 a.button span { padding: 10px !important; }
+
+}
+
+@media (max-width: 1272px) {
+
+}
+
+@media (max-width: 1025px) {
+.custom-content p.text-justify.pb-20 { display: none; }
+.custom-content li { line-height: 22px; }
+} 
+
+@media only screen and (min-width: 768px) and (max-width: 999px) {
+.container{ width:96%; } 
+
+}
+
+@media( max-width:992px) {
+h3 { font-size: 22px; }
+/*Menu*/
+.navbar-brand img { height: 40px; }
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand { margin-left: 0px; }
+ #menu { padding: 0px; }
+.navbar { margin-bottom: 0px; }
+ #menu.sticky { padding: 0px !important;  }
+ #menu.sticky.navbar-default .navbar-nav li a { line-height: 30px; }
+.navbar-collapse.pull-right { float: none !important; }
+.navbar-header {float: none; padding:10px 0;}
+.navbar-left,.navbar-right { float: none !important; }
+.navbar-toggle { display: block; margin-right: 0; margin-top: 3px; margin-bottom: 0; padding: 8px 0px; }
+.navbar-collapse { border-top: 1px solid transparent; box-shadow: none; }
+.navbar-collapse.collapse { display: none!important; width: 100%; }
+.navbar-nav li { float: none;}
+.navbar-nav li a {padding-top: 10px; padding-bottom: 10px; padding-left: 0px; } 
+.collapse.in { display:block !important; }
+.navbar-default .navbar-collapse, .navbar-default .navbar-form { border: none; }
+.navbar { min-height: 60px; padding: 10px 0; }
+.navbar-toggle .icon-bar { height: 3px; width: 30px; }
+.navbar-custom { border-bottom: none; background-color: #191919; }
+.navbar-header .logo { padding: 0px 0; }
+.navbar-right { float: none !important; }
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus { background-color: transparent; }
+.navbar-default .navbar-toggle { border: none; }
+.navbar-default .navbar-toggle .icon-bar { background-color: #00a9da; }
+.navbar-default .navbar-toggle:hover>.icon-bar { background-color: #00a9da; }
+.custom-content img.women { display: none; }
+.custom-content { margin-bottom: 60px; }
+.custom-content li { line-height: 26px; }
+.counter-main span { margin-top: 30px; display: block; }
+.team .team-box { margin-bottom: 30px; }
+.pricing .pricing-table.active { margin-top: -28px; }
+
+}
+
+@media( max-width:767px) {
+h1 { font-size: 30px; }
+h2 { font-size: 26px; }
+.page-section-ptb { padding: 50px 0; }
+.page-section-pt { padding: 50px 0 0; }
+.page-section-pb { padding: 0 0 50px; }
+.section-title-1 { margin-bottom: 40px; }
+.section-title-1 p { font-size: 16px; }
+.section-title-1 .title-line::before { width: 180px; }
+ /*portfolio*/
+.snap-scrolling-example .portfolio .portfolio-item { width: 370px; }
+/*slider*/
+.rev-slider-2 a.button.button-black span { padding: 4px 5px !important; } 
+.rev-slider-2 a.button span { padding:4px 7px !important; }
+/*pricing*/
+.pricing-table.active { margin-top:20px; }
+.custom-content img { display: none; }
+.team .team-box img { width: 100%; }
+.pricing .pricing-table.active { margin-top: 0px; }
+.pricing .pricing-table {  margin-bottom: 30px; }
+.feature-2  { margin-bottom: 30px; }
+
+}
+
+@media( max-width:600px) {
+h3 { font-size: 22px; }
+/*action-box*/
+.action-box { text-align: center; }
+.action-box .action-box-button { text-align: center; }
+.contact-form .section-field { width: 100%; }
+}
+
+@media( max-width:479px) { 
+.logo { display: table; }
+/*portfolio*/
+.snap-scrolling-example .portfolio .portfolio-item { width: 320px; }
+.mCSB_scrollTools.mCSB_scrollTools_horizontal { width: 100%; }
+ /*slider*/
+.rev-slider-2 a.button.button-black span { padding: 3px 5px !important; } 
+.rev-slider-2 a.button span { padding:3px 5px !important;  }
+.container-fluid { padding:  0 15px; }
+
+ }   
+ 
+@media (max-width: 1199px) { .boxed-layout .page-wrapper #menu.sticky { width: 970px; } }
+@media (max-width: 992px) { .boxed-layout .page-wrapper #menu.sticky { width: 100%; } }

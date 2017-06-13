@@ -118,6 +118,12 @@ module.exports = function(grunt) {
         },
         {
           expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['assets/**/*'],
+          dest: '<%= project.devPublic %>'
+        },
+        {
+          expand: true,
           cwd: '<%= project.src %>',
           src: ['**/*.jade'],
           dest: '<%= project.dev %>'
@@ -240,7 +246,7 @@ module.exports = function(grunt) {
       },
 
       express: {
-        files: ['src/configs/*.js', 'src/configs/*.json', 'src/services/*.js', 'src/*.js'],
+        files: ['src/configs/*.js', 'src/configs/*.json', 'src/services/*.js', 'src/*.js', 'src/components/Html.js'],
         tasks: ['newer:babel:dev', 'newer:copy:dev', 'express:dev'],
         options: {
           spawn: false,

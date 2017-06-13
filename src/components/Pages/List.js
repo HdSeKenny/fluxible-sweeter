@@ -185,7 +185,7 @@ const List = CreateReactClass({
     return (
       <div className="">
         {sortedPins.map((pin, index) =>
-          <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} currentUser={currentUser} />
+          <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} currentUser={currentUser} readMore={false} />
         )}
       </div>
     );
@@ -193,7 +193,7 @@ const List = CreateReactClass({
 
   _renderSearchBlock() {
     return (
-      <section className="search-block">
+      <section className="search-block mb-15">
         <div className="search-block-header">
           {this._renderSearchBlockHeader()}
         </div>
@@ -257,7 +257,7 @@ const List = CreateReactClass({
           {this._renderAllPinItems(blogs, currentUser)}
         </section>
         <section className="right">
-          <div className="right-user-card">
+          <div className="right-user-card mb-15">
             {this._renderUserCardInfo(displayUser)}
             {this._renderUserCardFooter(displayUser)}
           </div>

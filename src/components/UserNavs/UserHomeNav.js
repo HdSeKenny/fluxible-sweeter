@@ -1,7 +1,7 @@
 import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { router } from 'react-router';
+import { routerShape } from 'react-router';
 import { Row, Col } from '../UI/Layout';
 import { animations } from '../../utils';
 
@@ -10,7 +10,7 @@ const UserHomeNav = CreateReactClass({
   displayName: 'UserHomeNav',
 
   contextTypes: {
-    // router: routerShape.isRequired,
+    router: routerShape.isRequired,
     executeAction: PropTypes.func
   },
 

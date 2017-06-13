@@ -49,6 +49,7 @@ module.exports = {
     "document": true,
     "navigator": true,
     "window": true,
-    "$": true
+    "$": true,
+    "jQuery": true
   }
 };

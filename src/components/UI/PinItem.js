@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { routerShape } from 'react-router';
-import { sweetAlert, format, jsUtils } from '../../utils';
+import { sweetAlert, format, jsUtils, env } from '../../utils';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
@@ -22,7 +22,9 @@ export default class PinItem extends React.Component {
     onSelect: PropTypes.func,
     currentUser: PropTypes.object,
     disabledClick: PropTypes.bool,
-    specialClass: PropTypes.string
+    specialClass: PropTypes.string,
+    showImage: PropTypes.bool,
+    readMore: PropTypes.bool
   };
 
   static statics = {
@@ -89,16 +91,35 @@ export default class PinItem extends React.Component {
     }
   }
 
-  _renderPinHeader(pin) {
+  preloadPintemImage(url) {
+    // eslint-disable-next-line
+    const newImage = new Image();
+    newImage.src = url;
+  }
+
+  _renderPinitemImage(pin) {
+    const imageUrls = pin.images;
+    const displayImgUrl = imageUrls[0];
+    if (env.is_client) this.preloadPintemImage(displayImgUrl);
+    return (
+      <div className="pin-image">
+        <img src={displayImgUrl} alt="pin-bc" />
+      </div>
+    );
+  }
+
+  _renderPinUserInfo(pin) {
     const { author, created_at } = pin;
     const { image_url, firstName, lastName, username } = author;
     const fromNow = format.fromNow(created_at);
     return (
       <div className="pin-header">
-        <div className="pin-moment-user" onClick={() => this.goToUserCenter(author)}>
-          <span className="user-img pull-left mr-10"><img alt="pin" src={image_url} /></span>
+        <div className="pin-moment-user">
+          <span className="user-img pull-left mr-10" onClick={() => this.goToUserCenter(author)}>
+            <img alt="pin" src={image_url} />
+          </span>
           <div className="author">
-            <span className="name">{firstName} {lastName}</span>
+            <span className="name" onClick={() => this.goToUserCenter(author)}>{firstName} {lastName}</span>
             <small className="from-now fr">{fromNow}</small>
           </div>
           <p className="text-muted text-xs mt-5">{username}</p>
@@ -107,118 +128,97 @@ export default class PinItem extends React.Component {
     );
   }
 
-  _renderArticleRightContent(pin) {
-    return (
-      <div className="pin-article-right">
-        <p className="pin-article-title">{pin.title}</p>
-        <div className="">{this._renderTextPin(pin)}</div>
-        <Row className="">
-          <Col size="6" className="p-0 body-user">{this._renderPinFooter(pin)}</Col>
-          <Col size="6" className="p-0 body-icons tar">{this._renderPinFooterIcons(pin)}</Col>
-        </Row>
-      </div>
-    );
-  }
-
-  _renderPinBody(pin, isArticle) {
-    if (isArticle) {
-      const imageUrls = pin.images;
-      if (imageUrls && imageUrls.length) {
-        const displayImgUrl = imageUrls[0];
-        const imageStyle = {
-          backgroundImage: `url(${displayImgUrl})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center center',
-          height: '100px'
-        };
-        return (
-          <Row className="p-0">
-            <Col size="4 p-0" className="pin-image" onClick={() => this.goToArticlePage(pin)} style={imageStyle} />
-            <Col size="8 p-0" className="pl-15">{this._renderArticleRightContent(pin)}</Col>
-          </Row>
-        );
-      }
-      else {
-        return this._renderArticleRightContent(pin);
-      }
-    }
-    else {
-      return this._renderTextPin(pin);
-    }
-  }
-
-  _renderTextPin(pin) {
-    const displayText = jsUtils.shorten(pin.text, 70);
-    const { disabledClick } = this.props;
+  _renderTextPin(pin, readMore) {
+    const isArticle = pin.type === 'article';
     return (
       <div className="pin-body-text mt-5" onClick={() => this.pinTextActions(pin)}>
-        {disabledClick ? <p>{pin.text}</p> : <p>{displayText}</p>}
+        {isArticle && <h3 className="pin-article-title m-0 mb-5">{pin.title}</h3>}
+        {this._renderDisplayNumberText(pin, readMore, isArticle)}
       </div>
     );
   }
 
-  _renderPinFooter(pin) {
-    const { author, created_at } = pin;
-    const fromNow = format.fromNow(created_at);
-
-    return (
-      <div className="pin-article-user" onClick={() => this.goToUserCenter(author)}>
-        <span className="user-img pull-left mr-10" data-balloon="Go user center!" data-balloon-pos="top">
-          <img alt="pin" src={author.image_url} />
-        </span>
-        <div className="author">
-          <span className="name">{author.firstName} {author.lastName}</span>
-        </div>
-        <p className="text-muted text-xs mt-5">{fromNow}</p>
-      </div>
-    );
+  _renderDisplayNumberText(pin, readMore, isArticle) {
+    const display40Text = jsUtils.shorten(pin.text, 40);
+    const display70Text = jsUtils.shorten(pin.text, 70);
+    if (isArticle) {
+      if (readMore) {
+        return <p className="article">{display40Text}</p>;
+      }
+      else {
+        return <p className="moment">{display70Text}</p>;
+      }
+    }
+    else if (readMore) {
+      return <p className="moment">{display70Text}</p>;
+    }
+    else {
+      return <p className="moment">{pin.text}</p>;
+    }
   }
 
-  _renderPinFooterIcons(pin) {
+  _renderPinFooterIcons(pin, readMore) {
     const { currentUser } = this.state;
     const { likers, comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
     const faThumbsIcon = isThumbedUp ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up';
     const thumbsUpBallon = isThumbedUp ? 'cancel this?' : 'thumbs up!';
     return (
-      <div className="pin-footer-icons">
-        <div
-          className="icon-span"
-          // onClick={() => this.onViewPinItem()}
-          data-balloon="share!"
-          data-balloon-pos="top">
-          <i className="fa fa-share-square-o" />
-          <span className="ml-5">3434</span>
-        </div>
-        <div
-          className="icon-span"
-          onClick={() => this.pinTextActions(pin)}
-          data-balloon="add comment!"
-          data-balloon-pos="top">
-          <i className="fa fa-comments-o" />
-          <span className="ml-5">{comments.length}</span>
-        </div>
-        <div
-          className="icon-span"
-          onClick={() => this.onAddAndCancelThumbs(currentUser, pin, isThumbedUp)}
-          data-balloon={thumbsUpBallon}
-          data-balloon-pos="top">
-          <i className={faThumbsIcon} />
-          <span className="ml-5">{likers.length}</span>
-        </div>
+      <Row className="pin-footer-icons">
+        <Col size="3 p-0">
+          {readMore &&
+            <div className="icon-span read-more" onClick={() => this.pinTextActions(pin)}>
+              <span className="">Read more</span>
+            </div>
+          }
+        </Col>
+        <Col size="9 p-0 tar">
+          <div
+            className="icon-span"
+            // onClick={() => this.onViewPinItem()}
+            data-balloon="share!"
+            data-balloon-pos="top">
+            <i className="fa fa-share-square-o" />
+            <span className="ml-5">3434</span>
+          </div>
+          <div
+            className="icon-span"
+            onClick={() => this.pinTextActions(pin)}
+            data-balloon="add comment!"
+            data-balloon-pos="top">
+            <i className="fa fa-comments-o" />
+            <span className="ml-5">{comments.length}</span>
+          </div>
+          <div
+            className="icon-span"
+            onClick={() => this.onAddAndCancelThumbs(currentUser, pin, isThumbedUp)}
+            data-balloon={thumbsUpBallon}
+            data-balloon-pos="top">
+            <i className={faThumbsIcon} />
+            <span className="ml-5">{likers.length}</span>
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+
+  _renderPinitemContent(pin, showImage, readMore) {
+    return (
+      <div className="">
+        {showImage && <Row className="mb-15">{this._renderPinitemImage(pin)}</Row>}
+        <Row className="mb-10">{this._renderPinUserInfo(pin)}</Row>
+        <Row className="mb-10">{this._renderTextPin(pin, readMore)}</Row>
+        <Row className="mb-5">{this._renderPinFooterIcons(pin, readMore)}</Row>
       </div>
     );
   }
 
   render() {
-    const { pin, specialClass } = this.props;
-    const isArticle = pin.type === 'article';
-
+    const { pin, showImage, specialClass, readMore } = this.props;
+    const pinStyle = specialClass ? `pin ${specialClass}` : 'pin';
     return (
-      <div className={`pin ${specialClass}`}>
-        {!isArticle && <div className="pin-heading text-uc p-0">{this._renderPinHeader(pin)}</div>}
-        <div className="pin-body p-0">{this._renderPinBody(pin, isArticle)}</div>
-        {!isArticle && <div className="pin-footer p-0 tal">{this._renderPinFooterIcons(pin)}</div>}
+      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`}>
+        <div className="pin-body p-0">{this._renderPinitemContent(pin, showImage, readMore)}</div>
       </div>
     );
   }
