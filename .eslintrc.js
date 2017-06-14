@@ -43,7 +43,8 @@ module.exports = {
     "padded-blocks": 0,
     "import/newline-after-import": 0,
     'new-cap': 0,
-    'camelcase': 0
+    'camelcase': 0,
+    "linebreak-style": "off"
   },
   "globals": {
     "document": true,
