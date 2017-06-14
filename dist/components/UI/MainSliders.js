@@ -90,7 +90,7 @@ class MainSliders extends _react2.default.Component {
                 'div',
                 {
                   className: 'tp-caption customin customout',
-                  'data-x': '50',
+                  'data-x': '80',
                   'data-hoffset': '100',
                   'data-y': '110',
                   'data-voffset': '0',

@@ -279,7 +279,7 @@ class PinItem extends _react2.default.Component {
       ),
       _react2.default.createElement(
         _Layout.Row,
-        { className: 'mb-5' },
+        { className: '' },
         this._renderPinFooterIcons(pin, readMore)
       )
     );

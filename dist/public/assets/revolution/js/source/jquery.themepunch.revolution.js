@@ -1,17 +1,15 @@
-"use strict";
-
 /**************************************************************************
  * jquery.themepunch.revolution.js - jQuery Plugin for Revolution Slider
  * @version: 5.2.4 (25.03.2016)
  * @requires jQuery v1.7 or later (tested on 1.9)
  * @author ThemePunch
  **************************************************************************/
-(function (jQuery, undefined) {
+(function(jQuery, undefined) {
   "use strict";
 
   jQuery.fn.extend({
 
-    revolution: function (options) {
+    revolution: function(options) {
 
       // SET DEFAULT VALUES OF ITEM //
       var defaults = {
@@ -122,14 +120,14 @@
               v_align: "center",
               h_offset: 20,
               v_offset: 0,
-              container: "slider"
+              container: "slider",
             },
             right: {
               h_align: "right",
               v_align: "center",
               h_offset: 20,
               v_offset: 0,
-              container: "slider"
+              container: "slider",
             }
           },
           bullets: {
@@ -217,14 +215,15 @@
       // Merge of Defaults
       options = jQuery.extend(true, {}, defaults, options);
 
-      return this.each(function () {
+      return this.each(function() {
+
 
         var c = jQuery(this);
         //REMOVE SLIDES IF SLIDER IS HERO
         if (options.sliderType == "hero") {
-          c.find('>ul>li').each(function (i) {
+          c.find('>ul>li').each(function(i) {
             if (i > 0) jQuery(this).remove();
-          });
+          })
         }
         options.jsFileLocation = options.jsFileLocation || getScriptLocation("themepunch.revolution.min.js");
         options.jsFileLocation = options.jsFileLocation + options.extensions;
@@ -233,9 +232,12 @@
 
         options.rtl = true; //jQuery('body').hasClass("rtl");
 
-        if (options.navigation != undefined && options.navigation.touch != undefined) options.navigation.touch.swipe_min_touches = options.navigation.touch.swipe_min_touches > 5 ? 1 : options.navigation.touch.swipe_min_touches;
+        if (options.navigation != undefined && options.navigation.touch != undefined)
+          options.navigation.touch.swipe_min_touches = options.navigation.touch.swipe_min_touches > 5 ? 1 : options.navigation.touch.swipe_min_touches;
 
-        jQuery(this).on("scriptsloaded", function () {
+
+
+        jQuery(this).on("scriptsloaded", function() {
           if (options.modulesfailing) {
             c.html('<div style="margin:auto;line-height:40px;font-size:14px;color:#fff;padding:15px;background:#e74c3c;margin:20px 0px;">!! Error at loading Slider Revolution 5.0 Extrensions.' + options.errorm + '</div>').show();
             return false;
@@ -250,89 +252,96 @@
         });
         c.data('opt', options);
         waitForScripts(c, options);
-      });
+      })
     },
 
     // Remove a Slide from the Slider
-    revremoveslide: function (sindex) {
+    revremoveslide: function(sindex) {
 
-      return this.each(function () {
+      return this.each(function() {
 
         var container = jQuery(this);
         if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
           var bt = container.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           if (opt && opt.li.length > 0) {
             if (sindex > 0 || sindex <= opt.li.length) {
 
               var li = jQuery(opt.li[sindex]),
-                  ref = li.data("index"),
-                  nextslideafter = false;
+                ref = li.data("index"),
+                nextslideafter = false;
 
               opt.slideamount = opt.slideamount - 1;
               removeNavWithLiref('.tp-bullet', ref, opt);
               removeNavWithLiref('.tp-tab', ref, opt);
               removeNavWithLiref('.tp-thumb', ref, opt);
-              if (li.hasClass('active-revslide')) nextslideafter = true;
+              if (li.hasClass('active-revslide'))
+                nextslideafter = true;
               li.remove();
               opt.li = removeArray(opt.li, sindex);
-              if (opt.carousel && opt.carousel.slides) opt.carousel.slides = removeArray(opt.carousel.slides, sindex);
+              if (opt.carousel && opt.carousel.slides)
+                opt.carousel.slides = removeArray(opt.carousel.slides, sindex)
               opt.thumbs = removeArray(opt.thumbs, sindex);
               if (_R.updateNavIndexes) _R.updateNavIndexes(opt);
               if (nextslideafter) container.revnext();
+
             }
           }
         }
       });
+
     },
 
     // Add a New Call Back to some Module
-    revaddcallback: function (callback) {
-      return this.each(function () {
+    revaddcallback: function(callback) {
+      return this.each(function() {
         var container = jQuery(this);
         if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
           var bt = container.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
-          if (opt.callBackArray === undefined) opt.callBackArray = new Array();
+            opt = bt.data('opt');
+          if (opt.callBackArray === undefined)
+            opt.callBackArray = new Array();
           opt.callBackArray.push(callback);
         }
-      });
+      })
     },
 
     // Get Current Parallax Proc
-    revgetparallaxproc: function () {
+    revgetparallaxproc: function() {
       var container = jQuery(this);
       if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
         var bt = container.parent().find('.tp-bannertimer'),
-            opt = bt.data('opt');
+          opt = bt.data('opt');
         return opt.scrollproc;
       }
+
     },
 
     // ENABLE DEBUG MODE
-    revdebugmode: function () {
-      return this.each(function () {
+    revdebugmode: function() {
+      return this.each(function() {
         var container = jQuery(this);
         if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
           var bt = container.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           opt.debugMode = true;
           containerResized(container, opt);
         }
-      });
+      })
     },
 
     // METHODE SCROLL
-    revscroll: function (oy) {
-      return this.each(function () {
+    revscroll: function(oy) {
+      return this.each(function() {
         var container = jQuery(this);
-        if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) jQuery('body,html').animate({ scrollTop: container.offset().top + container.height() - oy + "px" }, { duration: 400 });
-      });
+        if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0)
+          jQuery('body,html').animate({ scrollTop: (container.offset().top + (container.height()) - oy) + "px" }, { duration: 400 });
+      })
     },
 
     // METHODE PAUSE
-    revredraw: function (oy) {
-      return this.each(function () {
+    revredraw: function(oy) {
+      return this.each(function() {
 
         var container = jQuery(this);
         if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
@@ -340,20 +349,20 @@
           var opt = bt.data('opt');
           containerResized(container, opt);
         }
-      });
+      })
     },
     // METHODE PAUSE
-    revkill: function (oy) {
+    revkill: function(oy) {
 
       var self = this,
-          container = jQuery(this);
+        container = jQuery(this);
 
       punchgs.TweenLite.killDelayedCallsTo(_R.showHideNavElements);
-      if (_R.endMoveCaption) if (opt.endtimeouts && opt.endtimeouts.length > 0) jQuery.each(opt.endtimeouts, function (i, timeo) {
-        clearTimeout(timeo);
-      });
+      if (_R.endMoveCaption)
+        if (opt.endtimeouts && opt.endtimeouts.length > 0)
+          jQuery.each(opt.endtimeouts, function(i, timeo) { clearTimeout(timeo); });
 
-      //punchgs.TweenLite.killDelayedCallsTo(_R.endMoveCaption);
+        //punchgs.TweenLite.killDelayedCallsTo(_R.endMoveCaption);
 
       if (container != undefined && container.length > 0 && jQuery('body').find('#' + container.attr('id')).length > 0) {
 
@@ -361,7 +370,7 @@
         container.data('conthover-changed', 1);
         container.trigger('revolution.slide.onpause');
         var bt = container.parent().find('.tp-bannertimer'),
-            opt = bt.data('opt');
+          opt = bt.data('opt');
         opt.tonpause = true;
         container.trigger('stoptimer');
 
@@ -370,52 +379,53 @@
         container.unbind('hover, mouseover, mouseenter,mouseleave, resize');
         var resizid = "resize.revslider-" + container.attr('id');
         jQuery(window).off(resizid);
-        container.find('*').each(function () {
+        container.find('*').each(function() {
           var el = jQuery(this);
 
           el.unbind('on, hover, mouseenter,mouseleave,mouseover, resize,restarttimer, stoptimer');
           el.off('on, hover, mouseenter,mouseleave,mouseover, resize');
           el.data('mySplitText', null);
           el.data('ctl', null);
-          if (el.data('tween') != undefined) el.data('tween').kill();
-          if (el.data('kenburn') != undefined) el.data('kenburn').kill();
-          if (el.data('timeline_out') != undefined) el.data('timeline_out').kill();
-          if (el.data('timeline') != undefined) el.data('timeline').kill();
+          if (el.data('tween') != undefined)
+            el.data('tween').kill();
+          if (el.data('kenburn') != undefined)
+            el.data('kenburn').kill();
+          if (el.data('timeline_out') != undefined)
+            el.data('timeline_out').kill();
+          if (el.data('timeline') != undefined)
+            el.data('timeline').kill();
 
           el.remove();
           el.empty();
           el = null;
-        });
+        })
+
 
         punchgs.TweenLite.killTweensOf(container.find('*'), false);
         punchgs.TweenLite.killTweensOf(container, false);
         bt.remove();
-        try {
-          container.closest('.forcefullwidth_wrapper_tp_banner').remove();
-        } catch (e) {}
-        try {
-          container.closest('.rev_slider_wrapper').remove();
-        } catch (e) {}
-        try {
-          container.remove();
-        } catch (e) {}
+        try { container.closest('.forcefullwidth_wrapper_tp_banner').remove(); } catch (e) {}
+        try { container.closest('.rev_slider_wrapper').remove() } catch (e) {}
+        try { container.remove(); } catch (e) {}
         container.empty();
         container.html();
         container = null;
 
         opt = null;
-        delete self.c;
-        delete self.opt;
+        delete(self.c);
+        delete(self.opt);
 
         return true;
       } else {
         return false;
       }
+
+
     },
 
     // METHODE PAUSE
-    revpause: function () {
-      return this.each(function () {
+    revpause: function() {
+      return this.each(function() {
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           c.data('conthover', 1);
@@ -426,12 +436,12 @@
           opt.tonpause = true;
           c.trigger('stoptimer');
         }
-      });
+      })
     },
 
     // METHODE RESUME
-    revresume: function () {
-      return this.each(function () {
+    revresume: function() {
+      return this.each(function() {
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           c.data('conthover', 0);
@@ -442,10 +452,10 @@
           opt.tonpause = false;
           c.trigger('starttimer');
         }
-      });
+      })
     },
 
-    revstart: function () {
+    revstart: function() {
       //return this.each(function() {
       var c = jQuery(this);
       if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0 && c.data('opt')) {
@@ -456,44 +466,47 @@
           console.log("Slider Is Running Already");
           return false;
         }
+
       }
       //})
+
     },
 
     // METHODE NEXT
-    revnext: function () {
-      return this.each(function () {
+    revnext: function() {
+      return this.each(function() {
         // CATCH THE CONTAINER
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           var bt = c.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           _R.callingNewSlide(opt, c, 1);
         }
-      });
+      })
     },
 
     // METHODE RESUME
-    revprev: function () {
-      return this.each(function () {
+    revprev: function() {
+      return this.each(function() {
         // CATCH THE CONTAINER
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           var bt = c.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           _R.callingNewSlide(opt, c, -1);
         }
-      });
+      })
     },
 
     // METHODE LENGTH
-    revmaxslide: function () {
+    revmaxslide: function() {
       // CATCH THE CONTAINER
       return jQuery(this).find('.tp-revslider-mainul >li').length;
     },
 
+
     // METHODE CURRENT
-    revcurrentslide: function () {
+    revcurrentslide: function() {
       // CATCH THE CONTAINER
       var c = jQuery(this);
       if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
@@ -504,35 +517,38 @@
     },
 
     // METHODE CURRENT
-    revlastslide: function () {
+    revlastslide: function() {
       // CATCH THE CONTAINER
       return jQuery(this).find('.tp-revslider-mainul >li').length;
     },
 
+
     // METHODE JUMP TO SLIDE
-    revshowslide: function (slide) {
-      return this.each(function () {
+    revshowslide: function(slide) {
+      return this.each(function() {
         // CATCH THE CONTAINER
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           var bt = c.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           _R.callingNewSlide(opt, c, "to" + (slide - 1));
         }
-      });
+      })
     },
-    revcallslidewithid: function (slide) {
-      return this.each(function () {
+    revcallslidewithid: function(slide) {
+      return this.each(function() {
         // CATCH THE CONTAINER
         var c = jQuery(this);
         if (c != undefined && c.length > 0 && jQuery('body').find('#' + c.attr('id')).length > 0) {
           var bt = c.parent().find('.tp-bannertimer'),
-              opt = bt.data('opt');
+            opt = bt.data('opt');
           _R.callingNewSlide(opt, c, slide);
         }
-      });
+      })
     }
   });
+
+
 
   //////////////////////////////////////////////////////////////
   // -	REVOLUTION FUNCTION EXTENSIONS FOR GLOBAL USAGE  -  //
@@ -541,15 +557,18 @@
 
   jQuery.extend(true, _R, {
 
-    simp: function (a, b, basic) {
-      var c = Math.abs(a) - Math.floor(Math.abs(a / b)) * b;
-      if (basic) return c;else return a < 0 ? -1 * c : c;
+    simp: function(a, b, basic) {
+      var c = Math.abs(a) - (Math.floor(Math.abs(a / b)) * b);
+      if (basic)
+        return c;
+      else
+        return a < 0 ? -1 * c : c;
     },
 
     //	-	IS IOS VERSION OLDER THAN 5 ??
-    iOSVersion: function () {
+    iOSVersion: function() {
       var oldios = false;
-      if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/iPad/i)) {
+      if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) {
         if (navigator.userAgent.match(/OS 4_\d like Mac OS X/i)) {
           oldios = true;
         }
@@ -559,8 +578,9 @@
       return oldios;
     },
 
+
     //	-	CHECK IF BROWSER IS IE		-
-    isIE: function (version, comparison) {
+    isIE: function(version, comparison) {
       var $div = jQuery('<div style="display:none;"/>').appendTo(jQuery('body'));
       $div.html('<!--[if ' + (comparison || '') + ' IE ' + (version || '') + ']><a>&nbsp;</a><![endif]-->');
       var ieTest = $div.find('a').length;
@@ -569,45 +589,50 @@
     },
 
     // 	-	IS MOBILE ??
-    is_mobile: function () {
-      var agents = ['android', 'webos', 'iphone', 'ipad', 'blackberry', 'Android', 'webos',, 'iPod', 'iPhone', 'iPad', 'Blackberry', 'BlackBerry'];
+    is_mobile: function() {
+      var agents = ['android', 'webos', 'iphone', 'ipad', 'blackberry', 'Android', 'webos', , 'iPod', 'iPhone', 'iPad', 'Blackberry', 'BlackBerry'];
       var ismobile = false;
       for (var i in agents) {
 
         if (navigator.userAgent.split(agents[i]).length > 1) {
           ismobile = true;
+
         }
       }
       return ismobile;
     },
 
     // -  CALL BACK HANDLINGS - //
-    callBackHandling: function (opt, type, position) {
+    callBackHandling: function(opt, type, position) {
       try {
-        if (opt.callBackArray) jQuery.each(opt.callBackArray, function (i, c) {
-          if (c) {
-            if (c.inmodule && c.inmodule === type) if (c.atposition && c.atposition === position) if (c.callback) c.callback.call();
-          }
-        });
+        if (opt.callBackArray)
+          jQuery.each(opt.callBackArray, function(i, c) {
+            if (c) {
+              if (c.inmodule && c.inmodule === type)
+                if (c.atposition && c.atposition === position)
+                  if (c.callback)
+                    c.callback.call();
+            }
+          });
       } catch (e) {
         console.log("Call Back Failed");
       }
     },
 
-    get_browser: function () {
+    get_browser: function() {
       var N = navigator.appName,
-          ua = navigator.userAgent,
-          tem;
+        ua = navigator.userAgent,
+        tem;
       var M = ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
       if (M && (tem = ua.match(/version\/([\.\d]+)/i)) != null) M[2] = tem[1];
       M = M ? [M[1], M[2]] : [N, navigator.appVersion, '-?'];
       return M[0];
     },
 
-    get_browser_version: function () {
+    get_browser_version: function() {
       var N = navigator.appName,
-          ua = navigator.userAgent,
-          tem;
+        ua = navigator.userAgent,
+        tem;
       var M = ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
       if (M && (tem = ua.match(/version\/([\.\d]+)/i)) != null) M[2] = tem[1];
       M = M ? [M[1], M[2]] : [N, navigator.appVersion, '-?'];
@@ -615,9 +640,9 @@
     },
 
     // GET THE HORIZONTAL OFFSET OF SLIDER BASED ON THE THU`MBNAIL AND TABS LEFT AND RIGHT SIDE
-    getHorizontalOffset: function (container, side) {
+    getHorizontalOffset: function(container, side) {
       var thumbloff = gWiderOut(container, '.outer-left'),
-          thumbroff = gWiderOut(container, '.outer-right');
+        thumbroff = gWiderOut(container, '.outer-right');
 
       switch (side) {
         case "left":
@@ -632,16 +657,19 @@
       }
     },
 
+
     // 	-	CALLING THE NEW SLIDE 	-	//
-    callingNewSlide: function (opt, container, direction) {
+    callingNewSlide: function(opt, container, direction) {
+
 
       var aindex = container.find('.next-revslide').length > 0 ? container.find('.next-revslide').index() : container.find('.processing-revslide').length > 0 ? container.find('.processing-revslide').index() : container.find('.active-revslide').index(),
-          nindex = 0;
+        nindex = 0;
 
       container.find('.next-revslide').removeClass("next-revslide");
 
       // IF WE ARE ON AN INVISIBLE SLIDE CURRENTLY
-      if (container.find('.active-revslide').hasClass("tp-invisible-slide")) aindex = opt.last_shown_slide;
+      if (container.find('.active-revslide').hasClass("tp-invisible-slide"))
+        aindex = opt.last_shown_slide;
 
       // SET NEXT DIRECTION
       if (direction && jQuery.isNumeric(direction) || direction.match(/to/g)) {
@@ -655,36 +683,48 @@
           nindex = direction < 0 ? 0 : direction > opt.slideamount - 1 ? opt.slideamount - 1 : direction;
         }
         container.find('.tp-revslider-slidesli:eq(' + nindex + ')').addClass("next-revslide");
-      } else if (direction) {
+      } else
+      if (direction) {
 
-        container.find('.tp-revslider-slidesli').each(function () {
+        container.find('.tp-revslider-slidesli').each(function() {
           var li = jQuery(this);
           if (li.data('index') === direction) li.addClass("next-revslide");
-        });
+        })
       }
+
 
       nindex = container.find('.next-revslide').index();
       container.trigger("revolution.nextslide.waiting");
 
-      if (nindex !== aindex && nindex != -1) swapSlide(container, opt);else container.find('.next-revslide').removeClass("next-revslide");
+
+      if (nindex !== aindex && nindex != -1)
+        swapSlide(container, opt);
+      else
+        container.find('.next-revslide').removeClass("next-revslide");
     },
 
-    slotSize: function (img, opt) {
+    slotSize: function(img, opt) {
       opt.slotw = Math.ceil(opt.width / opt.slots);
 
-      if (opt.sliderLayout == "fullscreen") opt.sloth = Math.ceil(jQuery(window).height() / opt.slots);else opt.sloth = Math.ceil(opt.height / opt.slots);
+      if (opt.sliderLayout == "fullscreen")
+        opt.sloth = Math.ceil(jQuery(window).height() / opt.slots);
+      else
+        opt.sloth = Math.ceil(opt.height / opt.slots);
 
-      if (opt.autoHeight == "on" && img !== undefined && img !== "") opt.sloth = Math.ceil(img.height() / opt.slots);
+      if (opt.autoHeight == "on" && img !== undefined && img !== "")
+        opt.sloth = Math.ceil(img.height() / opt.slots);
+
+
     },
 
-    setSize: function (opt) {
+    setSize: function(opt) {
 
       var ofh = (opt.top_outer || 0) + (opt.bottom_outer || 0),
-          cpt = parseInt(opt.carousel.padding_top || 0, 0),
-          cpb = parseInt(opt.carousel.padding_bottom || 0, 0),
-          maxhei = opt.gridheight[opt.curWinRange];
+        cpt = parseInt((opt.carousel.padding_top || 0), 0),
+        cpb = parseInt((opt.carousel.padding_bottom || 0), 0),
+        maxhei = opt.gridheight[opt.curWinRange];
 
-      opt.paddings = opt.paddings === undefined ? { top: parseInt(opt.c.parent().css("paddingTop"), 0) || 0, bottom: parseInt(opt.c.parent().css("paddingBottom"), 0) || 0 } : opt.paddings;
+      opt.paddings = opt.paddings === undefined ? { top: (parseInt(opt.c.parent().css("paddingTop"), 0) || 0), bottom: (parseInt(opt.c.parent().css("paddingBottom"), 0) || 0) } : opt.paddings;
 
       maxhei = maxhei < opt.minHeight ? opt.minHeight : maxhei;
       if (opt.sliderLayout == "fullwidth" && opt.autoHeight == "off") punchgs.TweenLite.set(opt.c, { maxHeight: maxhei + "px" });
@@ -705,12 +745,17 @@
         if (opt.fullScreenOffsetContainer != undefined) {
           try {
             var offcontainers = opt.fullScreenOffsetContainer.split(",");
-            if (offcontainers) jQuery.each(offcontainers, function (index, searchedcont) {
-              coh = jQuery(searchedcont).length > 0 ? coh - jQuery(searchedcont).outerHeight(true) : coh;
-            });
+            if (offcontainers)
+              jQuery.each(offcontainers, function(index, searchedcont) {
+                coh = jQuery(searchedcont).length > 0 ? coh - jQuery(searchedcont).outerHeight(true) : coh;
+              });
           } catch (e) {}
           try {
-            if (opt.fullScreenOffset.split("%").length > 1 && opt.fullScreenOffset != undefined && opt.fullScreenOffset.length > 0) coh = coh - jQuery(window).height() * parseInt(opt.fullScreenOffset, 0) / 100;else if (opt.fullScreenOffset != undefined && opt.fullScreenOffset.length > 0) coh = coh - parseInt(opt.fullScreenOffset, 0);
+            if (opt.fullScreenOffset.split("%").length > 1 && opt.fullScreenOffset != undefined && opt.fullScreenOffset.length > 0)
+              coh = coh - (jQuery(window).height() * parseInt(opt.fullScreenOffset, 0) / 100);
+            else
+            if (opt.fullScreenOffset != undefined && opt.fullScreenOffset.length > 0)
+              coh = coh - parseInt(opt.fullScreenOffset, 0);
           } catch (e) {}
         }
 
@@ -722,20 +767,23 @@
         opt.c.css({ 'height': '100%' });
 
         opt.height = coh;
-        if (opt.minHeight != undefined && opt.height < opt.minHeight) opt.height = opt.minHeight;
+        if (opt.minHeight != undefined && opt.height < opt.minHeight)
+          opt.height = opt.minHeight;
       } else {
 
-        if (opt.minHeight != undefined && opt.height < opt.minHeight) opt.height = opt.minHeight;
+        if (opt.minHeight != undefined && opt.height < opt.minHeight)
+          opt.height = opt.minHeight;
         opt.c.height(opt.height);
+
       }
-      var si = { height: cpt + cpb + ofh + opt.height + opt.paddings.top + opt.paddings.bottom };
+      var si = { height: (cpt + cpb + ofh + opt.height + opt.paddings.top + opt.paddings.bottom) };
 
       opt.c.closest('.forcefullwidth_wrapper_tp_banner').find('.tp-fullwidth-forcer').css(si);
       opt.c.closest('.rev_slider_wrapper').css(si);
       setScale(opt);
     },
 
-    enterInViewPort: function (opt) {
+    enterInViewPort: function(opt) {
       // START COUNTER IF VP ENTERED, AND COUNTDOWN WAS NOT ON YET
       if (opt.waitForCountDown) {
         countDown(opt.c, opt);
@@ -751,72 +799,83 @@
         opt.c.trigger("starttimer");
       }
 
+
       if (opt.lastplayedvideos != undefined && opt.lastplayedvideos.length > 0) {
 
-        jQuery.each(opt.lastplayedvideos, function (i, _nc) {
+        jQuery.each(opt.lastplayedvideos, function(i, _nc) {
 
           _R.playVideo(_nc, opt);
         });
       }
     },
 
-    leaveViewPort: function (opt) {
+    leaveViewPort: function(opt) {
       opt.sliderlaststatus = opt.sliderstatus;
       opt.c.trigger("stoptimer");
       if (opt.playingvideos != undefined && opt.playingvideos.length > 0) {
         opt.lastplayedvideos = jQuery.extend(true, [], opt.playingvideos);
-        if (opt.playingvideos) jQuery.each(opt.playingvideos, function (i, _nc) {
-          if (_R.stopVideo) _R.stopVideo(_nc, opt);
-        });
+        if (opt.playingvideos)
+          jQuery.each(opt.playingvideos, function(i, _nc) {
+            if (_R.stopVideo) _R.stopVideo(_nc, opt);
+          });
       }
     },
 
-    unToggleState: function (a) {
-      if (a != undefined && a.length > 0) jQuery.each(a, function (i, layer) {
-        layer.removeClass("rs-toggle-content-active");
-      });
+    unToggleState: function(a) {
+      if (a != undefined && a.length > 0)
+        jQuery.each(a, function(i, layer) {
+          layer.removeClass("rs-toggle-content-active");
+        });
     },
 
-    toggleState: function (a) {
-      if (a != undefined && a.length > 0) jQuery.each(a, function (i, layer) {
-        layer.addClass("rs-toggle-content-active");
-      });
+    toggleState: function(a) {
+      if (a != undefined && a.length > 0)
+        jQuery.each(a, function(i, layer) {
+          layer.addClass("rs-toggle-content-active");
+        });
     },
-    lastToggleState: function (a) {
+    lastToggleState: function(a) {
       var state = 0;
-      if (a != undefined && a.length > 0) jQuery.each(a, function (i, layer) {
-        state = layer.hasClass("rs-toggle-content-active");
-      });
+      if (a != undefined && a.length > 0)
+        jQuery.each(a, function(i, layer) {
+          state = layer.hasClass("rs-toggle-content-active");
+        });
       return state;
     }
 
   });
 
+
   var _ISM = _R.is_mobile();
 
+
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  var removeArray = function (arr, i) {
+  var removeArray = function(arr, i) {
     var newarr = [];
-    jQuery.each(arr, function (a, b) {
+    jQuery.each(arr, function(a, b) {
       if (a != i) newarr.push(b);
-    });
+    })
     return newarr;
-  };
+  }
 
-  var removeNavWithLiref = function (a, ref, opt) {
-    opt.c.find(a).each(function () {
+  var removeNavWithLiref = function(a, ref, opt) {
+    opt.c.find(a).each(function() {
       var a = jQuery(this);
-      if (a.data('liref') === ref) a.remove();
-    });
-  };
+      if (a.data('liref') === ref)
+        a.remove();
+    })
+  }
 
-  var lAjax = function (s, o) {
+
+  var lAjax = function(s, o) {
     if (jQuery('body').data(s)) return false;
     if (o.filesystem) {
-      if (o.errorm === undefined) o.errorm = "<br>Local Filesystem Detected !<br>Put this to your header:";
+      if (o.errorm === undefined)
+        o.errorm = "<br>Local Filesystem Detected !<br>Put this to your header:";
       console.warn('Local Filesystem detected !');
       o.errorm = o.errorm + '<br>&lt;script type="text/javascript" src="' + o.jsFileLocation + s + o.extensions_suffix + '"&gt;&lt;/script&gt;';
       console.warn(o.jsFileLocation + s + o.extensions_suffix + ' could not be loaded !');
@@ -829,18 +888,18 @@
       url: o.jsFileLocation + s + o.extensions_suffix,
       'dataType': 'script',
       'cache': true,
-      "error": function (e) {
-        console.warn("Slider Revolution 5.0 Error !");
-        console.error("Failure at Loading:" + s + o.extensions_suffix + " on Path:" + o.jsFileLocation);
+      "error": function(e) {
+        console.warn("Slider Revolution 5.0 Error !")
+        console.error("Failure at Loading:" + s + o.extensions_suffix + " on Path:" + o.jsFileLocation)
         console.info(e);
       }
     });
     jQuery('body').data(s, true);
-  };
+  }
 
-  var getNeededScripts = function (o, c) {
+  var getNeededScripts = function(o, c) {
     var n = new Object(),
-        _n = o.navigation;
+      _n = o.navigation;
 
     n.kenburns = false;
     n.parallax = false;
@@ -850,6 +909,9 @@
     n.actions = false;
     n.layeranim = false;
     n.migration = false;
+
+
+
 
     // MIGRATION EXTENSION
     if (!c.data('version') || !c.data('version').toString().match(/5./gi)) {
@@ -863,36 +925,45 @@
       n.migration = true;
     } else {
       // KEN BURN MODUL
-      c.find('img').each(function () {
+      c.find('img').each(function() {
         if (jQuery(this).data('kenburns') == "on") n.kenburns = true;
       });
 
       // NAVIGATION EXTENSTION
-      if (o.sliderType == "carousel" || _n.keyboardNavigation == "on" || _n.mouseScrollNavigation == "on" || _n.touch.touchenabled == "on" || _n.arrows.enable || _n.bullets.enable || _n.thumbnails.enable || _n.tabs.enable) n.navigation = true;
+      if (o.sliderType == "carousel" || _n.keyboardNavigation == "on" || _n.mouseScrollNavigation == "on" || _n.touch.touchenabled == "on" || _n.arrows.enable || _n.bullets.enable || _n.thumbnails.enable || _n.tabs.enable)
+        n.navigation = true;
 
       // LAYERANIM, VIDEOS, ACTIONS EXTENSIONS
-      c.find('.tp-caption, .tp-static-layer, .rs-background-video-layer').each(function () {
+      c.find('.tp-caption, .tp-static-layer, .rs-background-video-layer').each(function() {
         var _nc = jQuery(this);
-        if (_nc.data('ytid') != undefined || _nc.find('iframe').length > 0 && _nc.find('iframe').attr('src').toLowerCase().indexOf('youtube') > 0) n.videos = true;
-        if (_nc.data('vimeoid') != undefined || _nc.find('iframe').length > 0 && _nc.find('iframe').attr('src').toLowerCase().indexOf('vimeo') > 0) n.videos = true;
-        if (_nc.data('actions') !== undefined) n.actions = true;
+        if ((_nc.data('ytid') != undefined || _nc.find('iframe').length > 0 && _nc.find('iframe').attr('src').toLowerCase().indexOf('youtube') > 0))
+          n.videos = true;
+        if ((_nc.data('vimeoid') != undefined || _nc.find('iframe').length > 0 && _nc.find('iframe').attr('src').toLowerCase().indexOf('vimeo') > 0))
+          n.videos = true;
+        if (_nc.data('actions') !== undefined)
+          n.actions = true;
         n.layeranim = true;
       });
 
-      c.find('li').each(function () {
+      c.find('li').each(function() {
         if (jQuery(this).data('link') && jQuery(this).data('link') != undefined) {
           n.layeranim = true;
           n.actions = true;
         }
-      });
+      })
 
       // VIDEO EXTENSION
-      if (!n.videos && (c.find('.rs-background-video-layer').length > 0 || c.find(".tp-videolayer").length > 0 || c.find(".tp-audiolayer") || c.find('iframe').length > 0 || c.find('video').length > 0)) n.videos = true;
+      if (!n.videos && (c.find('.rs-background-video-layer').length > 0 || c.find(".tp-videolayer").length > 0 || c.find(".tp-audiolayer") || c.find('iframe').length > 0 || c.find('video').length > 0))
+        n.videos = true;
 
       // VIDEO EXTENSION
-      if (o.sliderType == "carousel") n.carousel = true;
+      if (o.sliderType == "carousel")
+        n.carousel = true;
 
-      if (o.parallax.type !== "off" || o.viewPort.enable || o.viewPort.enable == "true") n.parallax = true;
+
+
+      if (o.parallax.type !== "off" || o.viewPort.enable || o.viewPort.enable == "true")
+        n.parallax = true;
     }
 
     if (o.sliderType == "hero") {
@@ -904,6 +975,7 @@
       n.filesystem = true;
       o.filesystem = true;
     }
+
 
     // LOAD THE NEEDED LIBRARIES
     if (n.videos && typeof _R.isVideoPlaying == 'undefined') lAjax('revolution.extension.video', o);
@@ -917,121 +989,158 @@
     if (n.parallax && typeof _R.checkForParallax == 'undefined') lAjax('revolution.extension.parallax', o);
 
     if (o.addons != undefined && o.addons.length > 0) {
-      jQuery.each(o.addons, function (i, obj) {
-        if (typeof obj === "object" && obj.fileprefix != undefined) lAjax(obj.fileprefix, o);
-      });
+      jQuery.each(o.addons, function(i, obj) {
+        if (typeof obj === "object" && obj.fileprefix != undefined)
+          lAjax(obj.fileprefix, o);
+      })
     }
 
+
     return n;
-  };
+  }
 
   ///////////////////////////////////
   //   -  WAIT FOR SCRIPT LOADS  - //
   ///////////////////////////////////
-  var waitForScripts = function (c, o) {
+  var waitForScripts = function(c, o) {
     // CHECK KEN BURN DEPENDENCIES
     var addonsloaded = true,
-        n = o.scriptsneeded;
+      n = o.scriptsneeded;
 
     // CHECK FOR ADDONS
     if (o.addons != undefined && o.addons.length > 0) {
-      jQuery.each(o.addons, function (i, obj) {
+      jQuery.each(o.addons, function(i, obj) {
         if (typeof obj === "object" && obj.init != undefined) {
           if (_R[obj.init] === undefined) addonsloaded = false;
         }
-      });
+      })
     }
 
-    if (n.filesystem || typeof punchgs !== 'undefined' && addonsloaded && (!n.kenburns || n.kenburns && typeof _R.stopKenBurn !== 'undefined') && (!n.navigation || n.navigation && typeof _R.createNavigation !== 'undefined') && (!n.carousel || n.carousel && typeof _R.prepareCarousel !== 'undefined') && (!n.videos || n.videos && typeof _R.resetVideo !== 'undefined') && (!n.actions || n.actions && typeof _R.checkActions !== 'undefined') && (!n.layeranim || n.layeranim && typeof _R.handleStaticLayers !== 'undefined') && (!n.migration || n.migration && typeof _R.migration !== 'undefined') && (!n.parallax || n.parallax && typeof _R.checkForParallax !== 'undefined') && (n.carousel || !n.carousel && typeof _R.animateSlide !== 'undefined')) c.trigger("scriptsloaded");else setTimeout(function () {
-      waitForScripts(c, o);
-    }, 50);
-  };
+    if (n.filesystem ||
+      (typeof punchgs !== 'undefined' &&
+        (addonsloaded) &&
+        (!n.kenburns || (n.kenburns && typeof _R.stopKenBurn !== 'undefined')) &&
+        (!n.navigation || (n.navigation && typeof _R.createNavigation !== 'undefined')) &&
+        (!n.carousel || (n.carousel && typeof _R.prepareCarousel !== 'undefined')) &&
+        (!n.videos || (n.videos && typeof _R.resetVideo !== 'undefined')) &&
+        (!n.actions || (n.actions && typeof _R.checkActions !== 'undefined')) &&
+        (!n.layeranim || (n.layeranim && typeof _R.handleStaticLayers !== 'undefined')) &&
+        (!n.migration || (n.migration && typeof _R.migration !== 'undefined')) &&
+        (!n.parallax || (n.parallax && typeof _R.checkForParallax !== 'undefined')) &&
+        (n.carousel || (!n.carousel && typeof _R.animateSlide !== 'undefined'))
+      ))
+      c.trigger("scriptsloaded");
+    else
+      setTimeout(function() {
+        waitForScripts(c, o);
+      }, 50);
+
+  }
 
   //////////////////////////////////
   //	-	GET SCRIPT LOCATION	-	//
   //////////////////////////////////
-  var getScriptLocation = function (a) {
+  var getScriptLocation = function(a) {
 
     var srcexp = new RegExp("themepunch.revolution.min.js", "gi"),
-        ret = "";
-    jQuery("script").each(function () {
+      ret = "";
+    jQuery("script").each(function() {
       var src = jQuery(this).attr("src");
-      if (src && src.match(srcexp)) ret = src;
+      if (src && src.match(srcexp))
+        ret = src;
     });
 
     ret = ret.replace('jquery.themepunch.revolution.min.js', '');
     ret = ret.replace('jquery.themepunch.revolution.js', '');
     ret = ret.split("?")[0];
     return ret;
-  };
+  }
 
   //////////////////////////////////////////
   //	-	ADVANCED RESPONSIVE LEVELS	-	//
   //////////////////////////////////////////
-  var setCurWinRange = function (opt, vis) {
+  var setCurWinRange = function(opt, vis) {
     var curlevel = 0,
-        curwidth = 9999,
-        lastmaxlevel = 0,
-        lastmaxid = 0,
-        curid = 0,
-        winw = jQuery(window).width(),
-        l = vis && opt.responsiveLevels == 9999 ? opt.visibilityLevels : opt.responsiveLevels;
+      curwidth = 9999,
+      lastmaxlevel = 0,
+      lastmaxid = 0,
+      curid = 0,
+      winw = jQuery(window).width(),
+      l = vis && opt.responsiveLevels == 9999 ? opt.visibilityLevels : opt.responsiveLevels;
 
-    if (l && l.length) jQuery.each(l, function (index, level) {
-      if (winw < level) {
-        if (lastmaxlevel == 0 || lastmaxlevel > level) {
-          curwidth = level;
-          curid = index;
-          lastmaxlevel = level;
+    if (l && l.length)
+      jQuery.each(l, function(index, level) {
+        if (winw < level) {
+          if (lastmaxlevel == 0 || lastmaxlevel > level) {
+            curwidth = level;
+            curid = index;
+            lastmaxlevel = level;
+          }
         }
-      }
 
-      if (winw > level && lastmaxlevel < level) {
-        lastmaxlevel = level;
-        lastmaxid = index;
-      }
-    });
+        if (winw > level && lastmaxlevel < level) {
+          lastmaxlevel = level;
+          lastmaxid = index;
+        }
+      });
 
-    if (lastmaxlevel < curwidth) curid = lastmaxid;
+    if (lastmaxlevel < curwidth)
+      curid = lastmaxid;
 
-    if (!vis) opt.curWinRange = curid;else opt.forcedWinRange = curid;
-  };
+
+    if (!vis)
+      opt.curWinRange = curid;
+    else
+      opt.forcedWinRange = curid;
+
+
+  }
+
+
+
 
   //////////////////////////////////////////
   //	-	INITIALISATION OF OPTIONS 	-	//
   //////////////////////////////////////////
-  var prepareOptions = function (container, opt) {
+  var prepareOptions = function(container, opt) {
     opt.carousel.maxVisibleItems = opt.carousel.maxVisibleItems < 1 ? 999 : opt.carousel.maxVisibleItems; // === 1 ? 2 : opt.carousel.maxVisibleItems;
     opt.carousel.vertical_align = opt.carousel.vertical_align === "top" ? "0%" : opt.carousel.vertical_align === "bottom" ? "100%" : "50%";
-  };
+  }
 
-  var gWiderOut = function (c, cl) {
+  var gWiderOut = function(c, cl) {
     var r = 0;
-    c.find(cl).each(function () {
+    c.find(cl).each(function() {
       var a = jQuery(this);
-      if (!a.hasClass("tp-forcenotvisible") && r < a.outerWidth()) r = a.outerWidth();
+      if (!a.hasClass("tp-forcenotvisible") && r < a.outerWidth())
+        r = a.outerWidth();
     });
     return r;
-  };
+  }
+
+
+
 
   //////////////////////////////////////////
   //	-	INITIALISATION OF SLIDER	-	//
   //////////////////////////////////////////
-  var initSlider = function (container, opt) {
+  var initSlider = function(container, opt) {
     if (container == undefined) return false;
 
     // CHECK FOR ALTERNATIVE IMAGE, AND IFRAM EXIST, AND WE ARE IN IE8, MOBILE, DRAW IT SIMPLE
-    if (container.data('aimg') != undefined) if (container.data('aie8') == "enabled" && _R.isIE(8) || container.data('amobile') == "enabled" && _ISM) container.html('<img class="tp-slider-alternative-image" src="' + container.data("aimg") + '">');
+    if (container.data('aimg') != undefined)
+      if ((container.data('aie8') == "enabled" && _R.isIE(8)) || (container.data('amobile') == "enabled" && _ISM))
+        container.html('<img class="tp-slider-alternative-image" src="' + container.data("aimg") + '">');
 
-    // PREPRARE SOME CLASSES AND VARIABLES
+      // PREPRARE SOME CLASSES AND VARIABLES
     container.find('>ul').addClass("tp-revslider-mainul");
+
 
     // CREATE SOME DEFAULT OPTIONS FOR LATER
     opt.c = container;
     opt.ul = container.find('.tp-revslider-mainul');
 
     // Remove Not Needed Slides for Mobile Devices
-    opt.ul.find('>li').each(function (i) {
+    opt.ul.find('>li').each(function(i) {
       var li = jQuery(this);
       if (li.data('hideslideonmobile') == "on" && _ISM) li.remove();
       if (li.data('invisible') || li.data('invisible') === true) {
@@ -1040,37 +1149,47 @@
       }
     });
 
+
     if (opt.addons != undefined && opt.addons.length > 0) {
-      jQuery.each(opt.addons, function (i, obj) {
+      jQuery.each(opt.addons, function(i, obj) {
         if (typeof obj === "object" && obj.init != undefined) {
           _R[obj.init](eval(obj.params));
         }
-      });
+      })
     }
+
+
 
     opt.cid = container.attr('id');
     opt.ul.css({ visibility: "visible" });
     opt.slideamount = opt.ul.find('>li').not('.tp-invisible-slide').length;
     opt.slayers = container.find('.tp-static-layers');
 
-    if (opt.waitForInit == true) return;else {
+    if (opt.waitForInit == true)
+      return;
+    else {
       container.data('opt', opt);
       runSlider(container, opt);
     }
-  };
 
-  var runSlider = function (container, opt) {
+  }
+
+  var runSlider = function(container, opt) {
+
 
     opt.sliderisrunning = true;
     // Save Original Index of Slides
-    opt.ul.find('>li').each(function (i) {
+    opt.ul.find('>li').each(function(i) {
       jQuery(this).data('originalindex', i);
     });
 
+
+
+
     // RANDOMIZE THE SLIDER SHUFFLE MODE
     if (opt.shuffle == "on") {
-      var fsa = new Object(),
-          fli = opt.ul.find('>li:first-child');
+      var fsa = new Object,
+        fli = opt.ul.find('>li:first-child');
       fsa.fstransition = fli.data('fstransition');
       fsa.fsmasterspeed = fli.data('fsmasterspeed');
       fsa.fsslotamount = fli.data('fsslotamount');
@@ -1093,6 +1212,7 @@
     opt.li = opt.ul.find('>li').not('.tp-invisible-slide');
     opt.inli = opt.ul.find('>li.tp-invisible-slide');
 
+
     opt.thumbs = new Array();
 
     opt.slots = 4;
@@ -1103,26 +1223,31 @@
     opt.conw = container.width();
     opt.conh = container.height();
 
-    if (opt.responsiveLevels.length > 1) opt.responsiveLevels[0] = 9999;else opt.responsiveLevels = 9999;
+    if (opt.responsiveLevels.length > 1)
+      opt.responsiveLevels[0] = 9999;
+    else
+      opt.responsiveLevels = 9999;
 
     // RECORD THUMBS AND SET INDEXES
-    jQuery.each(opt.allli, function (index, li) {
+    jQuery.each(opt.allli, function(index, li) {
       var li = jQuery(li),
-          img = li.find('.rev-slidebg') || li.find('img').first(),
-          i = 0;
+        img = li.find('.rev-slidebg') || li.find('img').first(),
+        i = 0;
+
 
       li.addClass("tp-revslider-slidesli");
       if (li.data('index') === undefined) li.data('index', 'rs-' + Math.round(Math.random() * 999999));
 
-      var obj = new Object();
+      var obj = new Object;
       obj.params = new Array();
 
       obj.id = li.data('index');
       obj.src = li.data('thumb') !== undefined ? li.data('thumb') : img.data('lazyload') !== undefined ? img.data('lazyload') : img.attr('src');
-      if (li.data('title') !== undefined) obj.params.push({ from: RegExp("\\{\\{title\\}\\}", "g"), to: li.data("title") });
-      if (li.data('description') !== undefined) obj.params.push({ from: RegExp("\\{\\{description\\}\\}", "g"), to: li.data("description") });
+      if (li.data('title') !== undefined) obj.params.push({ from: RegExp("\\{\\{title\\}\\}", "g"), to: li.data("title") })
+      if (li.data('description') !== undefined) obj.params.push({ from: RegExp("\\{\\{description\\}\\}", "g"), to: li.data("description") })
       for (var i = 1; i <= 10; i++) {
-        if (li.data("param" + i) !== undefined) obj.params.push({ from: RegExp("\\{\\{param" + i + "\\}\\}", "g"), to: li.data("param" + i) });
+        if (li.data("param" + i) !== undefined)
+          obj.params.push({ from: RegExp("\\{\\{param" + i + "\\}\\}", "g"), to: li.data("param" + i) })
       }
       opt.thumbs.push(obj);
 
@@ -1131,20 +1256,25 @@
       // IF LINK ON SLIDE EXISTS, NEED TO CREATE A PROPER LAYER FOR IT.
       if (li.data('link') != undefined) {
         var link = li.data('link'),
-            target = li.data('target') || "_self",
-            zindex = li.data('slideindex') === "back" ? 0 : 60,
-            linktoslide = li.data('linktoslide'),
-            checksl = linktoslide;
+          target = li.data('target') || "_self",
+          zindex = li.data('slideindex') === "back" ? 0 : 60,
+          linktoslide = li.data('linktoslide'),
+          checksl = linktoslide;
 
-        if (linktoslide != undefined) if (linktoslide != "next" && linktoslide != "prev") opt.allli.each(function () {
-          var t = jQuery(this);
-          if (t.data('origindex') + 1 == checksl) linktoslide = t.data('index');
-        });
+        if (linktoslide != undefined)
+          if (linktoslide != "next" && linktoslide != "prev")
+            opt.allli.each(function() {
+              var t = jQuery(this);
+              if (t.data('origindex') + 1 == checksl) linktoslide = t.data('index');
+            });
+
 
         if (link != "slide") linktoslide = "no";
 
         var apptxt = '<div class="tp-caption slidelink" style="cursor:pointer;width:100%;height:100%;z-index:' + zindex + ';" data-x="center" data-y="center" data-basealign="slide" ',
-            jts = linktoslide === "scroll_under" ? '[{"event":"click","action":"scrollbelow","offset":"100px","delay":"0"}]' : linktoslide === "prev" ? '[{"event":"click","action":"jumptoslide","slide":"prev","delay":"0.2"}]' : linktoslide === "next" ? '[{"event":"click","action":"jumptoslide","slide":"next","delay":"0.2"}]' : '[{"event":"click","action":"jumptoslide","slide":"' + linktoslide + '","delay":"0.2"}]';
+          jts = linktoslide === "scroll_under" ? '[{"event":"click","action":"scrollbelow","offset":"100px","delay":"0"}]' :
+          linktoslide === "prev" ? '[{"event":"click","action":"jumptoslide","slide":"prev","delay":"0.2"}]' :
+          linktoslide === "next" ? '[{"event":"click","action":"jumptoslide","slide":"next","delay":"0.2"}]' : '[{"event":"click","action":"jumptoslide","slide":"' + linktoslide + '","delay":"0.2"}]'
 
         apptxt = linktoslide == "no" ? apptxt + ' data-start="0">' : apptxt + 'data-actions=' + "'" + jts + "'" + ' data-start="0">';
         apptxt = apptxt + '<a style="width:100%;height:100%;display:block"';
@@ -1154,6 +1284,7 @@
       }
     });
 
+
     // CREATE GRID WIDTH AND HEIGHT ARRAYS
     opt.rle = opt.responsiveLevels.length || 1;
     opt.gridwidth = cArray(opt.gridwidth, opt.rle);
@@ -1161,15 +1292,16 @@
     // END OF VERSION 5.0 INIT MODIFICATION
 
 
+
     // SIMPLIFY ANIMATIONS ON OLD IOS AND IE8 IF NEEDED
     if (opt.simplifyAll == "on" && (_R.isIE(8) || _R.iOSVersion())) {
-      container.find('.tp-caption').each(function () {
+      container.find('.tp-caption').each(function() {
         var tc = jQuery(this);
         tc.removeClass("customin customout").addClass("fadein fadeout");
         tc.data('splitin', "");
         tc.data('speed', 400);
-      });
-      opt.allli.each(function () {
+      })
+      opt.allli.each(function() {
         var li = jQuery(this);
         li.data('transition', "fade");
         li.data('masterspeed', 500);
@@ -1190,8 +1322,8 @@
     if (opt.sliderLayout != "auto" && container.closest('.forcefullwidth_wrapper_tp_banner').length == 0) {
       if (opt.sliderLayout !== "fullscreen" || opt.fullScreenAutoWidth != "on") {
         var cp = container.parent(),
-            mb = cp.css('marginBottom'),
-            mt = cp.css('marginTop');
+          mb = cp.css('marginBottom'),
+          mt = cp.css('marginTop');
         mb = mb === undefined ? 0 : mb;
         mt = mt === undefined ? 0 : mt;
 
@@ -1202,6 +1334,8 @@
         container.parent().css({ position: 'absolute' });
       }
     }
+
+
 
     // SHADOW ADD ONS
     if (opt.shadow !== undefined && opt.shadow > 0) {
@@ -1228,17 +1362,22 @@
       // CHECK IF FIREFOX 13 IS ON WAY.. IT HAS A STRANGE BUG, CSS ANIMATE SHOULD NOT BE USED
       opt.firefox13 = false;
       opt.ie = !jQuery.support.opacity;
-      opt.ie9 = document.documentMode == 9;
+      opt.ie9 = (document.documentMode == 9);
 
       opt.origcd = opt.delay;
 
+
+
       // CHECK THE jQUERY VERSION
       var version = jQuery.fn.jquery.split('.'),
-          versionTop = parseFloat(version[0]),
-          versionMinor = parseFloat(version[1]),
-          versionIncrement = parseFloat(version[2] || '0');
-      if (versionTop == 1 && versionMinor < 7) container.html('<div style="text-align:center; padding:40px 0px; font-size:20px; color:#992222;"> The Current Version of jQuery:' + version + ' <br>Please update your jQuery Version to min. 1.7 in Case you wish to use the Revolution Slider Plugin</div>');
+        versionTop = parseFloat(version[0]),
+        versionMinor = parseFloat(version[1]),
+        versionIncrement = parseFloat(version[2] || '0');
+      if (versionTop == 1 && versionMinor < 7)
+        container.html('<div style="text-align:center; padding:40px 0px; font-size:20px; color:#992222;"> The Current Version of jQuery:' + version + ' <br>Please update your jQuery Version to min. 1.7 in Case you wish to use the Revolution Slider Plugin</div>');
       if (versionTop > 1) opt.ie = false;
+
+
 
       // PREPARE VIDEO PLAYERS
       var addedApis = new Object();
@@ -1246,36 +1385,39 @@
       addedApis.addedvim = 0;
       addedApis.addedvid = 0;
 
-      container.find('.tp-caption, .rs-background-video-layer').each(function (i) {
+      container.find('.tp-caption, .rs-background-video-layer').each(function(i) {
         var _nc = jQuery(this),
-            an = _nc.data('autoplayonlyfirsttime'),
-            ap = _nc.data('autoplay'),
-            al = _nc.hasClass("tp-audiolayer"),
-            loop = _nc.data('videoloop');
+          an = _nc.data('autoplayonlyfirsttime'),
+          ap = _nc.data('autoplay'),
+          al = _nc.hasClass("tp-audiolayer"),
+          loop = _nc.data('videoloop');
 
-        if (_nc.hasClass("tp-static-layer") && _R.handleStaticLayers) _R.handleStaticLayers(_nc, opt);
+
+        if (_nc.hasClass("tp-static-layer") && _R.handleStaticLayers)
+          _R.handleStaticLayers(_nc, opt);
 
         var pom = _nc.data('noposteronmobile') || _nc.data('noPosterOnMobile') || _nc.data('posteronmobile') || _nc.data('posterOnMobile') || _nc.data('posterOnMObile');
         _nc.data('noposteronmobile', pom);
 
         // FIX VISIBLE IFRAME BUG IN SAFARI
         var iff = 0;
-        _nc.find('iframe').each(function () {
+        _nc.find('iframe').each(function() {
           punchgs.TweenLite.set(jQuery(this), { autoAlpha: 0 });
           iff++;
-        });
-        if (iff > 0) _nc.data('iframes', true);
+        })
+        if (iff > 0)
+          _nc.data('iframes', true)
 
         if (_nc.hasClass("tp-caption")) {
           // PREPARE LAYERS AND WRAP THEM WITH PARALLAX, LOOP, MASK HELP CONTAINERS
           var ec = _nc.hasClass("slidelink") ? "width:100% !important;height:100% !important;" : "";
           _nc.wrap('<div class="tp-parallax-wrap" style="' + ec + 'position:absolute;visibility:hidden"><div class="tp-loop-wrap" style="' + ec + 'position:absolute;"><div class="tp-mask-wrap" style="' + ec + 'position:absolute" ></div></div></div>');
           var lar = ['pendulum', 'rotate', 'slideloop', 'pulse', 'wave'],
-              _lc = _nc.closest('.tp-loop-wrap');
+            _lc = _nc.closest('.tp-loop-wrap');
 
-          jQuery.each(lar, function (i, k) {
+          jQuery.each(lar, function(i, k) {
             var lw = _nc.find('.rs-' + k),
-                f = lw.data() || "";
+              f = lw.data() || "";
             if (f != "") {
               _lc.data(f);
               _lc.addClass("rs-" + k);
@@ -1291,7 +1433,8 @@
 
         checkHoverDependencies(_nc, opt);
 
-        if (_R.checkVideoApis) addedApis = _R.checkVideoApis(_nc, opt, addedApis);
+        if (_R.checkVideoApis)
+          addedApis = _R.checkVideoApis(_nc, opt, addedApis);
 
         // REMOVE VIDEO AUTOPLAYS FOR MOBILE DEVICES
         if (_ISM) {
@@ -1309,27 +1452,38 @@
 
         _nc.data('videoloop', loop);
 
+
         // PREPARE TIMER BEHAVIOUR BASED ON AUTO PLAYED VIDEOS IN SLIDES
-        if (!al && (an == true || an == "true" || ap == "1sttime") && loop != "loopandnoslidestop") _nc.closest('li.tp-revslider-slidesli').addClass("rs-pause-timer-once");
+        if (!al && (an == true || an == "true" || ap == "1sttime") && loop != "loopandnoslidestop")
+          _nc.closest('li.tp-revslider-slidesli').addClass("rs-pause-timer-once");
 
-        if (!al && (ap == true || ap == "true" || ap == "on" || ap == "no1sttime") && loop != "loopandnoslidestop") _nc.closest('li.tp-revslider-slidesli').addClass("rs-pause-timer-always");
+
+        if (!al && (ap == true || ap == "true" || ap == "on" || ap == "no1sttime") && loop != "loopandnoslidestop")
+          _nc.closest('li.tp-revslider-slidesli').addClass("rs-pause-timer-always");
+
+
+
+
       });
 
-      container.hover(function () {
-        container.trigger('tp-mouseenter');
-        opt.overcontainer = true;
-      }, function () {
-        container.trigger('tp-mouseleft');
-        opt.overcontainer = false;
-      });
+      container.hover(
+        function() {
+          container.trigger('tp-mouseenter');
+          opt.overcontainer = true;
+        },
+        function() {
+          container.trigger('tp-mouseleft');
+          opt.overcontainer = false;
+        });
 
-      container.on('mouseover', function () {
+
+      container.on('mouseover', function() {
         container.trigger('tp-mouseover');
         opt.overcontainer = true;
-      });
+      })
 
       // REMOVE ANY VIDEO JS SETTINGS OF THE VIDEO  IF NEEDED  (OLD FALL BACK, AND HELP FOR 3THD PARTY PLUGIN CONFLICTS)
-      container.find('.tp-caption video').each(function (i) {
+      container.find('.tp-caption video').each(function(i) {
         var v = jQuery(this);
         v.removeClass("video-js vjs-default-skin");
         v.attr("preload", "");
@@ -1339,29 +1493,36 @@
       //PREPARE LOADINGS ALL IN SEQUENCE
       if (opt.sliderType !== "standard") opt.lazyType = "all";
 
+
       // PRELOAD STATIC LAYERS
       loadImages(container.find('.tp-static-layers'), opt, 0, true);
 
-      waitForCurrentImages(container.find('.tp-static-layers'), opt, function () {
-        container.find('.tp-static-layers img').each(function () {
+      waitForCurrentImages(container.find('.tp-static-layers'), opt, function() {
+        container.find('.tp-static-layers img').each(function() {
           var e = jQuery(this),
-              src = e.data('lazyload') != undefined ? e.data('lazyload') : e.attr('src'),
-              loadobj = getLoadObj(opt, src);
-          e.attr('src', loadobj.src);
-        });
-      });
+            src = e.data('lazyload') != undefined ? e.data('lazyload') : e.attr('src'),
+            loadobj = getLoadObj(opt, src);
+          e.attr('src', loadobj.src)
+        })
+      })
+
+
 
       // SET ALL LI AN INDEX AND INIT LAZY LOADING
-      opt.allli.each(function (i) {
+      opt.allli.each(function(i) {
         var li = jQuery(this);
 
-        if (opt.lazyType == "all" || opt.lazyType == "smart" && (i == 0 || i == 1 || i == opt.slideamount || i == opt.slideamount - 1)) {
+        if (opt.lazyType == "all" || (opt.lazyType == "smart" && (i == 0 || i == 1 || i == opt.slideamount || i == opt.slideamount - 1))) {
           loadImages(li, opt, i);
-          waitForCurrentImages(li, opt, function () {
-            if (opt.sliderType == "carousel") punchgs.TweenLite.to(li, 1, { autoAlpha: 1, ease: punchgs.Power3.easeInOut });
+          waitForCurrentImages(li, opt, function() {
+            if (opt.sliderType == "carousel")
+              punchgs.TweenLite.to(li, 1, { autoAlpha: 1, ease: punchgs.Power3.easeInOut });
           });
         }
+
       });
+
+
 
       // IF DEEPLINK HAS BEEN SET
       var deeplink = getUrlVars("#")[0];
@@ -1375,20 +1536,30 @@
       }
 
       // PREPARE THE SPINNER
-      container.append('<div class="tp-loader ' + opt.spinner + '">' + '<div class="dot1"></div>' + '<div class="dot2"></div>' + '<div class="bounce1"></div>' + '<div class="bounce2"></div>' + '<div class="bounce3"></div>' + '</div>');
+      container.append('<div class="tp-loader ' + opt.spinner + '">' +
+        '<div class="dot1"></div>' +
+        '<div class="dot2"></div>' +
+        '<div class="bounce1"></div>' +
+        '<div class="bounce2"></div>' +
+        '<div class="bounce3"></div>' +
+        '</div>');
+
 
       // RESET THE TIMER
       if (container.find('.tp-bannertimer').length === 0) container.append('<div class="tp-bannertimer" style="visibility:hidden"></div>');
       container.find('.tp-bannertimer').css({ 'width': '0%' });
       container.find('.tp-bannertimer').data('opt', opt);
 
+
       // PREPARE THE SLIDES
       opt.ul.css({ 'display': 'block' });
       prepareSlides(container, opt);
       if (opt.parallax.type !== "off") _R.checkForParallax(container, opt);
 
+
       // PREPARE SLIDER SIZE
       _R.setSize(opt);
+
 
       // Call the Navigation Builder
       if (opt.sliderType !== "hero") _R.createNavigation(container, opt);
@@ -1398,40 +1569,51 @@
       opt.inviewport = false;
 
       if (_v != undefined && _v.enable) {
-        if (!jQuery.isNumeric(_v.visible_area)) if (_v.visible_area.indexOf('%') !== -1) _v.visible_area = parseInt(_v.visible_area) / 100;
+        if (!jQuery.isNumeric(_v.visible_area))
+          if (_v.visible_area.indexOf('%') !== -1)
+            _v.visible_area = parseInt(_v.visible_area) / 100;
 
         if (_R.scrollTicker) _R.scrollTicker(opt, container);
       }
 
+
+
       // START THE SLIDER
-      setTimeout(function () {
+      setTimeout(function() {
         if (opt.sliderType == "carousel") _R.prepareCarousel(opt);
 
-        if (!_v.enable || _v.enable && opt.inviewport || _v.enable && !opt.inviewport && !_v.outof == "wait") {
+        if (!_v.enable || (_v.enable && opt.inviewport) || (_v.enable && !opt.inviewport && !_v.outof == "wait")) {
           swapSlide(container, opt);
-        } else opt.waitForFirstSlide = true;
+        } else
+          opt.waitForFirstSlide = true;
 
         if (_R.manageNavigation) _R.manageNavigation(opt);
 
+
         // START COUNTDOWN
         if (opt.slideamount > 1) {
-          if (!_v.enable || _v.enable && opt.inviewport) countDown(container, opt);else opt.waitForCountDown = true;
+          if (!_v.enable || (_v.enable && opt.inviewport))
+            countDown(container, opt);
+          else
+            opt.waitForCountDown = true;
         }
-        setTimeout(function () {
+        setTimeout(function() {
           container.trigger('revolution.slide.onloaded');
         }, 100);
       }, opt.startDelay);
       opt.startDelay = 0;
+
+
 
       /******************************
       	-	FULLSCREEN CHANGE	-
       ********************************/
       // FULLSCREEN MODE TESTING
       jQuery("body").data('rs-fullScreenMode', false);
-      jQuery(window).on('mozfullscreenchange webkitfullscreenchange fullscreenchange', function () {
+      jQuery(window).on('mozfullscreenchange webkitfullscreenchange fullscreenchange', function() {
         jQuery("body").data('rs-fullScreenMode', !jQuery("body").data('rs-fullScreenMode'));
         if (jQuery("body").data('rs-fullScreenMode')) {
-          setTimeout(function () {
+          setTimeout(function() {
             jQuery(window).trigger("resize");
           }, 200);
         }
@@ -1440,27 +1622,30 @@
       var resizid = "resize.revslider-" + container.attr('id');
 
       // IF RESIZED, NEED TO STOP ACTUAL TRANSITION AND RESIZE ACTUAL IMAGES
-      jQuery(window).on(resizid, function () {
+      jQuery(window).on(resizid, function() {
         if (container == undefined) return false;
 
-        if (jQuery('body').find(container) != 0) contWidthManager(opt);
+        if (jQuery('body').find(container) != 0)
+          contWidthManager(opt);
 
-        if (container.outerWidth(true) != opt.width || container.is(":hidden") || opt.sliderLayout == "fullscreen" && jQuery(window).height() != opt.lastwindowheight) {
+        if (container.outerWidth(true) != opt.width || container.is(":hidden") || (opt.sliderLayout == "fullscreen" && jQuery(window).height() != opt.lastwindowheight)) {
           opt.lastwindowheight = jQuery(window).height();
           containerResized(container, opt);
         }
+
+
       });
 
       hideSliderUnder(container, opt);
       contWidthManager(opt);
       if (!opt.fallbacks.disableFocusListener && opt.fallbacks.disableFocusListener != "true" && opt.fallbacks.disableFocusListener !== true) tabBlurringCheck(container, opt);
     }
-  };
+  }
 
   /*************************************
   	-	 CREATE SIMPLE ARRAYS	-
   **************************************/
-  var cArray = function (b, l) {
+  var cArray = function(b, l) {
     if (!jQuery.isArray(b)) {
       var t = b;
       b = new Array();
@@ -1468,96 +1653,117 @@
     }
     if (b.length < l) {
       var t = b[b.length - 1];
-      for (var i = 0; i < l - b.length + 2; i++) b.push(t);
+      for (var i = 0; i < (l - b.length) + 2; i++)
+        b.push(t)
     }
     return b;
-  };
+  }
 
-  var checkHoverDependencies = function (_nc, opt) {
+
+
+  var checkHoverDependencies = function(_nc, opt) {
 
     if (_nc.data('start') === "sliderenter") {
       if (opt.layersonhover === undefined) {
-        opt.c.on('tp-mouseenter', function () {
-          if (opt.layersonhover) jQuery.each(opt.layersonhover, function (i, tnc) {
-            tnc.data('animdirection', "in");
-            var otl = tnc.data('timeline_out'),
-                base_offsetx = opt.sliderType === "carousel" ? 0 : opt.width / 2 - opt.gridwidth[opt.curWinRange] * opt.bw / 2,
+        opt.c.on('tp-mouseenter', function() {
+          if (opt.layersonhover)
+            jQuery.each(opt.layersonhover, function(i, tnc) {
+              tnc.data('animdirection', "in");
+              var otl = tnc.data('timeline_out'),
+                base_offsetx = opt.sliderType === "carousel" ? 0 : opt.width / 2 - (opt.gridwidth[opt.curWinRange] * opt.bw) / 2,
                 base_offsety = 0,
                 cli = tnc.closest('.tp-revslider-slidesli'),
                 stl = tnc.closest('.tp-static-layers');
 
-            if (cli.length > 0 && cli.hasClass("active-revslide") || cli.hasClass("processing-revslide") || stl.length > 0) {
+              if ((cli.length > 0 && (cli.hasClass("active-revslide")) || cli.hasClass("processing-revslide")) || (stl.length > 0)) {
 
-              if (otl != undefined) {
-                otl.pause(0);
-                otl.kill();
+                if (otl != undefined) {
+                  otl.pause(0);
+                  otl.kill();
+                }
+                _R.animateSingleCaption(tnc, opt, base_offsetx, base_offsety, 0, false, true);
+                var tl = tnc.data('timeline');
+                tnc.data('triggerstate', "on");
+                tl.play(0);
               }
-              _R.animateSingleCaption(tnc, opt, base_offsetx, base_offsety, 0, false, true);
-              var tl = tnc.data('timeline');
-              tnc.data('triggerstate', "on");
-              tl.play(0);
-            }
-          });
+            });
         });
-        opt.c.on('tp-mouseleft', function () {
-          if (opt.layersonhover) jQuery.each(opt.layersonhover, function (i, tnc) {
-            tnc.data('animdirection', "out");
-            tnc.data('triggered', true);
-            tnc.data('triggerstate', "off");
-            if (_R.stopVideo) _R.stopVideo(tnc, opt);
-            if (_R.endMoveCaption) _R.endMoveCaption(tnc, null, null, opt);
-          });
+        opt.c.on('tp-mouseleft', function() {
+          if (opt.layersonhover)
+            jQuery.each(opt.layersonhover, function(i, tnc) {
+              tnc.data('animdirection', "out");
+              tnc.data('triggered', true);
+              tnc.data('triggerstate', "off");
+              if (_R.stopVideo) _R.stopVideo(tnc, opt);
+              if (_R.endMoveCaption) _R.endMoveCaption(tnc, null, null, opt);
+            });
         });
-        opt.layersonhover = new Array();
+        opt.layersonhover = new Array;
       }
       opt.layersonhover.push(_nc);
     }
-  };
+  }
 
-  var contWidthManager = function (opt) {
+
+
+  var contWidthManager = function(opt) {
 
     var rl = _R.getHorizontalOffset(opt.c, "left");
 
     if (opt.sliderLayout != "auto" && (opt.sliderLayout !== "fullscreen" || opt.fullScreenAutoWidth != "on")) {
       var loff = Math.ceil(opt.c.closest('.forcefullwidth_wrapper_tp_banner').offset().left - rl);
-      punchgs.TweenLite.set(opt.c.parent(), { 'left': 0 - loff + "px", 'width': jQuery(window).width() - _R.getHorizontalOffset(opt.c, "both") });
+      punchgs.TweenLite.set(opt.c.parent(), { 'left': (0 - loff) + "px", 'width': jQuery(window).width() - _R.getHorizontalOffset(opt.c, "both") });
     } else {
-      if (opt.sliderLayout == "fullscreen" && opt.fullScreenAutoWidth == "on") punchgs.TweenLite.set(opt.ul, { left: 0, width: opt.c.width() });else punchgs.TweenLite.set(opt.ul, { left: rl, width: opt.c.width() - _R.getHorizontalOffset(opt.c, "both") });
+      if (opt.sliderLayout == "fullscreen" && opt.fullScreenAutoWidth == "on")
+        punchgs.TweenLite.set(opt.ul, { left: 0, width: opt.c.width() });
+      else
+        punchgs.TweenLite.set(opt.ul, { left: rl, width: opt.c.width() - _R.getHorizontalOffset(opt.c, "both") });
     }
 
+
     // put Static Layer Wrapper in Position
-    if (opt.slayers && opt.sliderLayout != "fullwidth" && opt.sliderLayout != "fullscreen") punchgs.TweenLite.set(opt.slayers, { left: rl });
-  };
+    if (opt.slayers && (opt.sliderLayout != "fullwidth" && opt.sliderLayout != "fullscreen"))
+      punchgs.TweenLite.set(opt.slayers, { left: rl });
+  }
 
-  var cv = function (a, d) {
+
+  var cv = function(a, d) {
     return a === undefined ? d : a;
-  };
+  }
 
-  var hideSliderUnder = function (container, opt, resized) {
+
+  var hideSliderUnder = function(container, opt, resized) {
     // FIRST TIME STOP/START HIDE / SHOW SLIDER
     //REMOVE AND SHOW SLIDER ON DEMAND
     var contpar = container.parent();
     if (jQuery(window).width() < opt.hideSliderAtLimit) {
       container.trigger('stoptimer');
-      if (contpar.css('display') != "none") contpar.data('olddisplay', contpar.css('display'));
+      if (contpar.css('display') != "none")
+        contpar.data('olddisplay', contpar.css('display'));
       contpar.css({ display: "none" });
     } else {
       if (container.is(":hidden") && resized) {
-        if (contpar.data('olddisplay') != undefined && contpar.data('olddisplay') != "undefined" && contpar.data('olddisplay') != "none") contpar.css({ display: contpar.data('olddisplay') });else contpar.css({ display: "block" });
+        if (contpar.data('olddisplay') != undefined && contpar.data('olddisplay') != "undefined" && contpar.data('olddisplay') != "none")
+          contpar.css({ display: contpar.data('olddisplay') });
+        else
+          contpar.css({ display: "block" });
         container.trigger('restarttimer');
-        setTimeout(function () {
+        setTimeout(function() {
           containerResized(container, opt);
-        }, 150);
+        }, 150)
       }
     }
     if (_R.hideUnHideNav) _R.hideUnHideNav(opt);
-  };
+  }
+
 
   //////////////////////////
   //	CONTAINER RESIZED	//
   /////////////////////////
-  var containerResized = function (c, opt) {
-    if (opt.infullscreenmode == true) opt.minHeight = jQuery(window).height();
+  var containerResized = function(c, opt) {
+    if (opt.infullscreenmode == true)
+      opt.minHeight = jQuery(window).height();
+
 
     setCurWinRange(opt);
     setCurWinRange(opt, true);
@@ -1575,8 +1781,9 @@
       opt.conw = opt.c.width();
       opt.conh = opt.infullscreenmode ? opt.minHeight : opt.c.height();
 
+
       var actsh = c.find('.active-revslide .slotholder'),
-          nextsh = c.find('.processing-revslide .slotholder');
+        nextsh = c.find('.processing-revslide .slotholder');
 
       removeSlots(c, opt, c, 2);
 
@@ -1585,9 +1792,10 @@
         actsh.find('.defaultimg').css({ 'opacity': 1 });
       }
 
+
       if (opt.sliderType == "carousel" && opt.lastconw != opt.conw) {
         clearTimeout(opt.pcartimer);
-        opt.pcartimer = setTimeout(function () {
+        opt.pcartimer = setTimeout(function() {
           _R.prepareCarousel(opt, true);
         }, 100);
         opt.lastconw = opt.conw;
@@ -1595,60 +1803,79 @@
 
       if (_R.manageNavigation) _R.manageNavigation(opt);
 
+
       if (_R.animateTheCaptions) _R.animateTheCaptions(c.find('.active-revslide'), opt, true);
 
-      if (nextsh.data('kenburns') == "on") _R.startKenBurn(nextsh, opt, nextsh.data('kbtl').progress());
+      if (nextsh.data('kenburns') == "on")
+        _R.startKenBurn(nextsh, opt, nextsh.data('kbtl').progress());
 
-      if (actsh.data('kenburns') == "on") _R.startKenBurn(actsh, opt, actsh.data('kbtl').progress());
+      if (actsh.data('kenburns') == "on")
+        _R.startKenBurn(actsh, opt, actsh.data('kbtl').progress());
 
       // DOUBLE CALL FOR SOME FUNCTION TO AVOID PORTRAIT/LANDSCAPE ISSUES, AND TO AVOID FULLSCREEN/NORMAL SWAP ISSUES
       if (_R.animateTheCaptions) _R.animateTheCaptions(nextsh.closest('li'), opt, true);
       if (_R.manageNavigation) _R.manageNavigation(opt);
+
     }
-  };
+
+  }
+
+
+
+
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////       PREPARING / REMOVING		////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  var setScale = function (opt) {
-    opt.bw = opt.width / opt.gridwidth[opt.curWinRange];
-    opt.bh = opt.height / opt.gridheight[opt.curWinRange];
+  var setScale = function(opt) {
+    opt.bw = (opt.width / opt.gridwidth[opt.curWinRange]);
+    opt.bh = (opt.height / opt.gridheight[opt.curWinRange]);
 
-    if (opt.bh > opt.bw) opt.bh = opt.bw;else opt.bw = opt.bh;
 
-    if (opt.bh > 1 || opt.bw > 1) {
-      opt.bw = 1;
-      opt.bh = 1;
-    }
-  };
+    if (opt.bh > opt.bw)
+      opt.bh = opt.bw
+    else
+      opt.bw = opt.bh;
+
+    if (opt.bh > 1 || opt.bw > 1) { opt.bw = 1;
+      opt.bh = 1; }
+  }
+
+
+
+
 
   /////////////////////////////////////////
   //	-	PREPARE THE SLIDES / SLOTS -  //
   ///////////////////////////////////////
-  var prepareSlides = function (container, opt) {
+  var prepareSlides = function(container, opt) {
 
-    container.find('.tp-caption').each(function () {
+    container.find('.tp-caption').each(function() {
       var c = jQuery(this);
       if (c.data('transition') !== undefined) c.addClass(c.data('transition'));
     });
 
     // PREPARE THE UL CONTAINER TO HAVEING MAX HEIGHT AND HEIGHT FOR ANY SITUATION
-    opt.ul.css({ overflow: 'hidden', width: '100%', height: '100%', maxHeight: container.parent().css('maxHeight') });
+    opt.ul.css({ overflow: 'hidden', width: '100%', height: '100%', maxHeight: container.parent().css('maxHeight') })
     if (opt.autoHeight == "on") {
       opt.ul.css({ overflow: 'hidden', width: '100%', height: '100%', maxHeight: "none" });
       container.css({ 'maxHeight': 'none' });
       container.parent().css({ 'maxHeight': 'none' });
     }
     //_R.setSize("",opt);
-    opt.allli.each(function (j) {
+    opt.allli.each(function(j) {
       var li = jQuery(this),
-          originalIndex = li.data('originalindex');
+        originalIndex = li.data('originalindex');
 
       //START WITH CORRECT SLIDE
-      if (opt.startWithSlide != undefined && originalIndex == opt.startWithSlide || opt.startWithSlide === undefined && j == 0) li.addClass("next-revslide");
+      if ((opt.startWithSlide != undefined && originalIndex == opt.startWithSlide) || opt.startWithSlide === undefined && j == 0)
+        li.addClass("next-revslide");
+
 
       // MAKE LI OVERFLOW HIDDEN FOR FURTHER ISSUES
       li.css({ 'width': '100%', 'height': '100%', 'overflow': 'hidden' });
+
     });
 
     if (opt.sliderType === "carousel") {
@@ -1663,10 +1890,10 @@
     // RESOLVE OVERFLOW HIDDEN OF MAIN CONTAINER
     container.parent().css({ 'overflow': 'visible' });
 
-    opt.allli.find('>img').each(function (j) {
+    opt.allli.find('>img').each(function(j) {
 
       var img = jQuery(this),
-          bgvid = img.closest('li').find('.rs-background-video-layer');
+        bgvid = img.closest('li').find('.rs-background-video-layer');
 
       bgvid.addClass("defaultvid").css({ zIndex: 30 });
 
@@ -1683,14 +1910,17 @@
       var dts = img.data();
       img.closest('.slotholder').data(dts);
 
-      if (bgvid.length > 0 && dts.bgparallax != undefined) bgvid.data('bgparallax', dts.bgparallax);
+      if (bgvid.length > 0 && dts.bgparallax != undefined)
+        bgvid.data('bgparallax', dts.bgparallax);
 
-      if (opt.dottedOverlay != "none" && opt.dottedOverlay != undefined) img.closest('.slotholder').append('<div class="tp-dottedoverlay ' + opt.dottedOverlay + '"></div>');
+      if (opt.dottedOverlay != "none" && opt.dottedOverlay != undefined)
+        img.closest('.slotholder').append('<div class="tp-dottedoverlay ' + opt.dottedOverlay + '"></div>');
 
       var src = img.attr('src');
       dts.src = src;
       dts.bgfit = dts.bgfit || "cover";
-      dts.bgrepeat = dts.bgrepeat || "no-repeat", dts.bgposition = dts.bgposition || "center center";
+      dts.bgrepeat = dts.bgrepeat || "no-repeat",
+        dts.bgposition = dts.bgposition || "center center";
 
       var pari = img.closest('.slotholder');
       img.parent().append('<div class="tp-bgimg defaultimg" style="background-color:' + img.css("backgroundColor") + ';background-repeat:' + dts.bgrepeat + ';background-image:url(' + src + ');background-size:' + dts.bgfit + ';background-position:' + dts.bgposition + ';width:100%;height:100%;"></div>');
@@ -1700,19 +1930,25 @@
       img.data(dts);
       img.attr("src", src);
 
-      if (opt.sliderType === "standard" || opt.sliderType === "undefined") img.css({ 'opacity': 0 });
-    });
-  };
+      if (opt.sliderType === "standard" || opt.sliderType === "undefined")
+        img.css({ 'opacity': 0 });
+
+    })
+
+
+  }
+
 
   //	REMOVE SLOTS	//
-  var removeSlots = function (container, opt, where, addon) {
+  var removeSlots = function(container, opt, where, addon) {
     opt.removePrepare = opt.removePrepare + addon;
-    where.find('.slot, .slot-circle-wrapper').each(function () {
+    where.find('.slot, .slot-circle-wrapper').each(function() {
       jQuery(this).remove();
     });
     opt.transition = 0;
     opt.removePrepare = 0;
-  };
+  }
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////       SLIDE SWAPS			////////////////////////////////////////////////////////////
@@ -1720,93 +1956,111 @@
 
 
   // THE IMAGE IS LOADED, WIDTH, HEIGHT CAN BE SAVED
-  var cutParams = function (a) {
+  var cutParams = function(a) {
     var b = a;
-    if (a != undefined && a.length > 0) b = a.split("?")[0];
+    if (a != undefined && a.length > 0)
+      b = a.split("?")[0];
     return b;
-  };
+  }
 
-  var relativeRedir = function (redir) {
+  var relativeRedir = function(redir) {
     return location.pathname.replace(/(.*)\/[^/]*/, "$1/" + redir);
-  };
+  }
 
-  var abstorel = function (base, relative) {
+  var abstorel = function(base, relative) {
     var stack = base.split("/"),
-        parts = relative.split("/");
+      parts = relative.split("/");
     stack.pop(); // remove current file name (or empty string)
     // (omit if "base" is the current folder without trailing slash)
     for (var i = 0; i < parts.length; i++) {
-      if (parts[i] == ".") continue;
-      if (parts[i] == "..") stack.pop();else stack.push(parts[i]);
+      if (parts[i] == ".")
+        continue;
+      if (parts[i] == "..")
+        stack.pop();
+      else
+        stack.push(parts[i]);
     }
     return stack.join("/");
-  };
+  }
 
-  var imgLoaded = function (img, opt, progress) {
+  var imgLoaded = function(img, opt, progress) {
     opt.syncload--;
-    if (opt.loadqueue) jQuery.each(opt.loadqueue, function (index, queue) {
+    if (opt.loadqueue)
+      jQuery.each(opt.loadqueue, function(index, queue) {
 
-      var mqsrc = queue.src.replace(/\.\.\/\.\.\//gi, ""),
+        var mqsrc = queue.src.replace(/\.\.\/\.\.\//gi, ""),
           fullsrc = self.location.href,
           origin = document.location.origin,
           fullsrc_b = fullsrc.substring(0, fullsrc.length - 1) + "/" + mqsrc,
           origin_b = origin + "/" + mqsrc,
           absolute = abstorel(self.location.href, queue.src);
 
-      fullsrc = fullsrc.substring(0, fullsrc.length - 1) + mqsrc;
-      origin = origin + mqsrc;
+        fullsrc = fullsrc.substring(0, fullsrc.length - 1) + mqsrc;
+        origin = origin + mqsrc;
 
-      if (cutParams(origin) === cutParams(decodeURIComponent(img.src)) || cutParams(fullsrc) === cutParams(decodeURIComponent(img.src)) || cutParams(absolute) === cutParams(decodeURIComponent(img.src)) || cutParams(origin_b) === cutParams(decodeURIComponent(img.src)) || cutParams(fullsrc_b) === cutParams(decodeURIComponent(img.src)) || cutParams(queue.src) === cutParams(decodeURIComponent(img.src)) || cutParams(queue.src).replace(/^.*\/\/[^\/]+/, '') === cutParams(decodeURIComponent(img.src)).replace(/^.*\/\/[^\/]+/, '') || window.location.origin === "file://" && cutParams(img.src).match(new RegExp(mqsrc))) {
-        queue.progress = progress;
-        queue.width = img.width;
-        queue.height = img.height;
-      }
-    });
+        if (cutParams(origin) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(fullsrc) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(absolute) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(origin_b) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(fullsrc_b) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(queue.src) === cutParams(decodeURIComponent(img.src)) ||
+          cutParams(queue.src).replace(/^.*\/\/[^\/]+/, '') === cutParams(decodeURIComponent(img.src)).replace(/^.*\/\/[^\/]+/, '') ||
+          (window.location.origin === "file://" && cutParams(img.src).match(new RegExp(mqsrc)))) {
+          queue.progress = progress;
+          queue.width = img.width;
+          queue.height = img.height;
+        }
+      });
     progressImageLoad(opt);
-  };
+  }
 
   // PRELOAD IMAGES 3 PIECES ON ONE GO, CHECK LOAD PRIORITY
-  var progressImageLoad = function (opt) {
+  var progressImageLoad = function(opt) {
     if (opt.syncload == 3) return;
-    if (opt.loadqueue) jQuery.each(opt.loadqueue, function (index, queue) {
-      if (queue.progress.match(/prepared/g)) {
-        if (opt.syncload <= 3) {
-          opt.syncload++;
-          if (queue.type == "img") {
-            var img = new Image();
+    if (opt.loadqueue)
+      jQuery.each(opt.loadqueue, function(index, queue) {
+        if (queue.progress.match(/prepared/g)) {
+          if (opt.syncload <= 3) {
+            opt.syncload++;
+            if (queue.type == "img") {
+              var img = new Image();
 
-            img.onload = function () {
-              imgLoaded(this, opt, "loaded");
-            };
-            img.onerror = function () {
-              imgLoaded(this, opt, "failed");
-            };
+              img.onload = function() {
+                imgLoaded(this, opt, "loaded");
+              };
+              img.onerror = function() {
+                imgLoaded(this, opt, "failed");
+              };
 
-            img.src = queue.src;
-          } else {
-            jQuery.get(queue.src, function (data) {
-              queue.innerHTML = new XMLSerializer().serializeToString(data.documentElement);
-              queue.progress = "loaded";
-              opt.syncload--;
-              progressImageLoad(opt);
-            }).fail(function () {
-              queue.progress = "failed";
-              opt.syncload--;
-              progressImageLoad(opt);
-            });
+              img.src = queue.src;
+            } else {
+              jQuery.get(queue.src, function(data) {
+                queue.innerHTML = new XMLSerializer().serializeToString(data.documentElement);
+                queue.progress = "loaded";
+                opt.syncload--;
+                progressImageLoad(opt);
+              }).fail(function() {
+                queue.progress = "failed";
+                opt.syncload--;
+                progressImageLoad(opt);
+              });
+            }
+            queue.progress = "inload";
           }
-          queue.progress = "inload";
         }
-      }
-    });
-  };
+      });
+  }
+
+
 
   // ADD TO QUEUE THE NOT LOADED IMAGES YES
-  var addToLoadQueue = function (src, opt, prio, type, staticlayer) {
+  var addToLoadQueue = function(src, opt, prio, type, staticlayer) {
     var alreadyexist = false;
-    if (opt.loadqueue) jQuery.each(opt.loadqueue, function (index, queue) {
-      if (queue.src === src) alreadyexist = true;
-    });
+    if (opt.loadqueue)
+      jQuery.each(opt.loadqueue, function(index, queue) {
+        if (queue.src === src) alreadyexist = true;
+      });
+
 
     if (!alreadyexist) {
       var loadobj = new Object();
@@ -1817,51 +2071,59 @@
       loadobj.static = staticlayer;
       opt.loadqueue.push(loadobj);
     }
-  };
+
+  }
 
   // LOAD THE IMAGES OF THE PREDEFINED CONTAINER
-  var loadImages = function (container, opt, prio, staticlayer) {
+  var loadImages = function(container, opt, prio, staticlayer) {
 
-    container.find('img,.defaultimg, .tp-svg-layer').each(function () {
+    container.find('img,.defaultimg, .tp-svg-layer').each(function() {
       var element = jQuery(this),
-          src = element.data('lazyload') !== undefined && element.data('lazyload') !== "undefined" ? element.data('lazyload') : element.data('svg_src') != undefined ? element.data('svg_src') : element.attr('src'),
-          type = element.data('svg_src') != undefined ? "svg" : "img";
+        src = element.data('lazyload') !== undefined && element.data('lazyload') !== "undefined" ? element.data('lazyload') : element.data('svg_src') != undefined ? element.data('svg_src') : element.attr('src'),
+        type = element.data('svg_src') != undefined ? "svg" : "img";
 
       element.data('start-to-load', jQuery.now());
       addToLoadQueue(src, opt, prio, type, staticlayer);
     });
     progressImageLoad(opt);
-  };
+  }
+
 
   // FIND SEARCHED IMAGE/SRC IN THE LOAD QUEUE
-  var getLoadObj = function (opt, src) {
+  var getLoadObj = function(opt, src) {
     var obj = new Object();
-    if (opt.loadqueue) jQuery.each(opt.loadqueue, function (index, queue) {
-      if (queue.src == src) obj = queue;
-    });
+    if (opt.loadqueue)
+      jQuery.each(opt.loadqueue, function(index, queue) {
+        if (queue.src == src) obj = queue;
+      });
     return obj;
-  };
+  }
 
   // WAIT PROGRESS TILL THE PREDEFINED CONTAINER HAS ALL IMAGES LOADED INSIDE
-  var waitForCurrentImages = function (nextli, opt, callback) {
+  var waitForCurrentImages = function(nextli, opt, callback) {
 
     var waitforload = false;
 
+
     // PRELOAD ALL IMAGES
-    nextli.find('img,.defaultimg, .tp-svg-layer').each(function () {
+    nextli.find('img,.defaultimg, .tp-svg-layer').each(function() {
       var element = jQuery(this),
-          src = element.data('lazyload') != undefined ? element.data('lazyload') : element.data('svg_src') != undefined ? element.data('svg_src') : element.attr('src'),
-          loadobj = getLoadObj(opt, src);
+        src = element.data('lazyload') != undefined ? element.data('lazyload') : element.data('svg_src') != undefined ? element.data('svg_src') : element.attr('src'),
+        loadobj = getLoadObj(opt, src);
+
 
       // IF ELEMENTS IS NOT LOADED YET, AND IT IS NOW LOADED
       if (element.data('loaded') === undefined && loadobj !== undefined && loadobj.progress && loadobj.progress.match(/loaded/g)) {
 
         element.attr('src', loadobj.src);
 
+
         // IF IT IS A DEFAULT IMG, WE NEED TO ASSIGN SOME SPECIAL VALUES TO IT
         if (loadobj.type == "img") {
           if (element.hasClass("defaultimg")) {
-            if (!_R.isIE(8)) element.css({ backgroundImage: 'url("' + loadobj.src + '")' });else {
+            if (!_R.isIE(8))
+              element.css({ backgroundImage: 'url("' + loadobj.src + '")' });
+            else {
               defimg.attr('src', loadobj.src);
             }
             nextli.data('owidth', loadobj.width);
@@ -1870,7 +2132,7 @@
             nextli.find('.slotholder').data('oheight', loadobj.height);
           } else {
             var w = element.data('ww'),
-                h = element.data('hh');
+              h = element.data('hh');
 
             element.data('owidth', loadobj.width);
             element.data('oheight', loadobj.height);
@@ -1878,10 +2140,14 @@
             w = w == undefined || w == "auto" || w == "" ? loadobj.width : w;
             h = h == undefined || h == "auto" || h == "" ? loadobj.height : h;
 
+
             element.data('ww', w);
             element.data('hh', h);
+
           }
-        } else if (loadobj.type == "svg" && loadobj.progress == "loaded") {
+        } else
+
+        if (loadobj.type == "svg" && loadobj.progress == "loaded") {
 
           element.append('<div class="tp-svg-innercontainer"></div>');
           element.find('.tp-svg-innercontainer').append(loadobj.innerHTML);
@@ -1890,12 +2156,16 @@
         element.data('loaded', true);
       }
 
-      if (loadobj && loadobj.progress && loadobj.progress.match(/inprogress|inload|prepared/g)) if (jQuery.now() - element.data('start-to-load') < 5000) waitforload = true;else {
-        loadobj.progress = "failed";
-        console.error(src + "  Could not be loaded !");
-      }
 
-      // WAIT FOR VIDEO API'S
+      if (loadobj && loadobj.progress && loadobj.progress.match(/inprogress|inload|prepared/g))
+        if (jQuery.now() - element.data('start-to-load') < 5000)
+          waitforload = true;
+        else {
+          loadobj.progress = "failed";
+          console.error(src + "  Could not be loaded !");
+        }
+
+        // WAIT FOR VIDEO API'S
       if (opt.youtubeapineeded == true && (!window['YT'] || YT.Player == undefined)) {
         waitforload = true;
         if (jQuery.now() - opt.youtubestarttime > 5000 && opt.youtubewarning != true) {
@@ -1903,7 +2173,7 @@
           var txt = "YouTube Api Could not be loaded !";
           if (location.protocol === 'https:') txt = txt + " Please Check and Renew SSL Certificate !";
           console.error(txt);
-          opt.c.append('<div style="position:absolute;top:50%;width:100%;color:#e74c3c;  font-size:16px; text-align:center; padding:15px;background:#000; display:block;"><strong>' + txt + '</strong></div>');
+          opt.c.append('<div style="position:absolute;top:50%;width:100%;color:#e74c3c;  font-size:16px; text-align:center; padding:15px;background:#000; display:block;"><strong>' + txt + '</strong></div>')
         }
       }
 
@@ -1914,52 +2184,68 @@
           var txt = "Vimeo Froogaloop Api Could not be loaded !";
           if (location.protocol === 'https:') txt = txt + " Please Check and Renew SSL Certificate !";
           console.error(txt);
-          opt.c.append('<div style="position:absolute;top:50%;width:100%;color:#e74c3c;  font-size:16px; text-align:center; padding:15px;background:#000; display:block;"><strong>' + txt + '</strong></div>');
+          opt.c.append('<div style="position:absolute;top:50%;width:100%;color:#e74c3c;  font-size:16px; text-align:center; padding:15px;background:#000; display:block;"><strong>' + txt + '</strong></div>')
         }
       }
+
     });
 
     if (!_ISM && opt.audioqueue && opt.audioqueue.length > 0) {
-      jQuery.each(opt.audioqueue, function (i, obj) {
-        if (obj.status && obj.status === "prepared") if (jQuery.now() - obj.start < obj.waittime) waitforload = true;
+      jQuery.each(opt.audioqueue, function(i, obj) {
+        if (obj.status && obj.status === "prepared")
+          if (jQuery.now() - obj.start < obj.waittime)
+            waitforload = true;
       });
     }
 
-    jQuery.each(opt.loadqueue, function (i, o) {
-      if (o.static === true && (o.progress != "loaded" || o.progress === "failed")) waitforload = true;
+    jQuery.each(opt.loadqueue, function(i, o) {
+      if (o.static === true && (o.progress != "loaded" || o.progress === "failed"))
+        waitforload = true;
     });
 
-    if (waitforload) setTimeout(function () {
-      waitForCurrentImages(nextli, opt, callback);
-    }, 19);else setTimeout(callback, 19);
-  };
+    if (waitforload)
+      setTimeout(function() {
+        waitForCurrentImages(nextli, opt, callback);
+      }, 19);
+    else
+      setTimeout(callback, 19);
+
+  }
+
+
+
 
   //////////////////////////////////////
   //	-	CALL TO SWAP THE SLIDES -  //
   /////////////////////////////////////
-  var swapSlide = function (container, opt) {
+  var swapSlide = function(container, opt) {
 
     clearTimeout(opt.waitWithSwapSlide);
 
+
+
     if (container.find('.processing-revslide').length > 0) {
-      opt.waitWithSwapSlide = setTimeout(function () {
+      opt.waitWithSwapSlide = setTimeout(function() {
         swapSlide(container, opt);
+
       }, 150);
       return false;
     }
 
     var actli = container.find('.active-revslide'),
-        nextli = container.find('.next-revslide'),
-        defimg = nextli.find('.defaultimg');
+      nextli = container.find('.next-revslide'),
+      defimg = nextli.find('.defaultimg');
+
 
     if (nextli.index() === actli.index()) {
       nextli.removeClass("next-revslide");
       return false;
     }
 
+
     nextli.removeClass("next-revslide").addClass("processing-revslide");
 
-    nextli.data('slide_on_focus_amount', nextli.data('slide_on_focus_amount') + 1 || 1);
+    nextli.data('slide_on_focus_amount', (nextli.data('slide_on_focus_amount') + 1) || 1);
     // CHECK IF WE ARE ALREADY AT LAST ITEM TO PLAY IN REAL LOOP SESSION
     if (opt.stopLoop == "on" && nextli.index() == opt.lastslidetoshow - 1) {
       container.find('.tp-bannertimer').css({ 'visibility': 'hidden' });
@@ -1970,46 +2256,58 @@
     // INCREASE LOOP AMOUNTS
     if (nextli.index() === opt.slideamount - 1) {
       opt.looptogo = opt.looptogo - 1;
-      if (opt.looptogo <= 0) opt.stopLoop = "on";
+      if (opt.looptogo <= 0)
+        opt.stopLoop = "on";
     }
 
     opt.tonpause = true;
     container.trigger('stoptimer');
     opt.cd = 0;
-    if (opt.spinner === "off") container.find('.tp-loader').css({ display: "none" });else container.find('.tp-loader').css({ display: "block" });
+    if (opt.spinner === "off")
+      container.find('.tp-loader').css({ display: "none" });
+    else
+      container.find('.tp-loader').css({ display: "block" });
+
 
     loadImages(nextli, opt, 1);
     if (_R.preLoadAudio) _R.preLoadAudio(nextli, opt, 1);
 
     // WAIT FOR SWAP SLIDE PROGRESS
-    waitForCurrentImages(nextli, opt, function () {
+    waitForCurrentImages(nextli, opt, function() {
+
 
       // MANAGE BG VIDEOS
-      nextli.find('.rs-background-video-layer').each(function () {
+      nextli.find('.rs-background-video-layer').each(function() {
         var _nc = jQuery(this);
         if (!_nc.hasClass("HasListener")) {
           _nc.data('bgvideo', 1);
           if (_R.manageVideoLayer) _R.manageVideoLayer(_nc, opt);
         }
-        if (_nc.find('.rs-fullvideo-cover').length == 0) _nc.append('<div class="rs-fullvideo-cover"></div>');
+        if (_nc.find('.rs-fullvideo-cover').length == 0)
+          _nc.append('<div class="rs-fullvideo-cover"></div>')
       });
-      swapSlideProgress(opt, defimg, container);
+      swapSlideProgress(opt, defimg, container)
     });
-  };
+
+  }
 
   //////////////////////////////////////
   //	-	PROGRESS SWAP THE SLIDES -  //
   /////////////////////////////////////
-  var swapSlideProgress = function (opt, defimg, container) {
+  var swapSlideProgress = function(opt, defimg, container) {
 
     var actli = container.find('.active-revslide'),
-        nextli = container.find('.processing-revslide'),
-        actsh = actli.find('.slotholder'),
-        nextsh = nextli.find('.slotholder');
+      nextli = container.find('.processing-revslide'),
+      actsh = actli.find('.slotholder'),
+      nextsh = nextli.find('.slotholder');
+
 
     opt.tonpause = false;
 
     opt.cd = 0;
+
+
+
 
     container.find('.tp-loader').css({ display: "none" });
     // if ( opt.sliderType =="carousel") _R.prepareCarousel(opt);
@@ -2029,14 +2327,21 @@
     if (nextli.data('delay') != undefined) {
       opt.cd = 0;
       opt.delay = nextli.data('delay');
-    } else opt.delay = opt.origcd;
+    } else
+      opt.delay = opt.origcd;
 
-    if (nextli.data('ssop') == "true" || nextli.data('ssop') === true) opt.ssop = true;else opt.ssop = false;
+
+    if (nextli.data('ssop') == "true" || nextli.data('ssop') === true)
+      opt.ssop = true
+    else
+      opt.ssop = false;
+
+
 
     container.trigger('nulltimer');
 
     var ai = actli.index(),
-        ni = nextli.index();
+      ni = nextli.index();
     opt.sdir = ni < ai ? 1 : 0;
 
     if (opt.sc_indicator == "arrow") {
@@ -2053,15 +2358,21 @@
     ///////////////////////////
 
 
-    if (actli.index() != nextli.index() && opt.firststart != 1) if (_R.removeTheCaptions) _R.removeTheCaptions(actli, opt);
 
-    if (!nextli.hasClass('rs-pause-timer-once') && !nextli.hasClass("rs-pause-timer-always")) container.trigger('restarttimer');else opt.videoplaying = true;
+    if (actli.index() != nextli.index() && opt.firststart != 1)
+      if (_R.removeTheCaptions) _R.removeTheCaptions(actli, opt);
+
+
+    if (!nextli.hasClass('rs-pause-timer-once') && !nextli.hasClass("rs-pause-timer-always"))
+      container.trigger('restarttimer');
+    else
+      opt.videoplaying = true;
 
     nextli.removeClass("rs-pause-timer-once");
 
     var nexttrans,
-        direction = -1,
-        mtl;
+      direction = -1,
+      mtl;
 
     // SELECT SLIDER TYPE
     if (opt.sliderType == "carousel") {
@@ -2072,7 +2383,7 @@
       opt.firststart = 0;
     } else {
       mtl = new punchgs.TimelineLite({
-        onComplete: function () {
+        onComplete: function() {
           letItFree(container, opt, nextsh, actsh, nextli, actli, mtl);
         }
       });
@@ -2084,8 +2395,10 @@
         opt.firststart = 0;
       }
 
+
       punchgs.TweenLite.set(actli, { zIndex: 18 });
       punchgs.TweenLite.set(nextli, { autoAlpha: 0, zIndex: 20 });
+
 
       // IF THERE IS AN OTHER FIRST SLIDE START HAS BEED SELECTED
       if (nextli.data('differentissplayed') == 'prepared') {
@@ -2094,6 +2407,7 @@
         nextli.data('slotamount', nextli.data('savedslotamount'));
         nextli.data('masterspeed', nextli.data('savedmasterspeed'));
       }
+
 
       if (nextli.data('fstransition') != undefined && nextli.data('differentissplayed') != "done") {
 
@@ -2110,8 +2424,11 @@
 
       nexttrans = 0;
       var transtext = nextli.data('transition') !== undefined ? nextli.data('transition').split(",") : "fade",
-          curtransid = nextli.data('nexttransid') == undefined ? -1 : nextli.data('nexttransid');
-      if (nextli.data('randomtransition') == "on") curtransid = Math.round(Math.random() * transtext.length);else curtransid = curtransid + 1;
+        curtransid = nextli.data('nexttransid') == undefined ? -1 : nextli.data('nexttransid');
+      if (nextli.data('randomtransition') == "on")
+        curtransid = Math.round(Math.random() * transtext.length);
+      else
+        curtransid = curtransid + 1;
 
       if (curtransid == transtext.length) curtransid = 0;
       nextli.data('nexttransid', curtransid);
@@ -2124,12 +2441,15 @@
         if (comingtransition == "slotfade-horizontal") comingtransition = "slotzoom-horizontal";
       }
 
-      if (_R.isIE(8)) comingtransition = 11;
+      if (_R.isIE(8))
+        comingtransition = 11;
+
+
 
       mtl = _R.animateSlide(nexttrans, comingtransition, container, opt, nextli, actli, nextsh, actsh, mtl);
       if (nextsh.data('kenburns') == "on") {
         _R.startKenBurn(nextsh, opt);
-        mtl.add(punchgs.TweenLite.set(nextsh, { autoAlpha: 0 }));
+        mtl.add(punchgs.TweenLite.set(nextsh, { autoAlpha: 0 }))
       }
 
       // SHOW FIRST LI && ANIMATE THE CAPTIONS
@@ -2138,7 +2458,7 @@
 
     if (_R.scrollHandling) {
       _R.scrollHandling(opt, true);
-      mtl.eventCallback("onUpdate", function () {
+      mtl.eventCallback("onUpdate", function() {
         _R.scrollHandling(opt, true);
       });
     }
@@ -2148,32 +2468,36 @@
       opt.parallax.firstgo = true;
       opt.lastscrolltop = -999;
       _R.scrollHandling(opt, true);
-      setTimeout(function () {
+      setTimeout(function() {
         opt.lastscrolltop = -999;
         _R.scrollHandling(opt, true);
       }, 210);
-      setTimeout(function () {
+      setTimeout(function() {
         opt.lastscrolltop = -999;
         _R.scrollHandling(opt, true);
       }, 420);
     }
 
+
     if (_R.animateTheCaptions) {
       _R.animateTheCaptions(nextli, opt, null, mtl);
     } else {
-      if (mtl != undefined) setTimeout(function () {
+      if (mtl != undefined) setTimeout(function() {
         mtl.resume();
       }, 30);
     }
     punchgs.TweenLite.to(nextli, 0.001, { autoAlpha: 1 });
 
+
     //if (_R.callStaticDDDParallax) _R.callStaticDDDParallax(container,opt,nextli);
-  };
+
+  }
+
 
   //////////////////////////////////////////
   //	GIVE FREE THE TRANSITIOSN			//
   //////////////////////////////////////////
-  var letItFree = function (container, opt, nextsh, actsh, nextli, actli, mtl) {
+  var letItFree = function(container, opt, nextsh, actsh, nextli, actli, mtl) {
 
     if (opt.sliderType === "carousel") {
       // CAROUSEL SLIDER
@@ -2182,20 +2506,22 @@
       punchgs.TweenLite.to(nextsh.find('.defaultimg'), 0.001, {
         zIndex: 20,
         autoAlpha: 1,
-        onComplete: function () {
+        onComplete: function() {
           removeSlots(container, opt, nextli, 1);
+
         }
       });
       if (nextli.index() != actli.index()) {
         punchgs.TweenLite.to(actli, 0.2, {
           zIndex: 18,
           autoAlpha: 0,
-          onComplete: function () {
+          onComplete: function() {
             removeSlots(container, opt, actli, 1);
           }
         });
       }
     }
+
 
     container.find('.active-revslide').removeClass("active-revslide");
     container.find('.processing-revslide').removeClass("processing-revslide").addClass("active-revslide");
@@ -2203,12 +2529,14 @@
 
     opt.c.attr('data-slideactive', container.find('.active-revslide').data('index'));
 
+
     if (opt.parallax.type == "scroll" || opt.parallax.type == "scroll+mouse" || opt.parallax.type == "mouse+scroll") {
       opt.lastscrolltop = -999;
       _R.scrollHandling(opt);
     }
 
     mtl.clear();
+
 
     if (actsh.data('kbtl') != undefined) {
       actsh.data('kbtl').reverse();
@@ -2218,25 +2546,27 @@
       if (nextsh.data('kbtl') != undefined) {
         nextsh.data('kbtl').timeScale(1);
         nextsh.data('kbtl').play();
-      } else _R.startKenBurn(nextsh, opt);
+      } else
+        _R.startKenBurn(nextsh, opt);
     }
 
-    nextli.find('.rs-background-video-layer').each(function (i) {
+    nextli.find('.rs-background-video-layer').each(function(i) {
       if (_ISM) return false;
-      var _nc = jQuery(this);
+      var _nc = jQuery(this)
       _R.resetVideo(_nc, opt);
 
       punchgs.TweenLite.fromTo(_nc, 1, { autoAlpha: 0 }, {
         autoAlpha: 1,
         ease: punchgs.Power3.easeInOut,
         delay: 0.2,
-        onComplete: function () {
+        onComplete: function() {
           if (_R.animcompleted) _R.animcompleted(_nc, opt);
         }
       });
     });
 
-    actli.find('.rs-background-video-layer').each(function (i) {
+
+    actli.find('.rs-background-video-layer').each(function(i) {
       if (_ISM) return false;
       var _nc = jQuery(this);
       if (_R.stopVideo) {
@@ -2260,56 +2590,58 @@
     opt.duringslidechange = false;
 
     var lastSlideLoop = actli.data('slide_on_focus_amount'),
-        lastSlideMaxLoop = actli.data('hideafterloop');
+      lastSlideMaxLoop = actli.data('hideafterloop');
     if (lastSlideMaxLoop != 0 && lastSlideMaxLoop <= lastSlideLoop) {
       opt.c.revremoveslide(actli.index());
     }
     //if (_R.callStaticDDDParallax) _R.callStaticDDDParallax(container,opt,nextli);
-  };
+
+  }
+
+
+
+
 
   ///////////////////////////
   //	REMOVE THE LISTENERS //
   ///////////////////////////
-  var removeAllListeners = function (container, opt) {
-    container.children().each(function () {
-      try {
-        jQuery(this).die('click');
-      } catch (e) {}
-      try {
-        jQuery(this).die('mouseenter');
-      } catch (e) {}
-      try {
-        jQuery(this).die('mouseleave');
-      } catch (e) {}
-      try {
-        jQuery(this).unbind('hover');
-      } catch (e) {}
-    });
-    try {
-      container.die('click', 'mouseenter', 'mouseleave');
-    } catch (e) {}
+  var removeAllListeners = function(container, opt) {
+    container.children().each(function() {
+      try { jQuery(this).die('click'); } catch (e) {}
+      try { jQuery(this).die('mouseenter'); } catch (e) {}
+      try { jQuery(this).die('mouseleave'); } catch (e) {}
+      try { jQuery(this).unbind('hover'); } catch (e) {}
+    })
+    try { container.die('click', 'mouseenter', 'mouseleave'); } catch (e) {}
     clearInterval(opt.cdint);
     container = null;
-  };
+  }
 
   ///////////////////////////
   //	-	countDown	-	//
   /////////////////////////
-  var countDown = function (container, opt) {
+  var countDown = function(container, opt) {
     opt.cd = 0;
     opt.loop = 0;
-    if (opt.stopAfterLoops != undefined && opt.stopAfterLoops > -1) opt.looptogo = opt.stopAfterLoops;else opt.looptogo = 9999999;
+    if (opt.stopAfterLoops != undefined && opt.stopAfterLoops > -1)
+      opt.looptogo = opt.stopAfterLoops;
+    else
+      opt.looptogo = 9999999;
 
-    if (opt.stopAtSlide != undefined && opt.stopAtSlide > -1) opt.lastslidetoshow = opt.stopAtSlide;else opt.lastslidetoshow = 999;
+    if (opt.stopAtSlide != undefined && opt.stopAtSlide > -1)
+      opt.lastslidetoshow = opt.stopAtSlide;
+    else
+      opt.lastslidetoshow = 999;
 
     opt.stopLoop = "off";
 
     if (opt.looptogo == 0) opt.stopLoop = "on";
 
+
     var bt = container.find('.tp-bannertimer');
 
     // LISTENERS  //container.trigger('stoptimer');
-    container.on('stoptimer', function () {
+    container.on('stoptimer', function() {
 
       var bt = jQuery(this).find('.tp-bannertimer');
       bt.data('tween').pause();
@@ -2318,23 +2650,26 @@
       _R.unToggleState(opt.slidertoggledby);
     });
 
-    container.on('starttimer', function () {
-      if (opt.forcepause_viatoggle) return;
-      if (opt.conthover != 1 && opt.videoplaying != true && opt.width > opt.hideSliderAtLimit && opt.tonpause != true && opt.overnav != true && opt.ssop != true) if (opt.noloopanymore !== 1 && (!opt.viewPort.enable || opt.inviewport)) {
 
-        bt.css({ visibility: "visible" });
-        bt.data('tween').resume();
-        opt.sliderstatus = "playing";
-      }
+    container.on('starttimer', function() {
+      if (opt.forcepause_viatoggle) return;
+      if (opt.conthover != 1 && opt.videoplaying != true && opt.width > opt.hideSliderAtLimit && opt.tonpause != true && opt.overnav != true && opt.ssop != true)
+        if (opt.noloopanymore !== 1 && (!opt.viewPort.enable || opt.inviewport)) {
+
+          bt.css({ visibility: "visible" });
+          bt.data('tween').resume();
+          opt.sliderstatus = "playing";
+        }
 
       if (opt.disableProgressBar == "on") bt.css({ visibility: "hidden" });
       _R.toggleState(opt.slidertoggledby);
     });
 
-    container.on('restarttimer', function () {
+
+    container.on('restarttimer', function() {
       if (opt.forcepause_viatoggle) return;
       var bt = jQuery(this).find('.tp-bannertimer');
-      if (opt.mouseoncontainer && opt.navigation.onHoverStop == "on" && !_ISM) return false;
+      if (opt.mouseoncontainer && opt.navigation.onHoverStop == "on" && (!_ISM)) return false;
       if (opt.noloopanymore !== 1 && (!opt.viewPort.enable || opt.inviewport) && opt.ssop != true) {
         bt.css({ visibility: "visible" });
         bt.data('tween').kill();
@@ -2346,7 +2681,7 @@
       _R.toggleState(opt.slidertoggledby);
     });
 
-    container.on('nulltimer', function () {
+    container.on('nulltimer', function() {
       bt.data('tween').kill();
       bt.data('tween', punchgs.TweenLite.fromTo(bt, opt.delay / 1000, { width: "0%" }, { force3D: "auto", width: "100%", ease: punchgs.Linear.easeNone, onComplete: countDownNext, delay: 1 }));
       bt.data('tween').pause(0);
@@ -2354,7 +2689,7 @@
       opt.sliderstatus = "paused";
     });
 
-    var countDownNext = function () {
+    var countDownNext = function() {
       if (jQuery('body').find(container).length == 0) {
         removeAllListeners(container, opt);
         clearInterval(opt.cdint);
@@ -2369,7 +2704,7 @@
       }
 
       _R.callingNewSlide(opt, container, 1);
-    };
+    }
 
     bt.data('tween', punchgs.TweenLite.fromTo(bt, opt.delay / 1000, { width: "0%" }, { force3D: "auto", width: "100%", ease: punchgs.Linear.easeNone, onComplete: countDownNext, delay: 1 }));
     bt.data('opt', opt);
@@ -2382,21 +2717,25 @@
       container.trigger("nulltimer");
     }
 
-    container.on('tp-mouseenter', function () {
+    container.on('tp-mouseenter', function() {
       opt.mouseoncontainer = true;
-      if (opt.navigation.onHoverStop == "on" && !_ISM) {
+      if (opt.navigation.onHoverStop == "on" && (!_ISM)) {
         container.trigger('stoptimer');
         container.trigger('revolution.slide.onpause');
       }
     });
-    container.on('tp-mouseleft', function () {
+    container.on('tp-mouseleft', function() {
       opt.mouseoncontainer = false;
-      if (container.data('conthover') != 1 && opt.navigation.onHoverStop == "on" && (opt.viewPort.enable == true && opt.inviewport || opt.viewPort.enable == false)) {
+      if (container.data('conthover') != 1 && opt.navigation.onHoverStop == "on" && ((opt.viewPort.enable == true && opt.inviewport) || opt.viewPort.enable == false)) {
         container.trigger('revolution.slide.onresume');
         container.trigger('starttimer');
       }
     });
-  };
+
+  }
+
+
+
 
   //////////////////////////////////////////////////////
   // * Revolution Slider - NEEDFULL FUNCTIONS
@@ -2405,94 +2744,102 @@
   //////////////////////////////////////////////////////
 
 
+
   // 	-	BLUR / FOXUS FUNCTIONS ON BROWSER
 
-  var vis = function () {
+  var vis = (function() {
     var stateKey,
-        eventKey,
-        keys = {
-      hidden: "visibilitychange",
-      webkitHidden: "webkitvisibilitychange",
-      mozHidden: "mozvisibilitychange",
-      msHidden: "msvisibilitychange"
-    };
+      eventKey,
+      keys = {
+        hidden: "visibilitychange",
+        webkitHidden: "webkitvisibilitychange",
+        mozHidden: "mozvisibilitychange",
+        msHidden: "msvisibilitychange"
+      };
     for (stateKey in keys) {
       if (stateKey in document) {
         eventKey = keys[stateKey];
         break;
       }
     }
-    return function (c) {
+    return function(c) {
       if (c) document.addEventListener(eventKey, c);
       return !document[stateKey];
-    };
-  }();
+    }
+  })();
 
-  var restartOnFocus = function (opt) {
+  var restartOnFocus = function(opt) {
     if (opt == undefined || opt.c == undefined) return false;
     if (opt.windowfocused != true) {
       opt.windowfocused = true;
-      punchgs.TweenLite.delayedCall(0.3, function () {
+      punchgs.TweenLite.delayedCall(0.3, function() {
         // TAB IS ACTIVE, WE CAN START ANY PART OF THE SLIDER
         if (opt.fallbacks.nextSlideOnWindowFocus == "on") opt.c.revnext();
         opt.c.revredraw();
-        if (opt.lastsliderstatus == "playing") opt.c.revresume();
+        if (opt.lastsliderstatus == "playing")
+          opt.c.revresume();
       });
     }
-  };
+  }
 
-  var lastStatBlur = function (opt) {
+  var lastStatBlur = function(opt) {
     opt.windowfocused = false;
     opt.lastsliderstatus = opt.sliderstatus;
     opt.c.revpause();
     var actsh = opt.c.find('.active-revslide .slotholder'),
-        nextsh = opt.c.find('.processing-revslide .slotholder');
+      nextsh = opt.c.find('.processing-revslide .slotholder');
 
-    if (nextsh.data('kenburns') == "on") _R.stopKenBurn(nextsh, opt);
+    if (nextsh.data('kenburns') == "on")
+      _R.stopKenBurn(nextsh, opt);
 
-    if (actsh.data('kenburns') == "on") _R.stopKenBurn(actsh, opt);
-  };
+    if (actsh.data('kenburns') == "on")
+      _R.stopKenBurn(actsh, opt);
 
-  var tabBlurringCheck = function (container, opt) {
-    var notIE = document.documentMode === undefined,
-        isChromium = window.chrome;
+
+  }
+
+  var tabBlurringCheck = function(container, opt) {
+    var notIE = (document.documentMode === undefined),
+      isChromium = window.chrome;
 
     if (notIE && !isChromium) {
       // checks for Firefox and other  NON IE Chrome versions
-      jQuery(window).on("focusin", function () {
+      jQuery(window).on("focusin", function() {
         restartOnFocus(opt);
-      }).on("focusout", function () {
+      }).on("focusout", function() {
         lastStatBlur(opt);
       });
     } else {
       // checks for IE and Chromium versions
       if (window.addEventListener) {
         // bind focus event
-        window.addEventListener("focus", function (event) {
+        window.addEventListener("focus", function(event) {
           restartOnFocus(opt);
         }, false);
         // bind blur event
-        window.addEventListener("blur", function (event) {
+        window.addEventListener("blur", function(event) {
           lastStatBlur(opt);
         }, false);
+
       } else {
         // bind focus event
-        window.attachEvent("focus", function (event) {
+        window.attachEvent("focus", function(event) {
           restartOnFocus(opt);
         });
         // bind focus event
-        window.attachEvent("blur", function (event) {
+        window.attachEvent("blur", function(event) {
           lastStatBlur(opt);
         });
       }
     }
-  };
+  }
+
 
   // 	-	GET THE URL PARAMETER //
 
-  var getUrlVars = function (hashdivider) {
+  var getUrlVars = function(hashdivider) {
     var vars = [],
-        hash;
+      hash;
     var hashes = window.location.href.slice(window.location.href.indexOf(hashdivider) + 1).split('_');
     for (var i = 0; i < hashes.length; i++) {
       hashes[i] = hashes[i].replace('%3D', "=");
@@ -2501,5 +2848,5 @@
       vars[hash[0]] = hash[1];
     }
     return vars;
-  };
+  }
 })(jQuery);

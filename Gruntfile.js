@@ -172,6 +172,12 @@ module.exports = function(grunt) {
           cwd: '<%= project.src %>',
           src: ['**/*.jade'],
           dest: '<%= project.dist %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= project.srcPublic %>',
+          src: ['assets/**/*'],
+          dest: '<%= project.distPublic %>'
         }]
       }
     },
@@ -353,9 +359,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('serve', [
-    'env:build',
-    'clean:prod',
-    'babel:prod',
+    'env:dev',
+    'clean:dev',
+    'babel:dev',
     'copy:dev',
     'assets',
     'concurrent:express'

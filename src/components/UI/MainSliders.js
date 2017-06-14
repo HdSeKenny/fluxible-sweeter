@@ -73,7 +73,7 @@ export default class MainSliders extends React.Component {
               <li data-transition="fade" data-slotamount="7" data-masterspeed="700">
                 <div
                   className="tp-caption customin customout"
-                  data-x="50"
+                  data-x="80"
                   data-hoffset="100"
                   data-y="110"
                   data-voffset="0"

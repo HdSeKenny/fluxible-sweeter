@@ -14,7 +14,7 @@ const seed = {
     'tag': 'moment',
     'likers': [],
     'comments': [],
-    'images': []
+    'images': ['/styles/images/sliders/great-frontend.png']
   }, {
     '_id': mongdb.ObjectID('584a75341e8a6c8b80c9da7e'),
     'id_str': '584a75341e8a6c8b80c9da7e',
@@ -28,7 +28,7 @@ const seed = {
     'tag': 'life',
     'likers': [],
     'comments': [],
-    'images': []
+    'images': ['/styles/images/sliders/great-frontend.png']
   }, {
     '_id': mongdb.ObjectID('584a75341e8a6c8b20c9da7e'),
     'id_str': '584a75341e8a6c8b20c9da7e',
@@ -41,7 +41,8 @@ const seed = {
     'show_comments': false,
     'tag': 'life',
     'likers': [],
-    'comments': []
+    'comments': [],
+    'images': ['/styles/images/sliders/great-frontend.png']
   }],
   user: {
     '_id': mongdb.ObjectID('583ff3d6a193d70f6946948e'),

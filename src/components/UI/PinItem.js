@@ -208,7 +208,7 @@ export default class PinItem extends React.Component {
         {showImage && <Row className="mb-15">{this._renderPinitemImage(pin)}</Row>}
         <Row className="mb-10">{this._renderPinUserInfo(pin)}</Row>
         <Row className="mb-10">{this._renderTextPin(pin, readMore)}</Row>
-        <Row className="mb-5">{this._renderPinFooterIcons(pin, readMore)}</Row>
+        <Row className="">{this._renderPinFooterIcons(pin, readMore)}</Row>
       </div>
     );
   }
