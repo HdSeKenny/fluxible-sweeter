@@ -45,7 +45,6 @@
     "immutable": "^3.7.5",
     "intl": "^1.0.0",
     "intl-locales-supported": "^1.0.0",
-    "jquery": "^3.2.0",
     "json-loader": "^0.5.2",
     "jsonwebtoken": "^7.1.9",
     "jstransformer": "^1.0.0",

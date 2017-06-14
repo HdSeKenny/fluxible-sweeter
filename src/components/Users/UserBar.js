@@ -2,7 +2,6 @@ import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import $ from 'jquery';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { sweetAlert, jsUtils, env } from '../../utils';

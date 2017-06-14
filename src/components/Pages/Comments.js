@@ -171,17 +171,10 @@ const Comments = CreateReactClass({
       <Row className="reply-row mt-10">
         <Col size="1 reply-empty" />
         <Col size="9">
-          <textarea
-            rows="1"
-            className="form-control"
-            value={replyText}
-            onChange={this.handleReplyText} />
+          <textarea rows="1" className="form-control" value={replyText} onChange={this.handleReplyText} />
         </Col>
         <Col size="2">
-          <button
-            className="btn btn-info reply-btn"
-            onClick={() => this.onReplyComment(this, comment)}
-            disabled={isDisabled}> Reply</button>
+          <button className="btn btn-info reply-btn" onClick={() => this.onReplyComment(this, comment)} disabled={isDisabled}> Reply</button>
         </Col>
       </Row>
     );

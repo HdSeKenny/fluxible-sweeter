@@ -1,12 +1,12 @@
 import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import UserBar from './UserBar';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { sweetAlert } from '../../utils';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
+import UserBar from './UserBar';
 
 const UserInfo = CreateReactClass({
 

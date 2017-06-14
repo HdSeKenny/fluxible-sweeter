@@ -71,13 +71,13 @@ $(window).scroll(function () {
 $('body').scrollspy({
   target: '.navbar-default',
   offset: 100
-});
+}
 
 /*************************
       owl-carousel
 *************************/
 
-$('.owl-carousel-1').owlCarousel({
+);$('.owl-carousel-1').owlCarousel({
   items: 4,
   responsive: {
     0: {
