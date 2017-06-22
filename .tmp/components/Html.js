@@ -41,19 +41,24 @@ class Html extends _react2.default.Component {
         _react2.default.createElement('meta', { name: 'author', content: 'Kenny' }),
         _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
         _react2.default.createElement('link', { href: '/styles/bootstrap/css/font-awesome.min.css', rel: 'stylesheet' }),
-        _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/ui/sweetalert.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/css/slim.min.css', rel: 'stylesheet' }),
-        _react2.default.createElement('link', { href: '/assets/js/revolution/rs-plugin/css/settings.css', rel: 'stylesheet', media: 'screen' }),
+        _react2.default.createElement('link', { href: '/assets/revolution/css/settings.css', rel: 'stylesheet', media: 'screen' }),
         _react2.default.createElement('link', { href: '/assets/revolution/css/layers.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/assets/revolution/css/navigation.css', rel: 'stylesheet' }),
+        _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
         _react2.default.createElement('script', { src: '/styles/js/jquery.min.js' }),
         _react2.default.createElement('script', { src: '/styles/js/bootstrap.min.js' })
       ),
       _react2.default.createElement(
         'body',
         null,
+        _react2.default.createElement(
+          'div',
+          { className: 'loading' },
+          _react2.default.createElement('div', { className: 'loader' })
+        ),
         _react2.default.createElement('div', { id: 'main', dangerouslySetInnerHTML: markupHtml }),
         _react2.default.createElement('script', { dangerouslySetInnerHTML: exposedHtml }),
         _react2.default.createElement('script', { src: common }),

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Loader = exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.SweetInput = exports.MainSliders = exports.UserFollowsTabs = exports.HotBlogsTabs = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
+exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.SweetInput = exports.MainSliders = exports.UserFollowsTabs = exports.HotBlogsTabs = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
 
 var _FullScreen2 = require('./FullScreen');
 
@@ -57,10 +57,6 @@ var _SlimEditor2 = require('./SlimEditor');
 
 var _SlimEditor3 = _interopRequireDefault(_SlimEditor2);
 
-var _Loader2 = require('./Loader');
-
-var _Loader3 = _interopRequireDefault(_Loader2);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.FullScreen = _FullScreen3.default;
@@ -76,4 +72,3 @@ exports.Switch = _Switch3.default;
 exports.PinItem = _PinItem3.default;
 exports.Button = _Button3.default;
 exports.SlimEditor = _SlimEditor3.default;
-exports.Loader = _Loader3.default;

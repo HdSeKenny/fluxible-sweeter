@@ -28,23 +28,28 @@ export default class Html extends React.Component {
           <meta name="author" content="Kenny" />
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
-          <link href={style} rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
           <link href="/styles/components/pages/blog.css" rel="stylesheet" />
           <link href="/styles/css/slim.min.css" rel="stylesheet" />
 
-          <link href="/assets/js/revolution/rs-plugin/css/settings.css" rel="stylesheet" media="screen" />
+          <link href="/assets/revolution/css/settings.css" rel="stylesheet" media="screen" />
           <link href="/assets/revolution/css/layers.css" rel="stylesheet" />
           <link href="/assets/revolution/css/navigation.css" rel="stylesheet" />
+
+          <link href={style} rel="stylesheet" />
 
           <script src="/styles/js/jquery.min.js"></script>
           <script src="/styles/js/bootstrap.min.js"></script>
         </head>
         <body>
+          <div className="loading"><div className="loader"></div></div>
+
           <div id="main" dangerouslySetInnerHTML={markupHtml}></div>
           <script dangerouslySetInnerHTML={exposedHtml}></script>
+
           <script src={common}></script>
           <script src={main}></script>
+
           <script src="/styles/js/sweetalert.min.js"></script>
 
           <script src="/assets/revolution/js/jquery.themepunch.tools.min.js"></script>
@@ -58,7 +63,6 @@ export default class Html extends React.Component {
           <script src="/assets/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
           <script src="/assets/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
           <script src="/assets/revolution/js/extensions/revolution.extension.video.min.js"></script>
-
           {essentials && <script src={essentials}></script>}
         </body>
       </html>

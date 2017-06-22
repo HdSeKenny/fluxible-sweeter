@@ -3,10 +3,10 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { sweetAlert, mediaSize, env } from '../../utils';
+import { sweetAlert, mediaSize } from '../../utils';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { PinItem, ModalsFactory, Loader } from '../UI';
+import { PinItem, ModalsFactory } from '../UI';
 import { Page } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 
@@ -38,8 +38,7 @@ const Home = CreateReactClass({
       blogText: '',
       selectedPin: {},
       showPinModal: false,
-      isMedium,
-      loading: true
+      isMedium
     };
   },
 
@@ -72,8 +71,6 @@ const Home = CreateReactClass({
 
   componentDidMount() {
     window.addEventListener('resize', this.getBrowserScreenInfo);
-    // eslint-disable-next-line
-    this.setState({ loading: false });
   },
 
   componentWillUnmount() {
@@ -183,8 +180,7 @@ const Home = CreateReactClass({
   },
 
   render() {
-    const { blogs, selectedPin, currentUser, showPinModal, loading } = this.state;
-    const isClient = env.is_client;
+    const { blogs, selectedPin, currentUser, showPinModal } = this.state;
     return (
       <div className="home-page">
         <div className="main">{this._renderPinItems(blogs)}</div>
@@ -197,7 +193,6 @@ const Home = CreateReactClass({
             ModalComponent={PinItemModal}
             showHeaderAndFooter={false} />
         </Page>
-        {isClient && loading && <Loader />}
       </div>
     );
   }

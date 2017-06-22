@@ -17,7 +17,7 @@ const serverConfig = {
   },
   server: {
     addr: '',
-    port: 9000,
+    port: 3000,
 
     host: 'localhost',
     // user activity logger

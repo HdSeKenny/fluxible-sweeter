@@ -22,13 +22,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class App extends _react2.default.Component {
 
+  componentDidMount() {
+    $(document).ready(() => {
+      $('.loading').addClass('hide');
+    });
+  }
+
   render() {
     const route = this.props.location.pathname;
     const child = _react2.default.cloneElement(this.props.children);
+    const showMainSliders = child.type.displayName === 'Home';
     return _react2.default.createElement(
       _UI.FullScreen,
       { id: 'app' },
       _react2.default.createElement(_UserControls.Navbar, { route: route }),
+      showMainSliders && _react2.default.createElement(_UI.MainSliders, null),
       _react2.default.createElement(
         'div',
         { className: 'content-pages' },

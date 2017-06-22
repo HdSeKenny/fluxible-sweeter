@@ -11,4 +11,3 @@ export Switch from './Switch';
 export PinItem from './PinItem';
 export Button from './Button';
 export SlimEditor from './SlimEditor';
-export Loader from './Loader';

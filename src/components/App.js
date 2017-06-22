@@ -22,6 +22,12 @@ export default class App extends React.Component {
     });
   };
 
+  componentDidMount() {
+    $(document).ready(() => {
+      $('.loading').addClass('hide');
+    });
+  }
+
   render() {
     const route = this.props.location.pathname;
     const child = React.cloneElement(this.props.children);
