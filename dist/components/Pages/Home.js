@@ -63,8 +63,7 @@ const Home = (0, _createReactClass2.default)({
       blogText: '',
       selectedPin: {},
       showPinModal: false,
-      isMedium: isMedium,
-      loading: true
+      isMedium: isMedium
     };
   },
   onChange: function (res) {
@@ -85,8 +84,6 @@ const Home = (0, _createReactClass2.default)({
   },
   componentDidMount: function () {
     window.addEventListener('resize', this.getBrowserScreenInfo);
-    // eslint-disable-next-line
-    this.setState({ loading: false });
   },
   componentWillUnmount: function () {
     window.removeEventListener('resize', this.getBrowserScreenInfo);
@@ -193,8 +190,7 @@ const Home = (0, _createReactClass2.default)({
     );
   },
   render: function () {
-    const { blogs: blogs, selectedPin: selectedPin, currentUser: currentUser, showPinModal: showPinModal, loading: loading } = this.state;
-    const isClient = _utils.env.is_client;
+    const { blogs: blogs, selectedPin: selectedPin, currentUser: currentUser, showPinModal: showPinModal } = this.state;
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
@@ -213,8 +209,7 @@ const Home = (0, _createReactClass2.default)({
           currentUser: currentUser,
           ModalComponent: _UserControls.PinItemModal,
           showHeaderAndFooter: false })
-      ),
-      isClient && loading && _react2.default.createElement(_UI.Loader, null)
+      )
     );
   }
 });
