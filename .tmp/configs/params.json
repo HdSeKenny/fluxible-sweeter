@@ -1,0 +1,11 @@
+{
+  "navbar": {
+    "sticky_header_height": 250,
+    "fade_speed": 300
+  },
+
+  "leftNav": {
+    "left_nav_height": 900,
+    "fade_speed": 300
+  }
+}

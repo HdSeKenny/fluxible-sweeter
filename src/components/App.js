@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MainSliders, FullScreen } from './UI';
+import { FullScreen, MainSliders } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { Navbar, Footer } from './UserControls';
 

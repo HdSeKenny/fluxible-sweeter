@@ -1,0 +1,145 @@
+@media (min-width: 769px) {
+  .list-page {
+    // width: @nav-wrap-width;
+    // margin: 0 auto;
+    // padding: 3em 1em;
+    .left {
+      // width: 20%;
+      // float: left;
+      // margin-right: 2%;
+    }
+    .mid {
+      width: 66.5%;
+      float: left;
+      .search-block {
+        height: 200px;
+        padding: 20px 25px;
+        background-color: #fff;
+        border-radius: @border-radius-base;
+        .search-block-body {
+          padding: 30px 0 10px 0;
+          .iconic-input {
+            i {
+              font-size: 20px;
+              height: 20px;
+              margin: 10px 0;
+              right: 15px;
+              &:hover {
+                color: @brand-info;
+                cursor: pointer;
+              }
+            }
+            input {
+              height: 40px;
+              padding-left: 15px !important;
+            }
+          }
+        }
+        .search-block-footer {
+          .hot-searched {
+            margin-left: 1px;
+          }
+        }
+        .search-block-header {
+          .search-tip {
+            font-size: 18px;
+            word-break: break-all;
+          }
+        }
+      }
+    }
+    .right {
+      width: 32%;
+      float: right;
+      border-radius: 5px;
+      .right-user-card {
+        height: 200px;
+        background-color: #fff;
+        border-radius: @border-radius-base;
+        .card-header {
+          padding-top: 15px;
+        }
+        .card-body {
+          padding: 15px;
+          p {
+            font-size: 15px;
+            word-break: break-all;
+            color: gray;
+            min-height: 30px;
+          }
+        }
+        .card-footer {
+          margin-top: 20.5px;
+          border-top: 1px solid #efefef;
+          .col-xs-4 {
+            background-color: #efefef;
+            padding: 5px 0;
+            font-size: 14px;
+            &:hover {
+              color: @brand-info;
+              cursor: pointer;
+            }
+          }
+        }
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 5px;
+        }
+      }
+      .right-blog-option {
+        min-height: 500px;
+        background-color: #fff;
+        border-radius: @border-radius-base;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .list-page {
+    padding: 20px;
+    .mid {
+      width: 63%;
+      float: left;
+      .blog-create {
+        background-color: #fff;
+        padding: 15px 20px;
+        border-radius: 5px;
+      }
+    }
+    .right {
+      width: 35%;
+      float: right;
+      border-radius: 5px;
+      .right-user-card {
+        background-color: #fff;
+        padding: 15px 5px;
+        .card-footer {
+          margin-top: 82.5px;
+          padding: 0 15px;
+          .col-xs-4 {
+            background-color: #F4F4F4;
+            width: 33%;
+            margin-right: 1px;
+
+            &:hover {
+              color: @brand-info;
+              cursor: pointer;
+            }
+          }
+        }
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 5px;
+        }
+      }
+      .right-blog-option {
+        margin-top: 15px;
+        min-height: 500px;
+        background-color: #fff;
+      }
+    }
+  }
+}

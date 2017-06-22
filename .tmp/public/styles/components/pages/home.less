@@ -1,0 +1,67 @@
+.home-page {
+  @media (min-width: 769px) {
+    .main {
+      margin: @content-pages-margin;
+      .vbox {
+        min-height: 60em;
+      }
+    }
+  }
+  .main {
+    .classification {
+      .pins-section {
+        clear: both;
+        &:first-child {
+          .home-tag {
+            padding: 0 0 10px 0;
+          }
+        }
+        .home-tag {
+          font-size: 18px;
+          color: #333;
+          padding: 20px 0 10px 0;
+          .view-all {
+            font-size: 18px;
+            font-style: italic;
+            &:hover {
+              color: @brand-primary;
+            }
+          }
+        }
+        .pins-block {
+          width: 100%;
+          .pin {
+            margin-right: 2.75%;
+            display: inline-block;
+            float: left;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .pins-block {
+            .pin {
+              width: 48.625%;
+            }
+          }
+        }
+
+        @media (min-width: 1025px) {
+          .pins-block {
+            .pin {
+              width: 31.5%;
+            }
+          }
+        }
+
+        @media (max-width: 768px) {
+          .pins-block {
+            .pin {
+              margin-right: 0;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

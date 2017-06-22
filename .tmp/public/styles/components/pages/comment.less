@@ -1,0 +1,63 @@
+.comments-page {
+  .comment-row {
+    border-top: 1px solid #eee;
+    padding: 10px 0 0 0;
+    margin: 0 5px;
+    &:first-child {
+      margin-top: 20px;
+    }
+
+    &:last-child {
+      margin-bottom: 20px;
+    }
+
+    .comment-text {
+      margin: 0;
+      color: #000000;
+      word-break: break-all;
+      .username {
+        color: @brand-info;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .comment-date {
+      font-weight: 500;
+      color: gray;
+      font-size: 10px;
+      margin-bottom: -10px;
+      .reply-icon {
+        color: #00a9da;
+        font-size: 10px;
+        margin-top: -3px;
+        margin-left: 15px;
+        background: none;
+        outline: none;
+        border: none;
+        padding: 0;
+      }
+    }
+    .commenter-img {
+      img {
+        width: 28px;
+        height: 28px;
+        border-radius: 3px;
+      }
+    }
+    .comment-thumbs {
+      padding: 0;
+      text-align: right;
+      &:hover {
+        color: red;
+        cursor: pointer;
+      }
+    }
+    .reply-row {
+      .reply-btn {
+        outline: none;
+        border: none;
+      }
+    }
+  }
+}

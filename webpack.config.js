@@ -47,6 +47,9 @@ module.exports = function makeWebpackConfig(options) {
       exclude: /node_modules/,
       loaders: ['json-loader']
     }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
+    }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
@@ -144,8 +147,7 @@ module.exports = function makeWebpackConfig(options) {
                   output.assets.main = `${hostAddress}${str}`;
                 }
               });
-            }
-            else {
+            } else {
               output.assets[key] = `${hostAddress}${value}`;
             }
           });

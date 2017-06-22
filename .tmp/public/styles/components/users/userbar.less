@@ -1,0 +1,171 @@
+.user-bar {
+  border-radius: 3px;
+  .user-background {
+    width: inherit;
+    min-height: 220px;
+    padding: 40px 20px 30px 20px;
+    background-repeat: no-repeat;
+    .user-img {
+      text-align: center;
+      .input-file {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin-bottom: -100px;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+      }
+      img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+      }
+      .image-tooltip {
+        position: relative;
+        display: inline-block;
+      }
+
+      .image-tooltip input[type=file]:hover {
+        background: none;
+      }
+
+      .image-tooltip .tooltiptext {
+        visibility: visible;
+        width: 150px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+      }
+    }
+    .user-info {
+      color: #fff;
+      text-align: center;
+      .user-name {
+        font-size: 20px;
+      }
+    }
+    .user-btn  {
+      .follow-btn {
+        padding: 6px 20px;
+        background-color: @brand-info;
+        border: none;
+        color: #fff !important;
+        margin-right: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        outline: none;
+        &:hover {
+          background-color: #4CAF50;
+        }
+      }
+      .cancel-follow-btn {
+        padding: 6px 20px;
+        background-color: #4CAF50;
+        border: none;
+        color: #fff;
+        margin-right: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        outline: none;
+        &:hover {
+          background-color: @brand-info;
+        }
+      }
+      .message-btn {
+        padding: 6px 20px;
+        background-color: gray;
+        border: none;
+        color: #fff !important;
+        font-size: 13px;
+        font-weight: 500;
+        outline: none;
+        &:hover {
+          background-color: #5f636d;
+        }
+      }
+    }
+  }
+  .nav {
+    .bar-nav {
+      margin: 0;
+      border-radius: 0;
+      background-color: #fff;
+      text-align: center;
+      font-size: 14px;
+      padding: 10px;
+      border-right: 1px solid #eee;
+      font-weight: 500;
+      i {
+        margin-right: 6px;
+      }
+      a {
+        color: #333;
+        padding: 10px 20px;
+        &:hover {
+          text-decoration: none;
+        }
+        &:visit {
+          text-decoration: none;
+        }
+      }
+      &:last-child {
+        border-right: none;
+      }
+
+      &.active {
+        background-color: @brand-info;
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+
+      &:hover {
+        background-color: @brand-info;
+        a {
+          color: #fff;
+        }
+      }
+    }
+  }
+  .image-editor {
+    margin: 10px 15px;
+    .slim {
+      width: 340px;
+      height: 340px;
+      border-radius: 3px;
+    }
+    .upload-image {
+      .dashed {
+        border-right: 1px dashed gray;
+      }
+      .input-file {
+        width: 200px;
+        height: 200px;
+        margin-bottom: -200px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+      }
+    }
+    .editor-btns {
+      margin-top: 20px;
+      .btn {
+        margin-right: 10px;
+        padding: 6px 20px;
+        // border: none;
+        outline: none;
+      }
+    }
+  }
+}
+
+#uploadModal .modal-dialog.modal-md {
+  width: 400px;
+}
