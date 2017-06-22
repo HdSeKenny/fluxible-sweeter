@@ -16,8 +16,8 @@ function _getPropFromErrorObject(error, prop) {
   let result;
   if (error) {
     result = error[prop] // browser side error object
-    || _lodash2.default.get(error, `body.${prop}` // ajax API error object
-    ) || _lodash2.default.get(error, `output.${prop}`); // server side API error object
+    || _lodash2.default.get(error, `body.${prop}`) // ajax API error object
+    || _lodash2.default.get(error, `output.${prop}`); // server side API error object
   }
   return result;
 }

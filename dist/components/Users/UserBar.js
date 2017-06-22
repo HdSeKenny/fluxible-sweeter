@@ -20,10 +20,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 var _reactRouter = require('react-router');
 
 var _fluxibleAddonsReact = require('fluxible-addons-react');
@@ -103,7 +99,7 @@ const UserBar = (0, _createReactClass2.default)({
       this.setState({ showImageModal: true });
     }
 
-    (0, _jquery2.default)('#uploadModal').on('hidden.bs.modal', () => {
+    $('#uploadModal').on('hidden.bs.modal', () => {
       // eslint-disable-next-line
       this.hideImageModal && this.hideImageModal();
     });
@@ -119,7 +115,7 @@ const UserBar = (0, _createReactClass2.default)({
     formData.append('file', newImage.file);
     const _this = this;
 
-    _jquery2.default.ajax({
+    $.ajax({
       url: `/api/${newImage.userId}/changeProfileImage`,
       type: 'POST',
       data: formData,

@@ -34,11 +34,8 @@ require('./public/styles/main.less');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import 'bootstrap/dist/js/bootstrap';
 window.React = _react2.default;
-// window.jQuery = jQuery;
 
-// import jQuery from 'jquery';
 const dehydratedState = window.__DATA__;
 let firstRender = true;
 

@@ -198,21 +198,14 @@ const Comments = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Col,
         { size: '9' },
-        _react2.default.createElement('textarea', {
-          rows: '1',
-          className: 'form-control',
-          value: replyText,
-          onChange: this.handleReplyText })
+        _react2.default.createElement('textarea', { rows: '1', className: 'form-control', value: replyText, onChange: this.handleReplyText })
       ),
       _react2.default.createElement(
         _Layout.Col,
         { size: '2' },
         _react2.default.createElement(
           'button',
-          {
-            className: 'btn btn-info reply-btn',
-            onClick: () => this.onReplyComment(this, comment),
-            disabled: isDisabled },
+          { className: 'btn btn-info reply-btn', onClick: () => this.onReplyComment(this, comment), disabled: isDisabled },
           ' Reply'
         )
       )
