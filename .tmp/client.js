@@ -52,6 +52,8 @@ _app2.default.rehydrate(dehydratedState, (err, context) => {
       (0, _fetchData2.default)(context, this.state);
     }
     firstRender = false;
+
+    window.scrollTo(0, 0);
   }
 
   _reactDom2.default.render(_react2.default.createElement(_CustomFluxibleComponent2.default, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.Router, {

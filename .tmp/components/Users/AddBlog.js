@@ -34,6 +34,8 @@ var _plugins = require('../../plugins');
 
 var _Layout = require('../UI/Layout');
 
+var _ = require('..');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const AddBlog = (0, _createReactClass2.default)({
@@ -114,8 +116,11 @@ const AddBlog = (0, _createReactClass2.default)({
     this.executeAction(_actions.BlogActions.AddBlog, newBlog);
   },
   render: function () {
-    const { title: title, tags: tags } = this.state;
+    const { title: title, tags: tags, currentUser: currentUser } = this.state;
     const options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
+
+    if (!currentUser) return _react2.default.createElement(_.NotFound, { classes: 'create-article-page' });
+
     return _react2.default.createElement(
       'div',
       { className: 'create-article-page' },

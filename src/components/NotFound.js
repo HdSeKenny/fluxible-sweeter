@@ -6,8 +6,12 @@ import CreateReactClass from 'create-react-class';
  */
 const NotFound = CreateReactClass({
   render() {
+    const { classes } = this.props;
+    const classNames = `not-found ${classes}`;
     return (
-      <h1>! NotFound</h1>
+      <div className={classNames}>
+        <h1>! NotFound</h1>
+      </div>
     );
   }
 });

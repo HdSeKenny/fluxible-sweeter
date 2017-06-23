@@ -9,6 +9,7 @@ import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
 import { DraftEditor } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
+import { NotFound } from '..';
 
 const AddBlog = CreateReactClass({
 
@@ -94,11 +95,14 @@ const AddBlog = CreateReactClass({
   },
 
   render() {
-    const { title, tags } = this.state;
+    const { title, tags, currentUser } = this.state;
     const options = [
       { value: 'one', label: 'One' },
       { value: 'two', label: 'Two' }
     ];
+
+    if (!currentUser) return <NotFound classes="create-article-page"/>;
+
     return (
       <div className="create-article-page">
         <div className="draft-options">

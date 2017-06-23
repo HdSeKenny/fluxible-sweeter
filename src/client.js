@@ -27,6 +27,8 @@ app.rehydrate(dehydratedState, (err, context) => {
       fetchData(context, this.state);
     }
     firstRender = false;
+
+    window.scrollTo(0, 0);
   }
 
   ReactDOM.render(

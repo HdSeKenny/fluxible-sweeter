@@ -1,8 +1,9 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { UserStore } from '../../stores';
+import { Row, Col } from '../UI/Layout';
 
 const Footer = CreateReactClass({
 
@@ -35,15 +36,11 @@ const Footer = CreateReactClass({
   render() {
     const { kenny } = this.state;
     return (
-      <div className="footer">
-        <div className="row">
-          <div className="col-xs-8">
-          </div>
-          <div className="col-xs-4">
-            <h5>.</h5>
-            <h5>© 2016 <span>{kenny.firstName} {kenny.lastName}</span></h5>
-          </div>
-        </div>
+      <div className="footer-wrapper">
+        <Row className="footer-content">
+          <Col size="8 p-0"></Col>
+          <Col size="4 tar p-0"><h5>© 2016 <span>{kenny.firstName} {kenny.lastName}</span></h5></Col>
+        </Row>
       </div>
     );
   }

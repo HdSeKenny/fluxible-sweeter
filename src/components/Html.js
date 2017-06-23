@@ -29,7 +29,6 @@ export default class Html extends React.Component {
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
-          <link href="/styles/components/pages/blog.css" rel="stylesheet" />
           <link href="/styles/css/slim.min.css" rel="stylesheet" />
 
           <link href="/assets/revolution/css/settings.css" rel="stylesheet" media="screen" />
@@ -37,6 +36,8 @@ export default class Html extends React.Component {
           <link href="/assets/revolution/css/navigation.css" rel="stylesheet" />
 
           <link href={style} rel="stylesheet" />
+
+          <link href="/styles/components/pages/blog.css" rel="stylesheet" />
 
           <script src="/styles/js/jquery.min.js"></script>
           <script src="/styles/js/bootstrap.min.js"></script>

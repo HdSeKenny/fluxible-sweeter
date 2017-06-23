@@ -42,12 +42,12 @@ class Html extends _react2.default.Component {
         _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
         _react2.default.createElement('link', { href: '/styles/bootstrap/css/font-awesome.min.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/components/ui/sweetalert.css', rel: 'stylesheet' }),
-        _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/styles/css/slim.min.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/assets/revolution/css/settings.css', rel: 'stylesheet', media: 'screen' }),
         _react2.default.createElement('link', { href: '/assets/revolution/css/layers.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: '/assets/revolution/css/navigation.css', rel: 'stylesheet' }),
         _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
+        _react2.default.createElement('link', { href: '/styles/components/pages/blog.css', rel: 'stylesheet' }),
         _react2.default.createElement('script', { src: '/styles/js/jquery.min.js' }),
         _react2.default.createElement('script', { src: '/styles/js/bootstrap.min.js' })
       ),
