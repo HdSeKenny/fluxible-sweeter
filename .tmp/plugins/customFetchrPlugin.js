@@ -30,7 +30,7 @@ function interceptFetchrMethod(actionContext, methodName) {
     const resource = arguments[0];
     const params = arguments[1];
 
-    console.log(arguments);
+    console.log(arguments
     // let _args = [resource, params];
     // let body, clientConfig, callback;
     // if (['create', 'update'].includes(methodName)) {
@@ -72,6 +72,7 @@ function interceptFetchrMethod(actionContext, methodName) {
     // _args.push(cb);
 
     // method.apply(this, _args);
+    );
   };
 }
 

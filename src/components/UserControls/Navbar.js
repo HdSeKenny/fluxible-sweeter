@@ -167,7 +167,7 @@ const Navbar = CreateReactClass({
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
               {!authenticated &&
-                <li className="mr-0">
+                <li className="mr-0 pr-0 pl-20">
                   <img alt="gray-user" src={grayUserImageUrl} />
                   <ul className="dropdown">
                     <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>
@@ -177,7 +177,7 @@ const Navbar = CreateReactClass({
               }
 
               {authenticated &&
-                <li className="mr-0">
+                <li className="mr-0 pr-0">
                   <img alt="currentUser" src={currentUser.image_url} />
                   <ul className="dropdown">
                     <li><Link to={`/${currentUser.username}`}>User center</Link></li>
