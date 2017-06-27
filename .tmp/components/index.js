@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.List = exports.UserMoments = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
+exports.About = exports.List = exports.UserMoments = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
 
 var _NotFound2 = require('./NotFound');
 
@@ -61,6 +61,10 @@ var _List2 = require('./Pages/List');
 
 var _List3 = _interopRequireDefault(_List2);
 
+var _About2 = require('./Pages/About');
+
+var _About3 = _interopRequireDefault(_About2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.NotFound = _NotFound3.default;
@@ -77,3 +81,4 @@ exports.UserMessages = _UserMessages3.default;
 exports.UserFollows = _UserFollows3.default;
 exports.UserMoments = _UserMoments3.default;
 exports.List = _List3.default;
+exports.About = _About3.default;

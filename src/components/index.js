@@ -12,3 +12,4 @@ export UserMessages from './Users/UserMessages';
 export UserFollows from './Users/UserFollows';
 export UserMoments from './Users/UserMoments';
 export List from './Pages/List';
+export About from './Pages/About';

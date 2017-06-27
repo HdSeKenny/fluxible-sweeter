@@ -58,7 +58,7 @@ export default class HomeRightNav extends React.Component {
     return (
       <div className="home-right-nav mb-10">
         <Row>
-          <Col size="8 pl-0 home-nav-lis">
+          <Col size="7 pl-0 home-nav-lis">
             <button className={momentClasses} onClick={() => this.goToThisUserPages('')}>Moments</button>
             {isCurrentUser &&
               <div className="current-user-link">
@@ -70,7 +70,7 @@ export default class HomeRightNav extends React.Component {
           {!isCreateArticlePage &&
             <div className="">
               <Col size="3 pl-0 home-search"><input type="text" className="form-control" onChange={(e) => this.onSearchBlogs(e)} /></Col>
-              <Col size="1 p-0 tar">
+              <Col size="2 p-0 tar">
                 <select className="home-select form-control">
                   <option>life</option>
                 </select>

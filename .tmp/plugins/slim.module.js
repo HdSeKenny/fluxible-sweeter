@@ -57,9 +57,9 @@ exports.default = typeof window !== 'undefined' ? function () {
     // Files are also Blob instances, but some browsers
     // (Firefox 3.6) support the File API but not Blobs:
     loadImage.isInstanceOf('File', file)) {
-      url = oUrl = loadImage.createObjectURL(file
+      url = oUrl = loadImage.createObjectURL(file);
       // Store the file type for resize processing:
-      );img._type = file.type;
+      img._type = file.type;
     } else if (typeof file === 'string') {
       url = file;
       if (options && options.crossOrigin) {
@@ -448,14 +448,15 @@ exports.default = typeof window !== 'undefined' ? function () {
     jpeg: {
       0xffe1: [] // APP1 marker
     }
+  };
 
-    // Parses image meta data and calls the callback with an object argument
-    // with the following properties:
-    // * imageHead: The complete image head as ArrayBuffer (Uint8Array for IE10)
-    // The options arguments accepts an object and supports the following properties:
-    // * maxMetaDataSize: Defines the maximum number of bytes to parse.
-    // * disableImageHead: Disables creating the imageHead property.
-  };loadImage.parseMetaData = function (file, callback, options) {
+  // Parses image meta data and calls the callback with an object argument
+  // with the following properties:
+  // * imageHead: The complete image head as ArrayBuffer (Uint8Array for IE10)
+  // The options arguments accepts an object and supports the following properties:
+  // * maxMetaDataSize: Defines the maximum number of bytes to parse.
+  // * disableImageHead: Disables creating the imageHead property.
+  loadImage.parseMetaData = function (file, callback, options) {
     options = options || {};
     var that = this;
     // 256 KiB should contain all EXIF/ICC/IPTC segments:
@@ -485,11 +486,11 @@ exports.default = typeof window !== 'undefined' ? function () {
       // Check for the JPEG marker (0xffd8):
       if (dataView.getUint16(0) === 0xffd8) {
         while (offset < maxOffset) {
-          markerBytes = dataView.getUint16(offset
+          markerBytes = dataView.getUint16(offset);
           // Search for APPn (0xffeN) and COM (0xfffe) markers,
           // which contain application-specific meta-data like
           // Exif, ICC and IPTC data and text comments:
-          );if (markerBytes >= 0xffe0 && markerBytes <= 0xffef || markerBytes === 0xfffe) {
+          if (markerBytes >= 0xffe0 && markerBytes <= 0xffef || markerBytes === 0xfffe) {
             // The marker bytes (2) are always followed by
             // the length bytes (2), indicating the length of the
             // marker segment, which includes the length bytes,
@@ -610,8 +611,9 @@ exports.default = typeof window !== 'undefined' ? function () {
       },
       size: 8
     }
-    // undefined, 8-bit byte, value depending on field:
-  };loadImage.exifTagTypes[7] = loadImage.exifTagTypes[1];
+  };
+  // undefined, 8-bit byte, value depending on field:
+  loadImage.exifTagTypes[7] = loadImage.exifTagTypes[1];
 
   loadImage.getExifValue = function (dataView, tiffOffset, offset, type, length, littleEndian) {
     var tagType = loadImage.exifTagTypes[type];
@@ -723,17 +725,17 @@ exports.default = typeof window !== 'undefined' ? function () {
       return;
     }
     // Retrieve the directory offset bytes, usually 0x00000008 or 8 decimal:
-    dirOffset = dataView.getUint32(tiffOffset + 4, littleEndian
+    dirOffset = dataView.getUint32(tiffOffset + 4, littleEndian);
     // Create the exif object to store the tags:
-    );data.exif = new loadImage.ExifMap();
+    data.exif = new loadImage.ExifMap();
     // Parse the tags of the main image directory and retrieve the
     // offset to the next directory, usually the thumbnail directory:
     dirOffset = loadImage.parseExifTags(dataView, tiffOffset, tiffOffset + dirOffset, littleEndian, data);
     if (dirOffset && !options.disableExifThumbnail) {
       thumbnailData = { exif: {} };
-      dirOffset = loadImage.parseExifTags(dataView, tiffOffset, tiffOffset + dirOffset, littleEndian, thumbnailData
+      dirOffset = loadImage.parseExifTags(dataView, tiffOffset, tiffOffset + dirOffset, littleEndian, thumbnailData);
       // Check for JPEG Thumbnail offset:
-      );if (thumbnailData.exif[0x0201]) {
+      if (thumbnailData.exif[0x0201]) {
         data.exif.Thumbnail = loadImage.getExifThumbnail(dataView, tiffOffset + thumbnailData.exif[0x0201], thumbnailData.exif[0x0202] // Thumbnail data length
         );
       }

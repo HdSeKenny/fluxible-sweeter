@@ -204,7 +204,7 @@ const Navbar = (0, _createReactClass2.default)({
             { className: 'sweet-nav-menu sweet-nav-right' },
             !authenticated && _react2.default.createElement(
               'li',
-              { className: 'mr-0' },
+              { className: 'mr-0 pr-0 pl-20' },
               _react2.default.createElement('img', { alt: 'gray-user', src: grayUserImageUrl }),
               _react2.default.createElement(
                 'ul',
@@ -231,7 +231,7 @@ const Navbar = (0, _createReactClass2.default)({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: 'mr-0' },
+              { className: 'mr-0 pr-0' },
               _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url }),
               _react2.default.createElement(
                 'ul',

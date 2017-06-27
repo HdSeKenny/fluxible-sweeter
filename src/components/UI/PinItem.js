@@ -102,7 +102,7 @@ export default class PinItem extends React.Component {
     const displayImgUrl = imageUrls[0];
     if (env.is_client) this.preloadPintemImage(displayImgUrl);
     return (
-      <div className="pin-image">
+      <div className="pin-image" onClick={() => this.pinTextActions(pin)}>
         <img src={displayImgUrl} alt="pin-bc" />
       </div>
     );
@@ -157,7 +157,7 @@ export default class PinItem extends React.Component {
     }
   }
 
-  _renderPinFooterIcons(pin, readMore) {
+  _renderPinFooterIcons(pin) {
     const { currentUser } = this.state;
     const { likers, comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
@@ -165,21 +165,14 @@ export default class PinItem extends React.Component {
     const thumbsUpBallon = isThumbedUp ? 'cancel this?' : 'thumbs up!';
     return (
       <Row className="pin-footer-icons">
-        <Col size="3 p-0">
-          {readMore &&
-            <div className="icon-span read-more" onClick={() => this.pinTextActions(pin)}>
-              <span className="">Read more</span>
-            </div>
-          }
-        </Col>
+        <Col size="3 p-0"></Col>
         <Col size="9 p-0 tar">
           <div
             className="icon-span"
-            // onClick={() => this.onViewPinItem()}
             data-balloon="share!"
             data-balloon-pos="top">
             <i className="fa fa-share-square-o" />
-            <span className="ml-5">3434</span>
+            <span className="ml-5">0</span>
           </div>
           <div
             className="icon-span"
@@ -208,7 +201,7 @@ export default class PinItem extends React.Component {
         {showImage && <Row className="mb-15">{this._renderPinitemImage(pin)}</Row>}
         <Row className="mb-10">{this._renderPinUserInfo(pin)}</Row>
         <Row className="mb-10">{this._renderTextPin(pin, readMore)}</Row>
-        <Row className="">{this._renderPinFooterIcons(pin, readMore)}</Row>
+        <Row className="">{this._renderPinFooterIcons(pin)}</Row>
       </div>
     );
   }
