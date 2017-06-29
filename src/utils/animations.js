@@ -74,7 +74,7 @@ const animations = {
         hideThumbs: 10,
         fullWidth: 'on',
         forceFullWidth: 'on',
-        spinner: 'spinner2',
+        spinner: 'off',
         navigation: {
           keyboardNavigation: 'on',
           keyboard_direction: 'horizontal', //  horizontal - left/right arrows,  vertical - top/bottom arrows

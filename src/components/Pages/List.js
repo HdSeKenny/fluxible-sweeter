@@ -232,7 +232,7 @@ const List = CreateReactClass({
     return (
       <Row>
         <Col size="10" className="p-0">
-          <h3 className="search-tip m-0">Todaydasdasdasdasdasdasdasdasdasdasdsaadsadsadaasddsadasdasdadasdasdsdsad</h3>
+          <h3 className="search-tip m-0"></h3>
         </Col>
         <Col size="2" className="pr-0 pl-30">
           <button

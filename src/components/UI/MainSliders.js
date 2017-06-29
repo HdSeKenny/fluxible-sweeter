@@ -43,7 +43,6 @@ export default class MainSliders extends React.Component {
     };
 
     this.state = {
-
       dataCustomout: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       sliders: [
         '/styles/images/sliders/font-end.png',
@@ -55,14 +54,19 @@ export default class MainSliders extends React.Component {
   }
 
   componentDidMount() {
-    animations.main_sliders(() => {
-      $('.tp-banner-container').removeClass('hidden');
-    });
+    const { show } = this.props;
+    if (show) {
+      animations.main_sliders(() => {
+        $('.tp-banner-container').removeClass('hidden');
+      });
+    }
   }
 
   render() {
     const { sliders, dataCustomout } = this.state;
+    const { show } = this.props;
 
+    if (!show) return;
 
     return (
       <div className="main-sliders">

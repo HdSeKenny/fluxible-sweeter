@@ -21,14 +21,16 @@ app.rehydrate(dehydratedState, (err, context) => {
   window.context = context;
 
   const routes = createRoutes(context);
-
+  const scrollRoutes = ['list', 'about', ':blogId/details', ':username'];
   function UpdateRoute() {
     if (!firstRender) {
       fetchData(context, this.state);
     }
     firstRender = false;
-
-    window.scrollTo(0, 0);
+    const targetPath = this.state.routes[1].path;
+    if (!targetPath || scrollRoutes.includes(targetPath) && this.state.routes.length < 3) {
+      window.scrollTo(0, 0);
+    }
   }
 
   ReactDOM.render(

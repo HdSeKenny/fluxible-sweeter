@@ -47,13 +47,12 @@ class PinItem extends _react2.default.Component {
     this.props.onSelect(pin.id_str);
   }
 
-  pinTextActions(pin) {
-    const isMoment = pin.type !== 'article';
-    if (this.props.disabledClick) {
+  pinTextActions(pin, disabled) {
+    if (this.props.disabledClick || disabled) {
       return;
     }
 
-    if (isMoment) {
+    if (pin.type !== 'article') {
       this.onViewPinItem();
     } else {
       this.goToArticlePage(pin);
@@ -90,6 +89,20 @@ class PinItem extends _react2.default.Component {
     newImage.src = url;
   }
 
+  onHoverPinUserImg(pin, hovered) {
+    if (hovered) {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+    } else {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+      $(`#${pin.id_str}`).fadeIn();
+    }
+  }
+
+  onLeavePinUserImg(pin) {
+    $(`#${pin.id_str}`).stop();
+    $(`#${pin.id_str}`).fadeOut();
+  }
+
   _renderPinitemImage(pin) {
     const imageUrls = pin.images;
     const displayImgUrl = imageUrls[0];
@@ -111,10 +124,21 @@ class PinItem extends _react2.default.Component {
       _react2.default.createElement(
         'div',
         { className: 'pin-moment-user' },
+        _react2.default.createElement('div', {
+          className: 'pin-user-card',
+          id: pin.id_str,
+          onMouseEnter: () => this.onHoverPinUserImg(pin, true),
+          onMouseLeave: () => this.onLeavePinUserImg(pin) }),
         _react2.default.createElement(
           'span',
           { className: 'user-img pull-left mr-10', onClick: () => this.goToUserCenter(author) },
-          _react2.default.createElement('img', { alt: 'pin', src: image_url })
+          _react2.default.createElement('img', {
+            className: 'pin-user-img',
+            alt: 'pin',
+            src: image_url,
+            onMouseEnter: () => this.onHoverPinUserImg(pin),
+            onMouseLeave: () => this.onLeavePinUserImg(pin)
+          })
         ),
         _react2.default.createElement(
           'div',
@@ -274,10 +298,10 @@ class PinItem extends _react2.default.Component {
 
   render() {
     const { pin: pin, showImage: showImage, specialClass: specialClass, readMore: readMore } = this.props;
-    const pinStyle = specialClass ? `pin ${specialClass}` : 'pin';
+    const pinStyle = specialClass ? `pin ${specialClass} ${pin.type}` : `pin ${pin.type}`;
     return _react2.default.createElement(
       'div',
-      { className: `${pinStyle}${readMore ? ' mb-20' : ' mb-10'}` },
+      { className: `${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`, onClick: () => this.pinTextActions(pin, true) },
       _react2.default.createElement(
         'div',
         { className: 'pin-body p-0' },
