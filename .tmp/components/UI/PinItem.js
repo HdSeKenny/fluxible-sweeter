@@ -96,7 +96,7 @@ class PinItem extends _react2.default.Component {
     if (_utils.env.is_client) this.preloadPintemImage(displayImgUrl);
     return _react2.default.createElement(
       'div',
-      { className: 'pin-image' },
+      { className: 'pin-image', onClick: () => this.pinTextActions(pin) },
       _react2.default.createElement('img', { src: displayImgUrl, alt: 'pin-bc' })
     );
   }
@@ -187,7 +187,7 @@ class PinItem extends _react2.default.Component {
     }
   }
 
-  _renderPinFooterIcons(pin, readMore) {
+  _renderPinFooterIcons(pin) {
     const { currentUser: currentUser } = this.state;
     const { likers: likers, comments: comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
@@ -196,34 +196,21 @@ class PinItem extends _react2.default.Component {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'pin-footer-icons' },
-      _react2.default.createElement(
-        _Layout.Col,
-        { size: '3 p-0' },
-        readMore && _react2.default.createElement(
-          'div',
-          { className: 'icon-span read-more', onClick: () => this.pinTextActions(pin) },
-          _react2.default.createElement(
-            'span',
-            { className: '' },
-            'Read more'
-          )
-        )
-      ),
+      _react2.default.createElement(_Layout.Col, { size: '3 p-0' }),
       _react2.default.createElement(
         _Layout.Col,
         { size: '9 p-0 tar' },
         _react2.default.createElement(
           'div',
           {
-            className: 'icon-span'
-            // onClick={() => this.onViewPinItem()}
-            , 'data-balloon': 'share!',
+            className: 'icon-span',
+            'data-balloon': 'share!',
             'data-balloon-pos': 'top' },
           _react2.default.createElement('i', { className: 'fa fa-share-square-o' }),
           _react2.default.createElement(
             'span',
             { className: 'ml-5' },
-            '3434'
+            '0'
           )
         ),
         _react2.default.createElement(
@@ -280,7 +267,7 @@ class PinItem extends _react2.default.Component {
       _react2.default.createElement(
         _Layout.Row,
         { className: '' },
-        this._renderPinFooterIcons(pin, readMore)
+        this._renderPinFooterIcons(pin)
       )
     );
   }

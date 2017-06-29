@@ -91,6 +91,12 @@ License: http://codecanyon.net/licenses
           display: block;
         }
       }
+      &:active {
+        span, a {
+          color: @nav-blue;
+          border-bottom: 1px solid @brand-info;
+        }
+      }
       > span, > a {
         display: inline-block;
         text-decoration: none;
@@ -408,6 +414,7 @@ License: http://codecanyon.net/licenses
       &.active, &:hover {
         > a, > span {
           color: @nav-blue;
+          border-bottom: 1px solid @brand-info;
         }
       }
       ul.dropdown li:hover {

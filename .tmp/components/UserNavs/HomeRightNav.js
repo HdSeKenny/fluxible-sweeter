@@ -66,7 +66,7 @@ class HomeRightNav extends _react2.default.Component {
         null,
         _react2.default.createElement(
           _Layout.Col,
-          { size: '8 pl-0 home-nav-lis' },
+          { size: '7 pl-0 home-nav-lis' },
           _react2.default.createElement(
             'button',
             { className: momentClasses, onClick: () => this.goToThisUserPages('') },
@@ -97,7 +97,7 @@ class HomeRightNav extends _react2.default.Component {
           ),
           _react2.default.createElement(
             _Layout.Col,
-            { size: '1 p-0 tar' },
+            { size: '2 p-0 tar' },
             _react2.default.createElement(
               'select',
               { className: 'home-select form-control' },

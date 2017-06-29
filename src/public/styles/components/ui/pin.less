@@ -108,21 +108,30 @@
       }
     }
   }
-}
-
-.pins-section, .user-blogs {
-  .pin {
+  .pin-user-card {
+    height: 150px;
+    width: 235px;
+    background: #fff;
+    position: absolute;
+    display: none;
+    margin-top: -155px;
+    margin-left: -65px;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  &.moment {
     .pin-body {
-      .pin-body-text p {
-        &:hover {
-          cursor: pointer;
-          color: @brand-info;
-        }
+      .pin-body-text p:hover {
+        cursor: pointer;
+        color: @brand-info;
       }
     }
-    &:hover {
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-      transition: box-shadow 0.3s ease-in-out;
-    }
+  }
+}
+
+.pins-section {
+  .pin:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: box-shadow 0.3s ease-in-out;
   }
 }

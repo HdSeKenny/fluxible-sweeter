@@ -52,13 +52,12 @@ export default class PinItem extends React.Component {
     this.props.onSelect(pin.id_str);
   }
 
-  pinTextActions(pin) {
-    const isMoment = pin.type !== 'article';
-    if (this.props.disabledClick) {
+  pinTextActions(pin, disabled) {
+    if (this.props.disabledClick || disabled) {
       return;
     }
 
-    if (isMoment) {
+    if (pin.type !== 'article') {
       this.onViewPinItem();
     }
     else {
@@ -97,6 +96,21 @@ export default class PinItem extends React.Component {
     newImage.src = url;
   }
 
+  onHoverPinUserImg(pin, hovered) {
+    if (hovered) {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+    }
+    else {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+      $(`#${pin.id_str}`).fadeIn();
+    }
+  }
+
+  onLeavePinUserImg(pin) {
+    $(`#${pin.id_str}`).stop();
+    $(`#${pin.id_str}`).fadeOut();
+  }
+
   _renderPinitemImage(pin) {
     const imageUrls = pin.images;
     const displayImgUrl = imageUrls[0];
@@ -115,8 +129,21 @@ export default class PinItem extends React.Component {
     return (
       <div className="pin-header">
         <div className="pin-moment-user">
+          <div
+            className="pin-user-card"
+            id={pin.id_str}
+            onMouseEnter={() => this.onHoverPinUserImg(pin, true)}
+            onMouseLeave={() => this.onLeavePinUserImg(pin)}>
+
+          </div>
           <span className="user-img pull-left mr-10" onClick={() => this.goToUserCenter(author)}>
-            <img alt="pin" src={image_url} />
+            <img
+              className="pin-user-img"
+              alt="pin"
+              src={image_url}
+              onMouseEnter={() => this.onHoverPinUserImg(pin)}
+              onMouseLeave={() => this.onLeavePinUserImg(pin)}
+            />
           </span>
           <div className="author">
             <span className="name" onClick={() => this.goToUserCenter(author)}>{firstName} {lastName}</span>
@@ -208,9 +235,9 @@ export default class PinItem extends React.Component {
 
   render() {
     const { pin, showImage, specialClass, readMore } = this.props;
-    const pinStyle = specialClass ? `pin ${specialClass}` : 'pin';
+    const pinStyle = specialClass ? `pin ${specialClass} ${pin.type}` : `pin ${pin.type}`;
     return (
-      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`}>
+      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`} onClick={() => this.pinTextActions(pin, true)}>
         <div className="pin-body p-0">{this._renderPinitemContent(pin, showImage, readMore)}</div>
       </div>
     );
