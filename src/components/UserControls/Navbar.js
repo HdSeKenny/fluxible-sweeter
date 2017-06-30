@@ -38,7 +38,6 @@ const Navbar = CreateReactClass({
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       authenticated: this.getStore(UserStore).isAuthenticated(),
-      grayUserImageUrl: '/styles/images/users/gray-user.png',
       brandImage: '/styles/images/sweeter.png',
       showLoginModal: false,
       showSignupModal: false,
@@ -68,6 +67,7 @@ const Navbar = CreateReactClass({
   },
 
   isActive(routes) {
+    // if (this.props.route && this.props.route === routes) return 'active';
     const path = jsUtils.splitUrlBySlash(this.props.route, routes.length);
     const isActive = _.isEqual(routes.sort(), path.sort());
     return isActive ? 'active' : '';
@@ -142,40 +142,27 @@ const Navbar = CreateReactClass({
   },
 
   render() {
-    const { authenticated, currentUser, grayUserImageUrl, brandImage, showLoginModal, showSignupModal } = this.state;
+    const { authenticated, currentUser, brandImage, showLoginModal, showSignupModal } = this.state;
+    const aboutActiveClass = authenticated ? `${this.isActive(['about'])} mr-30` : this.isActive(['about']);
     return (
       <section className="menuzord-section">
         <header id="menuzord" className="sweet-nav blue">
           <div className="sweet-nav-wrap">
-            <Link to="/" className="sweet-nav-brand">
-              <img src={brandImage} alt="brand" height="26" />
-            </Link>
+            <Link to="/" className="sweet-nav-brand"><img src={brandImage} alt="brand" height="26" /></Link>
             <ul className="sweet-nav-menu sweet-nav-left">
-              <li className={this.isActive(['list'])}>
-                <Link to="/list">List</Link>
-              </li>
-
-              {authenticated &&
-                <li className={this.userCenterActive(currentUser.username)}>
-                  <Link to={`/${currentUser.username}`}>Personal</Link>
-                </li>
-              }
-
-              <li className={this.isActive(['about'])}>
-                <Link to="/about">About</Link>
+              <li className="search">
+                <form className="iconic-input">
+                  <i className="fa fa-search"></i>
+                  <input type="text" className="form-control search-input" name="keyword" placeholder="Search..." />
+                </form>
               </li>
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
-              {!authenticated &&
-                <li className="mr-0 pr-0 pl-20">
-                  <img alt="gray-user" src={grayUserImageUrl} />
-                  <ul className="dropdown">
-                    <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>
-                    <li><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>
-                  </ul>
-                </li>
-              }
-
+              <li className={this.isActive([''])}><Link to="/">Home</Link></li>
+              <li className={this.isActive(['list'])}><Link to="/list">List</Link></li>
+              <li className={aboutActiveClass}><Link to="/about">About</Link></li>
+              {!authenticated && <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>}
+              {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}
               {authenticated &&
                 <li className="mr-0 pr-0">
                   <img alt="currentUser" src={currentUser.image_url} />
@@ -189,7 +176,6 @@ const Navbar = CreateReactClass({
             </ul>
           </div>
         </header>
-
 
         <Layout.Page>
           <ModalsFactory

@@ -55,20 +55,25 @@ class MainSliders extends _react2.default.Component {
     };
 
     this.state = {
-
       dataCustomout: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       sliders: ['/styles/images/sliders/font-end.png', '/styles/images/sliders/reactjs.png', '/styles/images/sliders/great-frontend.png', '/styles/images/sliders/life.png']
     };
   }
 
   componentDidMount() {
-    _animations2.default.main_sliders(() => {
-      $('.tp-banner-container').removeClass('hidden');
-    });
+    const { show: show } = this.props;
+    if (show) {
+      _animations2.default.main_sliders(() => {
+        $('.tp-banner-container').removeClass('hidden');
+      });
+    }
   }
 
   render() {
     const { sliders: sliders, dataCustomout: dataCustomout } = this.state;
+    const { show: show } = this.props;
+
+    if (!show) return;
 
     return _react2.default.createElement(
       'div',

@@ -12,6 +12,8 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _reactRouter = require('react-router');
+
 var _actions = require('../../actions');
 
 var _Layout = require('../UI/Layout');
@@ -24,13 +26,18 @@ var _Draft = require('../../plugins/Draft');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Copyright 2017, created by Kuan Lu
+ * @ui BlogModal
+ */
+
 class BlogModal extends _react2.default.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       currentUser: props.currentUser,
-      welcomeText: 'Create a sweet here !',
+      welcomeText: 'Calm down, just a bad day, not a bad life !',
       blogText: ''
     };
   }
@@ -65,6 +72,8 @@ class BlogModal extends _react2.default.Component {
     if (!currentUser) {
       return _utils.sweetAlert.alertWarningMessage('Login first!');
     }
+
+    this.context.router.push(`/${currentUser.username}/create`);
   }
 
   _renderCreateBtns(isDisabled) {
@@ -147,25 +156,21 @@ class BlogModal extends _react2.default.Component {
       _react2.default.createElement(
         _Layout.Row,
         { className: 'textarea-row' },
-        _react2.default.createElement('textarea', { type: 'text', rows: '4', value: blogText, onChange: e => this.onChangeBlogText(e) })
+        _react2.default.createElement(_Draft.CustomMentionEditor, null)
       ),
       _react2.default.createElement(
         _Layout.Row,
         { className: 'btn-row' },
         this._renderCreateBtns(isDisabled)
-      ),
-      _react2.default.createElement(_Draft.CustomMentionEditor, null)
+      )
     );
   }
 }
-exports.default = BlogModal; /**
-                              * Copyright 2017, created by Kuan Lu
-                              * @ui BlogModal
-                              */
-
+exports.default = BlogModal;
 BlogModal.displayName = 'BlogModal';
 BlogModal.contextTypes = {
-  executeAction: _propTypes2.default.func
+  executeAction: _propTypes2.default.func,
+  router: _reactRouter.routerShape.isRequired
 };
 BlogModal.propTypes = {
   location: _propTypes2.default.object,

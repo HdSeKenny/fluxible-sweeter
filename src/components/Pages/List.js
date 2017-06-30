@@ -33,7 +33,7 @@ const List = CreateReactClass({
       currentUser: this.getStore(UserStore).getCurrentUser(),
       kenny: this.getStore(UserStore).getKennyUser(),
       blogs: this.getStore(BlogStore).getAllBlogs(),
-      welcomeText: 'What happened today, Write a blog here !',
+      welcomeText: 'Calm down, just a bad day, not a bad life',
       blogText: '',
       selectedPin: {},
       showCreateModal: false,
@@ -192,17 +192,10 @@ const List = CreateReactClass({
   },
 
   _renderSearchBlock() {
+    const { currentUser } = this.state;
     return (
       <section className="search-block mb-15">
-        <div className="search-block-header">
-          {this._renderSearchBlockHeader()}
-        </div>
-        <div className="search-block-body">
-          {this._renderSearchBlockBody()}
-        </div>
-        <div className="search-block-footer">
-          {this._renderSearchBlockFooter()}
-        </div>
+        <BlogModal currentUser={currentUser} isUserHome={true} />
       </section>
     );
   },

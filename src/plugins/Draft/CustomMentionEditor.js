@@ -30,7 +30,7 @@ const mentionPlugin = createMentionPlugin({
   mentionPrefix: '@',
 });
 const { MentionSuggestions } = mentionPlugin;
-const plugins = [mentionPlugin];
+// const plugins = [mentionPlugin];
 
 const Entry = (props) => {
   const {
@@ -89,12 +89,13 @@ export default class CustomMentionEditor extends Component {
   };
 // editorStyles.editor
   render() {
+    const { EmojiPlugins } = this.props;
     return (
-      <div className="" onClick={this.focus}>
+      <div className="sweet-editor" onClick={this.focus}>
         <Editor
           editorState={this.state.editorState}
           onChange={this.onChange}
-          plugins={plugins}
+          plugins={EmojiPlugins}
           ref={(element) => { this.editor = element; }}
         />
         <MentionSuggestions

@@ -5,18 +5,25 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { routerShape } from 'react-router';
+import createEmojiPlugin from 'draft-js-emoji-plugin'; // eslint-disable-line import/no-unresolved
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
 import { CustomMentionEditor } from '../../plugins/Draft';
 
+const emojiPlugin = createEmojiPlugin();
+const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+const EmojiPlugins = [emojiPlugin];
+
 export default class BlogModal extends React.Component {
 
   static displayName = 'BlogModal';
 
   static contextTypes = {
-    executeAction: PropTypes.func
+    executeAction: PropTypes.func,
+    router: routerShape.isRequired
   };
 
   static propTypes = {
@@ -30,7 +37,7 @@ export default class BlogModal extends React.Component {
     super(props);
     this.state = {
       currentUser: props.currentUser,
-      welcomeText: 'Create a sweet here !',
+      welcomeText: 'Calm down, just a bad day, not a bad life !',
       blogText: ''
     };
   }
@@ -65,6 +72,8 @@ export default class BlogModal extends React.Component {
     if (!currentUser) {
       return sweetAlert.alertWarningMessage('Login first!');
     }
+
+    this.context.router.push(`/${currentUser.username}/create`);
   }
 
   _renderCreateBtns(isDisabled) {
@@ -101,10 +110,12 @@ export default class BlogModal extends React.Component {
           </Col>
         </Row>
         <Row className="textarea-row">
-          <textarea type="text" rows="4" value={blogText} onChange={(e) => this.onChangeBlogText(e)} />
+          <CustomMentionEditor EmojiPlugins={EmojiPlugins} />
+          <EmojiSuggestions />
+          <EmojiSelect />
         </Row>
         <Row className="btn-row">{this._renderCreateBtns(isDisabled)}</Row>
-        <CustomMentionEditor />
+
       </div>
     );
   }

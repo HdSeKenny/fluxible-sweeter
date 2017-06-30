@@ -240,23 +240,24 @@ License: http://codecanyon.net/licenses
       &.search {
         form {
           float: left;
-          padding: 22px 16px 17px;
-          input[type="text"] {
-            width: 160px;
-            padding: 5px 10px;
+          margin: 18.5px 0;
+          .search-input {
+            width: 260px;
+            padding: 5px 15px;
             font-family: 'Open Sans', sans-serif;
-            border: none;
+            border: 1px solid #f0f0f0;
             background: #f0f0f0;
             border-radius: 2px;
             outline: 0;
-            -o-transition: width 1s ease-out;
-            -moz-transition: width 1s ease-out;
-            -webkit-transition: width 1s ease-out;
-            transition: width 1s ease-out;
-          }
-
-          &:hover input[type="text"] {
-            width: 160px;
+            -o-transition: all .3s ease-out;
+            -moz-transition: all .3s ease-out;
+            -webkit-transition: all .3s ease-out;
+            transition: all .3s ease-out;
+            &:hover,
+            &:focus {
+              border: 1px solid @brand-info;
+              background: #fff;
+            }
           }
         }
       }

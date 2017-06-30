@@ -58,7 +58,7 @@ const List = (0, _createReactClass2.default)({
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       kenny: this.getStore(_stores.UserStore).getKennyUser(),
       blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
-      welcomeText: 'What happened today, Write a blog here !',
+      welcomeText: 'Calm down, just a bad day, not a bad life',
       blogText: '',
       selectedPin: {},
       showCreateModal: false,
@@ -255,24 +255,11 @@ const List = (0, _createReactClass2.default)({
     );
   },
   _renderSearchBlock: function () {
+    const { currentUser: currentUser } = this.state;
     return _react2.default.createElement(
       'section',
       { className: 'search-block mb-15' },
-      _react2.default.createElement(
-        'div',
-        { className: 'search-block-header' },
-        this._renderSearchBlockHeader()
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'search-block-body' },
-        this._renderSearchBlockBody()
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'search-block-footer' },
-        this._renderSearchBlockFooter()
-      )
+      _react2.default.createElement(_UserControls.BlogModal, { currentUser: currentUser, isUserHome: true })
     );
   },
   _renderSearchBlockBody: function () {
@@ -309,11 +296,7 @@ const List = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Col,
         { size: '10', className: 'p-0' },
-        _react2.default.createElement(
-          'h3',
-          { className: 'search-tip m-0' },
-          'Todaydasdasdasdasdasdasdasdasdasdasdsaadsadsadaasddsadasdasdadasdasdsdsad'
-        )
+        _react2.default.createElement('h3', { className: 'search-tip m-0' })
       ),
       _react2.default.createElement(
         _Layout.Col,

@@ -55,6 +55,8 @@ function splitUrlBySlash(url, number) {
 
   if (number && isNumeric(number)) {
     targetNumber = number;
+  } else {
+    return path;
   }
 
   if (params.length) {

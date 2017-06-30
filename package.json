@@ -26,6 +26,7 @@
     "crypto": "0.0.3",
     "debug": "~2.2.0",
     "draft-js": "^0.10.1",
+    "draft-js-emoji-plugin": "^2.0.0-rc2",
     "draft-js-export-html": "^0.5.4",
     "draft-js-mention-plugin": "^2.0.0-rc2",
     "draft-js-plugins-editor": "^2.0.0-rc2",

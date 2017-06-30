@@ -36,7 +36,7 @@ class App extends _react2.default.Component {
       _UI.FullScreen,
       { id: 'app' },
       _react2.default.createElement(_UserControls.Navbar, { route: route }),
-      showMainSliders && _react2.default.createElement(_UI.MainSliders, null),
+      showMainSliders && _react2.default.createElement(_UI.MainSliders, { show: showMainSliders }),
       _react2.default.createElement(
         'div',
         { className: 'content-pages' },

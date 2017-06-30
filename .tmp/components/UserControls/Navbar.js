@@ -65,7 +65,6 @@ const Navbar = (0, _createReactClass2.default)({
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
-      grayUserImageUrl: '/styles/images/users/gray-user.png',
       brandImage: '/styles/images/sweeter.png',
       showLoginModal: false,
       showSignupModal: false,
@@ -87,6 +86,7 @@ const Navbar = (0, _createReactClass2.default)({
     }
   },
   isActive: function (routes) {
+    // if (this.props.route && this.props.route === routes) return 'active';
     const path = _utils.jsUtils.splitUrlBySlash(this.props.route, routes.length);
     const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
     return isActive ? 'active' : '';
@@ -153,7 +153,8 @@ const Navbar = (0, _createReactClass2.default)({
     this.setState({ switchModal: { modalRef: modalRef, state: true } });
   },
   render: function () {
-    const { authenticated: authenticated, currentUser: currentUser, grayUserImageUrl: grayUserImageUrl, brandImage: brandImage, showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
+    const { authenticated: authenticated, currentUser: currentUser, brandImage: brandImage, showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
+    const aboutActiveClass = authenticated ? `${this.isActive(['about'])} mr-30` : this.isActive(['about']);
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
@@ -173,6 +174,29 @@ const Navbar = (0, _createReactClass2.default)({
             { className: 'sweet-nav-menu sweet-nav-left' },
             _react2.default.createElement(
               'li',
+              { className: 'search' },
+              _react2.default.createElement(
+                'form',
+                { className: 'iconic-input' },
+                _react2.default.createElement('i', { className: 'fa fa-search' }),
+                _react2.default.createElement('input', { type: 'text', className: 'form-control search-input', name: 'keyword', placeholder: 'Search...' })
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'ul',
+            { className: 'sweet-nav-menu sweet-nav-right' },
+            _react2.default.createElement(
+              'li',
+              { className: this.isActive(['']) },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/' },
+                'Home'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
               { className: this.isActive(['list']) },
               _react2.default.createElement(
                 _reactRouter.Link,
@@ -180,53 +204,31 @@ const Navbar = (0, _createReactClass2.default)({
                 'List'
               )
             ),
-            authenticated && _react2.default.createElement(
-              'li',
-              { className: this.userCenterActive(currentUser.username) },
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: `/${currentUser.username}` },
-                'Personal'
-              )
-            ),
             _react2.default.createElement(
               'li',
-              { className: this.isActive(['about']) },
+              { className: aboutActiveClass },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/about' },
                 'About'
               )
-            )
-          ),
-          _react2.default.createElement(
-            'ul',
-            { className: 'sweet-nav-menu sweet-nav-right' },
+            ),
             !authenticated && _react2.default.createElement(
               'li',
-              { className: 'mr-0 pr-0 pl-20' },
-              _react2.default.createElement('img', { alt: 'gray-user', src: grayUserImageUrl }),
+              null,
               _react2.default.createElement(
-                'ul',
-                { className: 'dropdown' },
-                _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'span',
-                    { onClick: () => this.openNavbarModals('loginModal') },
-                    'Log in'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  null,
-                  _react2.default.createElement(
-                    'span',
-                    { onClick: () => this.openNavbarModals('signupModal') },
-                    'Sign up'
-                  )
-                )
+                'span',
+                { onClick: () => this.openNavbarModals('loginModal') },
+                'Log in'
+              )
+            ),
+            !authenticated && _react2.default.createElement(
+              'li',
+              { className: 'mr-0 pr-0' },
+              _react2.default.createElement(
+                'span',
+                { onClick: () => this.openNavbarModals('signupModal') },
+                'Sign up'
               )
             ),
             authenticated && _react2.default.createElement(

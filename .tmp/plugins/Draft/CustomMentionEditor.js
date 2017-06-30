@@ -14,6 +14,10 @@ var _draftJsPluginsEditor = require('draft-js-plugins-editor');
 
 var _draftJsPluginsEditor2 = _interopRequireDefault(_draftJsPluginsEditor);
 
+var _draftJsEmojiPlugin = require('draft-js-emoji-plugin');
+
+var _draftJsEmojiPlugin2 = _interopRequireDefault(_draftJsEmojiPlugin);
+
 var _draftJsMentionPlugin = require('draft-js-mention-plugin');
 
 var _draftJsMentionPlugin2 = _interopRequireDefault(_draftJsMentionPlugin);
@@ -26,7 +30,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } // eslint-disable-line import/no-unresolved
 // eslint-disable-line import/no-unresolved
+// eslint-disable-line import/no-unresolved
 
+
+const emojiPlugin = (0, _draftJsEmojiPlugin2.default)();
+const { EmojiSuggestions: EmojiSuggestions, EmojiSelect: EmojiSelect } = emojiPlugin;
+const plugins = [emojiPlugin];
 
 const positionSuggestions = ({ state: state, props: props }) => {
   let transform;
@@ -54,7 +63,7 @@ const mentionPlugin = (0, _draftJsMentionPlugin2.default)({
   mentionPrefix: '@'
 });
 const { MentionSuggestions: MentionSuggestions } = mentionPlugin;
-const plugins = [mentionPlugin];
+// const plugins = [mentionPlugin];
 
 const Entry = props => {
   const {
@@ -120,7 +129,7 @@ class CustomMentionEditor extends _react.Component {
   render() {
     return _react2.default.createElement(
       'div',
-      { className: '', onClick: this.focus },
+      { className: 'sweet-editor', onClick: this.focus },
       _react2.default.createElement(_draftJsPluginsEditor2.default, {
         editorState: this.state.editorState,
         onChange: this.onChange,
@@ -129,6 +138,8 @@ class CustomMentionEditor extends _react.Component {
           this.editor = element;
         }
       }),
+      _react2.default.createElement(EmojiSuggestions, null),
+      _react2.default.createElement(EmojiSelect, null),
       _react2.default.createElement(MentionSuggestions, {
         onSearchChange: this.onSearchChange,
         suggestions: this.state.suggestions,
