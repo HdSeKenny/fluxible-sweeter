@@ -31,13 +31,6 @@ export default class PinItem extends React.Component {
     storeListeners: [UserStore, BlogStore]
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: props.currentUser
-    };
-  }
-
   goToUserCenter(author) {
     $('#pinModal').modal('hide');
     this.context.router.push(`/${author.username}`);
@@ -185,7 +178,7 @@ export default class PinItem extends React.Component {
   }
 
   _renderPinFooterIcons(pin) {
-    const { currentUser } = this.state;
+    const { currentUser } = this.props;
     const { likers, comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
     const faThumbsIcon = isThumbedUp ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up';
@@ -237,7 +230,7 @@ export default class PinItem extends React.Component {
     const { pin, showImage, specialClass, readMore } = this.props;
     const pinStyle = specialClass ? `pin ${specialClass} ${pin.type}` : `pin ${pin.type}`;
     return (
-      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`} onClick={() => this.pinTextActions(pin, true)}>
+      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`}>
         <div className="pin-body p-0">{this._renderPinitemContent(pin, showImage, readMore)}</div>
       </div>
     );

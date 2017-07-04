@@ -1,5 +1,0 @@
-{
-  "node_env": "development:hot-loader",
-  "hot_server_host":"localhost",
-  "hot_server_port": 5858
-}

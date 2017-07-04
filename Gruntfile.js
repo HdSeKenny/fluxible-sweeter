@@ -12,11 +12,11 @@ module.exports = function(grunt) {
     project: {
       srcPublic: path.join(__dirname, '/src/public'),
       distPublic: path.join(__dirname, '/dist/public'),
-      devPublic: path.join(__dirname, '/.tmp/public'),
+      devPublic: path.join(__dirname, '/dev/public'),
 
       src: path.join(__dirname, '/src'),
       dist: path.join(__dirname, '/dist'),
-      dev: path.join(__dirname, '/.tmp')
+      dev: path.join(__dirname, '/dev')
     },
 
     // clean dist
@@ -208,7 +208,7 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
-          script: '.tmp/bin/server.js'
+          script: 'dev/bin/server.js'
         }
       },
       prod: {
@@ -265,20 +265,20 @@ module.exports = function(grunt) {
     // complete the ignore list to get a better experience on server-side relaunch
     nodemon: {
       client: {
-        script: '.tmp/bin/server.js',
+        script: 'dev/bin/server.js',
         options: {
-          watch: ['.tmp/**/*'],
+          watch: ['dev/**/*'],
           ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
           nodeArgs: ['--harmony', '--inspect'],
           verbose: true,
         }
       },
       server: {
-        script: '.tmp/bin/server.js',
+        script: 'dev/bin/server.js',
         options: {
           nodeArgs: ['--harmony', '--inspect'],
           verbose: true,
-          watch: ['.tmp/**/*'],
+          watch: ['dev/**/*'],
           ignore: ['public/**/*', 'tests/*/*', 'assets.json'],
         },
       }
@@ -384,7 +384,7 @@ module.exports = function(grunt) {
   // Because the assets is immutable for now
   // just hard code the assets instead get it from the webpack stats
   grunt.registerTask('assets', () => {
-    grunt.file.write('.tmp/configs/assets.json', JSON.stringify({
+    grunt.file.write('dev/configs/assets.json', JSON.stringify({
       assets: {
         'style': `http://${env.hot_server_host}:${env.hot_server_port}/main.css`,
         'main': `http://${env.hot_server_host}:${env.hot_server_port}/main.js`,

@@ -87,7 +87,7 @@ const Comments = CreateReactClass({
       commenter: this.state.currentUser._id
     };
 
-    this.executeAction(BlogActions.AddBlogComment, comment);
+    this.context.executeAction(BlogActions.AddBlogComment, comment);
   },
 
   showReplyTextarea(comment) {

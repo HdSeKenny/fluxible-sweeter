@@ -47,24 +47,36 @@ const List = CreateReactClass({
       'DELETE_COMMENT_SUCCESS',
       'THUMBS_UP_BLOG_SUCCESS',
       'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+    ];
+
+    const blogsMsgs = [
       'DELETE_BLOG_SUCCESS',
       'CREATE_BLOG_SUCCESS'
     ];
 
+    sweetAlert.success(res.msg);
+
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      sweetAlert.success(res.msg);
+      this.setState({
+        selectedPin: res.newBlog
+      });
+    }
+
+    if (blogsMsgs.includes(res.msg)) {
+      if (res.msg === 'CREATE_BLOG_SUCCESS') {
+        ModalsFactory.hide('createBlogModal');
+      }
+
       this.setState({
         blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      ModalsFactory.hide('createBlogModal');
+    if (res.msg === 'USER_LOGIN_SUCCESS') {
+      this.setState({
+        currentUser: this.getStore(UserStore).getCurrentUser()
+      });
     }
-  },
-
-  handleBlogText(e) {
-    this.setState({ blogText: e.target.value });
   },
 
   handleMicroBlog() {
@@ -191,52 +203,12 @@ const List = CreateReactClass({
     );
   },
 
-  _renderSearchBlock() {
+  _renderSweetBlock() {
     const { currentUser } = this.state;
     return (
       <section className="search-block mb-15">
         <BlogModal currentUser={currentUser} isUserHome={true} />
       </section>
-    );
-  },
-
-  _renderSearchBlockBody() {
-    return (
-      <Row>
-        <form className="search-content" action="#" method="post">
-          <div className="iconic-input">
-            <i className="fa fa-search"></i>
-            <input type="text" className="form-control" name="keyword" placeholder="Search..." />
-          </div>
-        </form>
-      </Row>
-    );
-  },
-
-  _renderSearchBlockFooter() {
-    return (
-      <Row>
-        <h5 className="hot-searched">Hot searched ：</h5>
-      </Row>
-    );
-  },
-
-  _renderSearchBlockHeader() {
-    return (
-      <Row>
-        <Col size="10" className="p-0">
-          <h3 className="search-tip m-0"></h3>
-        </Col>
-        <Col size="2" className="pr-0 pl-30">
-          <button
-            className="btn btn-info btn-block"
-            data-balloon="create a sweet!"
-            data-balloon-ops="top"
-            onClick={this.openCreateBlogModal}>
-            <i className="fa fa-pencil"></i> Sweet
-          </button>
-        </Col>
-      </Row>
     );
   },
 
@@ -246,7 +218,7 @@ const List = CreateReactClass({
     return (
       <article className="list-page">
         <section className="mid">
-          {this._renderSearchBlock()}
+          {this._renderSweetBlock()}
           {this._renderAllPinItems(blogs, currentUser)}
         </section>
         <section className="right">
@@ -257,17 +229,7 @@ const List = CreateReactClass({
           <div className="right-blog-option">
           </div>
         </section>
-
         <Layout.Page>
-          <ModalsFactory
-            modalref="createBlogModal"
-            title="Create a sweet !"
-            ModalComponent={BlogModal}
-            size="modal-md"
-            showHeaderAndFooter={false}
-            showModal={showCreateModal}
-            currentUser={currentUser} />
-
           <ModalsFactory
             modalref="pinModal"
             large={true}

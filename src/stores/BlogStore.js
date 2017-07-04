@@ -42,26 +42,23 @@ const BlogStore = createStore({
 
   // Blogs comments
   addCommentSuccess(res) {
-    const resObj = { msg: 'COMMENT_SUCCESS', blogId: res.blogId, data: res };
-    this.blogs.forEach((blog, index) => {
-      if (blog.id_str === res.blogId) {
-        this.blogs[index].comments.push(res);
-      }
-    });
+    const newBlog = this.blogs.find(b => b.id_str === res.blogId);
+    newBlog.comments.push(res);
+    const resObj = { msg: 'COMMENT_SUCCESS', newBlog };
+
+    const idx = this.blogs.findIndex(b => b.id_str === res.blogId);
+    this.blogs[idx] = newBlog;
     this.emitChange(resObj);
   },
 
   deleteCommentSuccess(res) {
-    const resObj = { msg: 'DELETE_COMMENT_SUCCESS', blogId: res.blogId, data: res.deletedCommentId };
-    this.blogs.forEach((blog, bIdx) => {
-      if (blog.id_str === res.blogId) {
-        blog.comments.forEach((comment, cIdx) => {
-          if (comment.id_str === res.deletedCommentId) {
-            this.blogs[bIdx].comments.splice(cIdx, 1);
-          }
-        });
-      }
-    });
+    const deletedCommentBlog = this.blogs.find(b => b.id_str === res.blogId);
+    const deletedCommentIndex = deletedCommentBlog.comments.findIndex(c => c.id_str === res.deletedCommentId);
+    deletedCommentBlog.comments.splice(deletedCommentIndex, 1);
+
+    const resObj = { msg: 'DELETE_COMMENT_SUCCESS', newBlog: deletedCommentBlog };
+    const idx = this.blogs.findIndex(b => b.id_str === res.blogId);
+    this.blogs[idx] = deletedCommentBlog;
     this.emitChange(resObj);
   },
 
@@ -268,29 +265,25 @@ const BlogStore = createStore({
     this.emitChange(resObj);
   },
 
-  thumbsUpBlogSuccess(newBlog) {
-    const resObj = {
-      msg: 'THUMBS_UP_BLOG_SUCCESS',
-      newBlog
-    };
-    this.blogs.forEach((blog, index) => {
-      if (blog.id_str === newBlog.id_str) {
-        this.blogs[index].likers = newBlog.likers;
-      }
-    });
+  thumbsUpBlogSuccess(res) {
+    const newBlog = this.blogs.find(b => b.id_str === res.id_str);
+    newBlog.likers = res.likers;
+    const resObj = { msg: 'THUMBS_UP_BLOG_SUCCESS', newBlog };
+
+    const idx = this.blogs.findIndex(b => b.id_str === res.id_str);
+    this.blogs[idx] = newBlog;
+
     this.emitChange(resObj);
   },
 
-  cancelThumbsUpBlogSuccess(newBlog) {
-    const resObj = {
-      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS',
-      newBlog
-    };
-    this.blogs.forEach((blog, index) => {
-      if (blog.id_str === newBlog.id_str) {
-        this.blogs[index].likers = newBlog.likers;
-      }
-    });
+  cancelThumbsUpBlogSuccess(res) {
+    const newBlog = _.cloneDeep(this.blogs).find(b => b.id_str === res.id_str);
+    newBlog.likers = res.likers;
+    const resObj = { msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS', newBlog };
+
+    const idx = this.blogs.findIndex(b => b.id_str === res.id_str);
+    this.blogs[idx] = newBlog;
+
     this.emitChange(resObj);
   },
 

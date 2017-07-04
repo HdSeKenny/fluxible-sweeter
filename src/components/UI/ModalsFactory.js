@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from './Layout';
 
-// const shallowCompare = require('react-addons-shallow-compare');
-
 export default class ModalsFactory extends React.Component {
 
   static displayName = 'ModalsFactory';
@@ -28,11 +26,6 @@ export default class ModalsFactory extends React.Component {
     $(`#${modalRef}`).modal('hide');
   };
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(shallowCompare(this, nextProps, nextState));
-  //   return shallowCompare(this, nextProps, nextState);
-  // }
-
   _renderModalHeader(title) {
     return (
       <div className="modal-header">
@@ -44,7 +37,6 @@ export default class ModalsFactory extends React.Component {
   }
 
   _renderModalFooter() {
-
     return (
       <div className="modal-footer mb-10">
       </div>

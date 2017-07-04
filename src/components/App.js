@@ -8,12 +8,16 @@ export default class App extends React.Component {
 
   static displayName = 'App';
 
+  static contextTypes = {
+    executeAction: PropTypes.func
+  };
+
   static propTypes = {
     location: PropTypes.object,
     children: PropTypes.object
   };
 
-  static fetchData = (context, params, query, done) => {
+  fetchData = (context, params, query, done) => {
     Promise.all([
       context.executeAction(UserActions.LoadUsers, params),
       context.executeAction(BlogActions.LoadBlogs, params)

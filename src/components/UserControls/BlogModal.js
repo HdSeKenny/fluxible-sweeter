@@ -5,13 +5,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createEmojiPlugin from 'draft-js-emoji-plugin';
 import { routerShape } from 'react-router';
-import createEmojiPlugin from 'draft-js-emoji-plugin'; // eslint-disable-line import/no-unresolved
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
-import { CustomMentionEditor } from '../../plugins/Draft';
+import { SweetEditor } from '../../plugins/Draft';
 
 const emojiPlugin = createEmojiPlugin();
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
@@ -36,7 +36,6 @@ export default class BlogModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: props.currentUser,
       welcomeText: 'Calm down, just a bad day, not a bad life !',
       blogText: ''
     };
@@ -68,7 +67,7 @@ export default class BlogModal extends React.Component {
   }
 
   goToArticleCreatePage() {
-    const { currentUser } = this.state;
+    const { currentUser } = this.props;
     if (!currentUser) {
       return sweetAlert.alertWarningMessage('Login first!');
     }
@@ -96,11 +95,18 @@ export default class BlogModal extends React.Component {
     }
   }
 
+  onSweetContentChange(editorContent, plainText) {
+    if (editorContent && plainText) {
+      this.setState({ blogText: plainText, editorContent });
+    }
+  }
+
   render() {
     const { welcomeText, blogText } = this.state;
     const blogTextLength = blogText.length;
     const isDisabled = blogTextLength > 140 || blogTextLength === 0;
     const isLimmitWords = blogTextLength < 141;
+
     return (
       <div className="create-well">
         <Row className="text-row">
@@ -110,12 +116,16 @@ export default class BlogModal extends React.Component {
           </Col>
         </Row>
         <Row className="textarea-row">
-          <CustomMentionEditor EmojiPlugins={EmojiPlugins} />
+          <SweetEditor
+            EmojiPlugins={EmojiPlugins}
+            onSweetContentChange={(editorContent, plainText) => this.onSweetContentChange(editorContent, plainText)}
+          />
           <EmojiSuggestions />
-          <EmojiSelect />
+          <Col size="8 p-0">
+            <EmojiSelect />
+          </Col>
+          <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
         </Row>
-        <Row className="btn-row">{this._renderCreateBtns(isDisabled)}</Row>
-
       </div>
     );
   }
