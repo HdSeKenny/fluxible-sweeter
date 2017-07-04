@@ -14,6 +14,10 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRouter = require('react-router');
 
+var _draftJsEmojiPlugin = require('draft-js-emoji-plugin');
+
+var _draftJsEmojiPlugin2 = _interopRequireDefault(_draftJsEmojiPlugin);
+
 var _actions = require('../../actions');
 
 var _Layout = require('../UI/Layout');
@@ -26,10 +30,14 @@ var _Draft = require('../../plugins/Draft');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const emojiPlugin = (0, _draftJsEmojiPlugin2.default)(); // eslint-disable-line import/no-unresolved
 /**
  * Copyright 2017, created by Kuan Lu
  * @ui BlogModal
  */
+
+const { EmojiSuggestions: EmojiSuggestions, EmojiSelect: EmojiSelect } = emojiPlugin;
+const EmojiPlugins = [emojiPlugin];
 
 class BlogModal extends _react2.default.Component {
 
@@ -156,7 +164,9 @@ class BlogModal extends _react2.default.Component {
       _react2.default.createElement(
         _Layout.Row,
         { className: 'textarea-row' },
-        _react2.default.createElement(_Draft.CustomMentionEditor, null)
+        _react2.default.createElement(_Draft.CustomMentionEditor, { EmojiPlugins: EmojiPlugins }),
+        _react2.default.createElement(EmojiSuggestions, null),
+        _react2.default.createElement(EmojiSelect, null)
       ),
       _react2.default.createElement(
         _Layout.Row,

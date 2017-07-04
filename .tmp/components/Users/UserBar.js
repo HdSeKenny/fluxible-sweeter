@@ -224,8 +224,8 @@ const UserBar = (0, _createReactClass2.default)({
   },
   _renderUserInfo: function (isCurrentUser, user, isFollowed) {
     return _react2.default.createElement(
-      'div',
-      { className: 'mt-10' },
+      _Layout.Row,
+      { className: 'user-info mt-10' },
       user && _react2.default.createElement(
         'p',
         { className: 'user-name' },
@@ -258,15 +258,19 @@ const UserBar = (0, _createReactClass2.default)({
     const hasChangedImage = currentUser ? currentUser.image_url === defaultImageUrl : false;
     const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return _react2.default.createElement(
-      'form',
-      { accept: 'multipart/form-data', className: imageClass },
-      isCurrentUser && _react2.default.createElement('img', { alt: 'user', className: 'current-user', src: currentUser.image_url, onClick: this.onEditUserImage }),
-      isCurrentUser && hasChangedImage && _react2.default.createElement(
-        'span',
-        { className: 'tooltiptext' },
-        'Click to change image'
-      ),
-      !isCurrentUser && user && _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
+      _Layout.Row,
+      { className: 'user-img' },
+      _react2.default.createElement(
+        'form',
+        { accept: 'multipart/form-data', className: imageClass },
+        isCurrentUser && _react2.default.createElement('img', { alt: 'user', className: 'current-user', src: currentUser.image_url, onClick: this.onEditUserImage }),
+        isCurrentUser && hasChangedImage && _react2.default.createElement(
+          'span',
+          { className: 'tooltiptext' },
+          'Click to change image'
+        ),
+        !isCurrentUser && user && _react2.default.createElement('img', { alt: 'user', className: 'user-image', src: user.image_url })
+      )
     );
   },
   render: function () {
@@ -275,13 +279,13 @@ const UserBar = (0, _createReactClass2.default)({
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
-    const background = user ? user.background_image_url : '';
+    // const background = user ? user.background_image_url : '';
+    const background = '/styles/images/users/user-center-bg.png';
+    // preload image
+    if (_utils.env.is_client) this.preloadBackgroundImage(background);
     const userBackground = {
       backgroundImage: `url(${background})`
     };
-
-    // preload image
-    if (_utils.env.is_client) this.preloadBackgroundImage(background);
 
     return _react2.default.createElement(
       'div',
@@ -289,16 +293,8 @@ const UserBar = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'div',
         { className: 'user-background', style: userBackground },
-        _react2.default.createElement(
-          _Layout.Row,
-          { className: 'user-img' },
-          this._renderUserImage(isCurrentUser, user, currentUser)
-        ),
-        _react2.default.createElement(
-          _Layout.Row,
-          { className: 'user-info' },
-          this._renderUserInfo(isCurrentUser, user, isFollowed)
-        )
+        this._renderUserImage(isCurrentUser, user, currentUser),
+        this._renderUserInfo(isCurrentUser, user, isFollowed)
       ),
       _react2.default.createElement(
         _Layout.Row,

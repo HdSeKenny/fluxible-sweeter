@@ -207,7 +207,7 @@ const UserBar = CreateReactClass({
 
   _renderUserInfo(isCurrentUser, user, isFollowed) {
     return (
-      <div className="mt-10">
+      <Row className="user-info mt-10">
         {user && <p className="user-name">{user.username}</p>}
         {!isCurrentUser && user &&
           <div className="user-btn mt-10">
@@ -222,7 +222,7 @@ const UserBar = CreateReactClass({
             <button className="message-btn" > Message</button>
           </div>
         }
-      </div>
+      </Row>
     );
   },
 
@@ -231,11 +231,13 @@ const UserBar = CreateReactClass({
     const hasChangedImage = currentUser ? (currentUser.image_url === defaultImageUrl) : false;
     const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return (
-      <form accept="multipart/form-data" className={imageClass}>
-        {isCurrentUser && <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />}
-        {isCurrentUser && hasChangedImage && <span className="tooltiptext">Click to change image</span>}
-        {!isCurrentUser && user && <img alt="user" className="user-image" src={user.image_url} />}
-      </form>
+      <Row className="user-img">
+        <form accept="multipart/form-data" className={imageClass}>
+          {isCurrentUser && <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />}
+          {isCurrentUser && hasChangedImage && <span className="tooltiptext">Click to change image</span>}
+          {!isCurrentUser && user && <img alt="user" className="user-image" src={user.image_url} />}
+        </form>
+      </Row>
     );
   },
 
@@ -245,23 +247,20 @@ const UserBar = CreateReactClass({
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
-    const background = user ? user.background_image_url : '';
-    const userBackground = {
-      backgroundImage: `url(${background})`
-    };
-
+    // const background = user ? user.background_image_url : '';
+    const background = '/styles/images/users/user-center-bg.png'
     // preload image
     if (env.is_client) this.preloadBackgroundImage(background);
+    const userBackground = {
+      background: `url(${background}) no-repeat center center fixed`,
+      backgroundSize: 'cover'
+    };
 
     return (
       <div className="user-bar mb-20">
         <div className="user-background" style={userBackground}>
-          <Row className="user-img">
-            {this._renderUserImage(isCurrentUser, user, currentUser)}
-          </Row>
-          <Row className="user-info">
-            {this._renderUserInfo(isCurrentUser, user, isFollowed)}
-          </Row>
+          {this._renderUserImage(isCurrentUser, user, currentUser)}
+          {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>
 
         <Row className="nav">
