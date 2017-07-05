@@ -30,6 +30,7 @@ const Home = CreateReactClass({
 
   getStateFromStores() {
     const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
+    const isSmall = mediaSize.getBrowserMediaInfo(true).media === 'small';
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       kenny: this.getStore(UserStore).getKennyUser(),
@@ -38,7 +39,8 @@ const Home = CreateReactClass({
       blogText: '',
       selectedPin: {},
       showPinModal: false,
-      isMedium
+      isMedium,
+      isSmall
     };
   },
 
@@ -61,12 +63,12 @@ const Home = CreateReactClass({
 
   getBrowserScreenInfo() {
     const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
-    this.setState({ isMedium });
+    const isSmall = mediaSize.getBrowserMediaInfo(true).media === 'small';
+    this.setState({ isMedium, isSmall });
   },
 
   componentWillMount() {
     this.getBrowserScreenInfo();
-
   },
 
   componentDidMount() {
@@ -135,8 +137,8 @@ const Home = CreateReactClass({
   },
 
   _renderPinSection(sectionTitle, typedPins) {
-    const { currentUser, isMedium } = this.state;
-    const marginRightIndex = isMedium ? 2 : 3;
+    const { currentUser, isMedium, isSmall } = this.state;
+    const marginRightIndex = isMedium || isSmall ? 2 : 3;
 
     return (
       <section className="pins-section">

@@ -157,15 +157,15 @@
 .draftJsEmojiPlugin__emojiSelectButtonPressed__3sOeC {
   margin: 0;
   padding: 0;
-  width: 2.5em;
-  height: 1.5em;
+  // width: 2.5em;
+  // height: 1.5em;
   box-sizing: border-box;
-  line-height: 1.2em;
-  font-size: 1.5em;
+  line-height: 0.8;
+  font-size: 2em;
   color: #888;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 1.5em;
+  border: none;
+  // border-radius: 1.5em;
   cursor: pointer;
 }
 
@@ -177,16 +177,19 @@
 
 .draftJsEmojiPlugin__emojiSelectButton__1hHuM:hover,
 .draftJsEmojiPlugin__emojiSelectButtonPressed__3sOeC:hover {
-  background: #f3f3f3;
+  // background: #f3f3f3;
+  color: #00a9da;
 }
 
 .draftJsEmojiPlugin__emojiSelectButton__1hHuM:active,
 .draftJsEmojiPlugin__emojiSelectButtonPressed__3sOeC:active {
-  background: #e6e6e6;
+  // background: #e6e6e6;
+  color: #00a9da;
 }
 
 .draftJsEmojiPlugin__emojiSelectButtonPressed__3sOeC {
-  background: #ededed;
+  // background: #ededed;
+  color: #00a9da;
 }
 
 .draftJsEmojiPlugin__emojiSelectPopover__3rwHu {

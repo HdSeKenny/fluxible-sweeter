@@ -1,11 +1,10 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
 import { sweetAlert, jsUtils } from '../../utils';
 import { BlogStore, UserStore } from '../../stores';
-import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
 import { PinItemModal, BlogModal } from '../UserControls';
@@ -33,10 +32,7 @@ const List = CreateReactClass({
       currentUser: this.getStore(UserStore).getCurrentUser(),
       kenny: this.getStore(UserStore).getKennyUser(),
       blogs: this.getStore(BlogStore).getAllBlogs(),
-      welcomeText: 'Calm down, just a bad day, not a bad life',
-      blogText: '',
       selectedPin: {},
-      showCreateModal: false,
       showPinModal: false
     };
   },
@@ -54,21 +50,17 @@ const List = CreateReactClass({
       'CREATE_BLOG_SUCCESS'
     ];
 
-    sweetAlert.success(res.msg);
-
     if (thumbsAndCommentMsgs.includes(res.msg)) {
+      sweetAlert.success(res.msg);
       this.setState({
         selectedPin: res.newBlog
       });
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      if (res.msg === 'CREATE_BLOG_SUCCESS') {
-        ModalsFactory.hide('createBlogModal');
-      }
-
+      sweetAlert.success(res.msg);
       this.setState({
-        blogs: this.getStore(BlogStore).getAllBlogs()
+        blogs: this.getStore(BlogStore).getAllBlogs(),
       });
     }
 
@@ -77,46 +69,6 @@ const List = CreateReactClass({
         currentUser: this.getStore(UserStore).getCurrentUser()
       });
     }
-  },
-
-  handleMicroBlog() {
-    const { currentUser } = this.state;
-    if (currentUser) {
-      const newBlog = {
-        content: this.state.blogText,
-        created_at: new Date(),
-        type: 'microblog',
-        author: currentUser._id
-      };
-      this.executeAction(BlogActions.AddBlog, newBlog);
-    } else {
-      this.checkCurrentUser();
-    }
-  },
-
-  onSearchBlog(e) {
-    const searchText = e.target.value.toLocaleLowerCase();
-    const searchedBlogs = this.getStore(BlogStore).getSearchedBlogs(searchText);
-    this.setState({ blogs: searchedBlogs });
-  },
-
-  sortByType(e) {
-    const sortText = e.target.value.toLocaleLowerCase();
-    const sortedBlogs = this.getStore(BlogStore).getSortedBlogs(sortText);
-    this.setState({ blogs: sortedBlogs });
-  },
-
-  checkCurrentUser() {
-    sweetAlert.alertWarningMessage('Login first !');
-    this.setState({ blogText: '' });
-  },
-
-  changeShowCommentsState() {
-    this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
-  },
-
-  changeBlogThumbsUpState() {
-    this.setState(this.getStateFromStores());
   },
 
   onViewPinItem(id) {
@@ -137,22 +89,6 @@ const List = CreateReactClass({
     if (listDom && listDom.length) {
       this.setState({ selectedPin: {}, showPinModal: false });
     }
-  },
-
-  hideCreateModal() {
-    this.setState({ showCreateModal: false });
-  },
-
-  openCreateBlogModal() {
-    if (!this.state.showCreateModal) {
-      this.setState({ showCreateModal: true });
-    }
-    $('#createBlogModal').on('hidden.bs.modal', () => {
-      // eslint-disable-next-line
-      this.hideCreateModal && this.hideCreateModal();
-    });
-
-    ModalsFactory.show('createBlogModal');
   },
 
   _renderUserCardInfo(displayUser) {
@@ -204,16 +140,16 @@ const List = CreateReactClass({
   },
 
   _renderSweetBlock() {
-    const { currentUser } = this.state;
+    const { currentUser, editorState } = this.state;
     return (
       <section className="search-block mb-15">
-        <BlogModal currentUser={currentUser} isUserHome={true} />
+        <BlogModal currentUser={currentUser} isUserHome={true} editorState={editorState} />
       </section>
     );
   },
 
   render() {
-    const { currentUser, kenny, blogs, selectedPin, showCreateModal, showPinModal } = this.state;
+    const { currentUser, kenny, blogs, selectedPin, showPinModal } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <article className="list-page">

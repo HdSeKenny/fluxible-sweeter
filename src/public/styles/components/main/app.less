@@ -1,6 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+
 body {
   font-weight: 500;
-  font-family: 'Open Sans', sans-serif;
+  font-family: @font-family-sans-serif;
   background-attachment: fixed;
   background-size: cover;
   background-color: #e0e0e0;
@@ -49,6 +51,13 @@ body {
   }
 }
 
+@media (max-width: 950px) {
+  .content-pages {
+    width: 66em;
+    margin: 0 auto;
+  }
+}
+
 .footer-wrapper {
   height: 100px;
   color: #fff;
@@ -70,7 +79,7 @@ body {
 
 .main-sliders {
   flex: 1 100%;
-  height: 430px;
+  max-height: 430px;
   background-color: @brand-info;
   .tp-banner-container {
     &.hidden {
@@ -82,7 +91,7 @@ body {
       background: #ccc !important;
       background: rgba(0, 0, 0, 0.1) !important;
       height: 5px !important;
-      position: relative;
+      position: absolute;
       z-index: 999999;
     }
   }

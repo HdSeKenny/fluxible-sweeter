@@ -9,11 +9,26 @@ import createEmojiPlugin from 'draft-js-emoji-plugin';
 import { routerShape } from 'react-router';
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
-import { ModalsFactory } from '../UI';
 import { sweetAlert } from '../../utils';
 import { SweetEditor } from '../../plugins/Draft';
 
-const emojiPlugin = createEmojiPlugin();
+const config = {
+  selectGroups: [{
+    title: 'People',
+    icon: React.createElement('i', { className: 'fa fa-smile-o' }),
+    categories: ['people'],
+  }, {
+    title: 'Food & Drink',
+    icon: React.createElement('i', { className: 'fa fa-cutlery' }),
+    categories: ['food'],
+  }, {
+    title: 'Symbols',
+    icon: React.createElement('i', { className: 'fa fa-heart' }),
+    categories: ['symbols'],
+  }]
+};
+
+const emojiPlugin = createEmojiPlugin(config);
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
 const EmojiPlugins = [emojiPlugin];
 
@@ -37,33 +52,32 @@ export default class BlogModal extends React.Component {
     super(props);
     this.state = {
       welcomeText: 'Calm down, just a bad day, not a bad life !',
-      blogText: ''
+      blogText: '',
+      loadEmoji: false
     };
   }
 
   onCreateSweet() {
-    const { currentUser, blogText } = this.state;
+    const { editorContent, blogText } = this.state;
+    const { currentUser } = this.props;
     if (!currentUser) {
-      sweetAlert.alertWarningMessage('Login first !');
-      return;
+      return sweetAlert.alertWarningMessage('Login first !');
     }
 
     const newBlog = {
       text: blogText,
+      content: editorContent,
       created_at: new Date(),
       type: 'moment',
-      author: currentUser._id
+      author: currentUser.id_str
     };
 
     this.context.executeAction(BlogActions.AddBlog, newBlog);
   }
 
-  onCloseBlogModal() {
-    ModalsFactory.hide('createBlogModal');
-  }
-
-  onChangeBlogText(e) {
-    this.setState({ blogText: e.target.value });
+  componentDidMount() {
+    // eslint-disable-next-line
+    this.setState({ loadEmoji: true });
   }
 
   goToArticleCreatePage() {
@@ -73,6 +87,12 @@ export default class BlogModal extends React.Component {
     }
 
     this.context.router.push(`/${currentUser.username}/create`);
+  }
+
+  onSweetChange(editorContent, plainText) {
+    if (editorContent && plainText) {
+      this.setState({ blogText: plainText, editorContent });
+    }
   }
 
   _renderCreateBtns(isDisabled) {
@@ -86,19 +106,20 @@ export default class BlogModal extends React.Component {
     );
   }
 
-  _renderCreateTips(isLimmitWords, blogTextLength) {
-    if (isLimmitWords) {
-      return <p>You can still write <span className="len-span">{140 - blogTextLength}</span> words</p>;
-    }
-    else {
-      return <p>Words can't be more than <span className="len-span-red">140</span> words</p>;
-    }
-  }
-
-  onSweetContentChange(editorContent, plainText) {
-    if (editorContent && plainText) {
-      this.setState({ blogText: plainText, editorContent });
-    }
+  _renderSweetEditor(isDisabled) {
+    return (
+      <Row className="textarea-row">
+        <SweetEditor
+          EmojiPlugins={EmojiPlugins}
+          onSweetChange={(editorContent, plainText) => this.onSweetChange(editorContent, plainText)}
+        />
+        <EmojiSuggestions />
+        <Col size="8 p-0">
+          <EmojiSelect />
+        </Col>
+        <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
+      </Row>
+    );
   }
 
   render() {
@@ -112,20 +133,15 @@ export default class BlogModal extends React.Component {
         <Row className="text-row">
           <Col size="12" className="p-0">
             <p className="welcomeText">{welcomeText}</p>
-            <div className="create-tip mt-5">{this._renderCreateTips(isLimmitWords, blogTextLength)}</div>
+            <div className="create-tip mt-5">
+              {isLimmitWords ? <p>You can still write <span className="len-span">{140 - blogTextLength}</span> words</p>
+                : <p>Words can't be more than <span className="len-span-red">140</span> words</p>
+              }
+            </div>
           </Col>
         </Row>
-        <Row className="textarea-row">
-          <SweetEditor
-            EmojiPlugins={EmojiPlugins}
-            onSweetContentChange={(editorContent, plainText) => this.onSweetContentChange(editorContent, plainText)}
-          />
-          <EmojiSuggestions />
-          <Col size="8 p-0">
-            <EmojiSelect />
-          </Col>
-          <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
-        </Row>
+
+        {this.state.loadEmoji && this._renderSweetEditor(isDisabled)}
       </div>
     );
   }

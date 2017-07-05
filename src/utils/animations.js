@@ -118,7 +118,7 @@ const animations = {
       });
 
       if (revol) {
-        callback();
+        callback(revol);
       }
     });
   }
