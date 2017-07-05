@@ -28,7 +28,7 @@ export default class Html extends React.Component {
           <meta name="author" content="Kenny" />
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
           <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,600,700" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700" rel="stylesheet" />
           <link href="http://fonts.googleapis.com/css?family=Roboto%3A700%2C300" rel="stylesheet" property="stylesheet" media="all" />
           <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
