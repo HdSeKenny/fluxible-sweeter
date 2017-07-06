@@ -90,7 +90,6 @@ export default {
       body.likers = [];
       body.comments = [];
       body.images = ['/styles/images/sliders/great-frontend.png'];
-      body.description = body.description || '';
       body.tag = body.tag || body.type;
       Blog.insert(body, (err, result) => {
         if (result) {

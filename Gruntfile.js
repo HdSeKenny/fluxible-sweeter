@@ -345,7 +345,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('express-server', [
     'express:dev',
-    // 'wait',
     'watch'
   ]);
 
@@ -373,7 +372,8 @@ module.exports = function(grunt) {
     'clean:prod',
     'babel:prod',
     'copy:prod',
-    'webpack:build'
+    'webpack:build',
+    'express:prod'
   ]);
 
   // Production model => build

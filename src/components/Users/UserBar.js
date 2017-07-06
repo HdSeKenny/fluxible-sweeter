@@ -10,7 +10,7 @@ import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
 import { Row, Col, Page } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
-import banner from '../../public/styles/images/users/user-center-bg.jpg';
+import { resizeImage } from '../../plugins/sharp';
 
 const UserBar = CreateReactClass({
 
@@ -38,47 +38,12 @@ const UserBar = CreateReactClass({
   getStateFromStores() {
     const store = this.getStore(UserStore);
     const currentUploadedImage = store.getCurrentUploadedImage();
-    // const showImageModal = currentUploadedImage !== null;
-    // const currentUser =  store.getCurrentUser();
     return {
       currentUploadedImage,
       currentUser: store.getCurrentUser(),
       showImageModal: false,
       defaultUserImageUrl: '/styles/images/users/default-user.png',
-      defaultBackgroundUrl: '/styles/images/users/user-center-bg.png'
     };
-  },
-
-  componentDidMount() {
-    // console.log($('.user-bar .user-background')[0])
-    // function init() {
-    //   const imgDefer = document.getElementsByTagName('img');
-    //   for (let i = 0; i < imgDefer.length; i++) {
-    //     if (imgDefer[i].getAttribute('data-src')) {
-    //       imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
-    //     }
-    //   }
-    // }
-
-    // window.onload = init;
-    // const { user } = this.props;
-    // const background = user ? user.background_image_url : '';
-    // const img = new Image();
-    // img.src = background;
-    // img.onload = function() {
-    //   document.getElementById('myImage').src = this.src;
-    // };
-  },
-
-  componentWillMount() {
-    // const { user } = this.props;
-    // const background = user ? user.background_image_url : '';
-    // const userBackground = {
-    //   'background': `url(${background})`,
-    //   'background-size': 'cover'
-    // };
-
-    // $('.user-bar .user-background').css(userBackground);
   },
 
   onChange(res) {
@@ -95,6 +60,10 @@ const UserBar = CreateReactClass({
       ModalsFactory.hide('uploadModal');
       this.setState(this.getStateFromStores());
     }
+  },
+
+  componentDidMount() {
+
   },
 
   isActive(routes) {
@@ -262,24 +231,22 @@ const UserBar = CreateReactClass({
 
   render() {
     const { user } = this.props;
-    const { currentUser, showImageModal, defaultBackgroundUrl } = this.state;
+    const { currentUser, showImageModal } = this.state;
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const background = user ? user.background_image_url : '';
-    // const background = '/styles/images/users/user-center-bg.png';
+    const background_lq = user ? user.lq_background_url : '';
 
     // const userBackground = {
     //   background: `url(${background}) no-repeat center center fixed`,
     //   backgroundSize: 'cover'
     // };
-    //           <img className="background" src={defaultBackgroundUrl} alt="bg" id="myImage" />
 
-    console.log(banner)
     return (
       <div className="user-bar mb-20">
         <div className="user-background">
-          <img alt="user-bg" src={banner.preSrc} className="background" />
+          <img alt="user-bg" src={background_lq} data-src={background} className="background lazyload blur-up" />
           {this._renderUserImage(isCurrentUser, user, currentUser)}
           {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>

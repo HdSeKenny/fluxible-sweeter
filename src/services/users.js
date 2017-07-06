@@ -133,6 +133,7 @@ export default {
           body.password = md5(body.password);
           body.image_url = '/styles/images/users/default-user.png';
           body.background_image_url = '/styles/images/users/user-center-bg.jpg';
+          body.lq_background_url = '/styles/images/lqip/users/user-center-bg.jpg';
           body.fans = [];
           body.focuses = [];
           body.blogs = [];
