@@ -76,6 +76,7 @@
     "react-select": "^1.0.0-rc.4",
     "serialize-javascript": "^1.0.0",
     "serve-favicon": "~2.2.1",
+    "sharp": "^0.18.2",
     "superagent": "^1.8.4"
   },
   "devDependencies": {
@@ -128,6 +129,7 @@
     "karma-junit-reporter": "^0.2.2",
     "less-loader": "^4.0.2",
     "load-grunt-tasks": "^3.2.0",
+    "lqip-loader": "^0.1.2",
     "matchdep": "^1.0.1",
     "protractor": "^2.0.0",
     "react-hot-loader": "^1.2.8",

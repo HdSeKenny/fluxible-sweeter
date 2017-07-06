@@ -27,7 +27,7 @@ export default class PinItemModal extends React.Component {
       return (
         <section className="pin-item-modal mt-20 mb-30 ml-10 mr-10">
           <PinItem pin={pin} disabledClick={true} currentUser={currentUser} />
-          <Comments blog={pin} isBlogsWell={true} currentUser={currentUser} isModal={true}/>
+          <Comments blog={pin} isSweet={true} currentUser={currentUser} isModal={true} />
         </section>
       );
     }

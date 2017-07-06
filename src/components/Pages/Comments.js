@@ -1,9 +1,8 @@
-/* eslint-disable all, camelcase */
+/* eslint-disable all, camelcase, no-param-reassign */
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-// import { routerShape } from 'react-router';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { sweetAlert, format } from '../../utils';
@@ -20,7 +19,7 @@ const Comments = CreateReactClass({
 
   propTypes: {
     blog: PropTypes.object,
-    isBlogsWell: PropTypes.bool,
+    isSweet: PropTypes.bool,
     currentUser: PropTypes.object
   },
 
@@ -31,13 +30,7 @@ const Comments = CreateReactClass({
   },
 
   getInitialState() {
-    return this.getStatesFromStores();
-  },
-
-  getStatesFromStores() {
     return {
-      currentUser: this.props.currentUser,
-      blog: this.props.blog,
       commentText: '',
       replyText: ''
     };
@@ -57,23 +50,16 @@ const Comments = CreateReactClass({
     this.setState({ replyText: e.target.value });
   },
 
-  checkLogin() {
-    sweetAlert.alertWarningMessage('Login first !');
-    this.setState({ commentText: '' });
-  },
-
-  getBlogCommentsById(blogId) {
-    return this.state.comments.filter(comment => comment.blogId === blogId);
-  },
-
   getCommenter(userId) {
     return this.getStore(UserStore).getCommenter(userId);
   },
 
   onCommentBlog(blog) {
-    const { currentUser, commentText } = this.state;
+    const { commentText } = this.state;
+    const { currentUser } = this.props;
     if (!currentUser) {
-      return this.checkLogin();
+      this.setState({ commentText: '' });
+      return sweetAlert.alertWarningMessage('Login first !');
     }
 
     if (!commentText.trim()) {
@@ -84,7 +70,7 @@ const Comments = CreateReactClass({
       blogId: blog._id,
       commentText: this.state.commentText,
       created_at: new Date(),
-      commenter: this.state.currentUser._id
+      commenter: currentUser.id_str
     };
 
     this.context.executeAction(BlogActions.AddBlogComment, comment);
@@ -93,18 +79,13 @@ const Comments = CreateReactClass({
   showReplyTextarea(comment) {
     const blogComments = this.props.blog.comments;
     if (comment.show_replies) {
-      // eslint-disable-next-line no-param-reassign
       comment.show_replies = false;
     } else {
-      // eslint-disable-next-line no-param-reassign
       comment.show_replies = true;
     }
 
-    blogComments.forEach((c, index) => {
-      if (c._id === comment._id) {
-        blogComments[index] = comment;
-      }
-    });
+    const idx = blogComments.findIndex(bc => bc._id === comment._id);
+    blogComments[idx] = comment;
     this.setState({ blogComments });
   },
 
@@ -124,21 +105,31 @@ const Comments = CreateReactClass({
     this.context.router.push(`/${username}`);
   },
 
+  getCommentOptions(currentUser, comment) {
+    const { id_str, commenter, created_at, show_replies } = comment;
+    const fromNow = format.fromNow(created_at);
+    const user = this.getCommenter(commenter);
+    const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
+    const { username, image_url } = user;
+
+    return {
+      id_str,
+      show_replies,
+      fromNow,
+      displayIcon,
+      username,
+      image_url
+    };
+  },
+
   _renderBlogTextarea(blog, isCommentText, currentUser, commentText) {
     return (
       <Row className="comment-textarea">
         <Col size="9 pl-5 pr-0">
-          <textarea
-            rows="1"
-            className="form-control"
-            value={commentText}
-            onChange={this.handleCommentText} />
+          <textarea rows="1" className="form-control" value={commentText} onChange={this.handleCommentText} />
         </Col>
         <Col size="3 pr-5 pl-5">
-          <button
-            className="btn btn-info fr"
-            onClick={this.onCommentBlog.bind(this, blog)}
-            disabled={isCommentText}> Comment</button>
+          <button className="btn btn-info fr" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button>
         </Col>
       </Row>
     );
@@ -147,20 +138,8 @@ const Comments = CreateReactClass({
   _renderArticleTextarea(blog, isCommentText, currentUser, commentText) {
     return (
       <Row className="comment-textarea">
-        <Row>
-          <textarea
-            rows="3"
-            className="form-control"
-            value={commentText}
-            onChange={this.handleCommentText}
-          />
-        </Row>
-        <Row>
-          <button
-            className="btn btn-info fr mt-15"
-            onClick={this.onCommentBlog.bind(this, blog)}
-            disabled={isCommentText}> Comment</button>
-        </Row>
+        <Row><textarea rows="3" className="form-control" value={commentText} onChange={this.handleCommentText} /></Row>
+        <Row><button className="btn btn-info fr mt-15" onClick={this.onCommentBlog.bind(this, blog)} disabled={isCommentText}> Comment</button></Row>
       </Row>
     );
   },
@@ -181,32 +160,25 @@ const Comments = CreateReactClass({
   },
 
   render() {
-    const { currentUser, replyText, commentText, blog } = this.state;
-    const isCommentText = commentText.length === 0;
-    const { isBlogsWell } = this.props;
+    const { replyText, commentText } = this.state;
+    const { isSweet, blog, currentUser } = this.props;
     const { comments } = blog;
+    const isCommentText = commentText.length === 0;
     return (
       <div className="comments-page">
-        {isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText)}
-        {!isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText)}
+        {isSweet && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText)}
+        {!isSweet && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText)}
         {comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         .map(comment => {
-          const { id_str, commenter, created_at, show_replies } = comment;
-          const fromNow = format.fromNow(created_at);
-          const user = this.getCommenter(commenter);
-          const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
-          const { username, image_url } = user;
+          const result = this.getCommentOptions(currentUser, comment);
+          const { id_str, image_url, username, fromNow, displayIcon, show_replies } = result;
           return (
             <div key={id_str}>
               <Row className="comment-row">
-                <Col size="1 commenter-img p-0">
-                  <img alt="commenter" src={image_url} />
-                </Col>
+                <Col size="1 commenter-img p-0"><img alt="commenter" src={image_url} /></Col>
                 <Col size="10 p-0">
                   <h5 className="comment-text">
-                    <span className="username" onClick={() => this.goToUserCenter(username)}>
-                      {username}
-                    </span> : {comment.commentText}
+                    <span className="username" onClick={() => this.goToUserCenter(username)}>{username}</span> : {comment.commentText}
                   </h5>
                   <p className="comment-date">
                     <small>{fromNow}</small>
@@ -219,8 +191,7 @@ const Comments = CreateReactClass({
                   {displayIcon && <i className="fa fa-trash" onClick={() => this.onDeleteComment(comment)} />}
                 </Col>
               </Row>
-              <Row className="comment-icons">
-              </Row>
+
               {show_replies && this._renderReplyTextarea(replyText, comment)}
             </div>
           );

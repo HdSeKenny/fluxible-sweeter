@@ -1,13 +1,12 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { routerShape } from 'react-router';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { BlogStore, UserStore } from '../../stores';
 import { Comments } from '../Pages';
-import { format } from '../../utils';
-// import { ImagePreloader } from '../../plugins/ImagePreloader';
+import { format, sweetAlert } from '../../utils';
 import { Row, Col } from '../UI/Layout';
 
 const Details = CreateReactClass({
@@ -50,8 +49,18 @@ const Details = CreateReactClass({
     };
   },
 
-  onChange() {
+  onChange(res) {
+    const commentMsgs = [
+      'COMMENT_SUCCESS',
+      'DELETE_COMMENT_SUCCESS'
+    ];
 
+    if (commentMsgs.includes(res.msg)) {
+      sweetAlert.success(res.msg);
+      this.setState({
+        blog: res.newBlog
+      });
+    }
   },
 
   componentDidMount() {
@@ -107,7 +116,8 @@ const Details = CreateReactClass({
     }
   },
 
-  _renderArticleUserInfo(blog, author) {
+  _renderArticleUserInfo(blog) {
+    const { author } = blog;
     const fromNow = format.fromNow(blog.created_at);
     const avatar = React.createElement('img', {
       src: author.image_url,
@@ -116,12 +126,6 @@ const Details = CreateReactClass({
       height: '40',
       onClick: () => this.goToUserCenter(author.username)
     });
-
-    // const preloadUrlObject = {
-    //   preload: author.image_url,
-    //   content: author.image_url
-    //   <ImagePreloader className="custom-image" src={preloadUrlObject} key="image-preloader" />
-    // };
 
     return (
       <Row className="info mt-10">
@@ -152,16 +156,13 @@ const Details = CreateReactClass({
   },
 
   render() {
-    const { blog, currentUser, styleMap, showEditor } = this.state;
-    const { author } = blog;
+    const { styleMap, showEditor, blog, currentUser } = this.state;
     return (
       <article className="details-page">
-        <section className="details">
-          {this._renderArticleHeader(blog)}
-          {this._renderArticleUserInfo(blog, author)}
-          {showEditor && this._renderDraftEditorContent(blog, styleMap)}
-          {this._renderArticleComments(blog, currentUser)}
-        </section>
+        {this._renderArticleHeader(blog)}
+        {this._renderArticleUserInfo(blog)}
+        {showEditor && this._renderDraftEditorContent(blog, styleMap)}
+        {this._renderArticleComments(blog, currentUser)}
       </article>
     );
   }

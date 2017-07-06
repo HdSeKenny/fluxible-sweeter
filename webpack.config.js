@@ -64,6 +64,15 @@ module.exports = function makeWebpackConfig(options) {
       // Allow loading html through js
       test: /\.html$/,
       loader: 'raw-loader'
+    }, {
+      test: /\.(jpg|jpeg|png)$/,
+      loaders: [{
+        loader: 'lqip-loader',
+        options: {
+          path: '/public/styles/images/users', // your image going to be in media folder in the output dir
+          name: '[name].[ext]' // you can use [hash].[ext] too if you wish
+        }
+      }]
     }]
   };
 

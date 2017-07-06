@@ -55,6 +55,7 @@ export default class Html extends React.Component {
           <script src={main}></script>
 
           <script src="/styles/js/sweetalert.min.js"></script>
+          <script src="/styles/js/lazysizes.min.js"></script>
 
           <script src="/assets/revolution/js/jquery.themepunch.tools.min.js"></script>
           <script src="/assets/revolution/js/jquery.themepunch.revolution.min.js"></script>

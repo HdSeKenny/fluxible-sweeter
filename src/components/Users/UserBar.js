@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { sweetAlert, jsUtils, env } from '../../utils';
+import { sweetAlert, jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
 import { Row, Col, Page } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
+import banner from '../../public/styles/images/users/user-center-bg.jpg';
 
 const UserBar = CreateReactClass({
 
@@ -42,12 +43,42 @@ const UserBar = CreateReactClass({
     return {
       currentUploadedImage,
       currentUser: store.getCurrentUser(),
-      showImageModal: false
+      showImageModal: false,
+      defaultUserImageUrl: '/styles/images/users/default-user.png',
+      defaultBackgroundUrl: '/styles/images/users/user-center-bg.png'
     };
   },
 
   componentDidMount() {
+    // console.log($('.user-bar .user-background')[0])
+    // function init() {
+    //   const imgDefer = document.getElementsByTagName('img');
+    //   for (let i = 0; i < imgDefer.length; i++) {
+    //     if (imgDefer[i].getAttribute('data-src')) {
+    //       imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
+    //     }
+    //   }
+    // }
 
+    // window.onload = init;
+    // const { user } = this.props;
+    // const background = user ? user.background_image_url : '';
+    // const img = new Image();
+    // img.src = background;
+    // img.onload = function() {
+    //   document.getElementById('myImage').src = this.src;
+    // };
+  },
+
+  componentWillMount() {
+    // const { user } = this.props;
+    // const background = user ? user.background_image_url : '';
+    // const userBackground = {
+    //   'background': `url(${background})`,
+    //   'background-size': 'cover'
+    // };
+
+    // $('.user-bar .user-background').css(userBackground);
   },
 
   onChange(res) {
@@ -118,13 +149,12 @@ const UserBar = CreateReactClass({
   onFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      this.checkCurrentUser();
-      return;
+      return sweetAlert.alertWarningMessage('Login first please!');
     }
 
     const followObj = {
-      thisUserId: user._id,
-      currentUserId: currentUser._id
+      thisUserId: user.id_str,
+      currentUserId: currentUser.id_str
     };
 
     this.executeAction(UserActions.FollowThisUser, followObj);
@@ -145,26 +175,15 @@ const UserBar = CreateReactClass({
   onCancelFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      this.checkCurrentUser();
-      return;
+      return sweetAlert.alertWarningMessage('Login first please!');
     }
 
     const cancelFollowObj = {
-      thisUserId: user._id,
-      currentUserId: currentUser._id
+      thisUserId: user.id_str,
+      currentUserId: currentUser.id_str
     };
 
     this.executeAction(UserActions.CancelFollowThisUser, cancelFollowObj);
-  },
-
-  checkCurrentUser() {
-    sweetAlert.alertWarningMessage('Login first please!');
-  },
-
-  preloadBackgroundImage(background) {
-    // eslint-disable-next-line
-    const newImage = new Image();
-    newImage.src = background;
   },
 
   _renderUserBarNavs(isCurrentUser, user) {
@@ -227,7 +246,7 @@ const UserBar = CreateReactClass({
   },
 
   _renderUserImage(isCurrentUser, user, currentUser) {
-    const defaultImageUrl = '/styles/images/users/default-user.png';
+    const defaultImageUrl = this.state.defaultUserImageUrl;
     const hasChangedImage = currentUser ? (currentUser.image_url === defaultImageUrl) : false;
     const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return (
@@ -243,22 +262,24 @@ const UserBar = CreateReactClass({
 
   render() {
     const { user } = this.props;
-    const { currentUser, showImageModal } = this.state;
+    const { currentUser, showImageModal, defaultBackgroundUrl } = this.state;
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
-    // const background = user ? user.background_image_url : '';
-    const background = '/styles/images/users/user-center-bg.png'
-    // preload image
-    if (env.is_client) this.preloadBackgroundImage(background);
-    const userBackground = {
-      background: `url(${background}) no-repeat center center fixed`,
-      backgroundSize: 'cover'
-    };
+    const background = user ? user.background_image_url : '';
+    // const background = '/styles/images/users/user-center-bg.png';
 
+    // const userBackground = {
+    //   background: `url(${background}) no-repeat center center fixed`,
+    //   backgroundSize: 'cover'
+    // };
+    //           <img className="background" src={defaultBackgroundUrl} alt="bg" id="myImage" />
+
+    console.log(banner)
     return (
       <div className="user-bar mb-20">
-        <div className="user-background" style={userBackground}>
+        <div className="user-background">
+          <img alt="user-bg" src={banner.preSrc} className="background" />
           {this._renderUserImage(isCurrentUser, user, currentUser)}
           {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>
