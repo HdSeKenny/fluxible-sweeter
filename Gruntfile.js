@@ -213,7 +213,7 @@ module.exports = function(grunt) {
       },
       prod: {
         options: {
-          script: '<%= project.dist %>/server.js',
+          script: '<%= project.dist %>/bin/server.js',
           node_env: 'production'
         }
       },
@@ -377,7 +377,18 @@ module.exports = function(grunt) {
   ]);
 
   // Production model => build
-  grunt.registerTask('build', []);
+  grunt.registerTask('build', [
+    'env:build',
+    'clean:prod',
+    'babel:prod',
+    'copy:prod',
+    'webpack:build'
+  ]);
+
+  grunt.registerTask('start', [
+    'env:build',
+    'express:start'
+  ]);
 
   // grunt don't know when the dev webpack has finished,
   // it will cause the app crash because cant find the assets.json.
@@ -403,6 +414,12 @@ module.exports = function(grunt) {
       grunt.log.writeln('Done waiting!');
       done();
     }, 5000);
+  });
+
+  grunt.registerTask('express:start', function() {
+    grunt.log.ok('Waiting for server loading...');
+    this.async();
+    require('./dist/bin/server');
   });
 
   grunt.event.on('watch', (action, filepath, target) => {

@@ -20,17 +20,17 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _utils = require('../../utils');
+var _UserBar = require('./UserBar');
+
+var _UserBar2 = _interopRequireDefault(_UserBar);
+
+var _plugins = require('../../plugins');
 
 var _UI = require('../UI');
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
-
-var _UserBar = require('./UserBar');
-
-var _UserBar2 = _interopRequireDefault(_UserBar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70,8 +70,7 @@ const UserFollows = (0, _createReactClass2.default)({
   onFollowThisUser: function (followUser) {
     const { currentUser: currentUser, user: user } = this.state;
     if (!currentUser) {
-      _utils.sweetAlert.alertErrorMessage('Login first please!');
-      return;
+      return _plugins.swal.error('Login first please!');
     }
 
     const followObj = {
@@ -86,8 +85,7 @@ const UserFollows = (0, _createReactClass2.default)({
   onCancelFollowThisUser: function (followUser) {
     const { currentUser: currentUser, user: user } = this.state;
     if (!currentUser) {
-      _utils.sweetAlert.alertErrorMessage('Login first please!');
-      return;
+      return _plugins.swal.error('Login first please!');
     }
 
     const cancelFollowObj = {

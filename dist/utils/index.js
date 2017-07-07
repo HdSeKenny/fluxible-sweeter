@@ -3,15 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mediaSize = exports.env = exports.jsUtils = exports.format = exports.animations = exports.sweetAlert = exports.validations = undefined;
+exports.mediaSize = exports.env = exports.jsUtils = exports.format = exports.animations = exports.validations = undefined;
 
 var _inputValidations = require('./inputValidations');
 
 var _inputValidations2 = _interopRequireDefault(_inputValidations);
-
-var _sweetAlert2 = require('./sweetAlert');
-
-var _sweetAlert3 = _interopRequireDefault(_sweetAlert2);
 
 var _animations2 = require('./animations');
 
@@ -36,7 +32,8 @@ var _mediaSize3 = _interopRequireDefault(_mediaSize2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.validations = _inputValidations2.default;
-exports.sweetAlert = _sweetAlert3.default;
+// export sweetAlert from './sweetAlert';
+
 exports.animations = _animations3.default;
 exports.format = _format3.default;
 exports.jsUtils = _jsUtils3.default;

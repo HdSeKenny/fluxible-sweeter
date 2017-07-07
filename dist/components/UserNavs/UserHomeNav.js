@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createReactClass = require('create-react-class');
-
-var _createReactClass2 = _interopRequireDefault(_createReactClass);
-
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -24,35 +20,21 @@ var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserHomeNav = (0, _createReactClass2.default)({
+class UserHomeNav extends _react2.default.Component {
 
-  displayName: 'UserHomeNav',
-
-  contextTypes: {
-    router: _reactRouter.routerShape.isRequired,
-    executeAction: _propTypes2.default.func
-  },
-
-  propTypes: {
-    path: _propTypes2.default.string,
-    user: _propTypes2.default.object,
-    displayBlogs: _propTypes2.default.array,
-    currentUser: _propTypes2.default.object
-  },
-
-  getInitialState: function () {
-    return {};
-  },
-  componentDidMount: function () {
+  componentDidMount() {
     _utils.animations.fixed_left_nav('.user-info-others');
-  },
-  isActive: function (route) {
+  }
+
+  isActive(route) {
     return route === this.props.path ? 'active' : '';
-  },
-  goToUserPages: function (str) {
+  }
+
+  goToUserPages(str) {
     this.context.router.push(str);
-  },
-  _renderUserInfo: function (user) {
+  }
+
+  _renderUserInfo(user) {
     const { firstName: firstName, lastName: lastName, email: email, phone: phone, birthday: birthday, profession: profession, description: description } = user;
     const { currentUser: currentUser } = this.props;
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
@@ -142,8 +124,9 @@ const UserHomeNav = (0, _createReactClass2.default)({
         )
       )
     );
-  },
-  render: function () {
+  }
+
+  render() {
     const { user: user, displayBlogs: displayBlogs, currentUser: currentUser } = this.props;
     const displayUser = user || currentUser;
     const { username: username, fans: fans, focuses: focuses } = displayUser;
@@ -158,7 +141,7 @@ const UserHomeNav = (0, _createReactClass2.default)({
           { size: '4 tip-li p-0' },
           _react2.default.createElement(
             'p',
-            { onClick: this.goToUserPages.bind(this, `/${username}/blogs`) },
+            { onClick: () => this.goToUserPages(`/${username}`) },
             displayBlogs.length
           ),
           _react2.default.createElement(
@@ -172,7 +155,7 @@ const UserHomeNav = (0, _createReactClass2.default)({
           { size: '4 tip-li p-0' },
           _react2.default.createElement(
             'p',
-            { onClick: this.goToUserPages.bind(this, `/${username}/follows`) },
+            { onClick: () => this.goToUserPages(`/${username}/follows`) },
             fans.length
           ),
           _react2.default.createElement(
@@ -186,7 +169,7 @@ const UserHomeNav = (0, _createReactClass2.default)({
           { size: '4 tip-li p-0' },
           _react2.default.createElement(
             'p',
-            { onClick: this.goToUserPages.bind(this, `/${username}/follows`) },
+            { onClick: () => this.goToUserPages(`/${username}/follows`) },
             focuses.length
           ),
           _react2.default.createElement(
@@ -208,7 +191,17 @@ const UserHomeNav = (0, _createReactClass2.default)({
       )
     );
   }
-});
-
+}
 exports.default = UserHomeNav;
+UserHomeNav.displayName = 'UserHomeNav';
+UserHomeNav.contextTypes = {
+  router: _reactRouter.routerShape.isRequired,
+  executeAction: _propTypes2.default.func
+};
+UserHomeNav.propTypes = {
+  path: _propTypes2.default.string,
+  user: _propTypes2.default.object,
+  displayBlogs: _propTypes2.default.array,
+  currentUser: _propTypes2.default.object
+};
 module.exports = exports['default'];

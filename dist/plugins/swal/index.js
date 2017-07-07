@@ -1,0 +1,83 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const convertMsg = msg => {
+  const strMsg = msg.split('_').join(' ').toLowerCase();
+  const firstLetter = strMsg.charAt(0).toUpperCase();
+  return `${firstLetter}${strMsg.substr(1)} !`;
+};
+
+const confirmButtonColor = '#00a9da';
+const closeTimer = 2000;
+
+exports.default = {
+  success: (msg, cb) => {
+    swal({
+      title: convertMsg(msg),
+      type: 'success',
+      confirmButtonColor: confirmButtonColor,
+      timer: closeTimer
+    }, () => {
+      if (cb) {
+        cb();
+      }
+    });
+  },
+
+  successCallback: (msg, callback) => {
+    swal({
+      title: convertMsg(msg),
+      type: 'success',
+      confirmButtonColor: confirmButtonColor,
+      timer: closeTimer
+    }, () => {
+      callback();
+    });
+  },
+
+  Info: msg => {
+    swal({
+      title: 'Info',
+      text: convertMsg(msg),
+      type: 'info',
+      timer: closeTimer
+    });
+  },
+
+  error: msg => {
+    swal({
+      title: convertMsg(msg),
+      type: 'error',
+      confirmButtonColor: '#F27474',
+      timer: 2000
+    });
+  },
+
+  warning: msg => {
+    swal({
+      title: convertMsg(msg),
+      type: 'warning',
+      confirmButtonColor: '#F8BB86'
+    });
+  },
+
+  confirm: (msg, confirmText, callback) => {
+    swal({
+      title: `${convertMsg(msg)}?`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: confirmText,
+      closeOnConfirm: false,
+      showLoaderOnConfirm: true
+    }, () => {
+      setTimeout(() => {
+        callback();
+      }, 500);
+    });
+  }
+};
+module.exports = exports['default'];

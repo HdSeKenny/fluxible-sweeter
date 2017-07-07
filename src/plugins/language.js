@@ -1,20 +1,18 @@
-/**
- * Created by hshen on 6/7/2015.
- */
-var Language = require('../utils/language');
+/* eslint-disable all, no-param-reassign*/
+const Language = require('../utils/language');
 
 module.exports = {
 
-    name: 'LanguagePlugin',
+  name: 'LanguagePlugin',
 
-    plugContext: function(options) {
-        return {
-            plugActionContext: function(actionContext) {
-                actionContext.language = new Language({
-                    req: options.req,
-                    res: options.res
-                });
-            }
-        };
-    }
+  plugContext(options) {
+    return {
+      plugActionContext(actionContext) {
+        actionContext.language = new Language({
+          req: options.req,
+          res: options.res
+        });
+      }
+    };
+  }
 };

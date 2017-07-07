@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -20,18 +16,20 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _fluxibleAddonsReact = require('fluxible-addons-react');
+
 var _stores = require('../../stores');
 
 var _actions = require('../../actions');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import { routerShape } from 'react-router';
-/* eslint-disable all, camelcase */
 const Comments = (0, _createReactClass2.default)({
 
   displayName: 'Comments',
@@ -43,23 +41,18 @@ const Comments = (0, _createReactClass2.default)({
 
   propTypes: {
     blog: _propTypes2.default.object,
-    isBlogsWell: _propTypes2.default.bool,
+    isSweet: _propTypes2.default.bool,
     currentUser: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore, _stores.BlogStore]
   },
 
   getInitialState: function () {
-    return this.getStatesFromStores();
-  },
-  getStatesFromStores: function () {
     return {
-      currentUser: this.props.currentUser,
-      blog: this.props.blog,
       commentText: '',
       replyText: ''
     };
@@ -75,64 +68,70 @@ const Comments = (0, _createReactClass2.default)({
   handleReplyText: function (e) {
     this.setState({ replyText: e.target.value });
   },
-  checkLogin: function () {
-    _utils.sweetAlert.alertWarningMessage('Login first !');
-    this.setState({ commentText: '' });
-  },
-  getBlogCommentsById: function (blogId) {
-    return this.state.comments.filter(comment => comment.blogId === blogId);
-  },
   getCommenter: function (userId) {
     return this.getStore(_stores.UserStore).getCommenter(userId);
   },
   onCommentBlog: function (blog) {
-    const { currentUser: currentUser, commentText: commentText } = this.state;
+    const { commentText: commentText } = this.state;
+    const { currentUser: currentUser } = this.props;
     if (!currentUser) {
-      return this.checkLogin();
+      this.setState({ commentText: '' });
+      return _plugins.swal.warning('Login first !');
     }
 
     if (!commentText.trim()) {
-      return _utils.sweetAlert.alertErrorMessage('Invalid text!');
+      return _plugins.swal.error('Invalid text!');
     }
 
     const comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
       created_at: new Date(),
-      commenter: this.state.currentUser._id
+      commenter: currentUser.id_str
     };
 
-    this.executeAction(_actions.BlogActions.AddBlogComment, comment);
+    this.context.executeAction(_actions.BlogActions.AddBlogComment, comment);
   },
   showReplyTextarea: function (comment) {
     const blogComments = this.props.blog.comments;
     if (comment.show_replies) {
-      // eslint-disable-next-line no-param-reassign
       comment.show_replies = false;
     } else {
-      // eslint-disable-next-line no-param-reassign
       comment.show_replies = true;
     }
 
-    blogComments.forEach((c, index) => {
-      if (c._id === comment._id) {
-        blogComments[index] = comment;
-      }
-    });
+    const idx = blogComments.findIndex(bc => bc._id === comment._id);
+    blogComments[idx] = comment;
     this.setState({ blogComments: blogComments });
   },
   onReplyComment: function () {
-    _utils.sweetAlert.alertInfoMessage('This is not finished !');
+    _plugins.swal.info('This is not finished !');
     this.setState({ replyText: '' });
   },
   onDeleteComment: function (comment) {
-    _utils.sweetAlert.alertConfirmMessage('', () => {
+    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', () => {
       this.executeAction(_actions.BlogActions.DeleteBlogComment, comment);
     });
   },
   goToUserCenter: function (username) {
     $('#pinModal').modal('hide');
     this.context.router.push(`/${username}`);
+  },
+  getCommentOptions: function (currentUser, comment) {
+    const { id_str: id_str, commenter: commenter, created_at: created_at, show_replies: show_replies } = comment;
+    const fromNow = _utils.format.fromNow(created_at);
+    const user = this.getCommenter(commenter);
+    const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
+    const { username: username, image_url: image_url } = user;
+
+    return {
+      id_str: id_str,
+      show_replies: show_replies,
+      fromNow: fromNow,
+      displayIcon: displayIcon,
+      username: username,
+      image_url: image_url
+    };
   },
   _renderBlogTextarea: function (blog, isCommentText, currentUser, commentText) {
     return _react2.default.createElement(
@@ -141,21 +140,14 @@ const Comments = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Col,
         { size: '9 pl-5 pr-0' },
-        _react2.default.createElement('textarea', {
-          rows: '1',
-          className: 'form-control',
-          value: commentText,
-          onChange: this.handleCommentText })
+        _react2.default.createElement('textarea', { rows: '1', className: 'form-control', value: commentText, onChange: this.handleCommentText })
       ),
       _react2.default.createElement(
         _Layout.Col,
         { size: '3 pr-5 pl-5' },
         _react2.default.createElement(
           'button',
-          {
-            className: 'btn btn-info fr',
-            onClick: this.onCommentBlog.bind(this, blog),
-            disabled: isCommentText },
+          { className: 'btn btn-info fr', onClick: this.onCommentBlog.bind(this, blog), disabled: isCommentText },
           ' Comment'
         )
       )
@@ -168,22 +160,14 @@ const Comments = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Row,
         null,
-        _react2.default.createElement('textarea', {
-          rows: '3',
-          className: 'form-control',
-          value: commentText,
-          onChange: this.handleCommentText
-        })
+        _react2.default.createElement('textarea', { rows: '3', className: 'form-control', value: commentText, onChange: this.handleCommentText })
       ),
       _react2.default.createElement(
         _Layout.Row,
         null,
         _react2.default.createElement(
           'button',
-          {
-            className: 'btn btn-info fr mt-15',
-            onClick: this.onCommentBlog.bind(this, blog),
-            disabled: isCommentText },
+          { className: 'btn btn-info fr mt-15', onClick: this.onCommentBlog.bind(this, blog), disabled: isCommentText },
           ' Comment'
         )
       )
@@ -212,21 +196,18 @@ const Comments = (0, _createReactClass2.default)({
     );
   },
   render: function () {
-    const { currentUser: currentUser, replyText: replyText, commentText: commentText, blog: blog } = this.state;
-    const isCommentText = commentText.length === 0;
-    const { isBlogsWell: isBlogsWell } = this.props;
+    const { replyText: replyText, commentText: commentText } = this.state;
+    const { isSweet: isSweet, blog: blog, currentUser: currentUser } = this.props;
     const { comments: comments } = blog;
+    const isCommentText = commentText.length === 0;
     return _react2.default.createElement(
       'div',
       { className: 'comments-page' },
-      isBlogsWell && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText),
-      !isBlogsWell && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText),
+      isSweet && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText),
+      !isSweet && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText),
       comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(comment => {
-        const { id_str: id_str, commenter: commenter, created_at: created_at, show_replies: show_replies } = comment;
-        const fromNow = _utils.format.fromNow(created_at);
-        const user = this.getCommenter(commenter);
-        const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
-        const { username: username, image_url: image_url } = user;
+        const result = this.getCommentOptions(currentUser, comment);
+        const { id_str: id_str, image_url: image_url, username: username, fromNow: fromNow, displayIcon: displayIcon, show_replies: show_replies } = result;
         return _react2.default.createElement(
           'div',
           { key: id_str },
@@ -273,13 +254,11 @@ const Comments = (0, _createReactClass2.default)({
               displayIcon && _react2.default.createElement('i', { className: 'fa fa-trash', onClick: () => this.onDeleteComment(comment) })
             )
           ),
-          _react2.default.createElement(_Layout.Row, { className: 'comment-icons' }),
           show_replies && this._renderReplyTextarea(replyText, comment)
         );
       })
     );
   }
-});
-
+}); /* eslint-disable all, camelcase, no-param-reassign */
 exports.default = Comments;
 module.exports = exports['default'];

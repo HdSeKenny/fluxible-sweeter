@@ -16,6 +16,8 @@ var _UI = require('../UI');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _actions = require('../../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -48,8 +50,7 @@ class UserImageEditor extends _react2.default.Component {
   onUploadImage() {
     const { imageData: imageData, currentUser: currentUser } = this.state;
     if (!imageData) {
-      _utils.sweetAlert.alertWarningMessage('Browser an image first !');
-      return;
+      return _plugins.swal.warning('Browser an image first !');
     }
 
     const { image: image, name: name } = imageData.output;

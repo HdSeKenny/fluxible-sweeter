@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { sweetAlert, jsUtils } from '../../utils';
+import { jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
 import { Row, Col, Page } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
-import { resizeImage } from '../../plugins/sharp';
+import { swal } from '../../plugins';
 
 const UserBar = CreateReactClass({
 
@@ -48,15 +48,15 @@ const UserBar = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'FOLLOW_USER_SUCCESS') {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
     }
 
     if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
     }
 
     if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       ModalsFactory.hide('uploadModal');
       this.setState(this.getStateFromStores());
     }
@@ -118,7 +118,7 @@ const UserBar = CreateReactClass({
   onFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      return sweetAlert.alertWarningMessage('Login first please!');
+      return swal.warning('Login first please!');
     }
 
     const followObj = {
@@ -144,7 +144,7 @@ const UserBar = CreateReactClass({
   onCancelFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      return sweetAlert.alertWarningMessage('Login first please!');
+      return swal.warning('Login first please!');
     }
 
     const cancelFollowObj = {
@@ -166,8 +166,7 @@ const UserBar = CreateReactClass({
       Settings: {
         label: isCurrentUser ? 'Settings' : 'Personal',
         icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
-      },
-      More: { label: 'More', icon: 'fa fa-ellipsis-h' }
+      }
     };
 
     const colSize = '2';
@@ -195,7 +194,7 @@ const UserBar = CreateReactClass({
 
   _renderUserInfo(isCurrentUser, user, isFollowed) {
     return (
-      <Row className="user-info mt-10">
+      <Row className="user-info mt-0">
         {user && <p className="user-name">{user.username}</p>}
         {!isCurrentUser && user &&
           <div className="user-btn mt-10">

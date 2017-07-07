@@ -1,5 +1,4 @@
 /* eslint-disable camelcase, no-param-reassign */
-import $ from 'jquery';
 
 export default (element, options) => {
   const settings = {

@@ -4,7 +4,7 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { router } from 'react-router';
 import UserBar from './UserBar';
-import sweetAlert from '../../utils/sweetAlert';
+import { swal } from '../../plugins';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../UserNavs';
@@ -45,7 +45,7 @@ const ChangePassword = CreateReactClass({
 
   onChange(res) {
     if (res.stat) {
-      sweetAlert.alertSuccessMessageWithCallback(res.msg, () => {
+      swal.successWithCallback(res.msg, () => {
         this.context.router.push('/login');
       });
     } else {
@@ -145,7 +145,7 @@ const ChangePassword = CreateReactClass({
       };
       this.executeAction(UserActions.ChangeUserPassword, newPasswordObj);
     } else {
-      sweetAlert.alertErrorMessage('Update password failed !');
+      swal.error('Update password failed !');
     }
   },
 

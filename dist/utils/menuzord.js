@@ -4,11 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/* eslint-disable camelcase, no-param-reassign */
 
 exports.default = (element, options) => {
   const settings = {
@@ -28,12 +24,12 @@ exports.default = (element, options) => {
     scrollableMaxHeight: 400
   };
 
-  _jquery2.default.extend(settings, options);
+  $.extend(settings, options);
 
   // variables
-  const menu_container = (0, _jquery2.default)(element);
-  const menu = (0, _jquery2.default)(menu_container).children('.sweet-nav-menu');
-  const menu_li = (0, _jquery2.default)(menu).find('li');
+  const menu_container = $(element);
+  const menu = $(menu_container).children('.sweet-nav-menu');
+  const menu_li = $(menu).find('li');
   const mobileWidthBase = 768;
 
   let showHideButton;
@@ -55,69 +51,69 @@ exports.default = (element, options) => {
 
   // navigation alignment
   if (settings.align == 'right') {
-    (0, _jquery2.default)(menu).addClass('sweet-nav-right');
+    $(menu).addClass('sweet-nav-right');
   }
 
   // dropdown indentation (mobile mode)
   if (settings.indentChildren) {
-    (0, _jquery2.default)(menu).addClass('sweet-nav-indented');
+    $(menu).addClass('sweet-nav-indented');
   }
 
   // responsive behavior
   if (settings.responsive) {
-    (0, _jquery2.default)(menu_container).addClass('sweet-nav-responsive');
-    showHideButton = (0, _jquery2.default)(menu_container).children('.showhide');
+    $(menu_container).addClass('sweet-nav-responsive');
+    showHideButton = $(menu_container).children('.showhide');
   }
 
   // scrollable menu
   if (settings.scrollable) {
     if (settings.responsive) {
-      (0, _jquery2.default)(menu).css('max-height', settings.scrollableMaxHeight).addClass('scrollable').append("<li class='scrollable-fix'></li>");
+      $(menu).css('max-height', settings.scrollableMaxHeight).addClass('scrollable').append("<li class='scrollable-fix'></li>");
     }
   }
 
   // shows a dropdown
   function showDropdown(item) {
     if (settings.effect == 'fade') {
-      (0, _jquery2.default)(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.showDelay).fadeIn(settings.showSpeed).addClass(settings.animation);
+      $(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.showDelay).fadeIn(settings.showSpeed).addClass(settings.animation);
     } else {
-      (0, _jquery2.default)(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.showDelay).slideDown(settings.showSpeed).addClass(settings.animation);
+      $(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.showDelay).slideDown(settings.showSpeed).addClass(settings.animation);
     }
   }
 
   // hides a dropdown
   function hideDropdown(item) {
     if (settings.effect == 'fade') {
-      (0, _jquery2.default)(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).fadeOut(settings.hideSpeed).removeClass(settings.animation);
+      $(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).fadeOut(settings.hideSpeed).removeClass(settings.animation);
     } else {
-      (0, _jquery2.default)(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).slideUp(settings.hideSpeed).removeClass(settings.animation);
+      $(item).children('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).slideUp(settings.hideSpeed).removeClass(settings.animation);
     }
-    (0, _jquery2.default)(item).children('.dropdown, .megamenu').find('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).fadeOut(settings.hideSpeed);
+    $(item).children('.dropdown, .megamenu').find('.dropdown, .megamenu').stop(true, true).delay(settings.hideDelay).fadeOut(settings.hideSpeed);
   }
 
   // landscape mode
   function landscapeMode() {
-    (0, _jquery2.default)(menu).find('.dropdown, .megamenu').hide(0);
+    $(menu).find('.dropdown, .megamenu').hide(0);
     if (navigator.userAgent.match(/Mobi/i) || window.navigator.msMaxTouchPoints > 0 || settings.trigger == 'click') {
-      (0, _jquery2.default)('.sweet-nav-menu > li > a, .sweet-nav-menu ul.dropdown li a').bind('click touchstart', function (e) {
+      $('.sweet-nav-menu > li > a, .sweet-nav-menu ul.dropdown li a').bind('click touchstart', function (e) {
         e.stopPropagation();
         e.preventDefault();
-        (0, _jquery2.default)(this).parent('li').siblings('li').find('.dropdown, .megamenu').stop(true, true).fadeOut(300);
-        if ((0, _jquery2.default)(this).siblings('.dropdown, .megamenu').css('display') == 'none') {
-          showDropdown((0, _jquery2.default)(this).parent('li'));
+        $(this).parent('li').siblings('li').find('.dropdown, .megamenu').stop(true, true).fadeOut(300);
+        if ($(this).siblings('.dropdown, .megamenu').css('display') == 'none') {
+          showDropdown($(this).parent('li'));
           return false;
         } else {
-          hideDropdown((0, _jquery2.default)(this).parent('li'));
+          hideDropdown($(this).parent('li'));
         }
-        window.location.href = (0, _jquery2.default)(this).attr('href');
+        window.location.href = $(this).attr('href');
       });
-      (0, _jquery2.default)(document).bind('click.menu touchstart.menu', ev => {
-        if ((0, _jquery2.default)(ev.target).closest('.sweet-nav').length == 0) {
-          (0, _jquery2.default)('.sweet-nav-menu').find('.dropdown, .megamenu').fadeOut(300);
+      $(document).bind('click.menu touchstart.menu', ev => {
+        if ($(ev.target).closest('.sweet-nav').length == 0) {
+          $('.sweet-nav-menu').find('.dropdown, .megamenu').fadeOut(300);
         }
       });
     } else {
-      (0, _jquery2.default)(menu_li).bind('mouseenter', function () {
+      $(menu_li).bind('mouseenter', function () {
         showDropdown(this);
       }).bind('mouseleave', function () {
         hideDropdown(this);
@@ -127,19 +123,19 @@ exports.default = (element, options) => {
 
   // portrait mode
   function portraitMode() {
-    (0, _jquery2.default)(menu).find('.dropdown, .megamenu').hide(0);
-    (0, _jquery2.default)(menu).find('.indicator').each(function () {
-      if ((0, _jquery2.default)(this).parent('a').siblings('.dropdown, .megamenu').length > 0) {
-        (0, _jquery2.default)(this).bind('click', function (e) {
-          (0, _jquery2.default)(menu).scrollTo({ top: 45, left: 0 }, 600);
-          if ((0, _jquery2.default)(this).parent().prop('tagName') == 'A') {
+    $(menu).find('.dropdown, .megamenu').hide(0);
+    $(menu).find('.indicator').each(function () {
+      if ($(this).parent('a').siblings('.dropdown, .megamenu').length > 0) {
+        $(this).bind('click', function (e) {
+          $(menu).scrollTo({ top: 45, left: 0 }, 600);
+          if ($(this).parent().prop('tagName') == 'A') {
             e.preventDefault();
           }
-          if ((0, _jquery2.default)(this).parent('a').siblings('.dropdown, .megamenu').css('display') == 'none') {
-            (0, _jquery2.default)(this).parent('a').siblings('.dropdown, .megamenu').delay(settings.showDelay).slideDown(settings.showSpeed);
-            (0, _jquery2.default)(this).parent('a').parent('li').siblings('li').find('.dropdown, .megamenu').slideUp(settings.hideSpeed);
+          if ($(this).parent('a').siblings('.dropdown, .megamenu').css('display') == 'none') {
+            $(this).parent('a').siblings('.dropdown, .megamenu').delay(settings.showDelay).slideDown(settings.showSpeed);
+            $(this).parent('a').parent('li').siblings('li').find('.dropdown, .megamenu').slideUp(settings.hideSpeed);
           } else {
-            (0, _jquery2.default)(this).parent('a').siblings('.dropdown, .megamenu').slideUp(settings.hideSpeed);
+            $(this).parent('a').siblings('.dropdown, .megamenu').slideUp(settings.hideSpeed);
           }
         });
       }
@@ -148,18 +144,18 @@ exports.default = (element, options) => {
 
   // Fix the submenu on the right side
   function fixSubmenuRight() {
-    const submenus = (0, _jquery2.default)(menu).children('li').children('.dropdown, .megamenu');
-    if ((0, _jquery2.default)(window).innerWidth() > mobileWidthBase) {
-      const menu_width = (0, _jquery2.default)(menu_container).outerWidth(true);
+    const submenus = $(menu).children('li').children('.dropdown, .megamenu');
+    if ($(window).innerWidth() > mobileWidthBase) {
+      const menu_width = $(menu_container).outerWidth(true);
       for (let i = 0; i < submenus.length; i++) {
-        if ((0, _jquery2.default)(submenus[i]).parent('li').position().left + (0, _jquery2.default)(submenus[i]).outerWidth() > menu_width) {
-          (0, _jquery2.default)(submenus[i]).css('right', 0);
+        if ($(submenus[i]).parent('li').position().left + $(submenus[i]).outerWidth() > menu_width) {
+          $(submenus[i]).css('right', 0);
         } else {
-          if (menu_width == (0, _jquery2.default)(submenus[i]).outerWidth() || menu_width - (0, _jquery2.default)(submenus[i]).outerWidth() < 20) {
-            (0, _jquery2.default)(submenus[i]).css('left', 0);
+          if (menu_width == $(submenus[i]).outerWidth() || menu_width - $(submenus[i]).outerWidth() < 20) {
+            $(submenus[i]).css('left', 0);
           }
-          if ((0, _jquery2.default)(submenus[i]).parent('li').position().left + (0, _jquery2.default)(submenus[i]).outerWidth() < menu_width) {
-            (0, _jquery2.default)(submenus[i]).css('right', 'auto');
+          if ($(submenus[i]).parent('li').position().left + $(submenus[i]).outerWidth() < menu_width) {
+            $(submenus[i]).css('right', 'auto');
           }
         }
       }
@@ -168,44 +164,44 @@ exports.default = (element, options) => {
 
   // show the bar to show/hide menu items on mobile
   function showMobileBar() {
-    (0, _jquery2.default)(menu).hide(0);
-    (0, _jquery2.default)(showHideButton).show(0).click(() => {
-      if ((0, _jquery2.default)(menu).css('display') == 'none') {
-        (0, _jquery2.default)(menu).slideDown(settings.showSpeed);
+    $(menu).hide(0);
+    $(showHideButton).show(0).click(() => {
+      if ($(menu).css('display') == 'none') {
+        $(menu).slideDown(settings.showSpeed);
       } else {
-        (0, _jquery2.default)(menu).slideUp(settings.hideSpeed).find('.dropdown, .megamenu').hide(settings.hideSpeed);
+        $(menu).slideUp(settings.hideSpeed).find('.dropdown, .megamenu').hide(settings.hideSpeed);
       }
     });
   }
 
   // hide the bar to show/hide menu items on mobile
   function hideMobileBar() {
-    (0, _jquery2.default)(menu).show(0);
-    (0, _jquery2.default)(showHideButton).hide(0);
+    $(menu).show(0);
+    $(showHideButton).hide(0);
   }
 
   // unbind events
   function unbindEvents() {
-    (0, _jquery2.default)(menu_container).find('li, a').unbind();
-    (0, _jquery2.default)(document).unbind('click.menu touchstart.menu');
+    $(menu_container).find('li, a').unbind();
+    $(document).unbind('click.menu touchstart.menu');
   }
 
   // sweet-nav tabs
   function menuTabs() {
     function startTab(tab) {
-      const TabNavs = (0, _jquery2.default)(tab).find('.sweet-nav-tabs-nav > li');
-      const TabContents = (0, _jquery2.default)(tab).find('.sweet-nav-tabs-content');
-      (0, _jquery2.default)(TabNavs).bind('click touchstart', function (e) {
+      const TabNavs = $(tab).find('.sweet-nav-tabs-nav > li');
+      const TabContents = $(tab).find('.sweet-nav-tabs-content');
+      $(TabNavs).bind('click touchstart', function (e) {
         e.stopPropagation();
         e.preventDefault();
-        (0, _jquery2.default)(TabNavs).removeClass('active');
-        (0, _jquery2.default)(this).addClass('active');
-        (0, _jquery2.default)(TabContents).hide(0);
-        (0, _jquery2.default)(TabContents[(0, _jquery2.default)(this).index()]).show(0);
+        $(TabNavs).removeClass('active');
+        $(this).addClass('active');
+        $(TabContents).hide(0);
+        $(TabContents[$(this).index()]).show(0);
       });
     }
-    if ((0, _jquery2.default)(menu).find('.sweet-nav-tabs').length > 0) {
-      const navTabs = (0, _jquery2.default)(menu).find('.sweet-nav-tabs');
+    if ($(menu).find('.sweet-nav-tabs').length > 0) {
+      const navTabs = $(menu).find('.sweet-nav-tabs');
       for (let i = 0; i < navTabs.length; i++) {
         startTab(navTabs[i]);
       }
@@ -242,8 +238,8 @@ exports.default = (element, options) => {
       // eslint-disable-next-line no-new-wrappers
       const ieversion = new Number(RegExp.$1);
       if (ieversion == 8) {
-        (0, _jquery2.default)(showHideButton).hide(0);
-        (0, _jquery2.default)(menu).show(0);
+        $(showHideButton).hide(0);
+        $(menu).show(0);
         unbindEvents();
         landscapeMode();
       }
@@ -251,11 +247,10 @@ exports.default = (element, options) => {
   }
 
   startMenu();
-  (0, _jquery2.default)(window).resize(() => {
+  $(window).resize(() => {
     startMenu();
     fixSubmenuRight();
   });
-}; /* eslint-disable camelcase, no-param-reassign */
-
+};
 
 module.exports = exports['default'];

@@ -6,8 +6,9 @@ import { routerShape } from 'react-router';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { BlogStore, UserStore } from '../../stores';
 import { Comments } from '../Pages';
-import { format, sweetAlert } from '../../utils';
+import { format } from '../../utils';
 import { Row, Col } from '../UI/Layout';
+import { swal } from '../../plugins';
 
 const Details = CreateReactClass({
 
@@ -56,7 +57,7 @@ const Details = CreateReactClass({
     ];
 
     if (commentMsgs.includes(res.msg)) {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       this.setState({
         blog: res.newBlog
       });

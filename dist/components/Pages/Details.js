@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -19,6 +15,8 @@ var _createReactClass2 = _interopRequireDefault(_createReactClass);
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _reactRouter = require('react-router');
 
@@ -31,6 +29,8 @@ var _Pages = require('../Pages');
 var _utils = require('../../utils');
 
 var _Layout = require('../UI/Layout');
+
+var _plugins = require('../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,7 +47,7 @@ const Details = (0, _createReactClass2.default)({
     params: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.BlogStore, _stores.UserStore]
@@ -72,7 +72,16 @@ const Details = (0, _createReactClass2.default)({
       showEditor: false
     };
   },
-  onChange: function () {},
+  onChange: function (res) {
+    const commentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
+
+    if (commentMsgs.includes(res.msg)) {
+      _plugins.swal.success(res.msg);
+      this.setState({
+        blog: res.newBlog
+      });
+    }
+  },
   componentDidMount: function () {
     // eslint-disable-next-line
     this.setState({ showEditor: true });
@@ -138,7 +147,8 @@ const Details = (0, _createReactClass2.default)({
       );
     }
   },
-  _renderArticleUserInfo: function (blog, author) {
+  _renderArticleUserInfo: function (blog) {
+    const { author: author } = blog;
     const fromNow = _utils.format.fromNow(blog.created_at);
     const avatar = _react2.default.createElement('img', {
       src: author.image_url,
@@ -147,12 +157,6 @@ const Details = (0, _createReactClass2.default)({
       height: '40',
       onClick: () => this.goToUserCenter(author.username)
     });
-
-    // const preloadUrlObject = {
-    //   preload: author.image_url,
-    //   content: author.image_url
-    //   <ImagePreloader className="custom-image" src={preloadUrlObject} key="image-preloader" />
-    // };
 
     return _react2.default.createElement(
       _Layout.Row,
@@ -210,22 +214,17 @@ const Details = (0, _createReactClass2.default)({
     );
   },
   render: function () {
-    const { blog: blog, currentUser: currentUser, styleMap: styleMap, showEditor: showEditor } = this.state;
-    const { author: author } = blog;
+    const { styleMap: styleMap, showEditor: showEditor, blog: blog, currentUser: currentUser } = this.state;
     return _react2.default.createElement(
       'article',
       { className: 'details-page' },
-      _react2.default.createElement(
-        'section',
-        { className: 'details' },
-        this._renderArticleHeader(blog),
-        this._renderArticleUserInfo(blog, author),
-        showEditor && this._renderDraftEditorContent(blog, styleMap),
-        this._renderArticleComments(blog, currentUser)
-      )
+      this._renderArticleHeader(blog),
+      this._renderArticleUserInfo(blog),
+      showEditor && this._renderDraftEditorContent(blog, styleMap),
+      this._renderArticleComments(blog, currentUser)
     );
   }
 });
-// import { ImagePreloader } from '../../plugins/ImagePreloader';
+
 exports.default = Details;
 module.exports = exports['default'];

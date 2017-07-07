@@ -1,0 +1,33 @@
+.sweet-editor {
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  cursor: text;
+  padding: 10px 15px;
+  border-radius: 2px;
+  margin: 1em 0;
+  box-shadow: inset 0px 1px 8px -3px #ABABAB;
+  background: #fefefe;
+  .public-DraftEditor-content {
+    min-height: 65px;
+    max-height: 65px;
+    overflow: auto;
+  }
+}
+
+.DraftEditor-root {
+  position: relative;
+}
+
+.DraftEditor-root,
+.DraftEditor-editorContainer,
+.public-DraftEditor-content {
+  height: inherit;
+  text-align: initial;
+}
+
+.DraftEditor-editorContainer {
+  background-color: rgba(255, 255, 255, 0);
+  border-left: 0.1px solid transparent;
+  position: relative;
+  z-index: 1;
+}

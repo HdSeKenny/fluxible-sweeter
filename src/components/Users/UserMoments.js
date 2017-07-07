@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import { UserStore, BlogStore } from '../../stores';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { PinItemModal } from '../UserControls';
-import { sweetAlert, jsUtils } from '../../utils';
+import { jsUtils } from '../../utils';
+import { swal } from '../../plugins';
 
 const UserHome = CreateReactClass({
 
@@ -62,7 +63,7 @@ const UserHome = CreateReactClass({
       const currentUser = this.getStore(UserStore).getCurrentUser();
       const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        sweetAlert.success(res.msg, () => {
+        swal.successCallback(res.msg, () => {
           if (res.msg === 'CREATE_BLOG_SUCCESS') {
             ModalsFactory.hide('createBlogModal');
           }

@@ -16,6 +16,8 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _Layout = require('./Layout');
 
 var _actions = require('../../actions');
@@ -24,14 +26,8 @@ var _stores = require('../../stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable all, camelcase */
 class PinItem extends _react2.default.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: props.currentUser
-    };
-  }
 
   goToUserCenter(author) {
     $('#pinModal').modal('hide');
@@ -47,21 +43,16 @@ class PinItem extends _react2.default.Component {
     this.props.onSelect(pin.id_str);
   }
 
-  pinTextActions(pin) {
-    const isMoment = pin.type !== 'article';
-    if (this.props.disabledClick) {
+  pinTextActions(pin, disabled) {
+    if (this.props.disabledClick || disabled) {
       return;
     }
 
-    if (isMoment) {
+    if (pin.type !== 'article') {
       this.onViewPinItem();
     } else {
       this.goToArticlePage(pin);
     }
-  }
-
-  checkCurrentUser() {
-    _utils.sweetAlert.alertWarningMessage('Login first !');
   }
 
   cancelThumbsUpBlog(currentUserId, blogId) {
@@ -74,8 +65,7 @@ class PinItem extends _react2.default.Component {
 
   onAddAndCancelThumbs(currentUser, blog, isThumbedUp) {
     if (!currentUser) {
-      this.checkCurrentUser();
-      return;
+      return _plugins.swal.warning('Login first !');
     }
     if (isThumbedUp) {
       this.cancelThumbsUpBlog(currentUser.id_str, blog.id_str);
@@ -90,13 +80,27 @@ class PinItem extends _react2.default.Component {
     newImage.src = url;
   }
 
+  onHoverPinUserImg(pin, hovered) {
+    if (hovered) {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+    } else {
+      $(`#${pin.id_str}`).stop().css('opacity', '1');
+      $(`#${pin.id_str}`).fadeIn();
+    }
+  }
+
+  onLeavePinUserImg(pin) {
+    $(`#${pin.id_str}`).stop();
+    $(`#${pin.id_str}`).fadeOut();
+  }
+
   _renderPinitemImage(pin) {
     const imageUrls = pin.images;
     const displayImgUrl = imageUrls[0];
     if (_utils.env.is_client) this.preloadPintemImage(displayImgUrl);
     return _react2.default.createElement(
       'div',
-      { className: 'pin-image' },
+      { className: 'pin-image', onClick: () => this.pinTextActions(pin) },
       _react2.default.createElement('img', { src: displayImgUrl, alt: 'pin-bc' })
     );
   }
@@ -111,10 +115,21 @@ class PinItem extends _react2.default.Component {
       _react2.default.createElement(
         'div',
         { className: 'pin-moment-user' },
+        _react2.default.createElement('div', {
+          className: 'pin-user-card',
+          id: pin.id_str,
+          onMouseEnter: () => this.onHoverPinUserImg(pin, true),
+          onMouseLeave: () => this.onLeavePinUserImg(pin) }),
         _react2.default.createElement(
           'span',
           { className: 'user-img pull-left mr-10', onClick: () => this.goToUserCenter(author) },
-          _react2.default.createElement('img', { alt: 'pin', src: image_url })
+          _react2.default.createElement('img', {
+            className: 'pin-user-img',
+            alt: 'pin',
+            src: image_url,
+            onMouseEnter: () => this.onHoverPinUserImg(pin),
+            onMouseLeave: () => this.onLeavePinUserImg(pin)
+          })
         ),
         _react2.default.createElement(
           'div',
@@ -187,8 +202,8 @@ class PinItem extends _react2.default.Component {
     }
   }
 
-  _renderPinFooterIcons(pin, readMore) {
-    const { currentUser: currentUser } = this.state;
+  _renderPinFooterIcons(pin) {
+    const { currentUser: currentUser } = this.props;
     const { likers: likers, comments: comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
     const faThumbsIcon = isThumbedUp ? 'fa fa-thumbs-up' : 'fa fa-thumbs-o-up';
@@ -196,34 +211,21 @@ class PinItem extends _react2.default.Component {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'pin-footer-icons' },
-      _react2.default.createElement(
-        _Layout.Col,
-        { size: '3 p-0' },
-        readMore && _react2.default.createElement(
-          'div',
-          { className: 'icon-span read-more', onClick: () => this.pinTextActions(pin) },
-          _react2.default.createElement(
-            'span',
-            { className: '' },
-            'Read more'
-          )
-        )
-      ),
+      _react2.default.createElement(_Layout.Col, { size: '3 p-0' }),
       _react2.default.createElement(
         _Layout.Col,
         { size: '9 p-0 tar' },
         _react2.default.createElement(
           'div',
           {
-            className: 'icon-span'
-            // onClick={() => this.onViewPinItem()}
-            , 'data-balloon': 'share!',
+            className: 'icon-span',
+            'data-balloon': 'share!',
             'data-balloon-pos': 'top' },
           _react2.default.createElement('i', { className: 'fa fa-share-square-o' }),
           _react2.default.createElement(
             'span',
             { className: 'ml-5' },
-            '3434'
+            '0'
           )
         ),
         _react2.default.createElement(
@@ -280,14 +282,14 @@ class PinItem extends _react2.default.Component {
       _react2.default.createElement(
         _Layout.Row,
         { className: '' },
-        this._renderPinFooterIcons(pin, readMore)
+        this._renderPinFooterIcons(pin)
       )
     );
   }
 
   render() {
     const { pin: pin, showImage: showImage, specialClass: specialClass, readMore: readMore } = this.props;
-    const pinStyle = specialClass ? `pin ${specialClass}` : 'pin';
+    const pinStyle = specialClass ? `pin ${specialClass} ${pin.type}` : `pin ${pin.type}`;
     return _react2.default.createElement(
       'div',
       { className: `${pinStyle}${readMore ? ' mb-20' : ' mb-10'}` },
@@ -299,8 +301,7 @@ class PinItem extends _react2.default.Component {
     );
   }
 }
-exports.default = PinItem; /* eslint-disable all, camelcase */
-
+exports.default = PinItem;
 PinItem.displayName = 'PinItem';
 PinItem.contextTypes = {
   router: _reactRouter.routerShape.isRequired,

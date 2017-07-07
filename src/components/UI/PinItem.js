@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { routerShape } from 'react-router';
-import { sweetAlert, format, jsUtils, env } from '../../utils';
+import { format, jsUtils, env } from '../../utils';
+import { swal } from '../../plugins';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
@@ -58,10 +59,6 @@ export default class PinItem extends React.Component {
     }
   }
 
-  checkCurrentUser() {
-    sweetAlert.alertWarningMessage('Login first !');
-  }
-
   cancelThumbsUpBlog(currentUserId, blogId) {
     this.context.executeAction(BlogActions.CancelThumbsUpBlog, { currentUserId, blogId });
   }
@@ -72,8 +69,7 @@ export default class PinItem extends React.Component {
 
   onAddAndCancelThumbs(currentUser, blog, isThumbedUp) {
     if (!currentUser) {
-      this.checkCurrentUser();
-      return;
+      return swal.warning('Login first !');
     }
     if (isThumbedUp) {
       this.cancelThumbsUpBlog(currentUser.id_str, blog.id_str);

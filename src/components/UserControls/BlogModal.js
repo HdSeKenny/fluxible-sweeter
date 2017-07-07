@@ -9,7 +9,7 @@ import createEmojiPlugin from 'draft-js-emoji-plugin';
 import { routerShape } from 'react-router';
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
-import { sweetAlert } from '../../utils';
+import { swal } from '../../plugins';
 import { SweetEditor } from '../../plugins/Draft';
 
 const config = {
@@ -61,7 +61,7 @@ export default class BlogModal extends React.Component {
     const { editorContent, blogText } = this.state;
     const { currentUser } = this.props;
     if (!currentUser) {
-      return sweetAlert.alertWarningMessage('Login first !');
+      return swal.warning('Login first !');
     }
 
     const newBlog = {
@@ -83,7 +83,7 @@ export default class BlogModal extends React.Component {
   goToArticleCreatePage() {
     const { currentUser } = this.props;
     if (!currentUser) {
-      return sweetAlert.alertWarningMessage('Login first!');
+      return swal.warning('Login first!');
     }
 
     this.context.router.push(`/${currentUser.username}/create`);

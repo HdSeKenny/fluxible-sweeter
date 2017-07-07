@@ -29,7 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class SlimEditor extends _react2.default.Component {
 
   componentDidMount() {
-    this.instance = _plugins.Slim ? _plugins.Slim.create(_reactDom2.default.findDOMNode(this), this.props) : null;
+    this.instance = _plugins.slim ? _plugins.slim.create(_reactDom2.default.findDOMNode(this), this.props) : null;
   }
 
   render() {

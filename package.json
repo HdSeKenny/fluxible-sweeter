@@ -4,10 +4,10 @@
   "private": true,
   "author": "Kenny",
   "scripts": {
-    "prod": "grunt prod && node ./dist/bin/server.js",
-    "start": "NODE_ENV=production node ./dist/bin/server.js",
-    "start-win": "set NODE_ENV=production && node ./dist/bin/server.js",
-    "dev": "nodemon ./.tmp/bin/server.js"
+    "build": "grunt build",
+    "prod": "grunt prod",
+    "start": "grunt start",
+    "dev": "grunt serve"
   },
   "dependencies": {
     "bluebird": "^3.4.6",

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 
 // Slim (place slim CSS and module js file in same folder as this file)
-import { Slim } from '../../plugins';
+import { slim } from '../../plugins';
 
 // React Component
 export default class SlimEditor extends React.Component {
@@ -19,7 +19,7 @@ export default class SlimEditor extends React.Component {
   };
 
   componentDidMount() {
-    this.instance = Slim ? Slim.create(ReactDOM.findDOMNode(this), this.props) : null;
+    this.instance = slim ? slim.create(ReactDOM.findDOMNode(this), this.props) : null;
   }
 
   render() {

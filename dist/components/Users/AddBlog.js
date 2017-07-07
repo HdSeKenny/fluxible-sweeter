@@ -24,8 +24,6 @@ var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _reactRouter = require('react-router');
 
-var _utils = require('../../utils');
-
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
@@ -33,6 +31,8 @@ var _stores = require('../../stores');
 var _plugins = require('../../plugins');
 
 var _Layout = require('../UI/Layout');
+
+var _ = require('..');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -73,7 +73,7 @@ const AddBlog = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _utils.sweetAlert.success(res.msg, () => {
+      _plugins.swal.successWirhCallback(res.msg, () => {
         const newBlogId = res.newBlog.id_str;
         this.context.router.push(`${newBlogId}/details`);
       });
@@ -90,15 +90,15 @@ const AddBlog = (0, _createReactClass2.default)({
     const { title: title, tags: tags, currentUser: currentUser } = this.state;
     const now = new Date();
     if (!title.trim()) {
-      return _utils.sweetAlert.alertErrorMessage('Please enter title !');
+      return _plugins.swal.error('Please enter title !');
     }
 
     if (!plainText.trim()) {
-      return _utils.sweetAlert.alertErrorMessage('Please enter content !');
+      return _plugins.swal.error('Please enter content !');
     }
 
     if (!tags.length) {
-      return _utils.sweetAlert.alertErrorMessage('Please choose a tag !');
+      return _plugins.swal.error('Please choose a tag !');
     }
 
     const newBlog = {
@@ -114,8 +114,11 @@ const AddBlog = (0, _createReactClass2.default)({
     this.executeAction(_actions.BlogActions.AddBlog, newBlog);
   },
   render: function () {
-    const { title: title, tags: tags } = this.state;
+    const { title: title, tags: tags, currentUser: currentUser } = this.state;
     const options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
+
+    if (!currentUser) return _react2.default.createElement(_.NotFound, { classes: 'create-article-page' });
+
     return _react2.default.createElement(
       'div',
       { className: 'create-article-page' },

@@ -24,6 +24,8 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _stores = require('../../stores');
 
 var _actions = require('../../actions');
@@ -55,6 +57,7 @@ const Home = (0, _createReactClass2.default)({
   },
   getStateFromStores: function () {
     const isMedium = _utils.mediaSize.getBrowserMediaInfo(true).media === 'medium';
+    const isSmall = _utils.mediaSize.getBrowserMediaInfo(true).media === 'small';
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       kenny: this.getStore(_stores.UserStore).getKennyUser(),
@@ -63,21 +66,23 @@ const Home = (0, _createReactClass2.default)({
       blogText: '',
       selectedPin: {},
       showPinModal: false,
-      isMedium: isMedium
+      isMedium: isMedium,
+      isSmall: isSmall
     };
   },
   onChange: function (res) {
     const blogMessages = ['CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
 
     if (blogMessages.includes(res.msg)) {
-      _utils.sweetAlert.success(res.msg, () => {
+      _plugins.swal.successWithCallback(res.msg, () => {
         this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
       });
     }
   },
   getBrowserScreenInfo: function () {
     const isMedium = _utils.mediaSize.getBrowserMediaInfo(true).media === 'medium';
-    this.setState({ isMedium: isMedium });
+    const isSmall = _utils.mediaSize.getBrowserMediaInfo(true).media === 'small';
+    this.setState({ isMedium: isMedium, isSmall: isSmall });
   },
   componentWillMount: function () {
     this.getBrowserScreenInfo();
@@ -116,7 +121,7 @@ const Home = (0, _createReactClass2.default)({
     this.setState({ blogs: sortedBlogs });
   },
   checkCurrentUser: function () {
-    _utils.sweetAlert.alertWarningMessage('Login first !');
+    _plugins.swal.warning('Login first !');
     this.setState({ blogText: '' });
   },
   onViewPinItem: function (id) {
@@ -139,8 +144,8 @@ const Home = (0, _createReactClass2.default)({
     }
   },
   _renderPinSection: function (sectionTitle, typedPins) {
-    const { currentUser: currentUser, isMedium: isMedium } = this.state;
-    const marginRightIndex = isMedium ? 2 : 3;
+    const { currentUser: currentUser, isMedium: isMedium, isSmall: isSmall } = this.state;
+    const marginRightIndex = isMedium || isSmall ? 2 : 3;
 
     return _react2.default.createElement(
       'section',

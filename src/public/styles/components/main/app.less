@@ -40,7 +40,7 @@ body {
   .footer-content {
     width: @content-pages-width;
     margin: @content-pages-margin;
-    padding: 0 2em;
+    padding: 0 20px;
   }
 }
 
@@ -55,7 +55,7 @@ body {
 
 @media (max-width: 950px) {
   .content-pages {
-    width: 66em;
+    width: 880px;
     margin: 0 auto;
   }
 }
@@ -81,7 +81,7 @@ body {
 
 .main-sliders {
   flex: 1 100%;
-  max-height: 430px;
+  height: 430px;
   background-color: @brand-info;
   .tp-banner-container {
     &.hidden {
@@ -97,6 +97,10 @@ body {
       z-index: 999999;
     }
   }
+  &.loaded {
+    height: auto;
+    max-height: 430px;
+  }
 }
 
 .sweet-alert {
@@ -108,5 +112,3 @@ body {
     padding: 8px 32px !important;
   }
 }
-
-.not-found {}

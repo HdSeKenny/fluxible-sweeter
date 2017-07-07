@@ -1,12 +1,12 @@
 import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { FluxibleMixin } from 'fluxible-addons-react';
-import { sweetAlert } from '../../utils';
+import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
+import UserBar from './UserBar';
 import { DatePicker } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import UserBar from './UserBar';
+import { swal } from '../../plugins';
 
 const UserInfo = CreateReactClass({
 
@@ -303,7 +303,7 @@ const UserInfo = CreateReactClass({
     if (isFirstName && isLastName && isUsername && isEmail && isPhone && isProfession && isBirthday) {
       this.executeAction(UserActions.UpdateUserInfo, newUser);
     } else {
-      sweetAlert.alertErrorMessage('Update failed !');
+      swal.error('Update failed !');
     }
   },
 

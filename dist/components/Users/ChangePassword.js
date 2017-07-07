@@ -26,9 +26,7 @@ var _UserBar = require('./UserBar');
 
 var _UserBar2 = _interopRequireDefault(_UserBar);
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _plugins = require('../../plugins');
 
 var _actions = require('../../actions');
 
@@ -72,7 +70,7 @@ const ChangePassword = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     if (res.stat) {
-      _sweetAlert2.default.alertSuccessMessageWithCallback(res.msg, () => {
+      _plugins.swal.successWithCallback(res.msg, () => {
         this.context.router.push('/login');
       });
     } else {
@@ -165,7 +163,7 @@ const ChangePassword = (0, _createReactClass2.default)({
       };
       this.executeAction(_actions.UserActions.ChangeUserPassword, newPasswordObj);
     } else {
-      _sweetAlert2.default.alertErrorMessage('Update password failed !');
+      _plugins.swal.error('Update password failed !');
     }
   },
   render: function () {

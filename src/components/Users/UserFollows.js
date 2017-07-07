@@ -2,11 +2,12 @@ import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { sweetAlert } from '../../utils';
+import UserBar from './UserBar';
+import { swal } from '../../plugins';
 import { UserFollowsTabs } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import UserBar from './UserBar';
+
 
 const UserFollows = CreateReactClass({
 
@@ -47,8 +48,7 @@ const UserFollows = CreateReactClass({
   onFollowThisUser(followUser) {
     const { currentUser, user } = this.state;
     if (!currentUser) {
-      sweetAlert.alertErrorMessage('Login first please!');
-      return;
+      return swal.error('Login first please!');
     }
 
     const followObj = {
@@ -64,8 +64,7 @@ const UserFollows = CreateReactClass({
   onCancelFollowThisUser(followUser) {
     const { currentUser, user } = this.state;
     if (!currentUser) {
-      sweetAlert.alertErrorMessage('Login first please!');
-      return;
+      return swal.error('Login first please!');
     }
 
     const cancelFollowObj = {

@@ -34,6 +34,8 @@ var _UI = require('../UI');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const UserHome = (0, _createReactClass2.default)({
@@ -85,7 +87,7 @@ const UserHome = (0, _createReactClass2.default)({
     const responseMessages = ['CREATE_BLOG_SUCCESS'];
     if (responseMessages.includes(res.msg)) {
       if (res.msg === 'CREATE_BLOG_SUCCESS') {
-        _utils.sweetAlert.success(res.msg, () => {
+        _plugins.swal.successWithCallback(res.msg, () => {
           _UI.ModalsFactory.hide('createBlogModal');
         });
       }

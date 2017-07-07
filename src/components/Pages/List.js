@@ -3,7 +3,8 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
-import { sweetAlert, jsUtils } from '../../utils';
+import { jsUtils } from '../../utils';
+import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
 import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
@@ -51,14 +52,14 @@ const List = CreateReactClass({
     ];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       this.setState({
         selectedPin: res.newBlog
       });
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       this.setState({
         blogs: this.getStore(BlogStore).getAllBlogs(),
       });

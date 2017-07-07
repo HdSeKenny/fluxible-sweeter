@@ -3,7 +3,8 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { routerShape } from 'react-router';
-import { sweetAlert, validations, jsUtils } from '../../utils';
+import { validations, jsUtils } from '../../utils';
+import { swal } from '../../plugins';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { SweetInput, Switch, ModalsFactory } from '../UI';
@@ -46,7 +47,7 @@ const Login = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       ModalsFactory.hide('loginModal');
       this.context.router.push('/list');
     }
@@ -56,7 +57,7 @@ const Login = CreateReactClass({
     }
 
     if (res.msg === 'LOGOUT_SUCCESS') {
-      sweetAlert.success(res.msg);
+      swal.success(res.msg);
       this.context.router.push('/');
     }
   },

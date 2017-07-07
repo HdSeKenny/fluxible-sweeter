@@ -28,6 +28,8 @@ var _UserControls = require('../UserControls');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const UserHome = (0, _createReactClass2.default)({
@@ -76,7 +78,7 @@ const UserHome = (0, _createReactClass2.default)({
       const currentUser = this.getStore(_stores.UserStore).getCurrentUser();
       const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        _utils.sweetAlert.success(res.msg, () => {
+        _plugins.swal.successCallback(res.msg, () => {
           if (res.msg === 'CREATE_BLOG_SUCCESS') {
             _UI.ModalsFactory.hide('createBlogModal');
           }

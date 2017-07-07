@@ -356,7 +356,8 @@
 
       var self = this,
         container = jQuery(this);
-
+      var bt = self.parent().find('.tp-bannertimer');
+      var opt = bt.data('opt');
       punchgs.TweenLite.killDelayedCallsTo(_R.showHideNavElements);
       if (_R.endMoveCaption)
         if (opt.endtimeouts && opt.endtimeouts.length > 0)

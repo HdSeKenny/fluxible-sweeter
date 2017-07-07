@@ -35,9 +35,9 @@ class PinItemModal extends _react2.default.Component {
     if (pin.author && showModal) {
       return _react2.default.createElement(
         'section',
-        { className: 'pin-item-modal mt-15 mb-20' },
+        { className: 'pin-item-modal mt-20 mb-30 ml-10 mr-10' },
         _react2.default.createElement(_UI.PinItem, { pin: pin, disabledClick: true, currentUser: currentUser }),
-        _react2.default.createElement(_Pages.Comments, { blog: pin, isBlogsWell: true, currentUser: currentUser })
+        _react2.default.createElement(_Pages.Comments, { blog: pin, isSweet: true, currentUser: currentUser, isModal: true })
       );
     } else {
       return null;

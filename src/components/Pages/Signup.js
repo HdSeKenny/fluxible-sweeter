@@ -1,11 +1,11 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { router } from 'react-router';
+import { FluxibleMixin } from 'fluxible-addons-react';
+import { routerShape } from 'react-router';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import sweetAlert from '../../utils/sweetAlert';
+import { swal } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
 
@@ -14,7 +14,7 @@ const Signup = CreateReactClass({
   displayName: 'Signup',
 
   contextTypes: {
-    // router: routerShape.isRequired,
+    router: routerShape.isRequired,
     executeAction: PropTypes.func
   },
 
@@ -40,7 +40,7 @@ const Signup = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'USER_REGISTER_SUCCESS') {
-      sweetAlert.success(res.stat);
+      swal.success(res.stat);
       ModalsFactory.hide('signupModal');
       this.context.router.push('/list');
     }
@@ -69,7 +69,7 @@ const Signup = CreateReactClass({
     if (firstName && lastName && username && email && password && confirmPassword) {
       this.executeAction(UserActions.UserRegister, newUser);
     } else {
-      sweetAlert.alertErrorMessage('Register failed !');
+      swal.error('Register failed !');
     }
   },
 

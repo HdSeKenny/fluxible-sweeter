@@ -7,7 +7,8 @@ import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { ModalsFactory } from '../UI';
-import { sweetAlert, jsUtils } from '../../utils';
+import { jsUtils } from '../../utils';
+import { swal } from '../../plugins';
 
 const UserHome = CreateReactClass({
 
@@ -60,7 +61,7 @@ const UserHome = CreateReactClass({
     const responseMessages = ['CREATE_BLOG_SUCCESS'];
     if (responseMessages.includes(res.msg)) {
       if (res.msg === 'CREATE_BLOG_SUCCESS') {
-        sweetAlert.success(res.msg, () => {
+        swal.successWithCallback(res.msg, () => {
           ModalsFactory.hide('createBlogModal');
         });
       }

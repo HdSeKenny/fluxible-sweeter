@@ -46,12 +46,16 @@ _app2.default.rehydrate(dehydratedState, (err, context) => {
   window.context = context;
 
   const routes = (0, _routes2.default)(context);
-
+  const scrollRoutes = ['list', 'about', ':blogId/details', ':username'];
   function UpdateRoute() {
     if (!firstRender) {
       (0, _fetchData2.default)(context, this.state);
     }
     firstRender = false;
+    const targetPath = this.state.routes[1].path;
+    if (!targetPath || scrollRoutes.includes(targetPath) && this.state.routes.length < 3) {
+      window.scrollTo(0, 0);
+    }
   }
 
   _reactDom2.default.render(_react2.default.createElement(_CustomFluxibleComponent2.default, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.Router, {

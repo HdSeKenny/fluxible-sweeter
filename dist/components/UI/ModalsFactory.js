@@ -16,14 +16,7 @@ var _Layout = require('./Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const shallowCompare = require('react-addons-shallow-compare');
-
 class ModalsFactory extends _react2.default.Component {
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(shallowCompare(this, nextProps, nextState));
-  //   return shallowCompare(this, nextProps, nextState);
-  // }
 
   _renderModalHeader(title) {
     return _react2.default.createElement(
@@ -44,7 +37,6 @@ class ModalsFactory extends _react2.default.Component {
   }
 
   _renderModalFooter() {
-
     return _react2.default.createElement('div', { className: 'modal-footer mb-10' });
   }
 

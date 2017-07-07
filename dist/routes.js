@@ -55,6 +55,7 @@ const createRoutes = context => {
     _react2.default.createElement(_reactRouter.IndexRoute, { component: _components.Home }),
     _react2.default.createElement(_reactRouter.Route, { path: '/', component: _components.Home }),
     _react2.default.createElement(_reactRouter.Route, { path: 'list', component: _components.List }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _components.About }),
     _react2.default.createElement(_reactRouter.Route, { path: ':blogId/details', component: _components.Details }),
     _react2.default.createElement(
       _reactRouter.Route,

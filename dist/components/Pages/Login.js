@@ -24,6 +24,8 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
@@ -69,7 +71,7 @@ const Login = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
+      _plugins.swal.success(res.msg);
       _UI.ModalsFactory.hide('loginModal');
       this.context.router.push('/list');
     }
@@ -79,7 +81,7 @@ const Login = (0, _createReactClass2.default)({
     }
 
     if (res.msg === 'LOGOUT_SUCCESS') {
-      _utils.sweetAlert.success(res.msg);
+      _plugins.swal.success(res.msg);
       this.context.router.push('/');
     }
   },

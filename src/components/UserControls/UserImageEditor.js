@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SlimEditor, ModalsFactory } from '../UI';
-import { sweetAlert, jsUtils } from '../../utils';
+import { jsUtils } from '../../utils';
+import { swal } from '../../plugins';
 import { UserActions, BlogActions } from '../../actions';
 
 export default class UserImageEditor extends React.Component {
@@ -44,8 +45,7 @@ export default class UserImageEditor extends React.Component {
   onUploadImage() {
     const { imageData, currentUser } = this.state;
     if (!imageData) {
-      sweetAlert.alertWarningMessage('Browser an image first !');
-      return;
+      return swal.warning('Browser an image first !');
     }
 
     const { image, name } = imageData.output;

@@ -3,7 +3,8 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { sweetAlert, mediaSize } from '../../utils';
+import { mediaSize } from '../../utils';
+import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory } from '../UI';
@@ -55,7 +56,7 @@ const Home = CreateReactClass({
     ];
 
     if (blogMessages.includes(res.msg)) {
-      sweetAlert.success(res.msg, () => {
+      swal.successWithCallback(res.msg, () => {
         this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
       });
     }
@@ -111,7 +112,7 @@ const Home = CreateReactClass({
   },
 
   checkCurrentUser() {
-    sweetAlert.alertWarningMessage('Login first !');
+    swal.warning('Login first !');
     this.setState({ blogText: '' });
   },
 

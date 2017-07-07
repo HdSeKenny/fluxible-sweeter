@@ -1,6 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+
 body {
   font-weight: 500;
-  font-family: 'Open Sans', sans-serif;
+  font-family: @font-family-sans-serif;
   background-attachment: fixed;
   background-size: cover;
   background-color: #e0e0e0;
@@ -8,10 +10,16 @@ body {
   padding: 0;
 }
 
-#app {
+.fullscreen {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
+  -webkit-flex-flow: column;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 .row {
@@ -19,14 +27,8 @@ body {
   padding: 0;
 }
 
-.menuzord-section {
-  width: 100%;
-  flex: 1 100%;
-}
-
 .content-pages {
-  flex: 0 0 auto;
-  position: relative;
+  flex: 1;
 }
 
 @media (min-width: 1201px) {
@@ -35,18 +37,38 @@ body {
     margin: @content-pages-margin;
     padding: @content-pages-padding;
   }
+  .footer-content {
+    width: @content-pages-width;
+    margin: @content-pages-margin;
+    padding: 0 20px;
+  }
 }
 
 @media (max-width: 1200px) {
-  .content-pages {
-    // width: @content-pages-width;
-    // margin: @content-pages-margin;
+  .content-pages,
+  .footer-wrapper {
+    width: @content-pages-width;
+    margin: @content-pages-margin;
     padding: @content-pages-padding;
   }
 }
 
-.footer {
-  flex: 1 100%;
+@media (max-width: 950px) {
+  .content-pages {
+    width: 880px;
+    margin: 0 auto;
+  }
+}
+
+.footer-wrapper {
+  height: 100px;
+  color: #fff;
+  background-color: #333;
+  img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .rev-slider-2 {
@@ -61,21 +83,23 @@ body {
   flex: 1 100%;
   height: 430px;
   background-color: @brand-info;
-
   .tp-banner-container {
     &.hidden {
       .tp-banner {
         visibility: hidden !important;
       }
-
     }
     .tp-bannertimer {
       background: #ccc !important;
       background: rgba(0, 0, 0, 0.1) !important;
       height: 5px !important;
-      position: relative;
+      position: absolute;
       z-index: 999999;
     }
+  }
+  &.loaded {
+    height: auto;
+    max-height: 430px;
   }
 }
 
@@ -84,12 +108,7 @@ body {
     font-size: 25px !important;
     margin: 0 !important;
   }
-
   button {
     padding: 8px 32px !important;
   }
 }
-
-
-
-

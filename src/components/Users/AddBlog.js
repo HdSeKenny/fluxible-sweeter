@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { routerShape } from 'react-router';
-import { sweetAlert } from '../../utils';
 import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
-import { DraftEditor } from '../../plugins';
+import { DraftEditor, swal } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
 import { NotFound } from '..';
 
@@ -50,7 +49,7 @@ const AddBlog = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      sweetAlert.success(res.msg, () => {
+      swal.successWirhCallback(res.msg, () => {
         const newBlogId = res.newBlog.id_str;
         this.context.router.push(`${newBlogId}/details`);
       });
@@ -70,15 +69,15 @@ const AddBlog = CreateReactClass({
     const { title, tags, currentUser } = this.state;
     const now = new Date();
     if (!title.trim()) {
-      return sweetAlert.alertErrorMessage('Please enter title !');
+      return swal.error('Please enter title !');
     }
 
     if (!plainText.trim()) {
-      return sweetAlert.alertErrorMessage('Please enter content !');
+      return swal.error('Please enter content !');
     }
 
     if (!tags.length) {
-      return sweetAlert.alertErrorMessage('Please choose a tag !');
+      return swal.error('Please choose a tag !');
     }
 
     const newBlog = {
@@ -101,7 +100,7 @@ const AddBlog = CreateReactClass({
       { value: 'two', label: 'Two' }
     ];
 
-    if (!currentUser) return <NotFound classes="create-article-page"/>;
+    if (!currentUser) return <NotFound classes="create-article-page" />;
 
     return (
       <div className="create-article-page">

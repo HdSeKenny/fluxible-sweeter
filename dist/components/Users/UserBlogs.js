@@ -22,6 +22,8 @@ var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _utils = require('../../utils');
 
+var _plugins = require('../../plugins');
+
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
@@ -68,19 +70,17 @@ const UserBlogs = (0, _createReactClass2.default)({
   onChange: function () {},
   onUpdateBlog: function (blog) {
     if (!blog.title) {
-      _utils.sweetAlert.alertErrorMessage('Please enter title !');
-      return;
+      return _plugins.swal.error('Please enter title !');
     }
 
     if (!blog.content) {
-      _utils.sweetAlert.alertErrorMessage('Please enter content');
-      return;
+      return _plugins.swal.error('Please enter content');
     }
 
     this.executeAction(_actions.BlogActions.UpdateBlog, blog);
   },
   onDeleteBlog: function (blog) {
-    _utils.sweetAlert.alertConfirmMessage('', () => {
+    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', () => {
       this.executeAction(_actions.BlogActions.DeleteBlog, blog);
     });
   },

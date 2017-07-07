@@ -97,8 +97,8 @@ exports.default = {
       body.show_comments = false;
       body.likers = [];
       body.comments = [];
-      body.images = [];
-      body.description = body.description || '';
+      body.images = ['/styles/images/sliders/great-frontend.png'];
+      body.tag = body.tag || body.type;
       Blog.insert(body, (err, result) => {
         if (result) {
           const blog = result.ops[0];

@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -20,15 +16,15 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _fluxibleAddonsReact = require('fluxible-addons-react');
+
 var _reactRouter = require('react-router');
 
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _sweetAlert = require('../../utils/sweetAlert');
-
-var _sweetAlert2 = _interopRequireDefault(_sweetAlert);
+var _plugins = require('../../plugins');
 
 var _Layout = require('../UI/Layout');
 
@@ -41,7 +37,7 @@ const Signup = (0, _createReactClass2.default)({
   displayName: 'Signup',
 
   contextTypes: {
-    // router: routerShape.isRequired,
+    router: _reactRouter.routerShape.isRequired,
     executeAction: _propTypes2.default.func
   },
 
@@ -49,7 +45,7 @@ const Signup = (0, _createReactClass2.default)({
     switchOpenModal: _propTypes2.default.func
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore]
@@ -66,7 +62,7 @@ const Signup = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     if (res.msg === 'USER_REGISTER_SUCCESS') {
-      _sweetAlert2.default.success(res.stat);
+      _plugins.swal.success(res.stat);
       _UI.ModalsFactory.hide('signupModal');
       this.context.router.push('/list');
     }
@@ -94,7 +90,7 @@ const Signup = (0, _createReactClass2.default)({
     if (firstName && lastName && username && email && password && confirmPassword) {
       this.executeAction(_actions.UserActions.UserRegister, newUser);
     } else {
-      _sweetAlert2.default.alertErrorMessage('Register failed !');
+      _plugins.swal.error('Register failed !');
     }
   },
   validateFirstName: function (firstName) {

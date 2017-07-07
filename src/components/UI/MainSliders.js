@@ -65,6 +65,12 @@ export default class MainSliders extends React.Component {
         this.revol = revol;
       });
     }
+
+    window.addEventListener('resize', () => {
+      if (!$('.main-sliders').hasClass('loaded')) {
+        $('.main-sliders').addClass('loaded');
+      }
+    });
   }
 
   componentWillUnmount() {
