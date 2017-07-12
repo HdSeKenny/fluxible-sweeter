@@ -4,10 +4,11 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const wbsap = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 const env = require('./src/configs/development');
+const options = { model: 'dev'}
+module.exports = function makeWebpackConfig() {
 
-module.exports = function makeWebpackConfig(options) {
   const isDev = options.model === 'dev';
   const isProd = options.model === 'prod';
   const isTest = options.model === 'test';
@@ -98,7 +99,8 @@ module.exports = function makeWebpackConfig(options) {
     new webpack.NoEmitOnErrorsPlugin(),
 
     // generates webpack assets config to use hashed assets in production mode
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: isProd ? 'common.[hash].js' : 'common.js' })
+    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: isProd ? 'common.[hash].js' : 'common.js' }),
+    new wbsap('./webpack.json')
   ];
 
   // Add build specific plugins

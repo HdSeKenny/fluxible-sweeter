@@ -54,7 +54,8 @@ const List = CreateReactClass({
     if (thumbsAndCommentMsgs.includes(res.msg)) {
       swal.success(res.msg);
       this.setState({
-        selectedPin: res.newBlog
+        selectedPin: res.newBlog,
+        blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 

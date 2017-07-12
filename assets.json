@@ -1,8 +1,0 @@
-{
-  "assets": {
-    "main": "build/main.0b7e35c8183cb995da20.js",
-    "style": "build/main.c810fbbfced1e521c8e0.css",
-    "common": "build/common.c810fbbfced1e521c8e0.js"
-  },
-  "cdnPath": "/"
-}

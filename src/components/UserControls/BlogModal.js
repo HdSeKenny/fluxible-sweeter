@@ -11,6 +11,7 @@ import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { swal } from '../../plugins';
 import { SweetEditor } from '../../plugins/Draft';
+import { params } from '../../configs';
 
 const config = {
   selectGroups: [{
@@ -28,9 +29,9 @@ const config = {
   }]
 };
 
-const emojiPlugin = createEmojiPlugin(config);
+const emojiPlugin = params.showEmoji ? createEmojiPlugin(config) : {};
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
-const EmojiPlugins = [emojiPlugin];
+const EmojiPlugins = params.showEmoji ? [emojiPlugin] : [];
 
 export default class BlogModal extends React.Component {
 
@@ -106,16 +107,16 @@ export default class BlogModal extends React.Component {
     );
   }
 
-  _renderSweetEditor(isDisabled) {
+  _renderSweetEditor(isDisabled, showEmoji) {
     return (
       <Row className="textarea-row">
         <SweetEditor
           EmojiPlugins={EmojiPlugins}
           onSweetChange={(editorContent, plainText) => this.onSweetChange(editorContent, plainText)}
         />
-        <EmojiSuggestions />
+        {showEmoji && <EmojiSuggestions />}
         <Col size="8 p-0">
-          <EmojiSelect />
+          {showEmoji && <EmojiSelect />}
         </Col>
         <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
       </Row>
@@ -123,7 +124,7 @@ export default class BlogModal extends React.Component {
   }
 
   render() {
-    const { welcomeText, blogText } = this.state;
+    const { welcomeText, blogText, loadEmoji } = this.state;
     const blogTextLength = blogText.length;
     const isDisabled = blogTextLength > 140 || blogTextLength === 0;
     const isLimmitWords = blogTextLength < 141;
@@ -141,7 +142,7 @@ export default class BlogModal extends React.Component {
           </Col>
         </Row>
 
-        {this.state.loadEmoji && this._renderSweetEditor(isDisabled)}
+        {loadEmoji && this._renderSweetEditor(isDisabled, params.showEmoji)}
       </div>
     );
   }

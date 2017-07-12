@@ -4,7 +4,6 @@ const env = require('./src/configs/development');
 
 module.exports = function(grunt) {
   // load npm grunt tasks
-  // require('load-grunt-tasks')(grunt);
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
