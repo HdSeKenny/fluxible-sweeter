@@ -62,10 +62,6 @@ const UserBar = CreateReactClass({
     }
   },
 
-  componentDidMount() {
-
-  },
-
   isActive(routes) {
     const path = jsUtils.splitUrlBySlash(this.props.path, routes.length);
     const isActive = _.isEqual(routes.sort(), path.sort());

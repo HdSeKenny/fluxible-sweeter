@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import 'babel-polyfill';
 import './polyfills';
-import CustomFluxibleComponent from './components/CustomFluxibleComponent';
+import { Custom } from './components';
 import createRoutes from './routes';
 import app from './app';
 import fetchData from './utils/fetchData';
@@ -35,7 +35,7 @@ app.rehydrate(dehydratedState, (err, context) => {
 
   ReactDOM.render(
     React.createElement(
-      CustomFluxibleComponent, { context: context.getComponentContext() },
+      Custom, { context: context.getComponentContext() },
       React.createElement(Router, {
         history: browserHistory,
         children: routes,

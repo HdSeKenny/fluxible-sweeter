@@ -12,23 +12,22 @@ import serialize from 'serialize-javascript';
 import React from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
-// import './polyfills';
+import { Custom } from './components';
+import { blogs, users, comments } from './services';
 import createRoutes from './routes';
 import fetchData from './utils/fetchData';
 import app from './app';
-import CustomFluxibleComponent from './components/CustomFluxibleComponent';
-import { blogs as BlogService, users as UserService, comments as CommentService } from './services';
 import Html from './components/Html';
 import config from './configs';
 import assets from './utils/assets';
 import serverConfig from './configs/server';
-import htmlToPdf from './plugins/pdfDownloader/HtmlToPdf';
+import htmlToPdf from './plugins/htmlToPdf';
+import sharp from './plugins/sharp';
 
 export default (server) => {
   const env = server.get('env');
 
-  // view engine setup
-  server.set('views', path.join(__dirname, 'views'));
+  server.set('views', path.join(__dirname, 'views')); // view engine setup
   server.set('view engine', 'pug');
 
   if (serverConfig.server.logEnable && env !== 'production') {
@@ -39,10 +38,6 @@ export default (server) => {
     server.use(express.static(path.join(serverConfig.server.root, '.tmp')));
   }
 
-  // limit size of json object less than 20M for extracting metadata
-  server.use(bodyParser.json({ limit: '20mb' }));
-
-  // limit size of json object less than 20M for extracting metadata
   server.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   server.use(cookieParser());
   server.use(favicon(`${__dirname}/public/styles/images/favicon.ico`));
@@ -59,14 +54,15 @@ export default (server) => {
   }));
 
   const fetchrPlugin = app.getPlugin('FetchrPlugin');
-  // fetchrPlugin.registerService(LanguageService);
-  fetchrPlugin.registerService(BlogService);
-  fetchrPlugin.registerService(UserService);
-  fetchrPlugin.registerService(CommentService);
+  fetchrPlugin.registerService(blogs);
+  fetchrPlugin.registerService(users);
+  fetchrPlugin.registerService(comments);
 
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', htmlToPdf);
+  server.use('/api/resize', sharp);
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
+
   server.use((req, res) => {
     const context = app.createContext({
       req,
@@ -87,7 +83,7 @@ export default (server) => {
           const exposed = `window.__DATA__=${serialize(app.dehydrate(context))}`;
           const doctype = '<!DOCTYPE html>';
           const markup = renderToString(React.createElement(
-            CustomFluxibleComponent, { context: context.getComponentContext() }, <RouterContext {...routerState} />
+            Custom, { context: context.getComponentContext() }, <RouterContext {...routerState} />
           ));
           const html = renderToStaticMarkup(<Html assets={assets} markup={markup} exposed={exposed} />);
 

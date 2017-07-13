@@ -1,12 +1,13 @@
 import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+
 /**
  * adding child context to react component
  */
-const CustomFluxibleComponent = CreateReactClass({
+export default CreateReactClass({
 
-  displayName: 'CustomFluxibleComponent',
+  displayName: 'Custom',
 
   propTypes: {
     context: PropTypes.object,
@@ -31,5 +32,3 @@ const CustomFluxibleComponent = CreateReactClass({
     return React.cloneElement(this.props.children, { context: this.props.context });
   }
 });
-
-export default CustomFluxibleComponent;

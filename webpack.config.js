@@ -6,8 +6,8 @@ const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const wbsap = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 const env = require('./src/configs/development');
-const options = { model: 'dev'}
-module.exports = function makeWebpackConfig() {
+
+module.exports = function makeWebpackConfig(options) {
 
   const isDev = options.model === 'dev';
   const isProd = options.model === 'prod';
@@ -20,6 +20,10 @@ module.exports = function makeWebpackConfig() {
   };
 
   config.entry = ['./src/client.js'];
+
+  // config.externals = {
+  //   sharp: 'commonjs sharp'
+  // };
 
   config.output = {
     // Absolute output directory

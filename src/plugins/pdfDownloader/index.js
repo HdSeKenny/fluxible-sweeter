@@ -1,1 +1,0 @@
-export htmlToPdf from './HtmlToPdf';
