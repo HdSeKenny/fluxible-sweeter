@@ -1,9 +1,11 @@
 import Fluxible from 'fluxible';
 import fetchrPlugin from 'fluxible-plugin-fetchr';
 import config from './configs';
+import routes from './routes';
+
 // import sessionStorage from './utils/sessionStorage';
+
 import {
-  // LanguageStore,
   BlogStore,
   UserStore,
   ErrorStore
@@ -12,9 +14,7 @@ import {
 // init namespace for current App
 // sessionStorage.setNamespace('sweeter');
 
-const app = new Fluxible({
-  component: require('./routes')
-});
+const app = new Fluxible({ component: routes });
 
 app.plug(fetchrPlugin({
   xhrPath: `${config.path_prefix}/api`,
@@ -22,11 +22,8 @@ app.plug(fetchrPlugin({
 }));
 
 app.plug(require('./plugins/cookie'));
-app.plug(require('./plugins/language'));
 app.plug(require('./plugins/config'));
-// app.plug(require('./plugins/customFetchrPlugin'));
 
-// app.registerStore(LanguageStore);
 app.registerStore(BlogStore);
 app.registerStore(UserStore);
 app.registerStore(ErrorStore);

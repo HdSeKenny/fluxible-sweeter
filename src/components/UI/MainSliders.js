@@ -12,38 +12,6 @@ export default class MainSliders extends React.Component {
 
   constructor(props) {
     super(props);
-    const dataCustominMap = {
-      x: 0,
-      y: 0,
-      z: 0,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      scaleX: 0.5,
-      scaleY: 0.5,
-      skewX: 0,
-      skewY: 0,
-      opacity: 0,
-      transformPerspective: 0,
-      transformOrigin: '50% 50%',
-    };
-
-    const dataCustomoutMap = {
-      x: 0,
-      y: 0,
-      z: 0,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      scaleX: 0.75,
-      scaleY: 0.75,
-      skewX: 0,
-      skewY: 0,
-      opacity: 0,
-      transformPerspective: 600,
-      transformOrigin: '50% 50%',
-    };
-
     this.state = {
       dataCustomout: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       dataImgCuromin: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
@@ -58,16 +26,20 @@ export default class MainSliders extends React.Component {
   }
 
   componentDidMount() {
-    const { show } = this.props;
-    if (show) {
-      animations.main_sliders((revol) => {
-        $('.tp-banner-container').removeClass('hidden');
-        this.revol = revol;
+    if (this.props.show) {
+      animations.main_sliders(async (revol) => {
+        await $('.tp-banner-container').removeClass('hidden');
+        setTimeout(async () => {
+          const slidesliHeight = await $('.tp-revslider-slidesli').height();
+          $('.main-sliders').height(slidesliHeight);
+          this.revol = revol;
+        }, 500);
       });
     }
 
     window.addEventListener('resize', () => {
       if (!$('.main-sliders').hasClass('loaded')) {
+        $('.main-sliders').height('auto');
         $('.main-sliders').addClass('loaded');
       }
     });
@@ -131,7 +103,7 @@ export default class MainSliders extends React.Component {
                   data-captionhidden="on">Developer: Kenny
                 </div>
               </li>
-              <li data-transition="zoomout" data-slotamount="7" data-masterspeed="1500">
+              <li data-transition="zoomout" data-slotamount="7" data-masterspeed="1500" className="main-sliders-li">
                 <img src="/assets/revolution/images/darkblurbg.jpg" alt="" />
                 <div
                   className="tp-caption customin"

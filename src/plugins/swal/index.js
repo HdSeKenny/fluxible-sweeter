@@ -22,17 +22,6 @@ export default {
     });
   },
 
-  successCallback: (msg, callback) => {
-    swal({
-      title: convertMsg(msg),
-      type: 'success',
-      confirmButtonColor,
-      timer: closeTimer
-    }, () => {
-      callback();
-    });
-  },
-
   Info: (msg) => {
     swal({
       title: 'Info',

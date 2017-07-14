@@ -54,9 +54,9 @@ const UserActions = {
   UserRegister: (context, payload, done) => {
     context.service.create('users.register', {}, payload, fetchClientConfig, (err, res) => {
       if (res.user) {
-        context.dispatch('USER_REGISTER_SUCCESS', res)
+        context.dispatch('USER_REGISTER_SUCCESS', res);
       } else {
-        context.dispatch('USER_REGISTER_FAIL', res)
+        context.dispatch('USER_REGISTER_FAIL', res);
       }
       done();
     });

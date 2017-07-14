@@ -10,7 +10,7 @@ import { PinItem, ModalsFactory, Layout } from '../UI';
 import { Row, Col } from '../UI/Layout';
 import { PinItemModal, BlogModal } from '../UserControls';
 
-const List = CreateReactClass({
+export default CreateReactClass({
 
   displayName: 'List',
 
@@ -66,7 +66,7 @@ const List = CreateReactClass({
       });
     }
 
-    if (res.msg === 'USER_LOGIN_SUCCESS') {
+    if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
       this.setState({
         currentUser: this.getStore(UserStore).getCurrentUser()
       });
@@ -141,22 +141,13 @@ const List = CreateReactClass({
     );
   },
 
-  _renderSweetBlock() {
-    const { currentUser, editorState } = this.state;
-    return (
-      <section className="search-block mb-15">
-        <BlogModal currentUser={currentUser} isUserHome={true} editorState={editorState} />
-      </section>
-    );
-  },
-
   render() {
     const { currentUser, kenny, blogs, selectedPin, showPinModal } = this.state;
     const displayUser = currentUser || kenny;
     return (
       <article className="list-page">
         <section className="mid">
-          {this._renderSweetBlock()}
+          <BlogModal currentUser={currentUser} isUserHome={true} />
           {this._renderAllPinItems(blogs, currentUser)}
         </section>
         <section className="right">
@@ -181,5 +172,3 @@ const List = CreateReactClass({
     );
   }
 });
-
-export default List;

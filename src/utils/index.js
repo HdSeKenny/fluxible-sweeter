@@ -5,3 +5,4 @@ export format from './format';
 export jsUtils from './jsUtils';
 export env from './env';
 export mediaSize from './mediaSize';
+export preload from './preload';

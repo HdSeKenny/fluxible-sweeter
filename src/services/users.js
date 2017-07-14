@@ -1,4 +1,4 @@
-/* eslint-disable all, no-param-reassign */
+/* eslint-disable all, no-param-reassign, no-shadow */
 import md5 from 'md5';
 import MongoClient from 'mongodb';
 import serverConfig from '../configs/server';
@@ -120,6 +120,7 @@ export default {
   },
 
   register(req, resource, params, body, config, callback) {
+
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.findOne({ email: body.email }, (err, user) => {
@@ -131,12 +132,13 @@ export default {
           });
         } else {
           body.password = md5(body.password);
-          body.image_url = '/styles/images/users/default-user.png';
+          body.image_url = '/styles/images/users/default-user.svg';
           body.background_image_url = '/styles/images/users/user-center-bg.jpg';
           body.lq_background_url = '/styles/images/lqip/users/user-center-bg.jpg';
           body.fans = [];
           body.focuses = [];
           body.blogs = [];
+
           User.insert(body, (err, res) => {
             const insertedUser = res.ops[0];
             insertedUser.id_str = insertedUser._id.toString();

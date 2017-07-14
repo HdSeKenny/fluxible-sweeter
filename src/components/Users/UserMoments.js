@@ -4,7 +4,7 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { UserStore, BlogStore } from '../../stores';
 import { PinItem, ModalsFactory, Layout } from '../UI';
-import { PinItemModal } from '../UserControls';
+import { PinItemModal, BlogModal } from '../UserControls';
 import { jsUtils } from '../../utils';
 import { swal } from '../../plugins';
 
@@ -56,22 +56,21 @@ const UserHome = CreateReactClass({
       'CANCEL_THUMBS_UP_BLOG_SUCCESS',
       'BLOG_CHANGE_IMAGE_SUCCESS'
     ];
+    const { username } = this.props.params;
+    const blogStore = this.getStore(BlogStore);
+    const userStore = this.getStore(UserStore);
+    const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
+    const result = { user, currentUser };
 
     if (successMessages.includes(res.msg)) {
-      const { username } = this.props.params;
-      const blogStore = this.getStore(BlogStore);
-      const currentUser = this.getStore(UserStore).getCurrentUser();
-      const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+      result.displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        swal.successCallback(res.msg, () => {
-          if (res.msg === 'CREATE_BLOG_SUCCESS') {
-            ModalsFactory.hide('createBlogModal');
-          }
-        });
+        swal.success(res.msg);
       }
-
-      this.setState({ displayBlogs });
     }
+
+    this.setState(result);
   },
 
   onViewPinItem(id) {
@@ -96,17 +95,26 @@ const UserHome = CreateReactClass({
   },
 
   render() {
-    const { currentUser, selectedPin, displayBlogs, showPinModal } = this.state;
+    const { currentUser, selectedPin, displayBlogs, showPinModal, user } = this.state;
     const { searchText } = this.props;
     const trimedSearchText = searchText ? searchText.trim() : '';
     const sortedBlogs = jsUtils.sortByDate(displayBlogs);
     const searchedBlogs = jsUtils.searchFromArray(sortedBlogs, searchText);
     const finalDisplayBlogs = (searchedBlogs.length || trimedSearchText) ? searchedBlogs : sortedBlogs;
+    const isCurrentUser = currentUser && user ? currentUser.id_str === user.id_str : false;
     return (
       <div className="user-moments">
         <div className="user-blogs">
-          {finalDisplayBlogs.map((blog, index) =>
-            <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />)
+          {isCurrentUser && <BlogModal currentUser={currentUser} isUserHome={true} />}
+          {finalDisplayBlogs.length ?
+            <div className="">
+              {finalDisplayBlogs.map((blog, index) =>
+                <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={blog} currentUser={currentUser} />
+              )}
+            </div> :
+            <div className={isCurrentUser ? 'no-moments' : 'no-moments not-current'}>
+              <h4>{isCurrentUser ? `You don't have any sweets, write a sweet here!` : `He doesn't have any sweets!`}</h4>
+            </div>
           }
         </div>
         <Layout.Page>

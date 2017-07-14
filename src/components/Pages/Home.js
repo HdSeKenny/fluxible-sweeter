@@ -56,7 +56,7 @@ const Home = CreateReactClass({
     ];
 
     if (blogMessages.includes(res.msg)) {
-      swal.successWithCallback(res.msg, () => {
+      swal.success(res.msg, () => {
         this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
       });
     }

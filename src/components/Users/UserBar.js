@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { jsUtils } from '../../utils';
+import { jsUtils, preload } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
@@ -42,7 +42,7 @@ const UserBar = CreateReactClass({
       currentUploadedImage,
       currentUser: store.getCurrentUser(),
       showImageModal: false,
-      defaultUserImageUrl: '/styles/images/users/default-user.png',
+      defaultUserImageUrl: '/styles/images/users/default-user.svg',
     };
   },
 
@@ -60,6 +60,10 @@ const UserBar = CreateReactClass({
       ModalsFactory.hide('uploadModal');
       this.setState(this.getStateFromStores());
     }
+  },
+
+  componentDidMount() {
+    preload();
   },
 
   isActive(routes) {
@@ -241,7 +245,7 @@ const UserBar = CreateReactClass({
     return (
       <div className="user-bar mb-20">
         <div className="user-background">
-          <img alt="user-bg" src={background_lq} data-src={background} className="background lazyload blur-up" />
+          <img alt="user-bg" src={background_lq} data-src={background} className="background" />
           {this._renderUserImage(isCurrentUser, user, currentUser)}
           {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>

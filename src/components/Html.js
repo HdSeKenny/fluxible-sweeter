@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
@@ -30,9 +31,10 @@ export default class Html extends React.Component {
           <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700" rel="stylesheet" />
           <link href="http://fonts.googleapis.com/css?family=Roboto%3A700%2C300" rel="stylesheet" property="stylesheet" media="all" />
-          <link href="/styles/bootstrap/css/font-awesome.min.css" rel="stylesheet" />
-          <link href="/styles/components/ui/sweetalert.css" rel="stylesheet" />
+          <link href="/styles/css/font-awesome.min.css" rel="stylesheet" />
+          <link href="/styles/css/sweetalert.css" rel="stylesheet" />
           <link href="/styles/css/slim.min.css" rel="stylesheet" />
+          <link href="/styles/css/blog.css" rel="stylesheet" />
 
           <link href="/assets/revolution/css/settings.css" rel="stylesheet" media="screen" />
           <link href="/assets/revolution/css/layers.css" rel="stylesheet" />
@@ -40,14 +42,11 @@ export default class Html extends React.Component {
 
           <link href={style} rel="stylesheet" />
 
-          <link href="/styles/components/pages/blog.css" rel="stylesheet" />
-
           <script src="/styles/js/jquery.min.js"></script>
           <script src="/styles/js/bootstrap.min.js"></script>
         </head>
         <body>
           <div className="loading"><div className="loader"></div></div>
-
           <div id="main" dangerouslySetInnerHTML={markupHtml}></div>
           <script dangerouslySetInnerHTML={exposedHtml}></script>
 
@@ -55,8 +54,6 @@ export default class Html extends React.Component {
           <script src={main}></script>
 
           <script src="/styles/js/sweetalert.min.js"></script>
-          <script src="/styles/js/lazysizes.min.js"></script>
-
           <script src="/assets/revolution/js/jquery.themepunch.tools.min.js"></script>
           <script src="/assets/revolution/js/jquery.themepunch.revolution.min.js"></script>
           <script src="/assets/revolution/js/extensions/revolution.extension.actions.min.js"></script>

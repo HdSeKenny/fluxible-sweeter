@@ -45,7 +45,7 @@ const ChangePassword = CreateReactClass({
 
   onChange(res) {
     if (res.stat) {
-      swal.successWithCallback(res.msg, () => {
+      swal.success(res.msg, () => {
         this.context.router.push('/login');
       });
     } else {

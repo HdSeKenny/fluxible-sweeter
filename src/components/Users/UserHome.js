@@ -3,6 +3,7 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import NotFound from '../NotFound';
 import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
@@ -57,17 +58,21 @@ const UserHome = CreateReactClass({
     const userStore = this.getStore(UserStore);
     const blogStore = this.getStore(BlogStore);
     const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
     const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     const responseMessages = ['CREATE_BLOG_SUCCESS'];
-    if (responseMessages.includes(res.msg)) {
-      if (res.msg === 'CREATE_BLOG_SUCCESS') {
-        swal.successWithCallback(res.msg, () => {
-          ModalsFactory.hide('createBlogModal');
-        });
-      }
+    const result = {
+      user,
+      currentUser
+    };
 
-      this.setState({ displayBlogs });
+    if (responseMessages.includes(res.msg)) {
+      swal.success(res.msg, () => {
+        result.displayBlogs = displayBlogs;
+      });
     }
+
+    this.setState(result);
   },
 
   onSearchBlogs(searchText) {
@@ -83,11 +88,19 @@ const UserHome = CreateReactClass({
   render() {
     const { currentUser, user, displayBlogs, searchedBlogs, currentUserBlogs, searchText } = this.state;
     const { pathname } = this.props.location;
-    const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
+    const isCurrentUser = currentUser && user ? currentUser.id_str === user.id_str : false;
     const trimedSearchText = searchText ? searchText.trim() : '';
     const displayMineBlogs = (searchedBlogs.length || trimedSearchText) ? searchedBlogs : currentUserBlogs;
     const searchBlogsData = Object.assign({}, { displayMineBlogs, searchText });
     const child = React.cloneElement(this.props.children, searchBlogsData);
+
+    if (!user) {
+      return (
+        <div className="user-home">
+          <NotFound />
+        </div>
+      );
+    }
 
     return (
       <div className="user-home">
