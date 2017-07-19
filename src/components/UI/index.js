@@ -2,7 +2,6 @@ export FullScreen from './FullScreen';
 export BgIcon from './BgIcon';
 export DatePicker from './DatePicker';
 export HotBlogsTabs from './HotBlogsTabs';
-export UserFollowsTabs from './UserFollowsTabs';
 export MainSliders from './MainSliders';
 export SweetInput from './SweetInput';
 export Layout from './Layout';

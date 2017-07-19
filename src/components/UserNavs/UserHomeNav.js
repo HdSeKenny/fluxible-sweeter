@@ -55,9 +55,9 @@ export default class UserHomeNav extends React.Component {
     const { user, displayBlogs, currentUser } = this.props;
     const displayUser = user || currentUser;
     const { username, fans, focuses } = displayUser;
-    if (!displayUser) {
-      return swal.info('You need login');
-    }
+
+    if (!displayUser) return swal.info('You need login');
+
     return (
       <div className="user-home-left">
         <Row className="blog-tips">
@@ -74,11 +74,10 @@ export default class UserHomeNav extends React.Component {
             <span>Focus</span>
           </Col>
         </Row>
-        <div className="user-info-others">
-          <Row className="user-info">{this._renderUserInfo(displayUser)}</Row>
-          <Row className="others">
-          </Row>
-        </div>
+
+        <Row className="user-info">{this._renderUserInfo(displayUser)}</Row>
+        <Row className="others">
+        </Row>
       </div>
     );
   }

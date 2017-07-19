@@ -7,7 +7,6 @@ import NotFound from '../NotFound';
 import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
-import { ModalsFactory } from '../UI';
 import { jsUtils } from '../../utils';
 import { swal } from '../../plugins';
 

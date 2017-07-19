@@ -237,11 +237,6 @@ const UserBar = CreateReactClass({
     const background = user ? user.background_image_url : '';
     const background_lq = user ? user.lq_background_url : '';
 
-    // const userBackground = {
-    //   background: `url(${background}) no-repeat center center fixed`,
-    //   backgroundSize: 'cover'
-    // };
-
     return (
       <div className="user-bar mb-20">
         <div className="user-background">
