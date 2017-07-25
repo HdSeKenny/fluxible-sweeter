@@ -66,7 +66,9 @@ const createRoutes = (context) => {
 
       <Route path=":username/more" component={UserMore} />
       <Route path=":username/messages" component={UserMessages} />
-      <Route path=":username/follows" component={UserFollows} />
+      <Route path=":username/follows" component={UserFollows} >
+
+      </Route>
 
       <Route path="*" component={NotFound} />
     </Route>

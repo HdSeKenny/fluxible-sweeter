@@ -4,6 +4,8 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import UserBar from './UserBar';
 import NotFound from '../NotFound';
+import FollowsRightTabs from './FollowsRightTabs';
+import { FollowsLeftNav, UserSuggestions } from '../UserNavs';
 import { swal } from '../../plugins';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
@@ -45,6 +47,10 @@ const UserFollows = CreateReactClass({
     this.setState(this.getStatesFromStores());
   },
 
+  componentDidMount() {
+
+  },
+
   onFollowThisUser(followUser) {
     const { currentUser, user } = this.state;
     if (!currentUser) {
@@ -78,24 +84,25 @@ const UserFollows = CreateReactClass({
   },
 
   render() {
-    const { pathname } = this.props.location;
+    const { pathname, query } = this.props.location;
     const { currentUser, user, isCurrentUser } = this.state;
 
-    if (!user) {
+    if (!currentUser) {
       return (
         <div className="user-follows">
           <NotFound />
         </div>
       );
     }
-
     return (
       <div className="user-follows">
         <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
         <div className="follows-left">
-
+          <FollowsLeftNav currentUser={currentUser} user={user} query={query} pathname={pathname} />
+          <UserSuggestions />
         </div>
         <div className="follows-right">
+          <FollowsRightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
         </div>
       </div>
     );

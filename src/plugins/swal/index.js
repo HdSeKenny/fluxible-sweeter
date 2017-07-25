@@ -40,11 +40,15 @@ export default {
     });
   },
 
-  warning: (msg) => {
+  warning: (msg, cb) => {
     swal({
       title: convertMsg(msg),
       type: 'warning',
       confirmButtonColor: '#F8BB86'
+    }, () => {
+      if (cb) {
+        cb();
+      }
     });
   },
 

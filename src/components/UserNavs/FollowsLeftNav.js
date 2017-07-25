@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Pane } from '../UserControls';
+import { Link } from 'react-router';
+import { Row } from '../UI/Layout';
 
 export default class FollowsLeftNav extends React.Component {
 
   static displayName = 'FollowsLeftNav';
 
   static contextTypes = {
-    executeAction: PropTypes.func,
-    currentUser: PropTypes.object,
-    user: PropTypes.object
+    executeAction: PropTypes.func
   };
+
+  static propTypes = {
+    currentUser: PropTypes.object,
+    user: PropTypes.object,
+    query: PropTypes.object,
+    pathname: PropTypes.string
+  };
+
+  isActive(tab) {
+    const { query } = this.props;
+    return query.tab === tab ? 'active' : '';
+  }
 
   isFollowedThisUser(currentUser, user) {
     let isFollowed = false;
@@ -24,106 +35,70 @@ export default class FollowsLeftNav extends React.Component {
     return isFollowed;
   }
 
-  _renderUserFollowing(currentUser, user) {
-    return (
-      <Tabs>
-        <Pane label="Following">
-          {this._renderUserFocuses(currentUser, user)}
-        </Pane>
-        <Pane label="Fans">
-          {this._renderUserFans(currentUser, user)}
-        </Pane>
-        <Pane label="Friends">
-          <center><h2>Friends - Not Finished !</h2></center>
-        </Pane>
-      </Tabs>
-    );
-  }
-
-  _renderUserFocuses(currentUser, user) {
-    if (user.focuses.length > 0) {
-      return (
-        <div className="">
-          {user.focuses.map(focus => {
-            const isFollowed = this.isFollowedThisUser(currentUser, focus);
-            const isFocusCurrentUser = currentUser ? focus.strId === currentUser.strId : false;
-            const focusObj = { type: 'FOCUS', user: focus };
-            return (
-              <div key={focus._id} className="well following">
-                <div className="row">
-                  <div className="col-xs-1 following-image">
-                    <img alt="following" src={focus.image_url} />
-                  </div>
-                  <div className="col-xs-8 following-info">
-                    <h4>{focus.username}</h4>
-                    <p>{focus.profession}</p>
-                  </div>
-                  <div className="col-xs-3 following-btn">
-                    {currentUser && isFollowed &&
-                      <button className="cancel-follow-btn" onClick={this.props.onCancelFollowThisUser.bind(null, focusObj)}>
-                        <i className="fa fa-heart" /> Following
-                      </button>
-                    }
-                    {currentUser && !isFollowed && !isFocusCurrentUser &&
-                      <button className="follow-btn" onClick={this.props.onFollowThisUser.bind(null, focusObj)}>
-                        <i className="fa fa-heart" /> Follow
-                      </button>
-                    }
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-  }
-
-  _renderUserFans(currentUser, user) {
-    if (user.fans.length > 0) {
-      return (
-        <div className="">
-          {user.fans.map(fan => {
-            const isFollowed = this.isFollowedThisUser(currentUser, fan);
-            const isFanCurrentUser = currentUser ? fan.strId === currentUser.strId : false;
-            const fanObj = { type: 'FAN', user: fan };
-            return (
-              <div key={fan._id} className="well following">
-                <div className="row">
-                  <div className="col-xs-1 following-image">
-                    <img alt="following" src={fan.image_url} />
-                  </div>
-                  <div className="col-xs-8 following-info">
-                    <h4>{fan.username}</h4>
-                    <p>{fan.profession}</p>
-                  </div>
-                  <div className="col-xs-3 following-btn">
-                    {currentUser && isFollowed &&
-                      <button className="cancel-follow-btn" onClick={this.props.onCancelFollowThisUser.bind(null, fanObj)}>
-                        <i className="fa fa-heart" /> Following
-                      </button>
-                    }
-                    {currentUser && !isFollowed && !isFanCurrentUser &&
-                      <button className="follow-btn" onClick={this.props.onFollowThisUser.bind(null, fanObj)}>
-                        <i className="fa fa-heart" /> Follow
-                      </button>
-                    }
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
+  _renderNavGroups(currentUser) {
+    const focusNum = currentUser ? currentUser.focuses.length : 0;
+    const fansNum = currentUser ? currentUser.fans.length : 0;
+    const blacklist = 0;
+    const navGroups = [
+      {
+        title: 'Focuses',
+        value: focusNum,
+        icon: 'fa fa-user-plus',
+        list: [
+          { tab: 'ng', value: 'No groups' },
+          { tab: 'mf', value: 'Friends' },
+          { tab: 'sf', value: 'Special focuses' }
+        ]
+      },
+      {
+        title: 'Fans',
+        value: fansNum,
+        icon: 'fa fa-heart',
+        list: []
+      },
+      {
+        title: 'Groups',
+        value: 0,
+        icon: 'fa fa-users',
+        list: []
+      },
+      {
+        title: 'Black list',
+        value: blacklist,
+        icon: 'fa fa-exclamation-circle',
+        list: []
+      }
+    ];
+    const { pathname } = this.props;
+    return navGroups.map((group, index) => {
+      if (group.list.length) {
+        return (
+          <Row className="nav-group" key={index}>
+            <h5 className="nav-title"><i className={group.icon}></i> {group.title} {group.value}</h5>
+            <div className="nav-list">
+              {group.list.map((li, lidx) => {
+                const url = { pathname, query: { tab: li.tab } };
+                return <li className={this.isActive(li.tab)} key={lidx}><Link to={url}>{li.value}</Link></li>;
+              })}
+            </div>
+          </Row>
+        );
+      }
+      else {
+        return (
+          <Row className="nav-group" key={index}>
+            <h5 className="nav-title"><i className={group.icon}></i> {group.title} {group.value}</h5>
+          </Row>
+        );
+      }
+    });
   }
 
   render() {
-    const { currentUser, user } = this.props;
-
+    const { currentUser } = this.props;
     return (
-      <div className="user-follows-tabs">
-        {this._renderUserFollowing(currentUser, user)}
+      <div className="follows-navs">
+        {this._renderNavGroups(currentUser)}
       </div>
     );
   }

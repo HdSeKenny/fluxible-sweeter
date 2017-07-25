@@ -9,5 +9,7 @@
     "fade_speed": 300
   },
 
-  "showEmoji": false
+  "showEmoji": false,
+
+  "showUserCard": false
 }

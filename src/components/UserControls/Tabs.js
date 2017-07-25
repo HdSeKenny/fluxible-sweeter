@@ -61,7 +61,7 @@ const Tabs = CreateReactClass({
 
   render() {
     return (
-      <div className="user-tabs">
+      <div className="">
         {this._renderTitles()}
         {this._renderContent()}
       </div>

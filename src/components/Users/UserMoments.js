@@ -70,7 +70,9 @@ const UserHome = CreateReactClass({
       }
     }
 
-    this.setState(result);
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS') {
+      this.setState(result);
+    }
   },
 
   onViewPinItem(id) {

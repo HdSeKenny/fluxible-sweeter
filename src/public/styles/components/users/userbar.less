@@ -44,7 +44,7 @@
       }
     }
     .user-info {
-      margin: -50px 0 50px 0;
+      margin: -55px 0 55px 0;
       color: #fff;
       text-align: center;
       .user-btn {
@@ -106,9 +106,7 @@
       text-align: center;
       font-size: 14px;
       padding: 10px;
-      border-right: 1px solid #eee;
       font-weight: 500;
-      width: 200px;
 
       i {
         margin-right: 6px;
@@ -178,7 +176,24 @@
 }
 
 @media (max-width: 950px) {
-  .user-bar .nav .bar-nav {
-    width: 168px;
+  .user-bar .nav {
+    &.mine .bar-nav {
+      width: 168px;
+    }
+    &.their .bar-nav {
+      width: 210px
+    }
   }
 }
+
+@media (min-width: 951px) {
+  .user-bar .nav {
+    &.mine .bar-nav {
+      width: 200px;
+    }
+    &.their .bar-nav {
+      width: 250px
+    }
+  }
+}
+

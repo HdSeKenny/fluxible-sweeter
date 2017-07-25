@@ -37,9 +37,7 @@ const UserBar = CreateReactClass({
 
   getStateFromStores() {
     const store = this.getStore(UserStore);
-    const currentUploadedImage = store.getCurrentUploadedImage();
     return {
-      currentUploadedImage,
       currentUser: store.getCurrentUser(),
       showImageModal: false,
       defaultUserImageUrl: '/styles/images/users/default-user.svg',
@@ -47,19 +45,32 @@ const UserBar = CreateReactClass({
   },
 
   onChange(res) {
-    if (res.msg === 'FOLLOW_USER_SUCCESS') {
+    const barMessages = [
+      'FOLLOW_USER_SUCCESS',
+      'CANCEL_FOLLOW_USER_SUCCESS',
+      'UPLOAD_IMAGE_SUCCESS'
+    ];
+
+    const store = this.getStore(UserStore);
+    const newState = {};
+
+    if (barMessages.includes(res.msg)) {
       swal.success(res.msg);
+      if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
+        ModalsFactory.hide('uploadModal');
+        newState.showImageModal = false;
+      }
     }
 
-    if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
-      swal.success(res.msg);
+    if (!res.msg || res.msg && res.msg !== 'LOGOUT_SUCCESS') {
+      newState.currentUser = store.getCurrentUser();
     }
 
-    if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
-      swal.success(res.msg);
-      ModalsFactory.hide('uploadModal');
-      this.setState(this.getStateFromStores());
-    }
+    this.setState(newState);
+  },
+
+  componentWillMount() {
+    preload();
   },
 
   componentDidMount() {
@@ -157,21 +168,25 @@ const UserBar = CreateReactClass({
 
   _renderUserBarNavs(isCurrentUser, user) {
     const { username } = user;
-
     const navs = {
-      Home: { label: 'Home', icon: 'fa fa-home' },
-      Follows: { label: 'Follows', icon: 'fa fa-heart' },
-      Messages: { label: 'Messages', icon: 'fa fa-comments-o' },
-      Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
-      Settings: {
-        label: isCurrentUser ? 'Settings' : 'Personal',
-        icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
-      }
+      Home: { label: 'Home', icon: 'fa fa-home' }
+    };
+
+    if (isCurrentUser) {
+      navs.Follows = { label: 'Follows', icon: 'fa fa-heart' };
+    }
+
+    navs.Messages = { label: 'Messages', icon: 'fa fa-comments-o' };
+    navs.Photos = { label: 'Photos', icon: 'fa fa-picture-o' };
+    navs.Settings = {
+      label: isCurrentUser ? 'Settings' : 'Personal',
+      icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
     };
 
     const colSize = '2';
+    const navKeys = Object.keys(navs);
 
-    return Object.keys(navs).map((navli, index) => {
+    return navKeys.map((navli, index) => {
       const lowcaseNav = navli.toLowerCase();
       const isHome = lowcaseNav === 'home';
       let isActive = false;
@@ -184,10 +199,11 @@ const UserBar = CreateReactClass({
 
       const classes = `${colSize} bar-nav ${isActive}`;
       const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
+      const query = lowcaseNav === 'follows' ? { tab: 'ng' } : '';
       const icon = navs[navli].icon;
       const label = navs[navli].label;
       return (
-        <Col size={classes} key={index}><Link to={url}><i className={icon}></i> {label}</Link></Col>
+        <Col size={classes} key={index}><Link to={{ pathname: url, query }}><i className={icon}></i> {label}</Link></Col>
       );
     });
   },
@@ -245,7 +261,7 @@ const UserBar = CreateReactClass({
           {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>
 
-        <Row className="nav">
+        <Row className={`nav ${isCurrentUser ? 'mine' : 'their'}`}>
           {user && this._renderUserBarNavs(isCurrentUser, displayUser)}
         </Row>
 

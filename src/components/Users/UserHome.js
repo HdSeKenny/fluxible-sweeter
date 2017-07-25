@@ -60,15 +60,17 @@ const UserHome = CreateReactClass({
     const user = userStore.getUserByUsername(username);
     const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     const responseMessages = ['CREATE_BLOG_SUCCESS'];
-    const result = {
-      user,
-      currentUser
-    };
+    const result = {};
 
     if (responseMessages.includes(res.msg)) {
       swal.success(res.msg, () => {
         result.displayBlogs = displayBlogs;
       });
+    }
+
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS' || !res.msg) {
+      result.user = user;
+      result.currentUser = currentUser;
     }
 
     this.setState(result);

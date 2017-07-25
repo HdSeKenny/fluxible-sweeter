@@ -1,0 +1,53 @@
+@follow-bg: #f2f2f5;
+@left-nav-padding: 10px 30px;
+
+.user-follows {
+  .follows-left {
+    width: 25%;
+    float: left;
+    .follows-navs {
+      padding: @left-nav-padding;
+      border-radius: @border-radius-base;
+      background: #fff;
+      .nav-group {
+        .nav-title {
+          padding: 0 2px;
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .nav-list li {
+          padding: 5px 21.5px;
+          list-style: none;
+          > span, > a {
+            color: #717171;
+            &:hover {
+              color: @brand-info;
+            }
+            i {
+              margin-right: 10px;
+            }
+          }
+          &.active, &:hover {
+            background: @follow-bg;
+            > span, > a {
+              color: @brand-info;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .follows-suggestion {
+      padding: @left-nav-padding;
+      margin-top: 20px;
+      min-height: 300px;
+      background: #fff;
+    }
+  }
+
+  .follows-right {
+    width: 73%;
+    float: right;
+    background: #fff;
+  }
+}

@@ -63,43 +63,39 @@ export default (server) => {
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', htmlToPdf);
   server.use('/api/resize', sharp);
+
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
   server.use((req, res) => {
-      const context = app.createContext({
-        req,
-        res,
-        config,
-        authenticated: req.session.user && req.session.user.authenticated
-      });
-      const routes = createRoutes(context);
+    const context = app.createContext({
+      req,
+      res,
+      config,
+      authenticated: req.session.user && req.session.user.authenticated
+    });
+    const routes = createRoutes(context);
 
-      match({ routes, location: req.url }, (error, redirectLocation, routerState) => {
-          if (error) {
-            res.send(500, error.message);
-          } else if (redirectLocation) {
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-          } else if (routerState) {
-            fetchData(context, routerState, (err) => {
-                if (err) {
-                  throw err; }
-                const exposed = `window.__DATA__=${serialize(app.dehydrate(context))}`;
-                const doctype = '<!DOCTYPE html>';
-                const markup = renderToString(React.createElement(
-                  Custom, { context: context.getComponentContext() }, < RouterContext {...routerState }
-                  />
-                ));
-                const html = renderToStaticMarkup( < Html assets = { assets }
-                  markup = { markup }
-                  exposed = { exposed }
-                  />);
+    match({ routes, location: req.url }, (error, redirectLocation, routerState) => {
+      if (error) {
+        res.send(500, error.message);
+      } else if (redirectLocation) {
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+      } else if (routerState) {
+        fetchData(context, routerState, (err) => {
+          if (err) throw err;
+          const exposed = `window.__DATA__=${serialize(app.dehydrate(context))}`;
+          const doctype = '<!DOCTYPE html>';
+          const markup = renderToString(React.createElement(
+            Custom, { context: context.getComponentContext() }, <RouterContext {...routerState} />
+          ));
+          const html = renderToStaticMarkup(<Html assets={assets} markup={markup} exposed={exposed} />);
 
-                  res.send(doctype + html);
-                });
-            }
-            else {
-              res.send(404, 'Not found');
-            }
-          });
-      });
-  };
+          res.send(doctype + html);
+        });
+      }
+      else {
+        res.send(404, 'Not found');
+      }
+    });
+  });
+};

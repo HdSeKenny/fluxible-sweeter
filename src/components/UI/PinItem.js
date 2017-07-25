@@ -7,6 +7,7 @@ import { swal } from '../../plugins';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
+import { params } from '../../configs';
 
 export default class PinItem extends React.Component {
 
@@ -130,8 +131,8 @@ export default class PinItem extends React.Component {
               className="pin-user-img"
               alt="pin"
               src={image_url}
-              onMouseEnter={() => this.onHoverPinUserImg(pin)}
-              onMouseLeave={() => this.onLeavePinUserImg(pin)}
+              onMouseEnter={() => params.showUserCard && this.onHoverPinUserImg(pin)}
+              onMouseLeave={() => params.showUserCard && this.onLeavePinUserImg(pin)}
             />
           </span>
           <div className="author">

@@ -30,7 +30,7 @@ export default class App extends React.Component {
 
   render() {
     const route = this.props.location.pathname;
-    const child = React.cloneElement(this.props.children);
+    const child = React.cloneElement(this.props.children, { location: this.props.location });
     const showMainSliders = child.type.displayName === 'Home';
     return (
       <FullScreen id="app">
