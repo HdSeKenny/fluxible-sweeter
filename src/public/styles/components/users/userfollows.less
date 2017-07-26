@@ -11,15 +11,23 @@
       background: #fff;
       .nav-group {
         .nav-title {
-          padding: 0 2px;
+          margin: 0;
+          padding: 7.5px 20px;
           font-size: 14px;
-          font-weight: 600;
+          // font-weight: 600;
+          &.active {
+            color: @brand-info;
+            background: @follow-bg;
+          }
         }
         .nav-list li {
-          padding: 5px 21.5px;
+          padding: 5px 0px;
           list-style: none;
-          > span, > a {
+          >span,
+          >a {
+            padding: 5px 0 5px 39.5px;
             color: #717171;
+            font-size: 12px;
             &:hover {
               color: @brand-info;
             }
@@ -27,9 +35,11 @@
               margin-right: 10px;
             }
           }
-          &.active, &:hover {
+          &.active,
+          &:hover {
             background: @follow-bg;
-            > span, > a {
+            >span,
+            >a {
               color: @brand-info;
               cursor: pointer;
             }
@@ -49,5 +59,11 @@
     width: 73%;
     float: right;
     background: #fff;
+    .right-tabs {
+      padding: @left-nav-padding;
+      .tab-value {
+        border-bottom: 1px solid #f2f2f5;
+      }
+    }
   }
 }

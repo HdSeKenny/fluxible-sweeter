@@ -18,9 +18,9 @@ export default class FollowsLeftNav extends React.Component {
     pathname: PropTypes.string
   };
 
-  isActive(tab) {
+  isActive(tag) {
     const { query } = this.props;
-    return query.tab === tab ? 'active' : '';
+    return query.tag === tag ? 'active' : '';
   }
 
   isFollowedThisUser(currentUser, user) {
@@ -45,25 +45,25 @@ export default class FollowsLeftNav extends React.Component {
         value: focusNum,
         icon: 'fa fa-user-plus',
         list: [
-          { tab: 'ng', value: 'No groups' },
-          { tab: 'mf', value: 'Friends' },
-          { tab: 'sf', value: 'Special focuses' }
+          { tag: 'ng', value: 'No groups' },
+          { tag: 'mf', value: 'Friends' },
+          { tag: 'sf', value: 'Special focuses' }
         ]
       },
       {
-        title: 'Fans',
+        title: { tag: 'fans', value: 'Fans' },
         value: fansNum,
         icon: 'fa fa-heart',
         list: []
       },
       {
-        title: 'Groups',
+        title: { tag: 'gp', value: 'Groups' },
         value: 0,
         icon: 'fa fa-users',
         list: []
       },
       {
-        title: 'Black list',
+        title: { tag: 'bl', value: 'Black list' },
         value: blacklist,
         icon: 'fa fa-exclamation-circle',
         list: []
@@ -77,8 +77,8 @@ export default class FollowsLeftNav extends React.Component {
             <h5 className="nav-title"><i className={group.icon}></i> {group.title} {group.value}</h5>
             <div className="nav-list">
               {group.list.map((li, lidx) => {
-                const url = { pathname, query: { tab: li.tab } };
-                return <li className={this.isActive(li.tab)} key={lidx}><Link to={url}>{li.value}</Link></li>;
+                const url = { pathname, query: { tag: li.tag } };
+                return <li className={this.isActive(li.tag)} key={lidx}><Link to={url}>{li.value}</Link></li>;
               })}
             </div>
           </Row>
@@ -87,7 +87,7 @@ export default class FollowsLeftNav extends React.Component {
       else {
         return (
           <Row className="nav-group" key={index}>
-            <h5 className="nav-title"><i className={group.icon}></i> {group.title} {group.value}</h5>
+            <h5 className="nav-title"><i className={group.icon}></i> {group.title.value} {group.value}</h5>
           </Row>
         );
       }

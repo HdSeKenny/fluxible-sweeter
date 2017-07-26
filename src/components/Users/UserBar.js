@@ -199,7 +199,7 @@ const UserBar = CreateReactClass({
 
       const classes = `${colSize} bar-nav ${isActive}`;
       const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
-      const query = lowcaseNav === 'follows' ? { tab: 'ng' } : '';
+      const query = lowcaseNav === 'follows' ? { tag: 'ng' } : '';
       const icon = navs[navli].icon;
       const label = navs[navli].label;
       return (
