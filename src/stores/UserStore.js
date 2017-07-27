@@ -286,6 +286,10 @@ const UserStore = createStore({
     return this.users ? this.users.find(user => user.id_str === userId) : null;
   },
 
+  getUserById(userId) {
+    return this.users ? this.users.find(user => user.id_str === userId) : null;
+  },
+
   getCurrentUploadedImage() {
     return this.currentUploadedImage;
   },

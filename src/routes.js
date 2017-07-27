@@ -4,6 +4,7 @@ import config from './configs';
 import Mode from './utils/mode';
 import env from './utils/env';
 import { UserActions } from './actions';
+import { UserFollows } from './components/Users';
 import {
   App,
   NotFound,
@@ -16,7 +17,6 @@ import {
   ChangePassword,
   UserMore,
   UserMessages,
-  UserFollows,
   List,
   UserMoments,
   About

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { Row } from '../UI/Layout';
 
 export default class FollowsLeftNav extends React.Component {
@@ -23,6 +23,14 @@ export default class FollowsLeftNav extends React.Component {
     return query.tag === tag ? 'active' : '';
   }
 
+  onChooseFollowsNavTitle(tag) {
+    const { query, pathname } = this.props;
+    browserHistory.push({
+      pathname,
+      query: ''
+    });
+  }
+
   isFollowedThisUser(currentUser, user) {
     let isFollowed = false;
     if (currentUser && user) {
@@ -41,9 +49,9 @@ export default class FollowsLeftNav extends React.Component {
     const blacklist = 0;
     const navGroups = [
       {
-        title: 'Focuses',
+        title: { tag: 'focuses', value: 'Focuses' },
         value: focusNum,
-        icon: 'fa fa-user-plus',
+        icon: 'fa fa-user-plus mr-10',
         list: [
           { tag: 'ng', value: 'No groups' },
           { tag: 'mf', value: 'Friends' },
@@ -53,19 +61,19 @@ export default class FollowsLeftNav extends React.Component {
       {
         title: { tag: 'fans', value: 'Fans' },
         value: fansNum,
-        icon: 'fa fa-heart',
+        icon: 'fa fa-heart mr-10',
         list: []
       },
       {
         title: { tag: 'gp', value: 'Groups' },
         value: 0,
-        icon: 'fa fa-users',
+        icon: 'fa fa-users mr-10',
         list: []
       },
       {
         title: { tag: 'bl', value: 'Black list' },
         value: blacklist,
-        icon: 'fa fa-exclamation-circle',
+        icon: 'fa fa-exclamation-circle mr-10',
         list: []
       }
     ];
@@ -74,7 +82,9 @@ export default class FollowsLeftNav extends React.Component {
       if (group.list.length) {
         return (
           <Row className="nav-group" key={index}>
-            <h5 className="nav-title"><i className={group.icon}></i> {group.title} {group.value}</h5>
+            <h5 className="nav-title" onClick={() => this.onChooseFollowsNavTitle(group.title.tag)}>
+              <i className={group.icon}></i>{group.title.value}<span className="ml-5">{group.value}</span>
+            </h5>
             <div className="nav-list">
               {group.list.map((li, lidx) => {
                 const url = { pathname, query: { tag: li.tag } };
@@ -87,7 +97,9 @@ export default class FollowsLeftNav extends React.Component {
       else {
         return (
           <Row className="nav-group" key={index}>
-            <h5 className="nav-title"><i className={group.icon}></i> {group.title.value} {group.value}</h5>
+            <h5 className="nav-title" onClick={this.onChooseFollowsNavTitle}>
+              <i className={group.icon}></i>{group.title.value}<span className="ml-5">{group.value}</span>
+            </h5>
           </Row>
         );
       }

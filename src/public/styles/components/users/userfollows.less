@@ -1,5 +1,5 @@
 @follow-bg: #f2f2f5;
-@left-nav-padding: 10px 30px;
+@left-nav-padding: 20px 30px;
 
 .user-follows {
   .follows-left {
@@ -12,12 +12,14 @@
       .nav-group {
         .nav-title {
           margin: 0;
-          padding: 7.5px 20px;
+          padding: 7.5px 10px;
           font-size: 14px;
-          // font-weight: 600;
           &.active {
             color: @brand-info;
             background: @follow-bg;
+          }
+          span {
+            color: @brand-info;
           }
         }
         .nav-list li {
@@ -30,9 +32,6 @@
             font-size: 12px;
             &:hover {
               color: @brand-info;
-            }
-            i {
-              margin-right: 10px;
             }
           }
           &.active,
@@ -60,7 +59,7 @@
     float: right;
     background: #fff;
     .right-tabs {
-      padding: @left-nav-padding;
+      padding: 15px 30px;
       .tab-value {
         border-bottom: 1px solid #f2f2f5;
       }
