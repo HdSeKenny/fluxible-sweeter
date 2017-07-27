@@ -2,7 +2,7 @@
 const convertMsg = (msg) => {
   const strMsg = msg.split('_').join(' ').toLowerCase();
   const firstLetter = strMsg.charAt(0).toUpperCase();
-  return `${firstLetter}${strMsg.substr(1)} !`;
+  return `${firstLetter}${strMsg.substr(1)}`;
 };
 
 const confirmButtonColor = '#00a9da';

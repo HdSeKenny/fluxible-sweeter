@@ -23,6 +23,7 @@ export default class SweetEditor extends React.Component {
     };
     this._onStoreChange = this._onStoreChange.bind(this);
   }
+
   onChange = (editorState) => {
     const editorContent = convertToRaw(editorState.getCurrentContent());
     const plainText = editorState.getCurrentContent().getPlainText();

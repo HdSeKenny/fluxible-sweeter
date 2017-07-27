@@ -41,6 +41,19 @@ export default class LeftNav extends React.Component {
     });
   }
 
+  getGroupSourceNumber(currentUser, group) {
+    const { query } = this.props;
+    let num = 0;
+    if (query.tab) {
+      num = currentUser[query.title] ? currentUser[query.title][query.tab].length : 0;
+    }
+    else {
+      num = currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
+    }
+
+    return num;
+  }
+
   isFollowedThisUser(currentUser, user) {
     let isFollowed = false;
     if (currentUser && user) {
@@ -58,11 +71,11 @@ export default class LeftNav extends React.Component {
     const pathname = this.props.pathname;
     return navGroupsKeys.map((key, index) => {
       const group = schema.navGroups[key];
-      const groupValue = currentUser.key ? currentUser.key.length : 0;
+      const groupNumber = this.getGroupSourceNumber(currentUser, group);
       return (
         <Row className="nav-group" key={index}>
           <h5 className={`nav-title ${this.isActive(key)}`} onClick={() => this.onChooseFollowsNavTitle(key)}>
-            <i className={group.icon}></i>{group.value}<span className="ml-5">{groupValue}</span>
+            <i className={group.icon}></i>{group.value}<span className="ml-5">{groupNumber}</span>
           </h5>
           {group.tabs.length > 0 &&
             <div className="nav-list">

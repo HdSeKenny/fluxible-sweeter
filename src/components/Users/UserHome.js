@@ -73,7 +73,9 @@ const UserHome = CreateReactClass({
       result.currentUser = currentUser;
     }
 
-    this.setState(result);
+    if (Object.keys(result).length) {
+      this.setState(result);
+    }
   },
 
   onSearchBlogs(searchText) {

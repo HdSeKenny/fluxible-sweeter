@@ -191,7 +191,7 @@ const UserStore = createStore({
   },
 
   isThumbedUp(blog) {
-    return blog.likers.indexOf(this.currentUser.strId) !== -1;
+    return blog.likers.indexOf(this.currentUser.id_str) !== -1;
   },
 
   isCurrentUser(username) {
@@ -208,15 +208,11 @@ const UserStore = createStore({
     const response = {
       msg: 'FOLLOW_USER_SUCCESS'
     };
-    this.users.forEach((user, index) => {
-      if (user.strId === res.thisUser.strId) {
-        this.users[index].fans.push(res.currentUser);
-      }
-      if (user.strId === res.currentUser.strId) {
-        this.users[index].focuses.push(res.thisUser);
-        this.currentUser.focuses.push(res.thisUser);
-      }
-    });
+
+    const thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
+
+    this.users[thisUserIndex].fans.push(res.currentUser);
+    this.currentUser.focuses.push(res.thisUser);
 
     this.emitChange(response);
   },
@@ -225,22 +221,23 @@ const UserStore = createStore({
     const response = {
       msg: 'CANCEL_FOLLOW_USER_SUCCESS'
     };
+
     this.users.forEach((user, index) => {
-      if (user.strId === res.thisUser.strId) {
+      if (user.id_str === res.thisUser.id_str) {
         this.users[index].fans.forEach((fan, faIdx) => {
-          if (fan.strId === res.currentUser.strId) {
+          if (fan.id_str === res.currentUser.id_str) {
             this.users[index].fans.splice(faIdx, 1);
           }
         });
       }
-      if (user.strId === res.currentUser.strId) {
+      if (user.id_str === res.currentUser.id_str) {
         this.users[index].focuses.forEach((focus, fsIdx) => {
-          if (focus.strId === res.thisUser.strId) {
+          if (focus.id_str === res.thisUser.id_str) {
             this.users[index].focuses.splice(fsIdx, 1);
           }
         });
         this.currentUser.focuses.forEach((focus, fsIdx) => {
-          if (focus.strId === res.thisUser.strId) {
+          if (focus.id_str === res.thisUser.id_str) {
             this.currentUser.focuses.splice(fsIdx, 1);
           }
         });
@@ -252,7 +249,7 @@ const UserStore = createStore({
 
   followUserWithSuccess(res) {
     const response = { msg: 'FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
+    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
     this.currentUser.focuses.push(res.thisUser);
     this.users[usrIdx] = this.currentUser;
     this.emitChange(response);
@@ -260,9 +257,9 @@ const UserStore = createStore({
 
   cancelFollowUserWithSuccess(res) {
     const response = { msg: 'CANCEL_FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
+    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
     this.currentUser.focuses.forEach((focus, fsIdx) => {
-      if (focus.strId === res.thisUser.strId) {
+      if (focus.id_str === res.thisUser.id_str) {
         this.currentUser.focuses.splice(fsIdx, 1);
       }
     });
