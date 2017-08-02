@@ -41,7 +41,8 @@ const Login = CreateReactClass({
     return {
       switchOn: false,
       emailErrorMessage: '',
-      passwordErrorMessage: ''
+      passwordErrorMessage: '',
+      remember: false
     };
   },
 
@@ -144,12 +145,16 @@ const Login = CreateReactClass({
   componentDidMount() {
   },
 
-  _renderEmailInput(email) {
+  rememberMe() {
+    this.setState({ remember: !this.state.remember });
+  },
+
+  _renderEmailInput(email, remember) {
     const { emailErrorMessage } = this.state;
     return (
       <SweetInput
         ref="emailRef"
-        autoComplete={'off'}
+        autoComplete={remember ? 'on' : 'off'}
         format="email"
         icon="fa fa-user"
         required={true}
@@ -161,12 +166,12 @@ const Login = CreateReactClass({
     );
   },
 
-  _renderPasswordInput(password) {
+  _renderPasswordInput(password, remember) {
     const { passwordErrorMessage } = this.state;
     return (
       <SweetInput
         ref="loginRef"
-        autoComplete={'off'}
+        autoComplete={remember ? 'on' : 'off'}
         format="password"
         icon="fa fa-lock"
         required={true}
@@ -182,7 +187,7 @@ const Login = CreateReactClass({
     return (
       <Row>
         <Col size="6" className="pl-0">
-          <Switch after="Remember me" />
+          <Switch after="Remember me" rememberMe={this.rememberMe} />
         </Col>
         <Col size="6" className="pr-0 tar">
           <span className="forgot-pw">
@@ -227,7 +232,7 @@ const Login = CreateReactClass({
   },
 
   render() {
-    const { errorMessage, password, email } = this.state;
+    const { errorMessage, password, email, remember } = this.state;
     return (
       <section className="login-section mt-15 mr-15 ml-15">
         <div className="wrapper-md animated fadeInUp">
@@ -235,8 +240,8 @@ const Login = CreateReactClass({
             <div className="form-group">
               <p className="help-block text-left">{errorMessage}</p>
             </div>
-            <div className="form-group">{this._renderEmailInput(email)}</div>
-            <div className="form-group">{this._renderPasswordInput(password)}</div>
+            <div className="form-group">{this._renderEmailInput(email, remember)}</div>
+            <div className="form-group">{this._renderPasswordInput(password, remember)}</div>
             <div className="form-group">{this._renderForgotPassword()}</div>
             <div className="form-group pt-10">{this._renderLoginBtns()}</div>
           </form>

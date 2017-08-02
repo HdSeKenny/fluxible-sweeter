@@ -13,8 +13,11 @@ class Switch extends React.Component {
 
   static propTypes = {
     onChange: PropTypes.func,
+    rememberMe: PropTypes.func,
     on: PropTypes.bool,
-    className: PropTypes.string
+    className: PropTypes.string,
+    before: PropTypes.string,
+    after: PropTypes.string
   };
 
   static defaultProps = {
@@ -30,7 +33,9 @@ class Switch extends React.Component {
   }
 
   onSwitchCheckBox() {
-    this.setState({ on: !this.state.on });
+    this.setState({ on: !this.state.on }, () => {
+      // this.props.rememberMe();
+    });
   }
 
   render() {

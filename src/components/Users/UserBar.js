@@ -66,7 +66,9 @@ const UserBar = CreateReactClass({
       newState.currentUser = store.getCurrentUser();
     }
 
-    this.setState(newState);
+    if (Object.keys(newState).length) {
+      this.setState(newState);
+    }
   },
 
   componentWillMount() {
@@ -163,7 +165,9 @@ const UserBar = CreateReactClass({
       currentUserId: currentUser.id_str
     };
 
-    this.executeAction(UserActions.CancelFollowThisUser, cancelFollowObj);
+    swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
+      this.executeAction(UserActions.CancelFollowThisUser, cancelFollowObj);
+    });
   },
 
   _renderUserBarNavs(isCurrentUser, user) {

@@ -43,8 +43,10 @@ export default CreateReactClass({
     };
   },
 
-  onChange() {
-    this.setState(this.getStatesFromStores());
+  onChange(res) {
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS' || !res.msg) {
+      this.setState(this.getStatesFromStores());
+    }
   },
 
   componentDidMount() {

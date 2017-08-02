@@ -33,7 +33,7 @@ export default class MainSliders extends React.Component {
           const slidesliHeight = await $('.tp-revslider-slidesli').height();
           $('.main-sliders').height(slidesliHeight);
           this.revol = revol;
-        }, 500);
+        }, 1500);
       });
     }
 

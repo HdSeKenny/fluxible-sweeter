@@ -41,7 +41,6 @@ export default class RightTabs extends React.Component {
   }
 
   _onStoreChange(res) {
-    console.log('right-tabs', res);
   }
 
   convertTabTitle(group, query) {

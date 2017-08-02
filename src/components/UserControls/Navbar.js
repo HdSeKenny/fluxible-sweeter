@@ -143,7 +143,6 @@ const Navbar = CreateReactClass({
 
   render() {
     const { authenticated, currentUser, brandImage, showLoginModal, showSignupModal } = this.state;
-    const aboutActiveClass = authenticated ? `${this.isActive(['about'])} mr-30` : this.isActive(['about']);
     return (
       <section className="menuzord-section">
         <header id="menuzord" className="sweet-nav blue">
@@ -160,8 +159,8 @@ const Navbar = CreateReactClass({
             <ul className="sweet-nav-menu sweet-nav-right">
               <li className={this.isActive([''])}><Link to="/">Home</Link></li>
               <li className={this.isActive(['list'])}><Link to="/list">List</Link></li>
-              <li className={aboutActiveClass}><Link to="/about">About</Link></li>
-              {authenticated && <li className={aboutActiveClass}><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
+              <li className={this.isActive(['about'])}><Link to="/about">About</Link></li>
+              {authenticated && <li className="mr-30"><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
 
               {!authenticated && <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>}
               {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}

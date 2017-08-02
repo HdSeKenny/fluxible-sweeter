@@ -330,11 +330,19 @@ export default {
       User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
         if (thisUser) {
           thisUser.fans.push(body.currentUserId);
-          User.save(thisUser, (err, thisUserResult) => {
+          User.save(thisUser, (err) => {
             User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.push(body.thisUserId);
-                User.save(currentUser, (err, currentUserResult) => {
+                if (!currentUser.focuses_list) {
+                  currentUser.focuses_list = {
+                    no_groups: [],
+                    friends: [],
+                    special_focuses: []
+                  };
+                }
+                currentUser.focuses_list.no_groups.push(body.thisUserId);
+                User.save(currentUser, (err) => {
                   callback(err, { thisUser, currentUser });
                 });
               }
@@ -361,7 +369,7 @@ export default {
               thisUser.fans.splice(index, 1);
             }
           });
-          User.save(thisUser, (err, thisUserResult) => {
+          User.save(thisUser, (err) => {
             User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.forEach((focus, index) => {
@@ -369,7 +377,18 @@ export default {
                     currentUser.focuses.splice(index, 1);
                   }
                 });
-                User.save(currentUser, (err, currentUserResult) => {
+                const { no_groups, friends, special_focuses } = currentUser.focuses_list;
+                const new_no_groups = no_groups.filter(id_str => id_str !== body.thisUserId);
+                const new_friends = friends.filter(id_str => id_str !== body.thisUserId);
+                const new_special_focuses = special_focuses.filter(id_str => id_str !== body.thisUserId);
+
+                currentUser.focuses_list = {
+                  no_groups: new_no_groups,
+                  friends: new_friends,
+                  special_focuses: new_special_focuses
+                };
+
+                User.save(currentUser, (err) => {
                   callback(err, { thisUser, currentUser });
                 });
               }
