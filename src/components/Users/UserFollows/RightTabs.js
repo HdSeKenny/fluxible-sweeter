@@ -13,7 +13,7 @@ export default class RightTabs extends React.Component {
   static displayName = 'RightTabs';
 
   static contextTypes = {
-    getStore: PropTypes.func.isRequired,
+    getStore: PropTypes.func,
     executeAction: PropTypes.func
   };
 
@@ -23,9 +23,13 @@ export default class RightTabs extends React.Component {
     query: PropTypes.object
   };
 
-  constructor() {
-    super();
+  constructor(props, context) {
+
+    super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.state = {
+      currentUser: context.getStore(UserStore).getCurrentUser()
+    };
   }
 
   focus = () => {
@@ -41,6 +45,9 @@ export default class RightTabs extends React.Component {
   }
 
   _onStoreChange(res) {
+    if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
+      // this.setState({});
+    }
   }
 
   convertTabTitle(group, query) {
@@ -107,6 +114,23 @@ export default class RightTabs extends React.Component {
     return personArr;
   }
 
+  getGroupSourceNumber(currentUser, group) {
+    const { query } = this.props;
+    let num = 0;
+    if (query.tab) {
+      num = currentUser[query.title] ? currentUser[query.title][query.tab].length : 0;
+    }
+    else {
+      num = currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
+    }
+
+    return num;
+  }
+
+  moveToOtherGroup() {
+
+  }
+
   _renderUserFollowsInfo(p) {
     return (
       <div>
@@ -130,14 +154,20 @@ export default class RightTabs extends React.Component {
 
   _renderUserRowBtns(currentUser, p) {
     const isFollowed = this.isFollowedThisUser(currentUser, p);
+    const { query } = this.props;
     return (
-      <div>
+      <div className="row-btns">
         {isFollowed &&
-          <button className="btn btn-danger btn-sm" onClick={() => this.unfollowThisUser(currentUser, p)}>Unfollow</button>}
+          <button className="btn btn-danger" onClick={() => this.unfollowThisUser(currentUser, p)}>Unfollow</button>}
         {!isFollowed &&
-          <button className="btn btn-info btn-sm" onClick={() => this.followThisUser(currentUser, p)}>
+          <button className="btn btn-info" onClick={() => this.followThisUser(currentUser, p)}>
             <i className="fa fa-plus mr-5" />Follow</button>}
-        <button className="btn btn-default btn-sm ml-5">Options</button>
+        <button className="btn btn-warning ml-5 options" data-toggle="dropdown" >Options</button>
+        <ul className="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          {query.title !== 'fans_list' && <li><a href="javascript:void(0)" onClick={this.moveToOtherGroup}>Move to</a></li>}
+          <li><a href="javascript:void(0)">Message</a></li>
+          <li><a href="javascript:void(0)">Report</a></li>
+        </ul>
       </div>
     );
   }
@@ -162,10 +192,10 @@ export default class RightTabs extends React.Component {
     const navGroups = schema.navGroups;
     const group = navGroups[query.title];
     const rows = this.convertTabRows(currentUser, group, query);
-
+    const tabValue = this.getGroupSourceNumber(currentUser, group);
     return (
       <div className="right-tabs">
-        <h5 className="tab-value pb-10"><strong>{this.convertTabTitle(group, query)}</strong></h5>
+        <h5 className="tab-value pb-10"><strong>{this.convertTabTitle(group, query)} {tabValue}</strong></h5>
         <div className="tab-rows">
           {this._renderUserRows(currentUser, rows)}
         </div>

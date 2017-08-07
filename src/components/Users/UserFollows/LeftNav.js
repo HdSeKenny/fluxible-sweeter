@@ -42,16 +42,7 @@ export default class LeftNav extends React.Component {
   }
 
   getGroupSourceNumber(currentUser, group) {
-    const { query } = this.props;
-    let num = 0;
-    if (query.tab) {
-      num = currentUser[query.title] ? currentUser[query.title][query.tab].length : 0;
-    }
-    else {
-      num = currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
-    }
-
-    return num;
+    return currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
   }
 
   isFollowedThisUser(currentUser, user) {

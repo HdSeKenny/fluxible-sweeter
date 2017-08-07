@@ -214,35 +214,33 @@ const UserStore = createStore({
     this.users[thisUserIndex].fans.push(res.currentUser);
     this.currentUser.focuses.push(res.thisUser);
 
+    if (this.currentUser.focuses_list) {
+      this.currentUser.focuses_list.no_groups.push(res.thisUser);
+    }
+
     this.emitChange(response);
   },
 
   cancelFollowUserSuccess(res) {
     const response = {
-      msg: 'CANCEL_FOLLOW_USER_SUCCESS'
+      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
+      currentUser: res.currentUser,
+      user: res.thisUser
     };
 
-    this.users.forEach((user, index) => {
-      if (user.id_str === res.thisUser.id_str) {
-        this.users[index].fans.forEach((fan, faIdx) => {
-          if (fan.id_str === res.currentUser.id_str) {
-            this.users[index].fans.splice(faIdx, 1);
-          }
-        });
-      }
-      if (user.id_str === res.currentUser.id_str) {
-        this.users[index].focuses.forEach((focus, fsIdx) => {
-          if (focus.id_str === res.thisUser.id_str) {
-            this.users[index].focuses.splice(fsIdx, 1);
-          }
-        });
-        this.currentUser.focuses.forEach((focus, fsIdx) => {
-          if (focus.id_str === res.thisUser.id_str) {
-            this.currentUser.focuses.splice(fsIdx, 1);
-          }
-        });
-      }
-    });
+    const _thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
+    const new_fans = this.users[_thisUserIndex].fans.filter(f => f.id_str !== res.currentUser.id_str);
+
+    const focuses = this.currentUser.focuses.filter(f => f.id_str !== res.thisUser.id_str);
+    const { no_groups, friends, special_focuses } = res.currentUser.focuses_list;
+
+    this.users[_thisUserIndex].fans = new_fans;
+    this.currentUser.focuses = focuses;
+    this.currentUser.focuses_list = {
+      no_groups,
+      friends,
+      special_focuses
+    };
 
     this.emitChange(response);
   },

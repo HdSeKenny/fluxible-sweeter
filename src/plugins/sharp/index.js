@@ -12,18 +12,17 @@ export default (req, res) => {
   const originalUrl = `${projectDir}/src/public${req.body.uri}`;
 
   sharp(originalUrl)
-    .resize(200)
+    .resize(50)
     .toBuffer()
     .then(async (data) => {
-      await fs.writeFile(srcTarget, data, (err) => {
-        if (err) throw err;
-      });
+      try {
+        await fs.writeFile(srcTarget, data);
+        await fs.writeFile(envTarget, data);
 
-      await fs.writeFile(envTarget, data, (err) => {
-        if (err) throw err;
-      });
-
-      res.status(200).json(srcTarget);
+        res.status(200).json(srcTarget);
+      } catch (err) {
+        throw new Error(err);
+      }
     })
     .catch(err => {
       if (err) throw err;

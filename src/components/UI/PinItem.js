@@ -126,7 +126,7 @@ export default class PinItem extends React.Component {
             onMouseLeave={() => this.onLeavePinUserImg(pin)}>
 
           </div>
-          <span className="user-img pull-left mr-10" onClick={() => this.goToUserCenter(author)}>
+          <a className="user-img pull-left mr-10" href={`/${username}`} target="_blank">
             <img
               className="pin-user-img"
               alt="pin"
@@ -134,7 +134,7 @@ export default class PinItem extends React.Component {
               onMouseEnter={() => params.showUserCard && this.onHoverPinUserImg(pin)}
               onMouseLeave={() => params.showUserCard && this.onLeavePinUserImg(pin)}
             />
-          </span>
+          </a>
           <div className="author">
             <span className="name" onClick={() => this.goToUserCenter(author)}>{firstName} {lastName}</span>
             <small className="from-now fr">{fromNow}</small>

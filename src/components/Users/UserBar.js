@@ -71,10 +71,6 @@ const UserBar = CreateReactClass({
     }
   },
 
-  componentWillMount() {
-    preload();
-  },
-
   componentDidMount() {
     preload();
   },

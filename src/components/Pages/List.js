@@ -151,7 +151,7 @@ export default CreateReactClass({
           {this._renderAllPinItems(blogs, currentUser)}
         </section>
         <section className="right">
-          <div className="right-user-card mb-15">
+          <div className="right-user-card mb-10">
             {this._renderUserCardInfo(displayUser)}
             {this._renderUserCardFooter(displayUser)}
           </div>

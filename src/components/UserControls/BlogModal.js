@@ -130,7 +130,7 @@ export default class BlogModal extends React.Component {
     const isLimmitWords = blogTextLength < 141;
 
     return (
-      <div className="create-well mb-15">
+      <div className="create-well mb-10">
         <Row className="text-row">
           <Col size="12" className="p-0">
             <p className="welcomeText">{welcomeText}</p>

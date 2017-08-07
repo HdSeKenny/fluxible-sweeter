@@ -141,6 +141,10 @@ const Navbar = CreateReactClass({
     this.setState({ switchModal: { modalRef, state: true } });
   },
 
+  goTo(route) {
+    this.context.router.push(route);
+  },
+
   render() {
     const { authenticated, currentUser, brandImage, showLoginModal, showSignupModal } = this.state;
     return (
@@ -166,9 +170,11 @@ const Navbar = CreateReactClass({
               {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}
               {authenticated &&
                 <li className="mr-0 pr-0">
-                  <img alt="currentUser" src={currentUser.image_url} />
+                  <a className="m-0" href={`/${currentUser.username}`}>
+                    <img alt="currentUser" src={currentUser.image_url} />
+                  </a>
                   <ul className="dropdown">
-                    <li><Link to={`/${currentUser.username}`}>User center</Link></li>
+                    <li><a href={`/${currentUser.username}`}>User center</a></li>
                     <li><span>Settings</span></li>
                     <li><span onClick={this.handleLogout}>Logout</span></li>
                   </ul>
