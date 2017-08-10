@@ -107,11 +107,11 @@ export default CreateReactClass({
               <Suggestions />
             </div>
             <div className="follows-right">
-              <RightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
+              <RightTabs currentUser={currentUser} user={user} isCurrentUser={isCurrentUser} query={query} pathname={pathname} />
             </div>
           </div> :
           <div className="follows-center">
-            <RightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
+            <RightTabs currentUser={currentUser} user={user} isCurrentUser={isCurrentUser} query={query} pathname={pathname} />
           </div>
         }
       </div>

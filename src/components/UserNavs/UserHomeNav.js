@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { routerShape } from 'react-router';
+import { routerShape, browserHistory } from 'react-router';
 import { Row, Col } from '../UI/Layout';
 import { animations } from '../../utils';
 
@@ -28,18 +28,32 @@ export default class UserHomeNav extends React.Component {
     return route === this.props.path ? 'active' : '';
   }
 
-  goToUserPages(str) {
-    this.context.router.push(str);
+  goToUserPages(str, qt) {
+    if (qt) {
+      browserHistory.push({
+        pathname: str,
+        query: {
+          title: qt
+        }
+      });
+    } else {
+      this.context.router.push(str);
+    }
   }
 
   _renderUserInfo(user) {
     const { firstName, lastName, email, phone, birthday, profession, description } = user;
     const { currentUser } = this.props;
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
+    const displayUserName = isCurrentUser ? currentUser.username : user.username;
     return (
       <div className="isNotCurrentUser">
         <Row className="basic-info">
-          <p className="text">Personal Information<span className="more">{!isCurrentUser ? 'more' : 'edit'}</span></p>
+          <p className="text">Personal Information
+            <span className="more" onClick={() => this.goToUserPages(`/${displayUserName}/personal`)}>
+              {!isCurrentUser ? 'more' : 'edit'}
+            </span>
+          </p>
         </Row>
         <Row><i className="fa fa-user" /> <span className="info-field">{firstName} {lastName}</span></Row>
         <Row><i className="fa fa-envelope" /> <span className="info-field">{email}</span></Row>
@@ -61,23 +75,24 @@ export default class UserHomeNav extends React.Component {
     return (
       <div className="user-home-left">
         <Row className="blog-tips">
-          <Col size="4 tip-li p-0" >
+          <Col size="4 tip-li p-0">
             <p onClick={() => this.goToUserPages(`/${username}`)}>{displayBlogs.length}</p>
             <span>Blogs</span>
           </Col>
           <Col size="4 tip-li p-0">
-            <p onClick={() => this.goToUserPages(`/${username}/follows`)}>{fans.length}</p>
+            <p onClick={() => this.goToUserPages(`/${username}/follows`, 'focuses_list')}>{fans.length}</p>
             <span>Fans</span>
           </Col>
           <Col size="4 tip-li p-0">
-            <p onClick={() => this.goToUserPages(`/${username}/follows`)}>{focuses.length}</p>
+            <p onClick={() => this.goToUserPages(`/${username}/follows`, 'focuses_list')}>{focuses.length}</p>
             <span>Focus</span>
           </Col>
         </Row>
-
-        <Row className="user-info">{this._renderUserInfo(displayUser)}</Row>
-        <Row className="others">
-        </Row>
+        <div className="user-info-others">
+          <Row className="user-info">{this._renderUserInfo(displayUser)}</Row>
+          <Row className="others">
+          </Row>
+        </div>
       </div>
     );
   }

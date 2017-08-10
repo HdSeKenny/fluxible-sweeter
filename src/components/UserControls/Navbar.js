@@ -175,7 +175,7 @@ const Navbar = CreateReactClass({
                   </a>
                   <ul className="dropdown">
                     <li><a href={`/${currentUser.username}`}>User center</a></li>
-                    <li><span>Settings</span></li>
+                    <li><a href={`/${currentUser.username}/personal`}>Settings</a></li>
                     <li><span onClick={this.handleLogout}>Logout</span></li>
                   </ul>
                 </li>

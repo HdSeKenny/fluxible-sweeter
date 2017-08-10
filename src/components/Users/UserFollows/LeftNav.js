@@ -16,7 +16,8 @@ export default class LeftNav extends React.Component {
     currentUser: PropTypes.object,
     user: PropTypes.object,
     query: PropTypes.object,
-    pathname: PropTypes.string
+    pathname: PropTypes.string,
+    isCurrentUser: PropTypes.bool
   };
 
   isActive(title, tab) {
@@ -47,9 +48,8 @@ export default class LeftNav extends React.Component {
     return displayUser[group.default_source] ? displayUser[group.default_source].length : 0;
   }
 
-  getTabSourceNumber(currentUser, tab) {
-    const { query } = this.props;
-    return currentUser[query.title] ? currentUser[query.title][tab].length : 0;
+  getTabSourceNumber(currentUser, default_source, tab) {
+    return currentUser[default_source] ? currentUser[default_source][tab].length : 0;
   }
 
   isFollowedThisUser(currentUser, user) {
@@ -79,7 +79,7 @@ export default class LeftNav extends React.Component {
             <div className="nav-list">
               {group.tabs.map((tab, tIdex) => {
                 const url = { pathname, query: { title: key, tab: tab.tag } };
-                const tabNum = this.getTabSourceNumber(currentUser, tab.tag);
+                const tabNum = this.getTabSourceNumber(currentUser, key, tab.tag);
                 return <li className={this.isActive(key, tab.tag)} key={tIdex}><Link to={url}>{tab.value} {tabNum}</Link></li>;
               })}
             </div>

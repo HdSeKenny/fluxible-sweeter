@@ -69,6 +69,22 @@
       padding: 15px 30px;
       .tab-value {
         border-bottom: 1px solid #f2f2f5;
+
+      }
+      .tab-choose {
+        .col-xs-2 {
+          border: 1px solid #E0E0E0;
+          border-radius: 3px;
+          &.active, &:hover {
+            background: @brand-info;
+            border: 1px solid @brand-info;
+            color: #fff;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
       .tab-row {
         .row-btns {
@@ -79,6 +95,7 @@
             margin: 6px 0 0 0;
             right: 0;
             min-width: 110px;
+            padding: 0;
             // display: none;
             &:before {
               position: absolute;

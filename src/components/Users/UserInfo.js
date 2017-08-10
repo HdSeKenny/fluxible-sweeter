@@ -31,8 +31,11 @@ const UserInfo = CreateReactClass({
   },
 
   getStatesFromStores() {
+    const { username } = this.props.params;
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
+      user: this.getStore(UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(UserStore).isCurrentUser(username),
       editable: false,
       firstName: '',
       lastName: '',
@@ -419,20 +422,21 @@ const UserInfo = CreateReactClass({
 
   render() {
     const { pathname } = this.props.location;
-    const { currentUser, editable } = this.state;
+    const { currentUser, editable, user, isCurrentUser } = this.state;
+    const displayUser = isCurrentUser ? currentUser : user;
     return (
       <div className="user-settings">
-        <UserBar path={pathname} user={currentUser} isCurrentUser={true} currentUser={currentUser} />
+        <UserBar path={pathname} user={displayUser} isCurrentUser={true} currentUser={currentUser} />
         <div className="settings-content form-horizontal">
           <div className="well personal-info">
             <h2>Personal information</h2>
-            {this._renderNameGroup(currentUser, editable)}
-            {this._renderUserNameGroup(currentUser, editable)}
-            {this._renderEmailGroup(currentUser, editable)}
-            {this._renderPhoneGroup(currentUser, editable)}
-            {this._renderBirthdayGroup(currentUser, editable)}
-            {this._renderProfessionGroup(currentUser, editable)}
-            {this._renderOptionsGroup(editable)}
+            {this._renderNameGroup(displayUser, editable)}
+            {this._renderUserNameGroup(displayUser, editable)}
+            {this._renderEmailGroup(displayUser, editable)}
+            {this._renderPhoneGroup(displayUser, editable)}
+            {this._renderBirthdayGroup(displayUser, editable)}
+            {this._renderProfessionGroup(displayUser, editable)}
+            {isCurrentUser && this._renderOptionsGroup(editable)}
           </div>
         </div>
       </div>

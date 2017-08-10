@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import schema from './schema';
+import { Link, browserHistory } from 'react-router';
 import { Row, Col } from '../../UI/Layout';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { swal } from '../../../plugins';
+import schema from './schema';
 
 
 export default class RightTabs extends React.Component {
@@ -20,7 +20,8 @@ export default class RightTabs extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
     user: PropTypes.object,
-    query: PropTypes.object
+    query: PropTypes.object,
+    isCurrentUser: PropTypes.bool
   };
 
   constructor(props, context) {
@@ -98,10 +99,10 @@ export default class RightTabs extends React.Component {
     });
   }
 
-  convertTabRows(currentUser, group, query) {
-    let personArr = currentUser[group.default_source] || [];
+  convertTabRows(user, group, query) {
+    let personArr = user[group.default_source] || [];
     if (query.tab) {
-      personArr = currentUser[query.title] ? currentUser[query.title][query.tab] : [];
+      personArr = user[query.title] ? user[query.title][query.tab] : [];
     }
 
     if (personArr.length) {
@@ -114,17 +115,32 @@ export default class RightTabs extends React.Component {
     return personArr;
   }
 
-  getGroupSourceNumber(currentUser, group) {
+  getGroupSourceNumber(user, group) {
     const { query } = this.props;
     let num = 0;
     if (query.tab) {
-      num = currentUser[query.title] ? currentUser[query.title][query.tab].length : 0;
+      num = user[query.title] ? user[query.title][query.tab].length : 0;
     }
     else {
-      num = currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
+      num = user[group.default_source] ? user[group.default_source].length : 0;
     }
 
     return num;
+  }
+
+  isActive(title) {
+    const { query } = this.props;
+    // eslint-disable-next-line
+    return query.title ? (query.title === title ? 'active' : '') : '';
+  }
+
+  onClickTabTitle(pathname, title) {
+    browserHistory.push({
+      pathname,
+      query: {
+        title
+      }
+    });
   }
 
   moveToOtherGroup() {
@@ -152,19 +168,40 @@ export default class RightTabs extends React.Component {
     );
   }
 
-  _renderUserRowBtns(currentUser, p) {
-    const isFollowed = this.isFollowedThisUser(currentUser, p);
-    const { query } = this.props;
+  _renderUserRowBtns(displayUser, p) {
+    const isFollowed = this.isFollowedThisUser(displayUser, p);
+    const { query, isCurrentUser } = this.props;
     return (
       <div className="row-btns">
-        {isFollowed &&
-          <button className="btn btn-danger" onClick={() => this.unfollowThisUser(currentUser, p)}>Unfollow</button>}
-        {!isFollowed &&
-          <button className="btn btn-info" onClick={() => this.followThisUser(currentUser, p)}>
-            <i className="fa fa-plus mr-5" />Follow</button>}
-        <button className="btn btn-warning ml-5 options" data-toggle="dropdown" >Options</button>
+        {isFollowed ?
+          <button
+            className="btn btn-success"
+            data-balloon="Click to unfollow user!"
+            data-balloon-pos="top"
+            onClick={() => this.unfollowThisUser(displayUser, p)}>
+            <i className="fa fa-check mr-5" aria-hidden="true" />Followed
+          </button> :
+          <button
+            className="btn btn-info"
+            data-balloon="Follow this user!"
+            data-balloon-pos="top"
+            onClick={() => this.followThisUser(displayUser, p)}>
+            <i className="fa fa-plus mr-5" aria-hidden="true" />Follow
+          </button>
+        }
+
+        <button
+          className="btn btn-warning ml-5 options"
+          data-toggle="dropdown"
+          data-balloon="Options"
+          data-balloon-pos="top">
+          <i className="fa fa-cog mr-5" aria-hidden="true" />Options
+        </button>
+
         <ul className="dropdown-menu" role="menu" aria-labelledby="dLabel">
-          {query.title !== 'fans_list' && <li><a href="javascript:void(0)" onClick={this.moveToOtherGroup}>Move to</a></li>}
+          {query.title !== 'fans_list' && isCurrentUser &&
+            <li><a href="javascript:void(0)" onClick={this.moveToOtherGroup}>Move to</a></li>
+          }
           <li><a href="javascript:void(0)">Message</a></li>
           <li><a href="javascript:void(0)">Report</a></li>
         </ul>
@@ -172,13 +209,13 @@ export default class RightTabs extends React.Component {
     );
   }
 
-  _renderUserRows(currentUser, rows) {
+  _renderUserRows(user, currentUser, rows) {
     if (rows.length) {
       return rows.map((p, index) =>
         <Row key={index} className="tab-row mb-15">
           <Col size="1 u-img pl-0 mb-10 mt-5"><Link to={`/${p.username}`}><img alt="user" src={p.image_url} /></Link></Col>
           <Col size="7">{this._renderUserFollowsInfo(p)}</Col>
-          <Col size="4 tar pr-0">{this._renderUserRowBtns(currentUser, p)}</Col>
+          <Col size="4 tar pr-0">{currentUser.id_str !== p.id_str && this._renderUserRowBtns(user, p)}</Col>
         </Row>
       );
     }
@@ -188,16 +225,29 @@ export default class RightTabs extends React.Component {
   }
 
   render() {
-    const { currentUser, query } = this.props;
+    const { currentUser, query, isCurrentUser, user, pathname } = this.props;
+
     const navGroups = schema.navGroups;
     const group = navGroups[query.title];
-    const rows = this.convertTabRows(currentUser, group, query);
-    const tabValue = this.getGroupSourceNumber(currentUser, group);
+    const displayUser = isCurrentUser ? currentUser : user;
+    const rows = this.convertTabRows(displayUser, group, query);
+    const tabValue = this.getGroupSourceNumber(displayUser, group);
     return (
       <div className="right-tabs">
-        <h5 className="tab-value pb-10"><strong>{this.convertTabTitle(group, query)} {tabValue}</strong></h5>
+        {isCurrentUser ?
+          <h5 className="tab-value pb-10"><strong>{this.convertTabTitle(group, query)} {tabValue}</strong></h5>
+          :
+          <Row className="tab-choose mb-20">
+            <div className={`col-xs-2 tac mr-10 ${this.isActive('focuses_list')}`} onClick={() => this.onClickTabTitle(pathname, 'focuses_list')}>
+              <h5>His Focuses</h5>
+            </div>
+            <div className={`col-xs-2 tac ${this.isActive('fans_list')}`} onClick={() => this.onClickTabTitle(pathname, 'fans_list')}>
+              <h5>His Fans</h5>
+            </div>
+          </Row>
+        }
         <div className="tab-rows">
-          {this._renderUserRows(currentUser, rows)}
+          {this._renderUserRows(displayUser, currentUser, rows)}
         </div>
       </div>
     );

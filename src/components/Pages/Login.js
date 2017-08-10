@@ -50,6 +50,7 @@ const Login = CreateReactClass({
     if (res.msg === 'USER_LOGIN_SUCCESS') {
       swal.success(res.msg);
       ModalsFactory.hide('loginModal');
+      this.context.router.push('/list');
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {

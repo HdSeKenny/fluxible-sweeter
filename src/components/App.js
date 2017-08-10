@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FullScreen, MainSliders } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { Navbar, Footer } from './UserControls';
+import { Messages } from './Users';
 
 export default class App extends React.Component {
 
@@ -39,6 +40,7 @@ export default class App extends React.Component {
         <div className="content-pages">
           {child}
         </div>
+        <Messages />
         <Footer />
       </FullScreen>
     );

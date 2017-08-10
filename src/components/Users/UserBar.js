@@ -73,13 +73,11 @@ const UserBar = CreateReactClass({
 
   componentDidMount() {
     const imgDefer = document.getElementsByTagName('img');
-    setTimeout(() => {
-      for (let i = 0; i < imgDefer.length; i++) {
-        if (imgDefer[i].getAttribute('data-src')) {
-          imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
-        }
+    for (let i = 0; i < imgDefer.length; i++) {
+      if (imgDefer[i].getAttribute('data-src')) {
+        imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
       }
-    }, 1);
+    }
   },
 
   isActive(routes) {
@@ -179,7 +177,7 @@ const UserBar = CreateReactClass({
       Home: { label: 'Home', icon: 'fa fa-home' },
       Follows: { label: 'Follows', icon: 'fa fa-heart' },
       Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
-      Settings: {
+      Personal: {
         label: isCurrentUser ? 'Settings' : 'Personal',
         icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
       }
@@ -215,14 +213,15 @@ const UserBar = CreateReactClass({
         {user && <p className="user-name">{user.username}</p>}
         {!isCurrentUser && user &&
           <div className="user-btn mt-10">
-            {!isFollowed &&
+            {!isFollowed ?
               <button className="follow-btn" onClick={this.onFollowThisUser.bind(this, user)} >
-                <i className="fa fa-plus" /> Follow
-              </button>}
-            {isFollowed &&
+                <i className="fa fa-plus mr-5" /> Follow
+              </button> :
               <button className="cancel-follow-btn" onClick={this.onCancelFollowThisUser.bind(this, user)} >
-                 Following
-              </button>}
+                <i className="fa fa-check mr-5" />Followed
+              </button>
+            }
+
             <button className="message-btn" > Message</button>
           </div>
         }

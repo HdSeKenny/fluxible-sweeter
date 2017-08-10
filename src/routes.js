@@ -4,7 +4,7 @@ import config from './configs';
 import Mode from './utils/mode';
 import env from './utils/env';
 import { UserActions } from './actions';
-import { UserFollows } from './components/Users';
+import { UserFollows, UserPhotos } from './components/Users';
 import {
   App,
   NotFound,
@@ -61,14 +61,13 @@ const createRoutes = (context) => {
         <Route path="create" component={AddBlog} />
       </Route>
 
-      <Route path=":username/settings" component={UserInfo} />
+      <Route path=":username/Personal" component={UserInfo} />
       <Route path=":username/changepassword" component={ChangePassword} />
 
       <Route path=":username/more" component={UserMore} />
       <Route path=":username/messages" component={UserMessages} />
-      <Route path=":username/follows" component={UserFollows} >
-
-      </Route>
+      <Route path=":username/follows" component={UserFollows} />
+      <Route path=":username/photos" component={UserPhotos} />
 
       <Route path="*" component={NotFound} />
     </Route>
