@@ -3,7 +3,6 @@
   box-shadow: rgba(0, 0, 0, 0.2) -3px -2px 8px -1px;
   box-sizing: border-box;
   color: rgb(51, 51, 51);
-  cursor: pointer;
   display: block;
   font-size: 12px;
   font-stretch: normal;
@@ -17,11 +16,12 @@
   margin: 0;
   padding: 0;
   position: fixed;
-  right: 0px;
-  bottom: 0px;
+  right: 0;
+  bottom: 0;
   visibility: visible;
   // width: 288px
   ol, ul {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
@@ -30,6 +30,7 @@
 
 .chat-box {
   .wrapper {
+    padding:0;
     position: relative;
     left: 50%;
     width: 550px;
@@ -39,9 +40,10 @@
     box-sizing: border-box;
     .left {
       float: left;
-      width: 37.6%;
+      width: 35%;
       height: 100%;
       background-color: #fff;
+      border-right: 1px solid #ECEFF1;
       a.search {
         display: block;
         float: left;
@@ -57,8 +59,9 @@
       }
       input {
         float: left;
+        width: 75%;
         height: 30px;
-        padding: 5px 15px;
+        padding: 5px 10px;
         border: 1px solid #e6e6e6;
         background-color: #eceff1;
         border-radius: 5px;
@@ -73,19 +76,34 @@
         position: relative;
         width: 100%;
         height: 50px;
-        padding: 10px 10% 16px;
+        padding: 5%;
+        border-bottom: 1px solid #e6e6e6;
+        .btn.btn-default {
+          margin-left: 7%;
+          width: 18%;
+          outline: none;
+        }
       }
 
       .people {
         .person {
           position: relative;
-          width: 100%;
-          padding: 12px 10% 16px;
+          padding: 10px;
           cursor: pointer;
           background-color: #fff;
           &.active, &:hover {
-            background-color: @brand-info;
-            color: #fff;
+            background-color: #ECEFF1;
+          }
+          img {
+            border-radius: 50%;
+          }
+          .name {
+            padding: 3px 0;
+            font-weight: 500;
+            font-size: 14px;
+          }
+          .time {
+            color: gray
           }
         }
       }
@@ -94,24 +112,19 @@
     .right {
       position: relative;
       float: left;
-      width: 62.4%;
+      width: 65%;
       height: 100%;
       .top {
         width: 100%;
         height: 50px;
-        padding: 12px 10% 16px;
-        background-color: #eceff1;
+        padding: 16px 10px;
+        border-bottom: 1px solid #e6e6e6;
       }
 
       .chat {
         position: relative;
-        display: none;
-        overflow: hidden;
-        padding: 0 35px 92px;
-        border-width: 1px 1px 1px 0;
-        border-style: solid;
-        border-color: #e6e6e6;
-        height: calc(100% - 48px);
+        overflow: auto;
+        padding: 10px;
         -webkit-box-pack: end;
         -ms-flex-pack: end;
         justify-content: flex-end;
@@ -119,6 +132,7 @@
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
         flex-direction: column;
+        max-height: 275px;
         &.active-chat {
           display: block;
           display: -webkit-box;
@@ -133,17 +147,17 @@
         .conversation-start {
           position: relative;
           width: 100%;
-          margin-bottom: 27px;
+          margin-bottom: 15px;
           text-align: center;
         }
 
         .bubble {
-          font-size: 16px;
+          font-size: 12px;
           position: relative;
           display: inline-block;
           clear: both;
           margin-bottom: 8px;
-          padding: 13px 14px;
+          padding: 8px 10px;
           vertical-align: top;
           border-radius: 5px;
           &:before {
@@ -187,59 +201,41 @@
 
       .write {
         position: absolute;
-        bottom: 29px;
-        left: 30px;
-        height: 42px;
-        padding-left: 8px;
-        border: 1px solid #e6e6e6;
-        background-color: #eceff1;
-        width: calc(100% - 58px);
-        border-radius: 5px;
-        input {
-          font-size: 16px;
-          float: left;
-          width: 347px;
+        width: 100%;
+        bottom: 0;
+        height: 66px;
+        // padding-left: 8px;
+        border-top: 1px solid #e6e6e6;
+        // background-color: #eceff1;
+        textarea {
+          font-size: 13px;
           height: 40px;
-          padding: 0 10px;
+          width: 100%;
+          padding: 5px 10px;
           color: #1a1a1a;
           border: 0;
           outline: none;
           background-color: #eceff1;
           font-family: 'Source Sans Pro', sans-serif;
-          font-weight: 400;
-        }
-        .write-link.smiley:before {
-          display: inline-block;
-          float: left;
-          width: 20px;
-          height: 42px;
-          content: '';
-          background-image: url(https://s14.postimg.org/q2ug83h7h/smiley.png);
-          background-repeat: no-repeat;
-          background-position: center;
-        }
-        .write-link.attach:before {
-          display: inline-block;
-          float: left;
-          width: 20px;
-          height: 42px;
-          content: '';
-          background-image: url(https://s1.postimg.org/s5gfy283f/attachemnt.png);
-          background-repeat: no-repeat;
-          background-position: center;
         }
 
-        .write-link.send:before {
-          display: inline-block;
-          float: left;
-          width: 20px;
-          height: 42px;
-          margin-left: 11px;
-          content: '';
-          background-image: url(https://s30.postimg.org/nz9dho0pp/send.png);
-          background-repeat: no-repeat;
-          background-position: center;
+        .icons {
+          background: #eceff1;
+          padding: 5px 10px;
+          span {
+            color: gray;
+            &:hover {
+              cursor: pointer;
+            }
+          }
         }
+        // .emoji {
+        //   position: absolute;
+        //   top: 10px;
+        //   left: 10px;
+        //   color: gray;
+
+        // }
       }
     }
 

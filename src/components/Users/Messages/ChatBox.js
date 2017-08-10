@@ -63,19 +63,20 @@ export default class ChatBox extends React.Component {
           <div className="left">
             <div className="top">
               <input type="text" />
+              <button className="btn btn-default btn-sm">+</button>
             </div>
             <ul className="people">
-              <li className="person" data-chat="person2">
-                <img src="https://s3.postimg.org/yf86x7z1r/img2.jpg" alt="" />
-                <span className="name">Dog Woofson</span>
-                <span className="time">1:44 PM</span>
-                <span className="preview">I've forgotten how it felt before</span>
-              </li>
+              <Row className="person" data-chat="person2">
+                <Col size="3 p-0"><img src="https://s3.postimg.org/yf86x7z1r/img2.jpg" alt="" /></Col>
+                <Col size="9 pr-0 pl-10">
+                  <Row className="name"><span>Dog Woofson</span></Row>
+                  <Row className="time"><span>1:44 PM</span></Row>
+                </Col>
+              </Row>
             </ul>
           </div>
           <div className="right">
-            <div className="top"><span>To: <span className="name">Dog Woofson</span></span>
-            </div>
+            <div className="top"><h4 className="m-0"><i>TDog Woofson</i></h4></div>
             <div className="chat" data-chat="person2">
               <div className="conversation-start">
                 <span>Today, 5:38 PM</span>
@@ -98,12 +99,18 @@ export default class ChatBox extends React.Component {
               <div className="bubble you">
                 I've forgotten how it felt before
               </div>
+                 <div className="bubble you">
+                I've forgotten how it felt before
+              </div>
+                 <div className="bubble you">
+                I've forgotten how it felt before
+              </div>
             </div>
             <div className="write">
-              <a href="javascript:;" className="write-link attach"></a>
-              <input type="text" />
-              <a href="javascript:;" className="write-link smiley"></a>
-              <a href="javascript:;" className="write-link send"></a>
+              <Row className="icons">
+                <span className="emoji"><i className="fa fa-smile-o fa-lg" aria-hidden="true" /></span>
+              </Row>
+              <textarea rows="1"></textarea>
             </div>
           </div>
         </div>
