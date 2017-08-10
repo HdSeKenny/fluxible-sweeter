@@ -41,8 +41,15 @@ export default class LeftNav extends React.Component {
     });
   }
 
-  getGroupSourceNumber(currentUser, group) {
-    return currentUser[group.default_source] ? currentUser[group.default_source].length : 0;
+  getGroupSourceNumber(isCurrentUser, group) {
+    const { currentUser, user } = this.props;
+    const displayUser = isCurrentUser ? currentUser : user;
+    return displayUser[group.default_source] ? displayUser[group.default_source].length : 0;
+  }
+
+  getTabSourceNumber(currentUser, tab) {
+    const { query } = this.props;
+    return currentUser[query.title] ? currentUser[query.title][tab].length : 0;
   }
 
   isFollowedThisUser(currentUser, user) {
@@ -57,22 +64,23 @@ export default class LeftNav extends React.Component {
     return isFollowed;
   }
 
-  _renderNavGroups(currentUser) {
+  _renderNavGroups(currentUser, user, isCurrentUser) {
     const navGroupsKeys = Object.keys(schema.navGroups);
     const pathname = this.props.pathname;
     return navGroupsKeys.map((key, index) => {
       const group = schema.navGroups[key];
-      const groupNumber = this.getGroupSourceNumber(currentUser, group);
+      const groupNumber = this.getGroupSourceNumber(isCurrentUser, group);
       return (
         <Row className="nav-group" key={index}>
           <h5 className={`nav-title ${this.isActive(key)}`} onClick={() => this.onChooseFollowsNavTitle(key)}>
             <i className={group.icon}></i>{group.value}<span className="ml-5">{groupNumber}</span>
           </h5>
-          {group.tabs.length > 0 &&
+          {group.tabs.length > 0 && isCurrentUser &&
             <div className="nav-list">
               {group.tabs.map((tab, tIdex) => {
                 const url = { pathname, query: { title: key, tab: tab.tag } };
-                return <li className={this.isActive(key, tab.tag)} key={tIdex}><Link to={url}>{tab.value}</Link></li>;
+                const tabNum = this.getTabSourceNumber(currentUser, tab.tag);
+                return <li className={this.isActive(key, tab.tag)} key={tIdex}><Link to={url}>{tab.value} {tabNum}</Link></li>;
               })}
             </div>
           }
@@ -82,10 +90,10 @@ export default class LeftNav extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, user, isCurrentUser } = this.props;
     return (
       <div className="follows-navs">
-        {this._renderNavGroups(currentUser)}
+        {this._renderNavGroups(currentUser, user, isCurrentUser)}
       </div>
     );
   }

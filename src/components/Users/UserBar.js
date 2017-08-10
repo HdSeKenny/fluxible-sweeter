@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { jsUtils, preload } from '../../utils';
+import { jsUtils } from '../../utils';
 import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
@@ -72,7 +72,14 @@ const UserBar = CreateReactClass({
   },
 
   componentDidMount() {
-    preload();
+    const imgDefer = document.getElementsByTagName('img');
+    setTimeout(() => {
+      for (let i = 0; i < imgDefer.length; i++) {
+        if (imgDefer[i].getAttribute('data-src')) {
+          imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
+        }
+      }
+    }, 1);
   },
 
   isActive(routes) {
@@ -169,20 +176,14 @@ const UserBar = CreateReactClass({
   _renderUserBarNavs(isCurrentUser, user) {
     const { username } = user;
     const navs = {
-      Home: { label: 'Home', icon: 'fa fa-home' }
+      Home: { label: 'Home', icon: 'fa fa-home' },
+      Follows: { label: 'Follows', icon: 'fa fa-heart' },
+      Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
+      Settings: {
+        label: isCurrentUser ? 'Settings' : 'Personal',
+        icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
+      }
     };
-
-    if (isCurrentUser) {
-      navs.Follows = { label: 'Follows', icon: 'fa fa-heart' };
-    }
-
-    navs.Messages = { label: 'Messages', icon: 'fa fa-comments-o' };
-    navs.Photos = { label: 'Photos', icon: 'fa fa-picture-o' };
-    navs.Settings = {
-      label: isCurrentUser ? 'Settings' : 'Personal',
-      icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
-    };
-
     const colSize = '2';
     const navKeys = Object.keys(navs);
 
@@ -235,11 +236,19 @@ const UserBar = CreateReactClass({
     const imageClass = isCurrentUser ? 'image-tooltip' : '';
     return (
       <Row className="user-img">
-        <form accept="multipart/form-data" className={imageClass}>
-          {isCurrentUser && <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />}
-          {isCurrentUser && hasChangedImage && <span className="tooltiptext">Click to change image</span>}
-          {!isCurrentUser && user && <img alt="user" className="user-image" src={user.image_url} />}
-        </form>
+        {isCurrentUser &&
+          <form accept="multipart/form-data" className={imageClass} data-balloon="Upload an image!" data-balloon-pos="right">
+            <img alt="user" className="current-user" src={currentUser.image_url} onClick={this.onEditUserImage} />
+            {hasChangedImage && <span className="tooltiptext">Click to change image</span>}
+            {!isCurrentUser && user && <img alt="user" className="user-image" src={user.image_url} />}
+          </form>
+        }
+
+        {!isCurrentUser &&
+          <form accept="multipart/form-data" className={imageClass}>
+            {user && <img alt="user" className="user-image" src={user.image_url} />}
+          </form>
+        }
       </Row>
     );
   },

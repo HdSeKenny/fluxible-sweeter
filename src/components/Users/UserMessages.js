@@ -50,9 +50,7 @@ const UserMessages = CreateReactClass({
       <div className="user-messages">
         <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
         <div className="messages-content">
-          <div className="well">
-            <center><h2>Messages - Not Finished !</h2></center>
-          </div>
+
         </div>
       </div>
     );

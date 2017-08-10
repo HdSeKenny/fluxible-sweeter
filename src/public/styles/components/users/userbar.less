@@ -23,6 +23,9 @@
         width: 90px;
         height: 90px;
         border-radius: 50%;
+        &.current-user:hover {
+          cursor: pointer;
+        }
       }
       .image-tooltip {
         position: relative;
@@ -177,7 +180,7 @@
 @media (max-width: 950px) {
   .user-bar .nav {
     &.mine .bar-nav {
-      width: 168px;
+      width: 210px;
     }
     &.their .bar-nav {
       width: 210px
@@ -188,7 +191,7 @@
 @media (min-width: 951px) {
   .user-bar .nav {
     &.mine .bar-nav {
-      width: 200px;
+      width: 250px;
     }
     &.their .bar-nav {
       width: 250px

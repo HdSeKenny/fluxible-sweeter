@@ -100,13 +100,20 @@ export default CreateReactClass({
     return (
       <div className="user-follows">
         <UserBar path={pathname} user={user} isCurrentUser={isCurrentUser} currentUser={currentUser} />
-        <div className="follows-left">
-          <LeftNav currentUser={currentUser} user={user} query={query} pathname={pathname} />
-          <Suggestions />
-        </div>
-        <div className="follows-right">
-          <RightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
-        </div>
+        {isCurrentUser ?
+          <div>
+            <div className="follows-left">
+              <LeftNav currentUser={currentUser} user={user} isCurrentUser={isCurrentUser} query={query} pathname={pathname} />
+              <Suggestions />
+            </div>
+            <div className="follows-right">
+              <RightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
+            </div>
+          </div> :
+          <div className="follows-center">
+            <RightTabs currentUser={currentUser} user={user} query={query} pathname={pathname} />
+          </div>
+        }
       </div>
     );
   }
