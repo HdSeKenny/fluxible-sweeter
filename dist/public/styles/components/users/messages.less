@@ -11,19 +11,52 @@
   font-variant-ligatures: normal;
   font-variant-numeric: normal;
   font-weight: normal;
-  // height: 40px;
+  min-height: 40px;
   line-height: 15.6px;
   margin: 0;
-  padding: 0;
+  padding: 10px 15px;
   position: fixed;
   right: 0;
   bottom: 0;
   visibility: visible;
-  // width: 288px
+  min-width: 250px;
   ol, ul {
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  .row {
+    .msg-event {
+      p {
+        margin-top: 2.5px;
+      }
+      i {
+        font-size: 19px;
+        color: @brand-info;
+        &.fa-remove {
+          color: gray;
+          font-weight: 400;
+        }
+      }
+      &:hover {
+        cursor: pointer;
+      }
+      .close-box {
+        margin-right: 1px;
+        font-size: 25px;
+        color: gray;
+        &:hover {
+          color: @brand-info;
+        }
+      }
+      .close-message {
+        font-size: 25px;
+        color: gray;
+        &:hover {
+          color: @brand-info;
+        }
+      }
+    }
   }
 }
 
@@ -44,19 +77,6 @@
       height: 100%;
       background-color: #fff;
       border-right: 1px solid #ECEFF1;
-      a.search {
-        display: block;
-        float: left;
-        width: 42px;
-        height: 42px;
-        margin-left: 10px;
-        border: 1px solid #e6e6e6;
-        background-color: #00b0ff;
-        background-image: url(https://s11.postimg.org/dpuahewmn/name_type.png);
-        background-repeat: no-repeat;
-        background-position: top 12px left 14px;
-        border-radius: 50%;
-      }
       input {
         float: left;
         width: 75%;
@@ -88,7 +108,7 @@
       .people {
         .person {
           position: relative;
-          padding: 10px;
+          padding: 5px 10px;
           cursor: pointer;
           background-color: #fff;
           &.active, &:hover {
@@ -117,14 +137,14 @@
       .top {
         width: 100%;
         height: 50px;
-        padding: 16px 10px;
+        padding: 16px 0 16px 10px;
         border-bottom: 1px solid #e6e6e6;
       }
 
       .chat {
         position: relative;
         overflow: auto;
-        padding: 10px;
+        padding: 10px 20px;
         -webkit-box-pack: end;
         -ms-flex-pack: end;
         justify-content: flex-end;
@@ -160,6 +180,7 @@
           padding: 8px 10px;
           vertical-align: top;
           border-radius: 5px;
+          max-width: 250px;
           &:before {
             position: absolute;
             top: 19px;
