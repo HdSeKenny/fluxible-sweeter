@@ -12,11 +12,7 @@ var _reactRouter = require('react-router');
 
 require('babel-polyfill');
 
-require('./polyfills');
-
-var _CustomFluxibleComponent = require('./components/CustomFluxibleComponent');
-
-var _CustomFluxibleComponent2 = _interopRequireDefault(_CustomFluxibleComponent);
+var _components = require('./components');
 
 var _routes = require('./routes');
 
@@ -35,6 +31,8 @@ require('./public/styles/main.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.React = _react2.default;
+// import './polyfills';
+
 
 const dehydratedState = window.__DATA__;
 let firstRender = true;
@@ -58,7 +56,7 @@ _app2.default.rehydrate(dehydratedState, (err, context) => {
     }
   }
 
-  _reactDom2.default.render(_react2.default.createElement(_CustomFluxibleComponent2.default, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.Router, {
+  _reactDom2.default.render(_react2.default.createElement(_components.Custom, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.Router, {
     history: _reactRouter.browserHistory,
     children: routes,
     onUpdate: UpdateRoute

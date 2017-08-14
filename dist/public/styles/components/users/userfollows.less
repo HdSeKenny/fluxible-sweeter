@@ -1,0 +1,144 @@
+@follow-bg: #f2f2f5;
+@left-nav-padding: 20px 30px;
+
+.user-follows {
+  .follows-left {
+    width: 25%;
+    float: left;
+    .follows-navs {
+      padding: @left-nav-padding;
+      border-radius: @border-radius-base;
+      background: #fff;
+      .nav-group {
+        .nav-title {
+          margin: 0;
+          padding: 8.5px 25px;
+          font-size: 14px;
+          color: #333;
+          font-weight: 600;
+          &.active {
+            color: @brand-info;
+            background: @follow-bg;
+          }
+          &:hover {
+            color: @brand-info;
+            background: @follow-bg;
+            cursor: pointer;
+          }
+          span {
+            color: @brand-info;
+          }
+        }
+        .nav-list li {
+          padding: 5px 0px;
+          list-style: none;
+          >span,
+          >a {
+            padding: 5px 51.5px;
+            color: #717171;
+            font-size: 12px;
+            &:hover {
+              color: @brand-info;
+            }
+          }
+          &.active,
+          &:hover {
+            background: @follow-bg;
+            >span,
+            >a {
+              color: @brand-info;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .follows-suggestion {
+      padding: @left-nav-padding;
+      margin-top: 15px;
+      min-height: 300px;
+      background: #fff;
+    }
+  }
+
+  .follows-right,
+  .follows-center {
+    background: #fff;
+    min-height: 573px;
+    .right-tabs {
+      padding: 15px 30px;
+      .tab-value {
+        border-bottom: 1px solid #f2f2f5;
+
+      }
+      .tab-choose {
+        .col-xs-2 {
+          border: 1px solid #E0E0E0;
+          border-radius: 3px;
+          &.active, &:hover {
+            background: @brand-info;
+            border: 1px solid @brand-info;
+            color: #fff;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .tab-row {
+        .row-btns {
+          button {
+            outline: none;
+          }
+          .dropdown-menu {
+            margin: 6px 0 0 0;
+            right: 0;
+            min-width: 110px;
+            padding: 0;
+            // display: none;
+            &:before {
+              position: absolute;
+              top: -7px;
+              left: 65px;
+              display: inline-block;
+              border-right: 7px solid transparent;
+              border-bottom: 7px solid #ccc;
+              border-left: 7px solid transparent;
+              border-bottom-color: rgba(0, 0, 0, 0.2);
+              content: '';
+            }
+            &:after {
+              position: absolute;
+              top: -6px;
+              left: 66px;
+              display: inline-block;
+              border-right: 6px solid transparent;
+              border-bottom: 6px solid #ffffff;
+              border-left: 6px solid transparent;
+              content: '';
+            }
+          }
+        }
+        .u-img img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 1px solid #f2f2f5;
+        }
+        h4 {
+          color: #333;
+        }
+        .f-value {
+          margin-left: 10px;
+          color: @brand-info;
+        }
+      }
+    }
+  }
+
+  .follows-right {
+    width: 73%;
+    float: right;
+  }
+}

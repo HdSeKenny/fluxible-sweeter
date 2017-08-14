@@ -24,13 +24,15 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _NotFound = require('../NotFound');
+
+var _NotFound2 = _interopRequireDefault(_NotFound);
+
 var _Users = require('../Users');
 
 var _stores = require('../../stores');
 
 var _UserNavs = require('../UserNavs');
-
-var _UI = require('../UI');
 
 var _utils = require('../../utils');
 
@@ -83,16 +85,24 @@ const UserHome = (0, _createReactClass2.default)({
     const userStore = this.getStore(_stores.UserStore);
     const blogStore = this.getStore(_stores.BlogStore);
     const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
     const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
     const responseMessages = ['CREATE_BLOG_SUCCESS'];
-    if (responseMessages.includes(res.msg)) {
-      if (res.msg === 'CREATE_BLOG_SUCCESS') {
-        _plugins.swal.successWithCallback(res.msg, () => {
-          _UI.ModalsFactory.hide('createBlogModal');
-        });
-      }
+    const result = {};
 
-      this.setState({ displayBlogs: displayBlogs });
+    if (responseMessages.includes(res.msg)) {
+      _plugins.swal.success(res.msg, () => {
+        result.displayBlogs = displayBlogs;
+      });
+    }
+
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS' || !res.msg) {
+      result.user = user;
+      result.currentUser = currentUser;
+    }
+
+    if (Object.keys(result).length) {
+      this.setState(result);
     }
   },
   onSearchBlogs: function (searchText) {
@@ -107,11 +117,19 @@ const UserHome = (0, _createReactClass2.default)({
   render: function () {
     const { currentUser: currentUser, user: user, displayBlogs: displayBlogs, searchedBlogs: searchedBlogs, currentUserBlogs: currentUserBlogs, searchText: searchText } = this.state;
     const { pathname: pathname } = this.props.location;
-    const isCurrentUser = currentUser ? currentUser.id_str === user.id_str : false;
+    const isCurrentUser = currentUser && user ? currentUser.id_str === user.id_str : false;
     const trimedSearchText = searchText ? searchText.trim() : '';
     const displayMineBlogs = searchedBlogs.length || trimedSearchText ? searchedBlogs : currentUserBlogs;
     const searchBlogsData = Object.assign({}, { displayMineBlogs: displayMineBlogs, searchText: searchText });
     const child = _react2.default.cloneElement(this.props.children, searchBlogsData);
+
+    if (!user) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'user-home' },
+        _react2.default.createElement(_NotFound2.default, null)
+      );
+    }
 
     return _react2.default.createElement(
       'div',

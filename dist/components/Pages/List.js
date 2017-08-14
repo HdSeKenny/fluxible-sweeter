@@ -34,7 +34,7 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const List = (0, _createReactClass2.default)({
+exports.default = (0, _createReactClass2.default)({
 
   displayName: 'List',
 
@@ -68,7 +68,8 @@ const List = (0, _createReactClass2.default)({
     if (thumbsAndCommentMsgs.includes(res.msg)) {
       _plugins.swal.success(res.msg);
       this.setState({
-        selectedPin: res.newBlog
+        selectedPin: res.newBlog,
+        blogs: this.getStore(_stores.BlogStore).getAllBlogs()
       });
     }
 
@@ -79,7 +80,7 @@ const List = (0, _createReactClass2.default)({
       });
     }
 
-    if (res.msg === 'USER_LOGIN_SUCCESS') {
+    if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
       this.setState({
         currentUser: this.getStore(_stores.UserStore).getCurrentUser()
       });
@@ -209,14 +210,6 @@ const List = (0, _createReactClass2.default)({
       sortedPins.map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser, readMore: false }))
     );
   },
-  _renderSweetBlock: function () {
-    const { currentUser: currentUser, editorState: editorState } = this.state;
-    return _react2.default.createElement(
-      'section',
-      { className: 'search-block mb-15' },
-      _react2.default.createElement(_UserControls.BlogModal, { currentUser: currentUser, isUserHome: true, editorState: editorState })
-    );
-  },
   render: function () {
     const { currentUser: currentUser, kenny: kenny, blogs: blogs, selectedPin: selectedPin, showPinModal: showPinModal } = this.state;
     const displayUser = currentUser || kenny;
@@ -226,7 +219,7 @@ const List = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'section',
         { className: 'mid' },
-        this._renderSweetBlock(),
+        _react2.default.createElement(_UserControls.BlogModal, { currentUser: currentUser, isUserHome: true }),
         this._renderAllPinItems(blogs, currentUser)
       ),
       _react2.default.createElement(
@@ -234,7 +227,7 @@ const List = (0, _createReactClass2.default)({
         { className: 'right' },
         _react2.default.createElement(
           'div',
-          { className: 'right-user-card mb-15' },
+          { className: 'right-user-card mb-10' },
           this._renderUserCardInfo(displayUser),
           this._renderUserCardFooter(displayUser)
         ),
@@ -255,6 +248,4 @@ const List = (0, _createReactClass2.default)({
     );
   }
 });
-
-exports.default = List;
 module.exports = exports['default'];

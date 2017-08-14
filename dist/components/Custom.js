@@ -21,9 +21,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * adding child context to react component
  */
-const CustomFluxibleComponent = (0, _createReactClass2.default)({
+exports.default = (0, _createReactClass2.default)({
 
-  displayName: 'CustomFluxibleComponent',
+  displayName: 'Custom',
 
   propTypes: {
     context: _propTypes2.default.object,
@@ -47,6 +47,4 @@ const CustomFluxibleComponent = (0, _createReactClass2.default)({
     return _react2.default.cloneElement(this.props.children, { context: this.props.context });
   }
 });
-
-exports.default = CustomFluxibleComponent;
 module.exports = exports['default'];

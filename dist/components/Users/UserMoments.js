@@ -71,21 +71,22 @@ const UserHome = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     const successMessages = ['CREATE_BLOG_SUCCESS', 'COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'BLOG_CHANGE_IMAGE_SUCCESS'];
+    const { username: username } = this.props.params;
+    const blogStore = this.getStore(_stores.BlogStore);
+    const userStore = this.getStore(_stores.UserStore);
+    const currentUser = userStore.getCurrentUser();
+    const user = userStore.getUserByUsername(username);
+    const result = { user: user, currentUser: currentUser };
 
     if (successMessages.includes(res.msg)) {
-      const { username: username } = this.props.params;
-      const blogStore = this.getStore(_stores.BlogStore);
-      const currentUser = this.getStore(_stores.UserStore).getCurrentUser();
-      const displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
+      result.displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        _plugins.swal.successCallback(res.msg, () => {
-          if (res.msg === 'CREATE_BLOG_SUCCESS') {
-            _UI.ModalsFactory.hide('createBlogModal');
-          }
-        });
+        _plugins.swal.success(res.msg);
       }
+    }
 
-      this.setState({ displayBlogs: displayBlogs });
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS') {
+      this.setState(result);
     }
   },
   onViewPinItem: function (id) {
@@ -108,19 +109,33 @@ const UserHome = (0, _createReactClass2.default)({
     }
   },
   render: function () {
-    const { currentUser: currentUser, selectedPin: selectedPin, displayBlogs: displayBlogs, showPinModal: showPinModal } = this.state;
+    const { currentUser: currentUser, selectedPin: selectedPin, displayBlogs: displayBlogs, showPinModal: showPinModal, user: user } = this.state;
     const { searchText: searchText } = this.props;
     const trimedSearchText = searchText ? searchText.trim() : '';
     const sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
     const searchedBlogs = _utils.jsUtils.searchFromArray(sortedBlogs, searchText);
     const finalDisplayBlogs = searchedBlogs.length || trimedSearchText ? searchedBlogs : sortedBlogs;
+    const isCurrentUser = currentUser && user ? currentUser.id_str === user.id_str : false;
     return _react2.default.createElement(
       'div',
       { className: 'user-moments' },
       _react2.default.createElement(
         'div',
         { className: 'user-blogs' },
-        finalDisplayBlogs.map((blog, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: blog, currentUser: currentUser }))
+        isCurrentUser && _react2.default.createElement(_UserControls.BlogModal, { currentUser: currentUser, isUserHome: true }),
+        finalDisplayBlogs.length ? _react2.default.createElement(
+          'div',
+          { className: '' },
+          finalDisplayBlogs.map((blog, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: blog, currentUser: currentUser }))
+        ) : _react2.default.createElement(
+          'div',
+          { className: isCurrentUser ? 'no-moments' : 'no-moments not-current' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            isCurrentUser ? `You don't have any sweets, write a sweet here!` : `He doesn't have any sweets!`
+          )
+        )
       ),
       _react2.default.createElement(
         _UI.Layout.Page,

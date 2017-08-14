@@ -88,7 +88,7 @@ const Signup = (0, _createReactClass2.default)({
     const confirmPassword = this.validateConfirmPassword(this.state.confirmPassword);
 
     if (firstName && lastName && username && email && password && confirmPassword) {
-      this.executeAction(_actions.UserActions.UserRegister, newUser);
+      this.context.executeAction(_actions.UserActions.UserRegister, newUser);
     } else {
       _plugins.swal.error('Register failed !');
     }

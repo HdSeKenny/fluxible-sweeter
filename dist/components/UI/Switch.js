@@ -28,7 +28,9 @@ class Switch extends _react2.default.Component {
   }
 
   onSwitchCheckBox() {
-    this.setState({ on: !this.state.on });
+    this.setState({ on: !this.state.on }, () => {
+      // this.props.rememberMe();
+    });
   }
 
   render() {
@@ -88,8 +90,11 @@ class Switch extends _react2.default.Component {
 
 Switch.propTypes = {
   onChange: _propTypes2.default.func,
+  rememberMe: _propTypes2.default.func,
   on: _propTypes2.default.bool,
-  className: _propTypes2.default.string
+  className: _propTypes2.default.string,
+  before: _propTypes2.default.string,
+  after: _propTypes2.default.string
 };
 Switch.defaultProps = {
   on: false

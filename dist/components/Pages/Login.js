@@ -66,7 +66,8 @@ const Login = (0, _createReactClass2.default)({
     return {
       switchOn: false,
       emailErrorMessage: '',
-      passwordErrorMessage: ''
+      passwordErrorMessage: '',
+      remember: false
     };
   },
   onChange: function (res) {
@@ -157,11 +158,14 @@ const Login = (0, _createReactClass2.default)({
     // }, 500);
   },
   componentDidMount: function () {},
-  _renderEmailInput: function (email) {
+  rememberMe: function () {
+    this.setState({ remember: !this.state.remember });
+  },
+  _renderEmailInput: function (email, remember) {
     const { emailErrorMessage: emailErrorMessage } = this.state;
     return _react2.default.createElement(_UI.SweetInput, {
       ref: 'emailRef',
-      autoComplete: 'off',
+      autoComplete: remember ? 'on' : 'off',
       format: 'email',
       icon: 'fa fa-user',
       required: true,
@@ -171,11 +175,11 @@ const Login = (0, _createReactClass2.default)({
       onChange: this.onEmailChange
     });
   },
-  _renderPasswordInput: function (password) {
+  _renderPasswordInput: function (password, remember) {
     const { passwordErrorMessage: passwordErrorMessage } = this.state;
     return _react2.default.createElement(_UI.SweetInput, {
       ref: 'loginRef',
-      autoComplete: 'off',
+      autoComplete: remember ? 'on' : 'off',
       format: 'password',
       icon: 'fa fa-lock',
       required: true,
@@ -192,7 +196,7 @@ const Login = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Col,
         { size: '6', className: 'pl-0' },
-        _react2.default.createElement(_UI.Switch, { after: 'Remember me' })
+        _react2.default.createElement(_UI.Switch, { after: 'Remember me', rememberMe: this.rememberMe })
       ),
       _react2.default.createElement(
         _Layout.Col,
@@ -281,7 +285,7 @@ const Login = (0, _createReactClass2.default)({
     );
   },
   render: function () {
-    const { errorMessage: errorMessage, password: password, email: email } = this.state;
+    const { errorMessage: errorMessage, password: password, email: email, remember: remember } = this.state;
     return _react2.default.createElement(
       'section',
       { className: 'login-section mt-15 mr-15 ml-15' },
@@ -303,12 +307,12 @@ const Login = (0, _createReactClass2.default)({
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            this._renderEmailInput(email)
+            this._renderEmailInput(email, remember)
           ),
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            this._renderPasswordInput(password)
+            this._renderPasswordInput(password, remember)
           ),
           _react2.default.createElement(
             'div',

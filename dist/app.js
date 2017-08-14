@@ -16,6 +16,10 @@ var _configs = require('./configs');
 
 var _configs2 = _interopRequireDefault(_configs);
 
+var _routes = require('./routes');
+
+var _routes2 = _interopRequireDefault(_routes);
+
 var _stores = require('./stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -23,11 +27,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // init namespace for current App
 // sessionStorage.setNamespace('sweeter');
 
-const app = new _fluxible2.default({
-  component: require('./routes')
-});
-// import sessionStorage from './utils/sessionStorage';
+const app = new _fluxible2.default({ component: _routes2.default });
 
+// import sessionStorage from './utils/sessionStorage';
 
 app.plug((0, _fluxiblePluginFetchr2.default)({
   xhrPath: `${_configs2.default.path_prefix}/api`,
@@ -35,11 +37,8 @@ app.plug((0, _fluxiblePluginFetchr2.default)({
 }));
 
 app.plug(require('./plugins/cookie'));
-app.plug(require('./plugins/language'));
 app.plug(require('./plugins/config'));
-// app.plug(require('./plugins/customFetchrPlugin'));
 
-// app.registerStore(LanguageStore);
 app.registerStore(_stores.BlogStore);
 app.registerStore(_stores.UserStore);
 app.registerStore(_stores.ErrorStore);

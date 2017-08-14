@@ -45,7 +45,6 @@ class SweetEditor extends _react2.default.Component {
     this._onStoreChange = this._onStoreChange.bind(this);
   }
 
-
   componentDidMount() {
     this.context.getStore(_stores.BlogStore).addChangeListener(this._onStoreChange);
   }

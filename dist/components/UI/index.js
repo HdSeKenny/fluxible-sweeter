@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.SweetInput = exports.MainSliders = exports.UserFollowsTabs = exports.HotBlogsTabs = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
+exports.SlimEditor = exports.Button = exports.PinItem = exports.Switch = exports.ModalsFactory = exports.Layout = exports.SweetInput = exports.MainSliders = exports.HotBlogsTabs = exports.DatePicker = exports.BgIcon = exports.FullScreen = undefined;
 
 var _FullScreen2 = require('./FullScreen');
 
@@ -20,10 +20,6 @@ var _DatePicker3 = _interopRequireDefault(_DatePicker2);
 var _HotBlogsTabs2 = require('./HotBlogsTabs');
 
 var _HotBlogsTabs3 = _interopRequireDefault(_HotBlogsTabs2);
-
-var _UserFollowsTabs2 = require('./UserFollowsTabs');
-
-var _UserFollowsTabs3 = _interopRequireDefault(_UserFollowsTabs2);
 
 var _MainSliders2 = require('./MainSliders');
 
@@ -63,7 +59,6 @@ exports.FullScreen = _FullScreen3.default;
 exports.BgIcon = _BgIcon3.default;
 exports.DatePicker = _DatePicker3.default;
 exports.HotBlogsTabs = _HotBlogsTabs3.default;
-exports.UserFollowsTabs = _UserFollowsTabs3.default;
 exports.MainSliders = _MainSliders3.default;
 exports.SweetInput = _SweetInput3.default;
 exports.Layout = _Layout3.default;

@@ -30,14 +30,24 @@ class UserHomeNav extends _react2.default.Component {
     return route === this.props.path ? 'active' : '';
   }
 
-  goToUserPages(str) {
-    this.context.router.push(str);
+  goToUserPages(str, qt) {
+    if (qt) {
+      _reactRouter.browserHistory.push({
+        pathname: str,
+        query: {
+          title: qt
+        }
+      });
+    } else {
+      this.context.router.push(str);
+    }
   }
 
   _renderUserInfo(user) {
     const { firstName: firstName, lastName: lastName, email: email, phone: phone, birthday: birthday, profession: profession, description: description } = user;
     const { currentUser: currentUser } = this.props;
     const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
+    const displayUserName = isCurrentUser ? currentUser.username : user.username;
     return _react2.default.createElement(
       'div',
       { className: 'isNotCurrentUser' },
@@ -50,7 +60,7 @@ class UserHomeNav extends _react2.default.Component {
           'Personal Information',
           _react2.default.createElement(
             'span',
-            { className: 'more' },
+            { className: 'more', onClick: () => this.goToUserPages(`/${displayUserName}/personal`) },
             !isCurrentUser ? 'more' : 'edit'
           )
         )
@@ -130,6 +140,9 @@ class UserHomeNav extends _react2.default.Component {
     const { user: user, displayBlogs: displayBlogs, currentUser: currentUser } = this.props;
     const displayUser = user || currentUser;
     const { username: username, fans: fans, focuses: focuses } = displayUser;
+
+    if (!displayUser) return swal.info('You need login');
+
     return _react2.default.createElement(
       'div',
       { className: 'user-home-left' },
@@ -155,7 +168,7 @@ class UserHomeNav extends _react2.default.Component {
           { size: '4 tip-li p-0' },
           _react2.default.createElement(
             'p',
-            { onClick: () => this.goToUserPages(`/${username}/follows`) },
+            { onClick: () => this.goToUserPages(`/${username}/follows`, 'focuses_list') },
             fans.length
           ),
           _react2.default.createElement(
@@ -169,7 +182,7 @@ class UserHomeNav extends _react2.default.Component {
           { size: '4 tip-li p-0' },
           _react2.default.createElement(
             'p',
-            { onClick: () => this.goToUserPages(`/${username}/follows`) },
+            { onClick: () => this.goToUserPages(`/${username}/follows`, 'focuses_list') },
             focuses.length
           ),
           _react2.default.createElement(

@@ -152,9 +152,11 @@ const Navbar = (0, _createReactClass2.default)({
   switchOpenModal: function (modalRef) {
     this.setState({ switchModal: { modalRef: modalRef, state: true } });
   },
+  goTo: function (route) {
+    this.context.router.push(route);
+  },
   render: function () {
     const { authenticated: authenticated, currentUser: currentUser, brandImage: brandImage, showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
-    const aboutActiveClass = authenticated ? `${this.isActive(['about'])} mr-30` : this.isActive(['about']);
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
@@ -206,11 +208,20 @@ const Navbar = (0, _createReactClass2.default)({
             ),
             _react2.default.createElement(
               'li',
-              { className: aboutActiveClass },
+              { className: this.isActive(['about']) },
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/about' },
                 'About'
+              )
+            ),
+            authenticated && _react2.default.createElement(
+              'li',
+              { className: 'mr-30' },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/about' },
+                _react2.default.createElement('i', { className: 'fa fa-2x fa-bell-o m-r-lg m-b-lg' })
               )
             ),
             !authenticated && _react2.default.createElement(
@@ -234,7 +245,11 @@ const Navbar = (0, _createReactClass2.default)({
             authenticated && _react2.default.createElement(
               'li',
               { className: 'mr-0 pr-0' },
-              _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url }),
+              _react2.default.createElement(
+                'a',
+                { className: 'm-0', href: `/${currentUser.username}` },
+                _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url })
+              ),
               _react2.default.createElement(
                 'ul',
                 { className: 'dropdown' },
@@ -242,8 +257,8 @@ const Navbar = (0, _createReactClass2.default)({
                   'li',
                   null,
                   _react2.default.createElement(
-                    _reactRouter.Link,
-                    { to: `/${currentUser.username}` },
+                    'a',
+                    { href: `/${currentUser.username}` },
                     'User center'
                   )
                 ),
@@ -251,8 +266,8 @@ const Navbar = (0, _createReactClass2.default)({
                   'li',
                   null,
                   _react2.default.createElement(
-                    'span',
-                    null,
+                    'a',
+                    { href: `/${currentUser.username}/personal` },
                     'Settings'
                   )
                 ),

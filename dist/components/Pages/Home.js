@@ -74,7 +74,7 @@ const Home = (0, _createReactClass2.default)({
     const blogMessages = ['CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
 
     if (blogMessages.includes(res.msg)) {
-      _plugins.swal.successWithCallback(res.msg, () => {
+      _plugins.swal.success(res.msg, () => {
         this.setState({ blogs: this.getStore(_stores.BlogStore).getAllBlogs() });
       });
     }
