@@ -1,0 +1,110 @@
+{
+  "passes": [{
+    "recordNetwork": true,
+    "recordTrace": true,
+    "pauseBeforeTraceEndMs": 500,
+    "useThrottling": true,
+    "gatherers": [
+      "url",
+      "image-usage",
+      "content-width",
+      "dobetterweb/domstats"
+    ]
+  },
+  {
+    "passName": "css-image-usage",
+    "recordNetwork": true,
+    "useThrottling": false,
+    "gatherers": [
+      "styles",
+      "css-usage",
+      "dobetterweb/tags-blocking-first-paint",
+      "dobetterweb/optimized-images"
+    ]
+  }
+  ],
+
+  "audits": [
+    "first-meaningful-paint",
+    "speed-index-metric",
+    "estimated-input-latency",
+    "time-to-interactive",
+    "user-timings",
+    "screenshots",
+    "critical-request-chains",
+    "byte-efficiency/unused-css-rules",
+    "byte-efficiency/uses-optimized-images",
+    "byte-efficiency/uses-responsive-images",
+    "dobetterweb/dom-size",
+    "dobetterweb/link-blocking-first-paint",
+    "dobetterweb/script-blocking-first-paint"
+  ],
+
+  "aggregations": [{
+    "name": "Performance metrics",
+    "description": "",
+    "scored": false,
+    "categorizable": false,
+    "items": [{
+      "audits": {
+        "first-meaningful-paint": {
+          "expectedValue": 100,
+          "weight": 1
+        },
+        "speed-index-metric": {
+          "expectedValue": 100,
+          "weight": 1
+        },
+        "estimated-input-latency": {
+          "expectedValue": 100,
+          "weight": 1
+        },
+        "time-to-interactive": {
+          "expectedValue": 100,
+          "weight": 1
+        }
+      }
+    }]
+  },{
+    "name": "Performance diagnostics",
+    "description": "",
+    "scored": false,
+    "categorizable": false,
+    "items": [{
+      "audits": {
+        "unused-css-rules": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "uses-optimized-images": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "uses-responsive-images": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "critical-request-chains": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "link-blocking-first-paint": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "script-blocking-first-paint": {
+          "expectedValue": true,
+          "weight": 1
+        },
+        "dom-size": {
+          "expectedValue": 100,
+          "weight": 1
+        },
+        "user-timings": {
+          "expectedValue": true,
+          "weight": 1
+        }
+      }
+    }]
+  }]
+}
