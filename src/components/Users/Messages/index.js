@@ -29,7 +29,8 @@ export default class Messages extends React.Component {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
-      currentUser: context.getStore(UserStore).getCurrentUser()
+      currentUser: context.getStore(UserStore).getCurrentUser(),
+      showChatBox: false
     };
   }
 
@@ -46,21 +47,45 @@ export default class Messages extends React.Component {
   }
 
   _onStoreChange(res) {
-    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
+    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'ADD_MESSAGE_CONNECTION_SUCCESS'];
+    const currentUser = this.context.getStore(UserStore).getCurrentUser();
+    const result = {
+      currentUser
+    };
+
     if (authMessages.includes(res.msg)) {
-      this.setState({ currentUser: this.context.getStore(UserStore).getCurrentUser() });
+      if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
+        result.showChatBox = true;
+      }
+
+      this.setState(result);
     }
   }
 
-  render() {
-    const { currentUser } = this.state;
-    // const { pathname } = this.props.location;
+  toggleChatBox() {
+    this.setState({ showChatBox: !this.state.showChatBox });
+  }
 
+  render() {
+    const { currentUser, showChatBox } = this.state;
     if (!currentUser) return null;
 
     return (
       <div className="messages">
-        <ChatBox />
+        {!showChatBox &&
+          <Row>
+            <Col size="2 p-0 msg-event" onClick={() => this.toggleChatBox()}><i className="fa fa-envelope" /></Col>
+            <Col size="8 p-0 msg-event" onClick={() => this.toggleChatBox()}><p>Chat Messages 0</p></Col>
+            <Col size="2 pr-0 msg-event"><p className="close-message">×</p></Col>
+          </Row>
+        }
+
+        {showChatBox &&
+          <ChatBox
+            toggleChatBox={() => this.toggleChatBox()}
+            currentUser={currentUser}
+          />
+        }
       </div>
     );
   }

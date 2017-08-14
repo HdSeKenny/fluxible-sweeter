@@ -52,6 +52,7 @@ module.exports = {
     "window": true,
     "$": true,
     "jQuery": true,
-    "swal": true
+    "swal": true,
+    "localStorage": true
   }
 };

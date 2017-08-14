@@ -37,9 +37,7 @@ export default class App extends React.Component {
       <FullScreen id="app">
         <Navbar route={route} />
         {showMainSliders && <MainSliders show={showMainSliders} />}
-        <div className="content-pages">
-          {child}
-        </div>
+        <div className="content-pages">{child}</div>
         <Messages />
         <Footer />
       </FullScreen>

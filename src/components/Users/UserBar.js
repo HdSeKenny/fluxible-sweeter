@@ -155,6 +155,16 @@ const UserBar = CreateReactClass({
     return isFollowed;
   },
 
+  openChatConnection(user) {
+    const connection = {
+      myId: this.state.currentUser.id_str,
+      thisUserId: user.id_str,
+      connectDate: new Date()
+    };
+
+    this.executeAction(UserActions.openChatConnection, connection);
+  },
+
   onCancelFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
@@ -222,7 +232,7 @@ const UserBar = CreateReactClass({
               </button>
             }
 
-            <button className="message-btn" > Message</button>
+            <button className="message-btn" onClick={() => this.openChatConnection(user)}> Message</button>
           </div>
         }
       </Row>

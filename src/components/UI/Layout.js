@@ -45,7 +45,7 @@ function getOffsetSizeClassName(offset) {
   return offsetSize;
 }
 
-Layout.Row = ({ children, className, mason }) => {
+Layout.Row = ({ children, className, mason, onClick }) => {
   let classesString = 'row';
   if (className) {
     classesString = `${classesString} ${className}`;
@@ -54,13 +54,13 @@ Layout.Row = ({ children, className, mason }) => {
     }
   }
   return (
-    <div className={classesString}>
+    <div className={classesString} onClick={onClick}>
       {children}
     </div>
   );
 };
 
-Layout.Col = ({ children, size, offset, className, style }) => {
+Layout.Col = ({ children, size, offset, className, style, onClick }) => {
   const colSize = getColSizeClassName(size);
   const offsetSize = getOffsetSizeClassName(offset);
   let classesString = '';
@@ -76,7 +76,7 @@ Layout.Col = ({ children, size, offset, className, style }) => {
     }
   }
   return (
-    <div className={classesString} style={style}>
+    <div className={classesString} style={style} onClick={onClick}>
       {children}
     </div>
   );

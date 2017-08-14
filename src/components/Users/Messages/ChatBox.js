@@ -1,10 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import { FluxibleMixin } from 'fluxible-addons-react';
-import { format, jsUtils } from '../../../utils';
-import { swal } from '../../../plugins';
-import { BlogActions } from '../../../actions';
 import { UserStore } from '../../../stores';
 import { Row, Col } from '../../UI/Layout';
 
@@ -21,14 +16,16 @@ export default class ChatBox extends React.Component {
     currentUser: PropTypes.object,
     user: PropTypes.object,
     query: PropTypes.object,
-    isCurrentUser: PropTypes.bool
+    isCurrentUser: PropTypes.bool,
+    toggleChatBox: PropTypes.func,
+    activeChatId: PropTypes.string
   };
 
   constructor(props, context) {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
-      currentUser: context.getStore(UserStore).getCurrentUser()
+      activeUserId: context.getStore(UserStore).getActiveUserId()
     };
   }
 
@@ -38,6 +35,9 @@ export default class ChatBox extends React.Component {
 
   componentDidMount() {
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+
+    const chatBox = document.getElementsByClassName('chat')[0];
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
   componentWillUnmount() {
@@ -45,16 +45,64 @@ export default class ChatBox extends React.Component {
   }
 
   _onStoreChange(res) {
-    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
-    if (authMessages.includes(res.msg)) {
-      this.setState({ currentUser: this.context.getStore(UserStore).getCurrentUser() });
+    if (res.msg && res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
+      this.setState({
+        activeUserId: res.connection.this_user_id
+      });
     }
   }
 
-  render() {
-    const { currentUser } = this.state;
-    // const { pathname } = this.props.location;
+  toggleChatBox() {
+    this.props.toggleChatBox();
+  }
 
+  setActiveUser(thisUserId) {
+    this.context.getStore(UserStore).setActiveUserId(thisUserId);
+    this.setState({ activeUserId: thisUserId });
+  }
+
+  getActiveUser() {
+    this.context.getStore(UserStore).getActiveUserId();
+  }
+
+  hasActiveUser(connections, activeUserId) {
+    const idx = connections.findIndex(c => c.this_user_id === activeUserId);
+    return idx >= 0;
+  }
+
+  _renderPeopleList(currentUser, activeUserId) {
+    const connections = currentUser.recent_chat_connections;
+    if (!connections.length) return null;
+    const hasActiveUser = this.hasActiveUser(connections, activeUserId);
+    return (
+      <ul className="people">
+        {connections.map((connection, index) => {
+          const thisUserId = connection.this_user_id;
+          const thisUser = this.context.getStore(UserStore).getUserById(thisUserId);
+          const { username, last_msg_date, image_url } = thisUser;
+          const isActive = activeUserId === thisUserId;
+          let classes = isActive ? 'person active' : 'person';
+          if (!hasActiveUser && index === 0) {
+            classes = 'person active';
+            this.setActiveUser(thisUserId);
+          }
+          return (
+            <Row className={classes} key={index} onClick={() => this.setActiveUser(thisUserId)}>
+              <Col size="3 p-0"><img src={image_url} alt="chat-user" width="40" /></Col>
+              <Col size="9 pr-0 pl-10">
+                <Row className="name"><span>{username}</span></Row>
+                <Row className="time"><span>{last_msg_date}</span></Row>
+              </Col>
+            </Row>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  render() {
+    const { currentUser } = this.props;
+    const { activeUserId } = this.state;
     if (!currentUser) return null;
 
     return (
@@ -63,20 +111,19 @@ export default class ChatBox extends React.Component {
           <div className="left">
             <div className="top">
               <input type="text" />
-              <button className="btn btn-default btn-sm">+</button>
+              <button className="btn btn-default btn-sm">十</button>
             </div>
-            <ul className="people">
-              <Row className="person" data-chat="person2">
-                <Col size="3 p-0"><img src="https://s3.postimg.org/yf86x7z1r/img2.jpg" alt="" /></Col>
-                <Col size="9 pr-0 pl-10">
-                  <Row className="name"><span>Dog Woofson</span></Row>
-                  <Row className="time"><span>1:44 PM</span></Row>
-                </Col>
-              </Row>
-            </ul>
+            {this._renderPeopleList(currentUser, activeUserId)}
           </div>
           <div className="right">
-            <div className="top"><h4 className="m-0"><i>TDog Woofson</i></h4></div>
+            <Row className="top">
+              <Col size="8 p-0">
+                <h4 className="m-0"><i>TDog Woofson</i></h4>
+              </Col>
+              <Col size="4 msg-event tar p-0">
+                <span className="close-box" onClick={() => this.toggleChatBox()}>×</span>
+              </Col>
+            </Row>
             <div className="chat" data-chat="person2">
               <div className="conversation-start">
                 <span>Today, 5:38 PM</span>
@@ -99,10 +146,10 @@ export default class ChatBox extends React.Component {
               <div className="bubble you">
                 I've forgotten how it felt before
               </div>
-                 <div className="bubble you">
+              <div className="bubble you">
                 I've forgotten how it felt before
               </div>
-                 <div className="bubble you">
+              <div className="bubble you">
                 I've forgotten how it felt before
               </div>
             </div>
