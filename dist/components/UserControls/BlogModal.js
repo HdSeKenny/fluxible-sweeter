@@ -26,12 +26,9 @@ var _plugins = require('../../plugins');
 
 var _Draft = require('../../plugins/Draft');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _configs = require('../../configs');
 
-/**
- * Copyright 2017, created by Kuan Lu
- * @ui BlogModal
- */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const config = {
   selectGroups: [{
@@ -47,11 +44,14 @@ const config = {
     icon: _react2.default.createElement('i', { className: 'fa fa-heart' }),
     categories: ['symbols']
   }]
-};
+}; /**
+    * Copyright 2017, created by Kuan Lu
+    * @ui BlogModal
+    */
 
-const emojiPlugin = (0, _draftJsEmojiPlugin2.default)(config);
+const emojiPlugin = _configs.params.showEmoji ? (0, _draftJsEmojiPlugin2.default)(config) : {};
 const { EmojiSuggestions: EmojiSuggestions, EmojiSelect: EmojiSelect } = emojiPlugin;
-const EmojiPlugins = [emojiPlugin];
+const EmojiPlugins = _configs.params.showEmoji ? [emojiPlugin] : [];
 
 class BlogModal extends _react2.default.Component {
 
@@ -125,7 +125,7 @@ class BlogModal extends _react2.default.Component {
     );
   }
 
-  _renderSweetEditor(isDisabled) {
+  _renderSweetEditor(isDisabled, showEmoji) {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'textarea-row' },
@@ -133,11 +133,11 @@ class BlogModal extends _react2.default.Component {
         EmojiPlugins: EmojiPlugins,
         onSweetChange: (editorContent, plainText) => this.onSweetChange(editorContent, plainText)
       }),
-      _react2.default.createElement(EmojiSuggestions, null),
+      showEmoji && _react2.default.createElement(EmojiSuggestions, null),
       _react2.default.createElement(
         _Layout.Col,
         { size: '8 p-0' },
-        _react2.default.createElement(EmojiSelect, null)
+        showEmoji && _react2.default.createElement(EmojiSelect, null)
       ),
       _react2.default.createElement(
         _Layout.Col,
@@ -148,14 +148,14 @@ class BlogModal extends _react2.default.Component {
   }
 
   render() {
-    const { welcomeText: welcomeText, blogText: blogText } = this.state;
+    const { welcomeText: welcomeText, blogText: blogText, loadEmoji: loadEmoji } = this.state;
     const blogTextLength = blogText.length;
     const isDisabled = blogTextLength > 140 || blogTextLength === 0;
     const isLimmitWords = blogTextLength < 141;
 
     return _react2.default.createElement(
       'div',
-      { className: 'create-well' },
+      { className: 'create-well mb-10' },
       _react2.default.createElement(
         _Layout.Row,
         { className: 'text-row' },
@@ -194,7 +194,7 @@ class BlogModal extends _react2.default.Component {
           )
         )
       ),
-      this.state.loadEmoji && this._renderSweetEditor(isDisabled)
+      loadEmoji && this._renderSweetEditor(isDisabled, _configs.params.showEmoji)
     );
   }
 }

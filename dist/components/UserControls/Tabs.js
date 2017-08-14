@@ -72,7 +72,7 @@ const Tabs = (0, _createReactClass2.default)({
   render: function () {
     return _react2.default.createElement(
       'div',
-      { className: 'user-tabs' },
+      { className: '' },
       this._renderTitles(),
       this._renderContent()
     );

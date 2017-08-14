@@ -184,7 +184,7 @@ const UserStore = (0, _createStore2.default)({
     return displayBlogs;
   },
   isThumbedUp: function (blog) {
-    return blog.likers.indexOf(this.currentUser.strId) !== -1;
+    return blog.likers.indexOf(this.currentUser.id_str) !== -1;
   },
   isCurrentUser: function (username) {
     let flag = false;
@@ -199,58 +199,53 @@ const UserStore = (0, _createStore2.default)({
     const response = {
       msg: 'FOLLOW_USER_SUCCESS'
     };
-    this.users.forEach((user, index) => {
-      if (user.strId === res.thisUser.strId) {
-        this.users[index].fans.push(res.currentUser);
-      }
-      if (user.strId === res.currentUser.strId) {
-        this.users[index].focuses.push(res.thisUser);
-        this.currentUser.focuses.push(res.thisUser);
-      }
-    });
+
+    const thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
+
+    this.users[thisUserIndex].fans.push(res.currentUser);
+    this.currentUser.focuses.push(res.thisUser);
+
+    if (this.currentUser.focuses_list) {
+      this.currentUser.focuses_list.no_groups.push(res.thisUser);
+    }
 
     this.emitChange(response);
   },
   cancelFollowUserSuccess: function (res) {
     const response = {
-      msg: 'CANCEL_FOLLOW_USER_SUCCESS'
+      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
+      currentUser: res.currentUser,
+      user: res.thisUser
     };
-    this.users.forEach((user, index) => {
-      if (user.strId === res.thisUser.strId) {
-        this.users[index].fans.forEach((fan, faIdx) => {
-          if (fan.strId === res.currentUser.strId) {
-            this.users[index].fans.splice(faIdx, 1);
-          }
-        });
-      }
-      if (user.strId === res.currentUser.strId) {
-        this.users[index].focuses.forEach((focus, fsIdx) => {
-          if (focus.strId === res.thisUser.strId) {
-            this.users[index].focuses.splice(fsIdx, 1);
-          }
-        });
-        this.currentUser.focuses.forEach((focus, fsIdx) => {
-          if (focus.strId === res.thisUser.strId) {
-            this.currentUser.focuses.splice(fsIdx, 1);
-          }
-        });
-      }
-    });
+
+    const _thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
+    const new_fans = this.users[_thisUserIndex].fans.filter(f => f.id_str !== res.currentUser.id_str);
+
+    const focuses = this.currentUser.focuses.filter(f => f.id_str !== res.thisUser.id_str);
+    const { no_groups: no_groups, friends: friends, special_focuses: special_focuses } = res.currentUser.focuses_list;
+
+    this.users[_thisUserIndex].fans = new_fans;
+    this.currentUser.focuses = focuses;
+    this.currentUser.focuses_list = {
+      no_groups: no_groups,
+      friends: friends,
+      special_focuses: special_focuses
+    };
 
     this.emitChange(response);
   },
   followUserWithSuccess: function (res) {
     const response = { msg: 'FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
+    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
     this.currentUser.focuses.push(res.thisUser);
     this.users[usrIdx] = this.currentUser;
     this.emitChange(response);
   },
   cancelFollowUserWithSuccess: function (res) {
     const response = { msg: 'CANCEL_FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.strId === this.currentUser.strId);
+    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
     this.currentUser.focuses.forEach((focus, fsIdx) => {
-      if (focus.strId === res.thisUser.strId) {
+      if (focus.id_str === res.thisUser.id_str) {
         this.currentUser.focuses.splice(fsIdx, 1);
       }
     });
@@ -268,6 +263,9 @@ const UserStore = (0, _createStore2.default)({
     return this.loginUserImage;
   },
   getCommenter: function (userId) {
+    return this.users ? this.users.find(user => user.id_str === userId) : null;
+  },
+  getUserById: function (userId) {
     return this.users ? this.users.find(user => user.id_str === userId) : null;
   },
   getCurrentUploadedImage: function () {

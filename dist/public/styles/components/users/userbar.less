@@ -7,7 +7,7 @@
       margin-bottom: -160px;
     }
     .user-img {
-      margin: -50px 0 0 0;
+      margin: -60px 0 10px 0;
       text-align: center;
       .input-file {
         position: relative;
@@ -23,6 +23,9 @@
         width: 90px;
         height: 90px;
         border-radius: 50%;
+        &.current-user:hover {
+          cursor: pointer;
+        }
       }
       .image-tooltip {
         position: relative;
@@ -44,7 +47,7 @@
       }
     }
     .user-info {
-      margin: -50px 0 50px 0;
+      margin: -55px 0 55px 0;
       color: #fff;
       text-align: center;
       .user-btn {
@@ -58,6 +61,7 @@
       .follow-btn {
         padding: 6px 20px;
         background-color: @brand-info;
+        border-radius: @border-radius-base;
         border: none;
         color: #fff !important;
         margin-right: 10px;
@@ -71,6 +75,7 @@
       .cancel-follow-btn {
         padding: 6px 20px;
         background-color: #4CAF50;
+        border-radius: @border-radius-base;
         border: none;
         color: #fff;
         margin-right: 10px;
@@ -84,6 +89,7 @@
       .message-btn {
         padding: 6px 20px;
         background-color: gray;
+        border-radius: @border-radius-base;
         border: none;
         color: #fff !important;
         font-size: 13px;
@@ -101,11 +107,9 @@
       border-radius: 0;
       background-color: #fff;
       text-align: center;
-      font-size: 14px;
+      font-size: 15px;
       padding: 10px;
-      border-right: 1px solid #eee;
       font-weight: 500;
-      width: 200px;
 
       i {
         margin-right: 6px;
@@ -162,8 +166,7 @@
       margin-top: 20px;
       .btn {
         margin-right: 10px;
-        padding: 6px 20px;
-        // border: none;
+        padding: 6px 20px; // border: none;
         outline: none;
       }
     }
@@ -175,7 +178,67 @@
 }
 
 @media (max-width: 950px) {
-  .user-bar .nav .bar-nav {
-    width: 168px;
+  .user-bar .nav {
+    &.mine .bar-nav {
+      width: 210px;
+    }
+    &.their .bar-nav {
+      width: 210px
+    }
+  }
+}
+
+@media (min-width: 951px) {
+  .user-bar .nav {
+    &.mine .bar-nav {
+      width: 250px;
+    }
+    &.their .bar-nav {
+      width: 250px
+    }
+  }
+}
+
+.follow-btn {
+  padding: 6px 20px;
+  background-color: @brand-info;
+  border-radius: @border-radius-base;
+  border: none;
+  color: #fff !important;
+  margin-right: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  &:hover {
+    background-color: #4CAF50;
+  }
+}
+
+.cancel-follow-btn {
+  padding: 6px 20px;
+  background-color: #7eb73d;
+  border-radius: @border-radius-base;
+  border: none;
+  color: #fff;
+  margin-right: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  &:hover {
+    background-color: @brand-info;
+  }
+}
+
+.message-btn {
+  padding: 6px 20px;
+  background-color: gray;
+  border-radius: @border-radius-base;
+  border: none;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  &:hover {
+    background-color: #5f636d;
   }
 }

@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _FluxibleMixin = require('fluxible-addons-react/FluxibleMixin');
-
-var _FluxibleMixin2 = _interopRequireDefault(_FluxibleMixin);
-
 var _createReactClass = require('create-react-class');
 
 var _createReactClass2 = _interopRequireDefault(_createReactClass);
@@ -20,17 +16,29 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _stores = require('../../stores');
+var _reactRouter = require('react-router');
 
-var _UserBar = require('./UserBar');
+var _fluxibleAddonsReact = require('fluxible-addons-react');
+
+var _utils = require('../../../utils');
+
+var _plugins = require('../../../plugins');
+
+var _actions = require('../../../actions');
+
+var _stores = require('../../../stores');
+
+var _Layout = require('../../UI/Layout');
+
+var _UserBar = require('../UserBar');
 
 var _UserBar2 = _interopRequireDefault(_UserBar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserMine = (0, _createReactClass2.default)({
+exports.default = (0, _createReactClass2.default)({
 
-  displayName: 'UserMine',
+  displayName: 'UserPhotos',
 
   contextTypes: {
     executeAction: _propTypes2.default.func
@@ -41,7 +49,7 @@ const UserMine = (0, _createReactClass2.default)({
     location: _propTypes2.default.object
   },
 
-  mixins: [_FluxibleMixin2.default],
+  mixins: [_fluxibleAddonsReact.FluxibleMixin],
 
   statics: {
     storeListeners: [_stores.UserStore]
@@ -51,45 +59,36 @@ const UserMine = (0, _createReactClass2.default)({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
-    const store = this.getStore(_stores.UserStore);
     const { username: username } = this.props.params;
+    const userStore = this.getStore(_stores.UserStore);
+    const user = userStore.getUserByUsername(username);
+    const currentUser = userStore.getCurrentUser();
+    const isCurrentUser = userStore.isCurrentUser();
+
     return {
-      currentUser: store.getCurrentUser(),
-      user: store.getUserByUsername(username),
-      isCurrentUser: store.isCurrentUser(username),
-      loaded: false
+      currentUser: currentUser,
+      user: user,
+      isCurrentUser: isCurrentUser
     };
   },
-  onChange: function () {
-    this.setState(this.getStatesFromStores());
-  },
+  onChange: function () {},
   render: function () {
+    const { isCurrentUser: isCurrentUser, user: user, currentUser: currentUser } = this.state;
     const { pathname: pathname } = this.props.location;
-    const { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser } = this.state;
     return _react2.default.createElement(
       'div',
-      { className: 'user-more' },
+      { className: 'user-photos' },
       _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
       _react2.default.createElement(
-        'div',
-        { className: 'more-content' },
+        'center',
+        null,
         _react2.default.createElement(
-          'div',
-          { className: 'well' },
-          _react2.default.createElement(
-            'center',
-            null,
-            _react2.default.createElement(
-              'h2',
-              null,
-              'More - Not Finished !'
-            )
-          )
+          'h1',
+          null,
+          ' User Photos Page...'
         )
       )
     );
   }
 });
-
-exports.default = UserMine;
 module.exports = exports['default'];

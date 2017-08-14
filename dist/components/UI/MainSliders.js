@@ -22,38 +22,6 @@ class MainSliders extends _react2.default.Component {
 
   constructor(props) {
     super(props);
-    const dataCustominMap = {
-      x: 0,
-      y: 0,
-      z: 0,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      scaleX: 0.5,
-      scaleY: 0.5,
-      skewX: 0,
-      skewY: 0,
-      opacity: 0,
-      transformPerspective: 0,
-      transformOrigin: '50% 50%'
-    };
-
-    const dataCustomoutMap = {
-      x: 0,
-      y: 0,
-      z: 0,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      scaleX: 0.75,
-      scaleY: 0.75,
-      skewX: 0,
-      skewY: 0,
-      opacity: 0,
-      transformPerspective: 600,
-      transformOrigin: '50% 50%'
-    };
-
     this.state = {
       dataCustomout: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       dataImgCuromin: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
@@ -63,16 +31,20 @@ class MainSliders extends _react2.default.Component {
   }
 
   componentDidMount() {
-    const { show: show } = this.props;
-    if (show) {
-      _animations2.default.main_sliders(revol => {
-        $('.tp-banner-container').removeClass('hidden');
-        this.revol = revol;
+    if (this.props.show) {
+      _animations2.default.main_sliders(async revol => {
+        await $('.tp-banner-container').removeClass('hidden');
+        setTimeout(async () => {
+          const slidesliHeight = await $('.tp-revslider-slidesli').height();
+          $('.main-sliders').height(slidesliHeight);
+          this.revol = revol;
+        }, 1500);
       });
     }
 
     window.addEventListener('resize', () => {
       if (!$('.main-sliders').hasClass('loaded')) {
+        $('.main-sliders').height('auto');
         $('.main-sliders').addClass('loaded');
       }
     });
@@ -155,7 +127,7 @@ class MainSliders extends _react2.default.Component {
             ),
             _react2.default.createElement(
               'li',
-              { 'data-transition': 'zoomout', 'data-slotamount': '7', 'data-masterspeed': '1500' },
+              { 'data-transition': 'zoomout', 'data-slotamount': '7', 'data-masterspeed': '1500', className: 'main-sliders-li' },
               _react2.default.createElement('img', { src: '/assets/revolution/images/darkblurbg.jpg', alt: '' }),
               _react2.default.createElement(
                 'div',

@@ -18,7 +18,7 @@ var _server2 = _interopRequireDefault(_server);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign */
+const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign, no-shadow */
 
 const MongoUrl = _server2.default.mongo.sweeter.url;
 
@@ -129,6 +129,7 @@ exports.default = {
     });
   },
   register: function (req, resource, params, body, config, callback) {
+
     _mongodb2.default.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.findOne({ email: body.email }, (err, user) => {
@@ -140,12 +141,13 @@ exports.default = {
           });
         } else {
           body.password = (0, _md2.default)(body.password);
-          body.image_url = '/styles/images/users/default-user.png';
+          body.image_url = '/styles/images/users/default-user.svg';
           body.background_image_url = '/styles/images/users/user-center-bg.jpg';
           body.lq_background_url = '/styles/images/lqip/users/user-center-bg.jpg';
           body.fans = [];
           body.focuses = [];
           body.blogs = [];
+
           User.insert(body, (err, res) => {
             const insertedUser = res.ops[0];
             insertedUser.id_str = insertedUser._id.toString();
@@ -322,11 +324,19 @@ exports.default = {
       User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
         if (thisUser) {
           thisUser.fans.push(body.currentUserId);
-          User.save(thisUser, (err, thisUserResult) => {
+          User.save(thisUser, err => {
             User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.push(body.thisUserId);
-                User.save(currentUser, (err, currentUserResult) => {
+                if (!currentUser.focuses_list) {
+                  currentUser.focuses_list = {
+                    no_groups: [],
+                    friends: [],
+                    special_focuses: []
+                  };
+                }
+                currentUser.focuses_list.no_groups.push(body.thisUserId);
+                User.save(currentUser, err => {
                   callback(err, { thisUser: thisUser, currentUser: currentUser });
                 });
               } else {
@@ -350,7 +360,7 @@ exports.default = {
               thisUser.fans.splice(index, 1);
             }
           });
-          User.save(thisUser, (err, thisUserResult) => {
+          User.save(thisUser, err => {
             User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
               if (currentUser) {
                 currentUser.focuses.forEach((focus, index) => {
@@ -358,7 +368,18 @@ exports.default = {
                     currentUser.focuses.splice(index, 1);
                   }
                 });
-                User.save(currentUser, (err, currentUserResult) => {
+                const { no_groups: no_groups, friends: friends, special_focuses: special_focuses } = currentUser.focuses_list;
+                const new_no_groups = no_groups.filter(id_str => id_str !== body.thisUserId);
+                const new_friends = friends.filter(id_str => id_str !== body.thisUserId);
+                const new_special_focuses = special_focuses.filter(id_str => id_str !== body.thisUserId);
+
+                currentUser.focuses_list = {
+                  no_groups: new_no_groups,
+                  friends: new_friends,
+                  special_focuses: new_special_focuses
+                };
+
+                User.save(currentUser, err => {
                   callback(err, { thisUser: thisUser, currentUser: currentUser });
                 });
               } else {

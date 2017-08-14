@@ -20,21 +20,35 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _UserBar = require('./UserBar');
+var _UserBar = require('../UserBar');
 
 var _UserBar2 = _interopRequireDefault(_UserBar);
 
-var _plugins = require('../../plugins');
+var _NotFound = require('../../NotFound');
 
-var _UI = require('../UI');
+var _NotFound2 = _interopRequireDefault(_NotFound);
 
-var _actions = require('../../actions');
+var _RightTabs = require('./RightTabs');
 
-var _stores = require('../../stores');
+var _RightTabs2 = _interopRequireDefault(_RightTabs);
+
+var _LeftNav = require('./LeftNav');
+
+var _LeftNav2 = _interopRequireDefault(_LeftNav);
+
+var _Suggestions = require('./Suggestions');
+
+var _Suggestions2 = _interopRequireDefault(_Suggestions);
+
+var _plugins = require('../../../plugins');
+
+var _actions = require('../../../actions');
+
+var _stores = require('../../../stores');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserFollows = (0, _createReactClass2.default)({
+exports.default = (0, _createReactClass2.default)({
 
   displayName: 'UserFollows',
 
@@ -64,9 +78,12 @@ const UserFollows = (0, _createReactClass2.default)({
       isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
     };
   },
-  onChange: function () {
-    this.setState(this.getStatesFromStores());
+  onChange: function (res) {
+    if (res.msg && res.msg !== 'LOGOUT_SUCCESS' || !res.msg) {
+      this.setState(this.getStatesFromStores());
+    }
   },
+  componentDidMount: function () {},
   onFollowThisUser: function (followUser) {
     const { currentUser: currentUser, user: user } = this.state;
     if (!currentUser) {
@@ -98,29 +115,41 @@ const UserFollows = (0, _createReactClass2.default)({
     this.executeAction(_actions.UserActions.CancelFollowThisUserWithFollow, cancelFollowObj);
   },
   render: function () {
-    const { pathname: pathname } = this.props.location;
+    const { pathname: pathname, query: query } = this.props.location;
     const { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser } = this.state;
+
+    if (!currentUser) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'user-follows' },
+        _react2.default.createElement(_NotFound2.default, null)
+      );
+    }
+
     return _react2.default.createElement(
       'div',
       { className: 'user-follows' },
       _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
-      _react2.default.createElement(
+      isCurrentUser ? _react2.default.createElement(
         'div',
-        { className: 'follows-content' },
+        null,
         _react2.default.createElement(
           'div',
-          { className: 'well follows-bg' },
-          _react2.default.createElement(_UI.UserFollowsTabs, {
-            user: user,
-            currentUser: currentUser,
-            onFollowThisUser: this.onFollowThisUser,
-            onCancelFollowThisUser: this.onCancelFollowThisUser
-          })
+          { className: 'follows-left' },
+          _react2.default.createElement(_LeftNav2.default, { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser, query: query, pathname: pathname }),
+          _react2.default.createElement(_Suggestions2.default, null)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'follows-right' },
+          _react2.default.createElement(_RightTabs2.default, { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser, query: query, pathname: pathname })
         )
+      ) : _react2.default.createElement(
+        'div',
+        { className: 'follows-center' },
+        _react2.default.createElement(_RightTabs2.default, { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser, query: query, pathname: pathname })
       )
     );
   }
 });
-
-exports.default = UserFollows;
 module.exports = exports['default'];

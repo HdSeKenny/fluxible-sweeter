@@ -7,5 +7,9 @@
   "leftNav": {
     "left_nav_height": 900,
     "fade_speed": 300
-  }
+  },
+
+  "showEmoji": false,
+
+  "showUserCard": false
 }

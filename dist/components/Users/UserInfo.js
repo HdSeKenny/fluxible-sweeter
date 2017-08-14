@@ -56,8 +56,11 @@ const UserInfo = (0, _createReactClass2.default)({
     return this.getStatesFromStores();
   },
   getStatesFromStores: function () {
+    const { username: username } = this.props.params;
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
+      user: this.getStore(_stores.UserStore).getUserByUsername(username),
+      isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username),
       editable: false,
       firstName: '',
       lastName: '',
@@ -547,11 +550,12 @@ const UserInfo = (0, _createReactClass2.default)({
   },
   render: function () {
     const { pathname: pathname } = this.props.location;
-    const { currentUser: currentUser, editable: editable } = this.state;
+    const { currentUser: currentUser, editable: editable, user: user, isCurrentUser: isCurrentUser } = this.state;
+    const displayUser = isCurrentUser ? currentUser : user;
     return _react2.default.createElement(
       'div',
       { className: 'user-settings' },
-      _react2.default.createElement(_UserBar2.default, { path: pathname, user: currentUser, isCurrentUser: true, currentUser: currentUser }),
+      _react2.default.createElement(_UserBar2.default, { path: pathname, user: displayUser, isCurrentUser: true, currentUser: currentUser }),
       _react2.default.createElement(
         'div',
         { className: 'settings-content form-horizontal' },
@@ -563,13 +567,13 @@ const UserInfo = (0, _createReactClass2.default)({
             null,
             'Personal information'
           ),
-          this._renderNameGroup(currentUser, editable),
-          this._renderUserNameGroup(currentUser, editable),
-          this._renderEmailGroup(currentUser, editable),
-          this._renderPhoneGroup(currentUser, editable),
-          this._renderBirthdayGroup(currentUser, editable),
-          this._renderProfessionGroup(currentUser, editable),
-          this._renderOptionsGroup(editable)
+          this._renderNameGroup(displayUser, editable),
+          this._renderUserNameGroup(displayUser, editable),
+          this._renderEmailGroup(displayUser, editable),
+          this._renderPhoneGroup(displayUser, editable),
+          this._renderBirthdayGroup(displayUser, editable),
+          this._renderProfessionGroup(displayUser, editable),
+          isCurrentUser && this._renderOptionsGroup(editable)
         )
       )
     );

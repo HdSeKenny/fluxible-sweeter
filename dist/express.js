@@ -56,6 +56,10 @@ var _server = require('react-dom/server');
 
 var _reactRouter = require('react-router');
 
+var _components = require('./components');
+
+var _services = require('./services');
+
 var _routes = require('./routes');
 
 var _routes2 = _interopRequireDefault(_routes);
@@ -67,12 +71,6 @@ var _fetchData2 = _interopRequireDefault(_fetchData);
 var _app = require('./app');
 
 var _app2 = _interopRequireDefault(_app);
-
-var _CustomFluxibleComponent = require('./components/CustomFluxibleComponent');
-
-var _CustomFluxibleComponent2 = _interopRequireDefault(_CustomFluxibleComponent);
-
-var _services = require('./services');
 
 var _Html = require('./components/Html');
 
@@ -90,18 +88,20 @@ var _server2 = require('./configs/server');
 
 var _server3 = _interopRequireDefault(_server2);
 
-var _HtmlToPdf = require('./plugins/pdfDownloader/HtmlToPdf');
+var _htmlToPdf = require('./plugins/htmlToPdf');
 
-var _HtmlToPdf2 = _interopRequireDefault(_HtmlToPdf);
+var _htmlToPdf2 = _interopRequireDefault(_htmlToPdf);
+
+var _sharp = require('./plugins/sharp');
+
+var _sharp2 = _interopRequireDefault(_sharp);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import './polyfills';
 exports.default = server => {
   const env = server.get('env');
 
-  // view engine setup
-  server.set('views', _path2.default.join(__dirname, 'views'));
+  server.set('views', _path2.default.join(__dirname, 'views')); // view engine setup
   server.set('view engine', 'pug');
 
   if (_server3.default.server.logEnable && env !== 'production') {
@@ -112,15 +112,13 @@ exports.default = server => {
     server.use(_express2.default.static(_path2.default.join(_server3.default.server.root, '.tmp')));
   }
 
-  // limit size of json object less than 20M for extracting metadata
   server.use(_bodyParser2.default.json({ limit: '20mb' }));
-
-  // limit size of json object less than 20M for extracting metadata
   server.use(_bodyParser2.default.urlencoded({ limit: '20mb', extended: false }));
   server.use((0, _cookieParser2.default)());
-  server.use((0, _serveFavicon2.default)(`${__dirname}/public/styles/images/favicon.ico`));
   server.use((0, _cors2.default)());
+
   server.use(`${_configs2.default.path_prefix}/`, _express2.default.static(_path2.default.join(__dirname, 'public')));
+  server.use((0, _serveFavicon2.default)(`${__dirname}/public/styles/images/favicon.ico`));
   server.use(_expressUseragent2.default.express());
 
   const MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
@@ -132,14 +130,16 @@ exports.default = server => {
   }));
 
   const fetchrPlugin = _app2.default.getPlugin('FetchrPlugin');
-  // fetchrPlugin.registerService(LanguageService);
   fetchrPlugin.registerService(_services.blogs);
   fetchrPlugin.registerService(_services.users);
   fetchrPlugin.registerService(_services.comments);
 
   server.use('/api/upload', require('./plugins/upload'));
-  server.use('/api/download', _HtmlToPdf2.default);
+  server.use('/api/download', _htmlToPdf2.default);
+  server.use('/api/resize', _sharp2.default);
+
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
+
   server.use((req, res) => {
     const context = _app2.default.createContext({
       req: req,
@@ -156,12 +156,10 @@ exports.default = server => {
         res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (routerState) {
         (0, _fetchData2.default)(context, routerState, err => {
-          if (err) {
-            throw err;
-          }
+          if (err) throw err;
           const exposed = `window.__DATA__=${(0, _serializeJavascript2.default)(_app2.default.dehydrate(context))}`;
           const doctype = '<!DOCTYPE html>';
-          const markup = (0, _server.renderToString)(_react2.default.createElement(_CustomFluxibleComponent2.default, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.RouterContext, routerState)));
+          const markup = (0, _server.renderToString)(_react2.default.createElement(_components.Custom, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.RouterContext, routerState)));
           const html = (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Html2.default, { assets: _assets2.default, markup: markup, exposed: exposed }));
 
           res.send(doctype + html);

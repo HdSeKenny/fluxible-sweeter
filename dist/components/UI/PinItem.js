@@ -24,9 +24,10 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
+var _configs = require('../../configs');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable all, camelcase */
 class PinItem extends _react2.default.Component {
 
   goToUserCenter(author) {
@@ -121,14 +122,14 @@ class PinItem extends _react2.default.Component {
           onMouseEnter: () => this.onHoverPinUserImg(pin, true),
           onMouseLeave: () => this.onLeavePinUserImg(pin) }),
         _react2.default.createElement(
-          'span',
-          { className: 'user-img pull-left mr-10', onClick: () => this.goToUserCenter(author) },
+          'a',
+          { className: 'user-img pull-left mr-10', href: `/${username}`, target: '_blank' },
           _react2.default.createElement('img', {
             className: 'pin-user-img',
             alt: 'pin',
             src: image_url,
-            onMouseEnter: () => this.onHoverPinUserImg(pin),
-            onMouseLeave: () => this.onLeavePinUserImg(pin)
+            onMouseEnter: () => _configs.params.showUserCard && this.onHoverPinUserImg(pin),
+            onMouseLeave: () => _configs.params.showUserCard && this.onLeavePinUserImg(pin)
           })
         ),
         _react2.default.createElement(
@@ -301,7 +302,8 @@ class PinItem extends _react2.default.Component {
     );
   }
 }
-exports.default = PinItem;
+exports.default = PinItem; /* eslint-disable all, camelcase */
+
 PinItem.displayName = 'PinItem';
 PinItem.contextTypes = {
   router: _reactRouter.routerShape.isRequired,

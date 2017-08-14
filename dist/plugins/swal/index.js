@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 const convertMsg = msg => {
   const strMsg = msg.split('_').join(' ').toLowerCase();
   const firstLetter = strMsg.charAt(0).toUpperCase();
-  return `${firstLetter}${strMsg.substr(1)} !`;
+  return `${firstLetter}${strMsg.substr(1)}`;
 };
 
 const confirmButtonColor = '#00a9da';
@@ -24,17 +24,6 @@ exports.default = {
       if (cb) {
         cb();
       }
-    });
-  },
-
-  successCallback: (msg, callback) => {
-    swal({
-      title: convertMsg(msg),
-      type: 'success',
-      confirmButtonColor: confirmButtonColor,
-      timer: closeTimer
-    }, () => {
-      callback();
     });
   },
 
@@ -56,11 +45,15 @@ exports.default = {
     });
   },
 
-  warning: msg => {
+  warning: (msg, cb) => {
     swal({
       title: convertMsg(msg),
       type: 'warning',
       confirmButtonColor: '#F8BB86'
+    }, () => {
+      if (cb) {
+        cb();
+      }
     });
   },
 

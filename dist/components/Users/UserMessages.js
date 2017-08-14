@@ -70,23 +70,7 @@ const UserMessages = (0, _createReactClass2.default)({
       'div',
       { className: 'user-messages' },
       _react2.default.createElement(_UserBar2.default, { path: pathname, user: user, isCurrentUser: isCurrentUser, currentUser: currentUser }),
-      _react2.default.createElement(
-        'div',
-        { className: 'messages-content' },
-        _react2.default.createElement(
-          'div',
-          { className: 'well' },
-          _react2.default.createElement(
-            'center',
-            null,
-            _react2.default.createElement(
-              'h2',
-              null,
-              'Messages - Not Finished !'
-            )
-          )
-        )
-      )
+      _react2.default.createElement('div', { className: 'messages-content' })
     );
   }
 });

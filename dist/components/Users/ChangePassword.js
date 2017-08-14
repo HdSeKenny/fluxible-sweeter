@@ -70,7 +70,7 @@ const ChangePassword = (0, _createReactClass2.default)({
   },
   onChange: function (res) {
     if (res.stat) {
-      _plugins.swal.successWithCallback(res.msg, () => {
+      _plugins.swal.success(res.msg, () => {
         this.context.router.push('/login');
       });
     } else {

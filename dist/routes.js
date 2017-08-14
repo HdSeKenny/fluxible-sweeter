@@ -20,6 +20,8 @@ var _env2 = _interopRequireDefault(_env);
 
 var _actions = require('./actions');
 
+var _Users = require('./components/Users');
+
 var _components = require('./components');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -64,11 +66,12 @@ const createRoutes = context => {
       _react2.default.createElement(_reactRouter.Route, { path: 'mine', component: _components.UserBlogs }),
       _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _components.AddBlog })
     ),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/settings', component: _components.UserInfo }),
+    _react2.default.createElement(_reactRouter.Route, { path: ':username/Personal', component: _components.UserInfo }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/changepassword', component: _components.ChangePassword }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/more', component: _components.UserMore }),
     _react2.default.createElement(_reactRouter.Route, { path: ':username/messages', component: _components.UserMessages }),
-    _react2.default.createElement(_reactRouter.Route, { path: ':username/follows', component: _components.UserFollows }),
+    _react2.default.createElement(_reactRouter.Route, { path: ':username/follows', component: _Users.UserFollows }),
+    _react2.default.createElement(_reactRouter.Route, { path: ':username/photos', component: _Users.UserPhotos }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _components.NotFound })
   );
 };

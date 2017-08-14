@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.About = exports.List = exports.UserMoments = exports.UserFollows = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
+exports.Custom = exports.About = exports.List = exports.UserMoments = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
 
 var _NotFound2 = require('./NotFound');
 
@@ -49,10 +49,6 @@ var _UserMessages2 = require('./Users/UserMessages');
 
 var _UserMessages3 = _interopRequireDefault(_UserMessages2);
 
-var _UserFollows2 = require('./Users/UserFollows');
-
-var _UserFollows3 = _interopRequireDefault(_UserFollows2);
-
 var _UserMoments2 = require('./Users/UserMoments');
 
 var _UserMoments3 = _interopRequireDefault(_UserMoments2);
@@ -64,6 +60,10 @@ var _List3 = _interopRequireDefault(_List2);
 var _About2 = require('./Pages/About');
 
 var _About3 = _interopRequireDefault(_About2);
+
+var _Custom2 = require('./Custom');
+
+var _Custom3 = _interopRequireDefault(_Custom2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78,7 +78,7 @@ exports.UserInfo = _UserInfo3.default;
 exports.ChangePassword = _ChangePassword3.default;
 exports.UserMore = _UserMore3.default;
 exports.UserMessages = _UserMessages3.default;
-exports.UserFollows = _UserFollows3.default;
 exports.UserMoments = _UserMoments3.default;
 exports.List = _List3.default;
 exports.About = _About3.default;
+exports.Custom = _Custom3.default;
