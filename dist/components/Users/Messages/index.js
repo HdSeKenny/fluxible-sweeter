@@ -43,7 +43,8 @@ class Messages extends _react2.default.Component {
 
     this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
-      currentUser: context.getStore(_stores.UserStore).getCurrentUser()
+      currentUser: context.getStore(_stores.UserStore).getCurrentUser(),
+      showChatBox: false
     };
   }
 
@@ -56,22 +57,63 @@ class Messages extends _react2.default.Component {
   }
 
   _onStoreChange(res) {
-    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
+    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'ADD_MESSAGE_CONNECTION_SUCCESS'];
+    const currentUser = this.context.getStore(_stores.UserStore).getCurrentUser();
+    const result = {
+      currentUser: currentUser
+    };
+
     if (authMessages.includes(res.msg)) {
-      this.setState({ currentUser: this.context.getStore(_stores.UserStore).getCurrentUser() });
+      if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
+        result.showChatBox = true;
+      }
+
+      this.setState(result);
     }
   }
 
-  render() {
-    const { currentUser: currentUser } = this.state;
-    // const { pathname } = this.props.location;
+  toggleChatBox() {
+    this.setState({ showChatBox: !this.state.showChatBox });
+  }
 
+  render() {
+    const { currentUser: currentUser, showChatBox: showChatBox } = this.state;
     if (!currentUser) return null;
 
     return _react2.default.createElement(
       'div',
       { className: 'messages' },
-      _react2.default.createElement(_ChatBox2.default, null)
+      !showChatBox && _react2.default.createElement(
+        _Layout.Row,
+        null,
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '2 p-0 msg-event', onClick: () => this.toggleChatBox() },
+          _react2.default.createElement('i', { className: 'fa fa-envelope' })
+        ),
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '8 p-0 msg-event', onClick: () => this.toggleChatBox() },
+          _react2.default.createElement(
+            'p',
+            null,
+            'Chat Messages 0'
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '2 pr-0 msg-event' },
+          _react2.default.createElement(
+            'p',
+            { className: 'close-message' },
+            '\xD7'
+          )
+        )
+      ),
+      showChatBox && _react2.default.createElement(_ChatBox2.default, {
+        toggleChatBox: () => this.toggleChatBox(),
+        currentUser: currentUser
+      })
     );
   }
 }

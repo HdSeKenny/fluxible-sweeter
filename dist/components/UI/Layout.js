@@ -56,7 +56,7 @@ function getOffsetSizeClassName(offset) {
   return offsetSize;
 }
 
-Layout.Row = ({ children: children, className: className, mason: mason }) => {
+Layout.Row = ({ children: children, className: className, mason: mason, onClick: onClick }) => {
   let classesString = 'row';
   if (className) {
     classesString = `${classesString} ${className}`;
@@ -66,12 +66,12 @@ Layout.Row = ({ children: children, className: className, mason: mason }) => {
   }
   return _react2.default.createElement(
     'div',
-    { className: classesString },
+    { className: classesString, onClick: onClick },
     children
   );
 };
 
-Layout.Col = ({ children: children, size: size, offset: offset, className: className, style: style }) => {
+Layout.Col = ({ children: children, size: size, offset: offset, className: className, style: style, onClick: onClick }) => {
   const colSize = getColSizeClassName(size);
   const offsetSize = getOffsetSizeClassName(offset);
   let classesString = '';
@@ -88,7 +88,7 @@ Layout.Col = ({ children: children, size: size, offset: offset, className: class
   }
   return _react2.default.createElement(
     'div',
-    { className: classesString, style: style },
+    { className: classesString, style: style, onClick: onClick },
     children
   );
 };

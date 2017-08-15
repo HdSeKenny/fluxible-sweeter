@@ -1,5 +1,6 @@
 import createStore from 'fluxible/addons/createStore';
 import _ from 'lodash';
+import { env } from '../utils';
 
 const UserStore = createStore({
 
@@ -27,7 +28,8 @@ const UserStore = createStore({
     'UPLOAD_IMAGE_SUCCESS': 'uploadImageSuccess',
     'FOLLOW_USER_WITH_SUCCESS': 'followUserWithSuccess',
     'CANCEL_FOLLOW_USER_WITH_SUCCESS': 'cancelFollowUserWithSuccess',
-    'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess'
+    'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
+    'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess'
   },
 
   initialize() {
@@ -311,6 +313,37 @@ const UserStore = createStore({
     };
     this.currentUser.image_url = newuser.image_url;
     this.emitChange(response);
+  },
+
+
+  addMessageConnectionSuccess(connection) {
+    if (!this.currentUser.recent_chat_connections) {
+      this.currentUser.recent_chat_connections = [];
+    }
+
+    this.currentUser.recent_chat_connections.push(connection);
+
+    this.setActiveUserId(connection.this_user_id);
+    this.emitChange({
+      msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
+      connection
+    });
+  },
+
+  getActiveUserId() {
+    if (!env.is_client) {
+      return '';
+    }
+
+    return localStorage.getItem('active-user');
+  },
+
+  setActiveUserId(id) {
+    if (!env.is_client) {
+      return '';
+    }
+
+    localStorage.setItem('active-user', id);
   },
 
   dehydrate() {

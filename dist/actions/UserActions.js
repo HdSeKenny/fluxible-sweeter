@@ -190,6 +190,18 @@ const UserActions = {
       }
       done();
     });
+  },
+
+  openChatConnection: (context, payload, done) => {
+    context.service.create('users.addMessageConnection', {}, payload, _fetchClientConfig2.default, (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+      if (res) {
+        context.dispatch('ADD_MESSAGE_CONNECTION_SUCCESS', res);
+      }
+      done();
+    });
   }
 };
 

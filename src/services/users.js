@@ -403,6 +403,30 @@ export default {
         }
       });
     });
+  },
+
+  addMessageConnection(req, resource, params, body, config, callback) {
+    MongoClient.connect(MongoUrl, (err, db) => {
+      const User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.myId) })
+        .then((currentUser) => {
+          if (!currentUser.recent_chat_connections) {
+            currentUser.recent_chat_connections = [];
+          }
+
+          const connecttion = {
+            this_user_id: body.thisUserId,
+            connect_date: body.connectDate,
+            messages: []
+          };
+
+          currentUser.recent_chat_connections.push(connecttion);
+
+          User.save(currentUser).then(() => {
+            callback(err, connecttion);
+          });
+        });
+    });
   }
 };
 

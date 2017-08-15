@@ -168,6 +168,15 @@ const UserBar = (0, _createReactClass2.default)({
     }
     return isFollowed;
   },
+  openChatConnection: function (user) {
+    const connection = {
+      myId: this.state.currentUser.id_str,
+      thisUserId: user.id_str,
+      connectDate: new Date()
+    };
+
+    this.executeAction(_actions.UserActions.openChatConnection, connection);
+  },
   onCancelFollowThisUser: function (user) {
     const { currentUser: currentUser } = this.state;
     if (!currentUser) {
@@ -250,7 +259,7 @@ const UserBar = (0, _createReactClass2.default)({
         ),
         _react2.default.createElement(
           'button',
-          { className: 'message-btn' },
+          { className: 'message-btn', onClick: () => this.openChatConnection(user) },
           ' Message'
         )
       )
