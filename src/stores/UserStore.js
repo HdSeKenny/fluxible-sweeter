@@ -29,7 +29,8 @@ const UserStore = createStore({
     'FOLLOW_USER_WITH_SUCCESS': 'followUserWithSuccess',
     'CANCEL_FOLLOW_USER_WITH_SUCCESS': 'cancelFollowUserWithSuccess',
     'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
-    'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess'
+    'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess',
+    'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
   },
 
   initialize() {
@@ -327,6 +328,19 @@ const UserStore = createStore({
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection
+    });
+  },
+
+  deleteMessageConnectionSuccess(res) {
+    this.currentUser.recent_chat_connections = res.connections;
+
+    if (res.thisUserId === this.getActiveUserId()) {
+      this.setActiveUserId(res.connections[0].this_user_id);
+    }
+
+    this.emitChange({
+      msg: 'DELETE_MESSAGE_CONNECTION_SUCCESS',
+      connections: res.connections
     });
   },
 

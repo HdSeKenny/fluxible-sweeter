@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UserStore } from '../../../stores';
+import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
 
 export default class ChatBox extends React.Component {
@@ -24,6 +25,7 @@ export default class ChatBox extends React.Component {
   constructor(props, context) {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.context = context;
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId()
     };
@@ -45,9 +47,14 @@ export default class ChatBox extends React.Component {
   }
 
   _onStoreChange(res) {
-    if (res.msg && res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
+    const connectionMessages = [
+      'ADD_MESSAGE_CONNECTION_SUCCESS',
+      'DELETE_MESSAGE_CONNECTION_SUCCESS'
+    ];
+
+    if (res.msg && connectionMessages.includes(res.msg)) {
       this.setState({
-        activeUserId: res.connection.this_user_id
+        activeUserId: this.context.getStore(UserStore).getActiveUserId()
       });
     }
   }
@@ -69,6 +76,13 @@ export default class ChatBox extends React.Component {
     return connections.findIndex(c => c.this_user_id === activeUserId) >= 0;
   }
 
+  closeUserConnection(thisUserId) {
+    this.context.executeAction(UserActions.closeUserConnection, {
+      myId: this.props.currentUser.id_str,
+      thisUserId
+    });
+  }
+
   _renderPeopleList(currentUser, activeUserId) {
     const connections = currentUser.recent_chat_connections;
     if (!connections.length) return null;
@@ -86,11 +100,16 @@ export default class ChatBox extends React.Component {
             this.setActiveUser(thisUserId);
           }
           return (
-            <Row className={classes} key={index} onClick={() => this.setActiveUser(thisUserId)}>
-              <Col size="3 p-0"><img src={image_url} alt="chat-user" width="40" /></Col>
-              <Col size="9 pr-0 pl-10">
-                <Row className="name"><span>{username}</span></Row>
-                <Row className="time"><span>{last_msg_date}</span></Row>
+            <Row className={classes} key={index}>
+              <Col size="10 p-0" onClick={() => this.setActiveUser(thisUserId)}>
+                <Col size="4 p-0"><img src={image_url} alt="chat-user" width="40" /></Col>
+                <Col size="8 p-0">
+                  <Row className="name"><span>{username}</span></Row>
+                  <Row className="time"><span>{last_msg_date}</span></Row>
+                </Col>
+              </Col>
+              <Col size="2 p-0 tar">
+                <Row className="close-connect"><span onClick={() => this.closeUserConnection(thisUserId)}>×</span></Row>
               </Col>
             </Row>
           );

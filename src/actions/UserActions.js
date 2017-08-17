@@ -189,6 +189,21 @@ const UserActions = {
       }
       done();
     });
+  },
+
+  closeUserConnection: (context, payload, done) => {
+    context.service.create('users.deleteMessageConnection', {}, payload, fetchClientConfig, (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+      if (res) {
+        context.dispatch('DELETE_MESSAGE_CONNECTION_SUCCESS', {
+          connections: res,
+          thisUserId: payload.thisUserId
+        });
+      }
+      done();
+    });
   }
 };
 

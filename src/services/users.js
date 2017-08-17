@@ -427,6 +427,23 @@ export default {
           });
         });
     });
+  },
+
+  deleteMessageConnection(req, resource, params, body, config, callback) {
+    MongoClient.connect(MongoUrl, (err, db) => {
+      const User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.myId) })
+        .then((currentUser) => {
+          const connecttions = currentUser.recent_chat_connections.filter((c) => {
+            return c.this_user_id !== body.thisUserId;
+          });
+
+          currentUser.recent_chat_connections = connecttions;
+          User.save(currentUser).then(() => {
+            callback(err, connecttions);
+          });
+        });
+    });
   }
 };
 
