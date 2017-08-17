@@ -73,10 +73,10 @@ export default class Messages extends React.Component {
     return (
       <div className="messages">
         {!showChatBox &&
-          <Row>
+          <Row className="small-chat-box">
             <Col size="2 p-0 msg-event" onClick={() => this.toggleChatBox()}><i className="fa fa-envelope" /></Col>
             <Col size="8 p-0 msg-event" onClick={() => this.toggleChatBox()}><p>Chat Messages 0</p></Col>
-            <Col size="2 pr-0 msg-event"><p className="close-message">×</p></Col>
+            <Col size="2 pr-0 msg-event"><i className="fa fa-cog" /></Col>
           </Row>
         }
 

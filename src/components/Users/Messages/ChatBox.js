@@ -66,8 +66,7 @@ export default class ChatBox extends React.Component {
   }
 
   hasActiveUser(connections, activeUserId) {
-    const idx = connections.findIndex(c => c.this_user_id === activeUserId);
-    return idx >= 0;
+    return connections.findIndex(c => c.this_user_id === activeUserId) >= 0;
   }
 
   _renderPeopleList(currentUser, activeUserId) {
@@ -120,7 +119,7 @@ export default class ChatBox extends React.Component {
               <Col size="8 p-0">
                 <h4 className="m-0"><i>TDog Woofson</i></h4>
               </Col>
-              <Col size="4 msg-event tar p-0">
+              <Col size="4 tar p-0">
                 <span className="close-box" onClick={() => this.toggleChatBox()}>×</span>
               </Col>
             </Row>
