@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
+import { swal } from '../../../plugins';
 
 export default class ChatBox extends React.Component {
 
@@ -27,7 +28,8 @@ export default class ChatBox extends React.Component {
     this._onStoreChange = this._onStoreChange.bind(this);
     this.context = context;
     this.state = {
-      activeUserId: context.getStore(UserStore).getActiveUserId()
+      activeUserId: context.getStore(UserStore).getActiveUserId(),
+      message: ''
     };
   }
 
@@ -59,8 +61,12 @@ export default class ChatBox extends React.Component {
     }
   }
 
+  onMessageChange(e) {
+    this.setState({ message: e.target.value });
+  }
+
   toggleChatBox() {
-    this.props.toggleChatBox();
+    this.props.toggleChatBox(true);
   }
 
   setActiveUser(thisUserId) {
@@ -83,6 +89,41 @@ export default class ChatBox extends React.Component {
     });
   }
 
+  onSubmitMessage(e) {
+    e.preventDefault();
+    this.sendMessage();
+  }
+
+  sendMessage() {
+    const msg = this.state.message.trim();
+    if (!msg) {
+      return swal.warning('Invalid message!');
+    }
+
+
+  }
+
+  _renderConnectionMessage(currentUser, activeUserId) {
+    const connections = currentUser.recent_chat_connections;
+    const currentConnect = connections.find(c => c.this_user_id === activeUserId);
+    const thisUser = this.context.getStore(UserStore).getUserById(activeUserId);
+    const { connect_date, messages } = currentConnect;
+    return (
+      <div>
+        <Row className="top">
+          <Col size="8 p-0"><h4 className="m-0"><i>{thisUser.username}</i></h4></Col>
+          <Col size="4 tar p-0">
+            <span className="close-box" onClick={() => this.toggleChatBox()}>×</span>
+          </Col>
+        </Row>
+        <div className="chat">
+          <div className="conversation-start"><span>{connect_date}</span></div>
+          {messages.map((msg) => <div className={`bubble ${msg.class}`}>{msg.content}</div>)}
+        </div>
+      </div>
+    );
+  }
+
   _renderPeopleList(currentUser, activeUserId) {
     const connections = currentUser.recent_chat_connections;
     if (!connections.length) return null;
@@ -102,7 +143,7 @@ export default class ChatBox extends React.Component {
           return (
             <Row className={classes} key={index}>
               <Col size="10 p-0" onClick={() => this.setActiveUser(thisUserId)}>
-                <Col size="4 p-0"><img src={image_url} alt="chat-user" width="40" /></Col>
+                <Col size="4 p-0"><img src={image_url} alt="chat-user" width="30" /></Col>
                 <Col size="8 p-0">
                   <Row className="name"><span>{username}</span></Row>
                   <Row className="time"><span>{last_msg_date}</span></Row>
@@ -120,62 +161,31 @@ export default class ChatBox extends React.Component {
 
   render() {
     const { currentUser } = this.props;
-    const { activeUserId } = this.state;
-    if (!currentUser) return null;
+    const { activeUserId, message } = this.state;
 
+    if (!currentUser) return null;
     return (
       <div className="chat-box">
         <div className="wrapper">
           <div className="left">
-            <div className="top">
-              <input type="text" />
-              <button className="btn btn-default btn-sm">十</button>
-            </div>
+            <div className="top"><input type="text" /></div>
             {this._renderPeopleList(currentUser, activeUserId)}
           </div>
           <div className="right">
-            <Row className="top">
-              <Col size="8 p-0">
-                <h4 className="m-0"><i>TDog Woofson</i></h4>
-              </Col>
-              <Col size="4 tar p-0">
-                <span className="close-box" onClick={() => this.toggleChatBox()}>×</span>
-              </Col>
-            </Row>
-            <div className="chat" data-chat="person2">
-              <div className="conversation-start">
-                <span>Today, 5:38 PM</span>
-              </div>
-              <div className="bubble you">
-                Hello, can you hear me?
-              </div>
-              <div className="bubble you">
-                I'm in California dreaming
-              </div>
-              <div className="bubble me">
-                ... about who we used to be.
-              </div>
-              <div className="bubble me">
-                Are you serious?
-              </div>
-              <div className="bubble you">
-                When we were younger and free...
-              </div>
-              <div className="bubble you">
-                I've forgotten how it felt before
-              </div>
-              <div className="bubble you">
-                I've forgotten how it felt before
-              </div>
-              <div className="bubble you">
-                I've forgotten how it felt before
-              </div>
-            </div>
+            {this._renderConnectionMessage(currentUser, activeUserId)}
             <div className="write">
-              <Row className="icons">
-                <span className="emoji"><i className="fa fa-smile-o fa-lg" aria-hidden="true" /></span>
+              <Row className="">
+                <Col size="9 p-0">
+                  <form onSubmit={this.onSubmitMessage.bind(this)}>
+                    <input onChange={(e) => this.onMessageChange(e)} value={message}></input>
+                  </form>
+                </Col>
+                <Col size="3 p-0 tar">
+                  <button className="btn btn-info send" onClick={() => this.sendMessage()}>
+                    <i className="fa fa-paper-plane mr-5" aria-hidden="true" />Send
+                  </button>
+                </Col>
               </Row>
-              <textarea rows="1"></textarea>
             </div>
           </div>
         </div>

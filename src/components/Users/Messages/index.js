@@ -62,17 +62,27 @@ export default class Messages extends React.Component {
     }
   }
 
-  toggleChatBox() {
-    this.setState({ showChatBox: !this.state.showChatBox });
+  toggleChatBox(close) {
+    const showChatBox = !this.state.showChatBox;
+    this.setState({ showChatBox }, () => {
+      if (showChatBox) {
+        this.props.setShowMessages(showChatBox);
+      }
+
+      if (close) {
+        this.props.setShowMessages(false);
+      }
+    });
   }
 
   render() {
     const { currentUser, showChatBox } = this.state;
+    const displayMessageBox = this.props.showMessages ? showChatBox : false;
     if (!currentUser) return null;
 
     return (
       <div className="messages">
-        {!showChatBox &&
+        {!displayMessageBox &&
           <Row className="small-chat-box">
             <Col size="2 p-0 msg-event" onClick={() => this.toggleChatBox()}><i className="fa fa-envelope" /></Col>
             <Col size="8 p-0 msg-event" onClick={() => this.toggleChatBox()}><p>Chat Messages 0</p></Col>
@@ -80,9 +90,9 @@ export default class Messages extends React.Component {
           </Row>
         }
 
-        {showChatBox &&
+        {displayMessageBox &&
           <ChatBox
-            toggleChatBox={() => this.toggleChatBox()}
+            toggleChatBox={(close) => this.toggleChatBox(close)}
             currentUser={currentUser}
           />
         }

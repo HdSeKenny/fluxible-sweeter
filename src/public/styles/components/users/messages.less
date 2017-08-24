@@ -80,13 +80,13 @@
     box-sizing: border-box;
     .left {
       float: left;
-      width: 35%;
+      width: 30%;
       height: 100%;
       background-color: #fff;
       border-right: 1px solid #ECEFF1;
       input {
         float: left;
-        width: 75%;
+        width: 100%;
         height: 30px;
         padding: 5px 10px;
         border: 1px solid #e6e6e6;
@@ -134,7 +134,7 @@
           .name {
             padding: 3px 0;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 12px;
           }
           .time {
             color: gray
@@ -152,7 +152,7 @@
     .right {
       position: relative;
       float: left;
-      width: 65%;
+      width: 70%;
       height: 100%;
       .top {
         width: 100%;
@@ -241,38 +241,28 @@
       }
 
       .write {
-        position: absolute;
         width: 100%;
         bottom: 0;
-        height: 66px; // padding-left: 8px;
-        border-top: 1px solid #e6e6e6; // background-color: #eceff1;
-        textarea {
+        height: 45px;
+        position: absolute;
+        padding: 5px;
+        border-top: 1px solid #e6e6e6;
+        input {
           font-size: 13px;
-          height: 40px;
-          width: 100%;
-          padding: 5px 10px;
-          color: #1a1a1a;
-          border: 0;
-          outline: none;
-          background-color: #eceff1;
           font-family: 'Source Sans Pro', sans-serif;
+          color: #1a1a1a;
+          height: 35px;
+          width: 105%;
+          padding: 10px;
+          border: 0;
+          background-color: #eceff1;
+          border-radius: 3px;
+          outline: none;
+          overflow: auto;
         }
-
-        .icons {
-          background: #eceff1;
-          padding: 5px 10px;
-          span {
-            color: gray;
-            &:hover {
-              cursor: pointer;
-            }
-          }
-        } // .emoji {
-        //   position: absolute;
-        //   top: 10px;
-        //   left: 10px;
-        //   color: gray;
-        // }
+        .send {
+          outline: none;
+        }
       }
     }
   }
