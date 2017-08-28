@@ -71,9 +71,12 @@ const UserStore = createStore({
       stat: res.msg,
       user: res.user
     };
+
     this.currentUser = res.user;
     this.users.push(res.user);
     this.authenticated = true;
+
+    this.setCurrentUserConnection();
     this.emitChange(response);
   },
 
@@ -83,6 +86,7 @@ const UserStore = createStore({
       stat: res.msg,
       user: res.user
     };
+
     this.currentUser = null;
     this.authenticated = false;
     this.emitChange(response);
@@ -92,8 +96,11 @@ const UserStore = createStore({
     const response = {
       msg: 'USER_LOGIN_SUCCESS'
     };
+
     this.currentUser = res.user;
     this.authenticated = true;
+
+    this.setCurrentUserConnection();
     this.emitChange(response);
   },
 
@@ -114,6 +121,8 @@ const UserStore = createStore({
     };
     this.currentUser = null;
     this.authenticated = false;
+
+    this.clearUserConnection();
     this.emitChange(response);
   },
 
@@ -324,7 +333,7 @@ const UserStore = createStore({
 
     this.currentUser.recent_chat_connections.push(connection);
 
-    this.setActiveUserId(connection.this_user_id);
+    this.setActiveUser(connection.this_user_id);
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection
@@ -335,7 +344,11 @@ const UserStore = createStore({
     this.currentUser.recent_chat_connections = res.connections;
 
     if (res.thisUserId === this.getActiveUserId()) {
-      this.setActiveUserId(res.connections[0].this_user_id);
+      this.setUserConnection({
+        current_user: this.currentUser.id_str,
+        active_user: res.connections[0].this_user_id,
+        recent_chat_connections: this.currentUser.recent_chat_connections
+      });
     }
 
     this.emitChange({
@@ -348,16 +361,46 @@ const UserStore = createStore({
     if (!env.is_client) {
       return '';
     }
-
-    return localStorage.getItem('active-user');
+    const connection = localStorage.getItem('current_user_connection');
+    return JSON.parse(connection).active_user;
   },
 
-  setActiveUserId(id) {
+  getUserConnection() {
+    if (!env.is_client) {
+      return '';
+    }
+    const connection = localStorage.getItem('current_user_connection');
+    return JSON.parse(connection);
+  },
+
+  setActiveUser(thisUserId) {
+    if (!env.is_client) {
+      return '';
+    }
+    const connection = localStorage.getItem('current_user_connection');
+    const parsedConection = JSON.parse(connection);
+    parsedConection.active_user = thisUserId;
+    localStorage.setItem('current_user_connection', JSON.stringify(parsedConection));
+  },
+
+  setUserConnection(connection) {
     if (!env.is_client) {
       return '';
     }
 
-    localStorage.setItem('active-user', id);
+    localStorage.setItem('current_user_connection', JSON.stringify(connection));
+  },
+
+  setCurrentUserConnection() {
+    this.setUserConnection({
+      current_user: this.currentUser.id_str,
+      active_user: this.currentUser.recent_chat_connections[0].this_user_id,
+      recent_chat_connections: this.currentUser.recent_chat_connections
+    });
+  },
+
+  clearUserConnection() {
+    // TODO
   },
 
   dehydrate() {

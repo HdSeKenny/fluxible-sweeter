@@ -35,6 +35,12 @@ const serverConfig = {
   APIAuthHeader: 'Basic cXVhdHRyb3VzZXIxOjFxYXoyd3N4',
   exportPath: '/tmp',
   requestBodySize: '20mb',
+  indexedDB: {
+    name: 'sweeter',
+    version: 1,
+    dateKey: 'last_updated_date',
+    expired: 180 * 60 * 1000  // 3 hours
+  }
 };
 
 if (environmentConfig.apiService) {

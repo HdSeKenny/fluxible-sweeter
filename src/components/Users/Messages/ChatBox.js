@@ -31,25 +31,22 @@ export default class ChatBox extends React.Component {
     this.context = context;
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId(),
+      connection: context.getStore(UserStore).getUserConnection(),
+      chatSocket: openSocket.connect('http://localhost:3000/chat'),
       message: ''
     };
   }
 
-  focus = () => {
-    this.editor.focus();
-  };
-
   componentDidMount() {
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
-    const chatSocket = openSocket.connect('http://localhost:3000/chat');
 
+    const { chatSocket, currentUser } = this.state;
     const chatBox = document.getElementsByClassName('chat')[0];
+
     chatBox.scrollTop = chatBox.scrollHeight;
-    // chatSocket.on('connect', (chat) => {
-    //   console.log('Client chat connected', chat);
-      chatSocket.on('a message', (data) => {
-        console.log(data);
-      });
+
+    // chatSocket.on(`connection:${currentUser.id_str}`, (data) => {
+    //   console.log(data);
     // });
   }
 
@@ -79,8 +76,9 @@ export default class ChatBox extends React.Component {
   }
 
   setActiveUser(thisUserId) {
-    this.context.getStore(UserStore).setActiveUserId(thisUserId);
-    this.setState({ activeUserId: thisUserId });
+    this.setState({ activeUserId: thisUserId }, () => {
+      this.context.getStore(UserStore).setActiveUser(thisUserId);
+    });
   }
 
   getActiveUser() {
@@ -105,6 +103,7 @@ export default class ChatBox extends React.Component {
 
   sendMessage() {
     const msg = this.state.message.trim();
+    const { chatSocket, currentUser } = this.state;
     if (!msg) {
       return swal.warning('Invalid message!');
     }
@@ -134,7 +133,8 @@ export default class ChatBox extends React.Component {
   }
 
   _renderPeopleList(currentUser, activeUserId) {
-    const connections = currentUser.recent_chat_connections;
+    const connections = this.state.connection.recent_chat_connections;
+    console.log(connections);
     if (!connections.length) return null;
     const hasActiveUser = this.hasActiveUser(connections, activeUserId);
     return (
