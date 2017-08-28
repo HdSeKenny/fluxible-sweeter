@@ -22,15 +22,16 @@ export default class Messages extends React.Component {
     currentUser: PropTypes.object,
     user: PropTypes.object,
     query: PropTypes.object,
-    isCurrentUser: PropTypes.bool
+    isCurrentUser: PropTypes.bool,
+    hideMessages: PropTypes.func,
+    showMessages: PropTypes.bool
   };
 
   constructor(props, context) {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
-      currentUser: context.getStore(UserStore).getCurrentUser(),
-      showChatBox: false
+      currentUser: context.getStore(UserStore).getCurrentUser()
     };
   }
 
@@ -54,45 +55,32 @@ export default class Messages extends React.Component {
     };
 
     if (authMessages.includes(res.msg)) {
-      if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
-        result.showChatBox = true;
-      }
-
       this.setState(result);
     }
   }
 
-  toggleChatBox(close) {
-    const showChatBox = !this.state.showChatBox;
-    this.setState({ showChatBox }, () => {
-      if (showChatBox) {
-        this.props.setShowMessages(showChatBox);
-      }
-
-      if (close) {
-        this.props.setShowMessages(false);
-      }
-    });
+  hideMessages() {
+    this.props.hideMessages();
   }
 
   render() {
-    const { currentUser, showChatBox } = this.state;
-    const displayMessageBox = this.props.showMessages ? showChatBox : false;
+    const { currentUser } = this.state;
+    const { showMessages } = this.props;
     if (!currentUser) return null;
 
     return (
       <div className="messages">
-        {!displayMessageBox &&
+        {!showMessages &&
           <Row className="small-chat-box">
-            <Col size="2 p-0 msg-event" onClick={() => this.toggleChatBox()}><i className="fa fa-envelope" /></Col>
-            <Col size="8 p-0 msg-event" onClick={() => this.toggleChatBox()}><p>Chat Messages 0</p></Col>
+            <Col size="2 p-0 msg-event"><i className="fa fa-envelope" /></Col>
+            <Col size="8 p-0 msg-event"><p>Chat Messages 0</p></Col>
             <Col size="2 pr-0 msg-event"><i className="fa fa-cog" /></Col>
           </Row>
         }
 
-        {displayMessageBox &&
+        {showMessages &&
           <ChatBox
-            toggleChatBox={(close) => this.toggleChatBox(close)}
+            hideMessages={() => this.hideMessages()}
             currentUser={currentUser}
           />
         }

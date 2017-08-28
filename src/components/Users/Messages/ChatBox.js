@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import openSocket from 'socket.io-client';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
 import { swal } from '../../../plugins';
+
 
 export default class ChatBox extends React.Component {
 
@@ -19,7 +21,7 @@ export default class ChatBox extends React.Component {
     user: PropTypes.object,
     query: PropTypes.object,
     isCurrentUser: PropTypes.bool,
-    toggleChatBox: PropTypes.func,
+    hideMessages: PropTypes.func,
     activeChatId: PropTypes.string
   };
 
@@ -39,9 +41,16 @@ export default class ChatBox extends React.Component {
 
   componentDidMount() {
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+    const chatSocket = openSocket.connect('http://localhost:3000/chat');
 
     const chatBox = document.getElementsByClassName('chat')[0];
     chatBox.scrollTop = chatBox.scrollHeight;
+    // chatSocket.on('connect', (chat) => {
+    //   console.log('Client chat connected', chat);
+      chatSocket.on('a message', (data) => {
+        console.log(data);
+      });
+    // });
   }
 
   componentWillUnmount() {
@@ -66,7 +75,7 @@ export default class ChatBox extends React.Component {
   }
 
   toggleChatBox() {
-    this.props.toggleChatBox(true);
+    this.props.hideMessages();
   }
 
   setActiveUser(thisUserId) {
