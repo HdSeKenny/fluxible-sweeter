@@ -120,7 +120,6 @@ export default {
   },
 
   register(req, resource, params, body, config, callback) {
-
     MongoClient.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.findOne({ email: body.email }, (err, user) => {
@@ -414,16 +413,24 @@ export default {
             currentUser.recent_chat_connections = [];
           }
 
-          const connecttion = {
-            this_user_id: body.thisUserId,
-            connect_date: body.connectDate,
-            messages: []
-          };
+          const recentConnections = currentUser.recent_chat_connections;
+          const connectionIndex = recentConnections.findIndex(c => c.this_user_id === body.thisUserId);
 
-          currentUser.recent_chat_connections.push(connecttion);
+          let connection;
+          if (connectionIndex < 0) {
+            connection = {
+              this_user_id: body.thisUserId,
+              connect_date: body.connectDate,
+              messages: []
+            };
+            currentUser.recent_chat_connections.push(connection);
+          }
+          else {
+            connection = currentUser.recent_chat_connections[connectionIndex];
+          }
 
           User.save(currentUser).then(() => {
-            callback(err, connecttion);
+            callback(err, connection);
           });
         });
     });

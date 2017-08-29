@@ -1,5 +1,6 @@
 import createStore from 'fluxible/addons/createStore';
 import _ from 'lodash';
+import openSocket from 'socket.io-client';
 import { env } from '../utils';
 
 const UserStore = createStore({
@@ -40,6 +41,8 @@ const UserStore = createStore({
     this.currentUploadedImage = null;
     this.authenticated = false;
     this.loginUserImage = null;
+    this.chatSocket = openSocket.connect('http://192.168.0.158:3000/chat');
+
   },
 
   loadKennySuccess(res) {
@@ -99,7 +102,7 @@ const UserStore = createStore({
 
     this.currentUser = res.user;
     this.authenticated = true;
-
+    this.chatSocket.emit('current-user', { id: res.user.id_str, username: res.user.username });
     this.setCurrentUserConnection();
     this.emitChange(response);
   },
@@ -333,7 +336,7 @@ const UserStore = createStore({
 
     this.currentUser.recent_chat_connections.push(connection);
 
-    this.setActiveUser(connection.this_user_id);
+    this.setCurrentUserConnection(connection.this_user_id);
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection
@@ -391,10 +394,10 @@ const UserStore = createStore({
     localStorage.setItem('current_user_connection', JSON.stringify(connection));
   },
 
-  setCurrentUserConnection() {
+  setCurrentUserConnection(thisUserId) {
     this.setUserConnection({
       current_user: this.currentUser.id_str,
-      active_user: this.currentUser.recent_chat_connections[0].this_user_id,
+      active_user: thisUserId || this.currentUser.recent_chat_connections[0].this_user_id,
       recent_chat_connections: this.currentUser.recent_chat_connections
     });
   },

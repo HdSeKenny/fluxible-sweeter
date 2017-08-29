@@ -6,7 +6,6 @@ import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
 import { swal } from '../../../plugins';
 
-
 export default class ChatBox extends React.Component {
 
   static displayName = 'ChatBox';
@@ -32,7 +31,7 @@ export default class ChatBox extends React.Component {
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId(),
       connection: context.getStore(UserStore).getUserConnection(),
-      chatSocket: openSocket.connect('http://localhost:3000/chat'),
+      chatSocket: openSocket.connect('http://192.168.0.158:3000/chat'),
       message: ''
     };
   }
@@ -40,14 +39,15 @@ export default class ChatBox extends React.Component {
   componentDidMount() {
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
 
-    const { chatSocket, currentUser } = this.state;
+    const { chatSocket } = this.state;
+    const { currentUser } = this.props;
     const chatBox = document.getElementsByClassName('chat')[0];
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // chatSocket.on(`connection:${currentUser.id_str}`, (data) => {
-    //   console.log(data);
-    // });
+    chatSocket.on(`messages-${currentUser.id_str}`, data => {
+      console.log(data);
+    });
   }
 
   componentWillUnmount() {
@@ -62,7 +62,8 @@ export default class ChatBox extends React.Component {
 
     if (res.msg && connectionMessages.includes(res.msg)) {
       this.setState({
-        activeUserId: this.context.getStore(UserStore).getActiveUserId()
+        activeUserId: this.context.getStore(UserStore).getActiveUserId(),
+        connection: this.context.getStore(UserStore).getUserConnection()
       });
     }
   }
@@ -103,12 +104,18 @@ export default class ChatBox extends React.Component {
 
   sendMessage() {
     const msg = this.state.message.trim();
-    const { chatSocket, currentUser } = this.state;
+    const now = new Date();
+    const { chatSocket, activeUserId } = this.state;
     if (!msg) {
       return swal.warning('Invalid message!');
     }
 
-
+    console.log(`sendMessage:${activeUserId}`)
+    chatSocket.emit(`sendMessage-${activeUserId}`, {
+      message: msg,
+      date: now,
+      userId: this.props.currentUser.id_str
+    });
   }
 
   _renderConnectionMessage(currentUser, activeUserId) {
@@ -134,7 +141,6 @@ export default class ChatBox extends React.Component {
 
   _renderPeopleList(currentUser, activeUserId) {
     const connections = this.state.connection.recent_chat_connections;
-    console.log(connections);
     if (!connections.length) return null;
     const hasActiveUser = this.hasActiveUser(connections, activeUserId);
     return (

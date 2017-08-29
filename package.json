@@ -79,6 +79,7 @@
     "serve-favicon": "~2.2.1",
     "sharp": "^0.18.2",
     "socket.io": "^2.0.3",
+    "socketio-jwt": "^4.5.0",
     "superagent": "^1.8.4"
   },
   "devDependencies": {

@@ -15,6 +15,7 @@ Promise.all(mongodbPromises).then(() => {
 
   require('../express')(app);
   require('../socket.io')(io);
+
   setImmediate(() => {
     app.sweeter = server.listen(config.server.port, (err) => {
       if (err) { throw err; }

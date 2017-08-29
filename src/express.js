@@ -49,7 +49,7 @@ export default (server) => {
 
   const MongoStore = connectMongo(session);
   server.use(session({
-    secret: 'secret',
+    secret: 'sweeter-secret',
     store: new MongoStore(serverConfig.mongo.session),
     resave: false,
     saveUninitialized: false
