@@ -15,15 +15,16 @@ function onConnect(socket, name) {
     socket.log(JSON.stringify(data, null, 2));
   });
 
-  socket.on('currentuser', username => {
-    console.log(username, 'is connected =====>');
-    users.push(username);
-
-    socket.on('chat', msg => {
-      console.log(msg, '<==============');
-      socket.emit('room', msg);
-    });
+  socket.on('messages', msgObj => {
+    socket.emit(msgObj.userId, 'dsadasdas')
+    // usernames.forEach(username => {
+    //   console.log(username, 'is connected =====>');
+    //   socket.on(`user:${username}`, msg => {
+    //     console.log(username, '======  received a message  =======', msg);
+    //   });
+    // });
   });
+
   // Insert sockets below require('../api/thing/thing.socket').register(socket);
 }
 
@@ -50,30 +51,15 @@ export default (socketio) => {
     socket.connectedAt = new Date();
 
     socket.log = function(...data) {
-      // console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
+      console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
     };
 
-    // Call onDisconnect.
     socket.on('disconnect', () => {
       onDisconnect(socket);
       socket.log('DISCONNECTED');
     });
 
-    // Call onConnect.
     onConnect(socket, 'main');
     socket.log('CONNECTED');
-  });
-
-  const chat = socketio.of('/chat');
-  chat.on('connection', chatSocket => {
-    onConnect(chat, 'chat');
-    // chatSocket.on('current-user', data => {
-    //   console.log('============>', data.username);
-    //   // chat.broadcast.emit(`${data.username} is connected`);
-    //   chatSocket.on(`sendMessage`, msgObj => {
-    //     console.log('onSendMessage ===>', msgObj);
-    //     chatSocket.emit(`messages-${data.username}`, msgObj);
-    //   });
-    // });
   });
 };

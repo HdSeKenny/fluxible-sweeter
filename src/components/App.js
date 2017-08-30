@@ -28,11 +28,13 @@ export default class App extends React.Component {
     });
   };
 
-  constructor() {
-    super();
+  constructor(props, context) {
+    super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.context = context;
     this.state = {
-      showMessages: false
+      showMessages: false,
+      usernames: context.getStore(UserStore).getUsernames()
     };
   }
 
@@ -42,6 +44,7 @@ export default class App extends React.Component {
     });
 
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+    socket.emit('users', this.state.usernames);
   }
 
   componentWillUnmount() {
@@ -52,6 +55,8 @@ export default class App extends React.Component {
     if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
       this.setState({ showMessages: true });
     }
+
+
   }
 
   hideMessages() {

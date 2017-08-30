@@ -34,7 +34,7 @@ const UserStore = createStore({
   },
 
   initialize() {
-    this.users = null;
+    this.users = [];
     this.kenny = null;
     this.currentUser = null;
     this.currentUploadedImage = null;
@@ -53,7 +53,13 @@ const UserStore = createStore({
 
   loadUsersSuccess(res) {
     this.users = res;
-    this.emitChange();
+    this.emitChange({
+      msg: 'LOAD_USERS_SUCCESS'
+    });
+  },
+
+  getUsernames() {
+    return this.users.map(user => user.username);
   },
 
   loadUsersFail() {
@@ -99,22 +105,8 @@ const UserStore = createStore({
 
     this.currentUser = res.user;
     this.authenticated = true;
-    this.emitCurrentUserLoggedin();
-    this.listenCurrentUserConnect();
     this.setCurrentUserConnection();
     this.emitChange(response);
-  },
-
-  emitCurrentUserLoggedin() {
-    console.log('emitCurrentUserLoggedin');
-    chatSocket.emit('currentuser', this.currentUser.username);
-  },
-
-  listenCurrentUserConnect() {
-    console.log('listenCurrentUserConnect', this.currentUser.username);
-    chatSocket.on('room', data => {
-      console.log('room:', data);
-    });
   },
 
   loginFail(res) {

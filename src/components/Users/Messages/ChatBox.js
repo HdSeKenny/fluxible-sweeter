@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import openSocket from 'socket.io-client';
-import serverConfig from '../../../configs/sweeter';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
@@ -32,23 +30,19 @@ export default class ChatBox extends React.Component {
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId(),
       connection: context.getStore(UserStore).getUserConnection(),
-      // chatSocket: openSocket.connect(`http://${serverConfig.hot_server_host}:3000/chat`),
       message: ''
     };
   }
 
   componentDidMount() {
+    const chatBox = document.getElementsByClassName('chat')[0];
+    chatBox.scrollTop = chatBox.scrollHeight;
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
 
-    const { chatSocket } = this.state;
     const { currentUser } = this.props;
-    const chatBox = document.getElementsByClassName('chat')[0];
+    socket.on(currentUser.id_str, (msg) => {
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // chatSocket.on(`messages-${currentUser.id_str}`, data => {
-    //   console.log(data);
-    // });
+    })
   }
 
   componentWillUnmount() {
@@ -114,11 +108,7 @@ export default class ChatBox extends React.Component {
 
     const store = this.context.getStore(UserStore);
     const thisUser = store.getUserById(activeUserId);
-    chatSocket.emit('chat', {
-      message: msg,
-      date: now,
-      userId: this.props.currentUser.id_str
-    });
+    socket.emit(`messages`, msg);
   }
 
   _renderConnectionMessage(currentUser, activeUserId) {

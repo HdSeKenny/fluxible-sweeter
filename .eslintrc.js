@@ -53,6 +53,7 @@ module.exports = {
     "$": true,
     "jQuery": true,
     "swal": true,
-    "localStorage": true
+    "localStorage": true,
+    "socket": true
   }
 };
