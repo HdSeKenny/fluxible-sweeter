@@ -29,20 +29,36 @@ export default class ChatBox extends React.Component {
     this.context = context;
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId(),
-      connection: context.getStore(UserStore).getUserConnection(),
+      localChat: context.getStore(UserStore).getUserConnection(),
       message: ''
     };
   }
 
   componentDidMount() {
-    const chatBox = document.getElementsByClassName('chat')[0];
-    chatBox.scrollTop = chatBox.scrollHeight;
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
 
-    const { currentUser } = this.props;
-    socket.on(currentUser.id_str, (msg) => {
+    const chatBox = document.getElementsByClassName('chat')[0];
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-    })
+    socket.on('message:receive', (messageObj) => this._recieveMessages(messageObj));
+  }
+
+
+  _recieveMessages(messageObj) {
+    console.log('_recieveMessages ===>');
+
+    const { currentUser } = this.props;
+    if (messageObj.user_to === currentUser.id_str) {
+      const { user_from } = messageObj;
+      const { localChat } = this.state;
+      const connections = localChat.recent_chat_connections;
+      const thisUserConnect = connections.find(c => c.this_user_id === user_from);
+
+      thisUserConnect.messages.push(messageObj);
+      this.setState({ localChat }, () => {
+        this.context.getStore(UserStore).setUserConnection(localChat);
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -58,7 +74,7 @@ export default class ChatBox extends React.Component {
     if (res.msg && connectionMessages.includes(res.msg)) {
       this.setState({
         activeUserId: this.context.getStore(UserStore).getActiveUserId(),
-        connection: this.context.getStore(UserStore).getUserConnection()
+        localChat: this.context.getStore(UserStore).getUserConnection()
       });
     }
   }
@@ -100,19 +116,30 @@ export default class ChatBox extends React.Component {
   sendMessage() {
     const msg = this.state.message.trim();
     const now = new Date();
-    const { activeUserId } = this.state;
-
+    const { activeUserId, localChat } = this.state;
     if (!msg) {
       return swal.warning('Invalid message!');
     }
+    const newMessage = {
+      content: msg,
+      date: now,
+      user_to: activeUserId,
+      user_from: this.props.currentUser.id_str,
+      class: 'me'
+    };
 
-    const store = this.context.getStore(UserStore);
-    const thisUser = store.getUserById(activeUserId);
-    socket.emit(`messages`, msg);
+    const connections = localChat.recent_chat_connections;
+    const thisUserConnect = connections.find(c => c.this_user_id === activeUserId);
+    thisUserConnect.messages.push(newMessage);
+
+    this.setState({ localChat }, () => {
+      this.context.getStore(UserStore).setUserConnection(localChat);
+      socket.emit('message:send', newMessage);
+    });
   }
 
   _renderConnectionMessage(currentUser, activeUserId) {
-    const connections = currentUser.recent_chat_connections;
+    const connections = this.state.localChat.recent_chat_connections;
     const currentConnect = connections.find(c => c.this_user_id === activeUserId);
     const thisUser = this.context.getStore(UserStore).getUserById(activeUserId);
     const { connect_date, messages } = currentConnect;
@@ -126,14 +153,14 @@ export default class ChatBox extends React.Component {
         </Row>
         <div className="chat">
           <div className="conversation-start"><span>{connect_date}</span></div>
-          {messages.map((msg) => <div className={`bubble ${msg.class}`}>{msg.content}</div>)}
+          {messages.map((msg, idx) => <div className={`bubble ${msg.class}`} key={idx}>{msg.content}</div>)}
         </div>
       </div>
     );
   }
 
   _renderPeopleList(currentUser, activeUserId) {
-    const connections = this.state.connection.recent_chat_connections;
+    const connections = this.state.localChat.recent_chat_connections;
     if (!connections.length) return null;
     const hasActiveUser = this.hasActiveUser(connections, activeUserId);
     return (

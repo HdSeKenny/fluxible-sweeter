@@ -1,6 +1,5 @@
 /* eslint-disable all, no-param-reassign */
 
-const users = [];
 // When the user disconnects.. perform this
 function onDisconnect() {
   // TODO
@@ -15,14 +14,10 @@ function onConnect(socket, name) {
     socket.log(JSON.stringify(data, null, 2));
   });
 
-  socket.on('messages', msgObj => {
-    socket.emit(msgObj.userId, 'dsadasdas')
-    // usernames.forEach(username => {
-    //   console.log(username, 'is connected =====>');
-    //   socket.on(`user:${username}`, msg => {
-    //     console.log(username, '======  received a message  =======', msg);
-    //   });
-    // });
+  socket.on('message:send', messageobj => {
+    messageobj.class = 'you';
+    console.log('Message sent from client, the user is:', messageobj.user_from);
+    socket.emit('message:receive', messageobj);
   });
 
   // Insert sockets below require('../api/thing/thing.socket').register(socket);
@@ -46,10 +41,7 @@ export default (socketio) => {
 
   socketio.on('connection', (socket) => {
     socket.address = `${socket.request.connection.remoteAddress}:${socket.request.connection.remotePort}`;
-
-    console.log(socket.request.session, '#########');
     socket.connectedAt = new Date();
-
     socket.log = function(...data) {
       console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
     };
