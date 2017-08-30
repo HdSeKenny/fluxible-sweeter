@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import openSocket from 'socket.io-client';
+import serverConfig from '../../../configs/sweeter';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
@@ -31,7 +32,7 @@ export default class ChatBox extends React.Component {
     this.state = {
       activeUserId: context.getStore(UserStore).getActiveUserId(),
       connection: context.getStore(UserStore).getUserConnection(),
-      chatSocket: openSocket.connect('http://192.168.0.158:3000/chat'),
+      // chatSocket: openSocket.connect(`http://${serverConfig.hot_server_host}:3000/chat`),
       message: ''
     };
   }
@@ -45,9 +46,9 @@ export default class ChatBox extends React.Component {
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    chatSocket.on(`messages-${currentUser.id_str}`, data => {
-      console.log(data);
-    });
+    // chatSocket.on(`messages-${currentUser.id_str}`, data => {
+    //   console.log(data);
+    // });
   }
 
   componentWillUnmount() {
@@ -105,13 +106,15 @@ export default class ChatBox extends React.Component {
   sendMessage() {
     const msg = this.state.message.trim();
     const now = new Date();
-    const { chatSocket, activeUserId } = this.state;
+    const { activeUserId } = this.state;
+
     if (!msg) {
       return swal.warning('Invalid message!');
     }
 
-    console.log(`sendMessage:${activeUserId}`)
-    chatSocket.emit(`sendMessage-${activeUserId}`, {
+    const store = this.context.getStore(UserStore);
+    const thisUser = store.getUserById(activeUserId);
+    chatSocket.emit('chat', {
       message: msg,
       date: now,
       userId: this.props.currentUser.id_str

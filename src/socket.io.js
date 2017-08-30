@@ -1,5 +1,6 @@
 /* eslint-disable all, no-param-reassign */
 
+const users = [];
 // When the user disconnects.. perform this
 function onDisconnect() {
   // TODO
@@ -8,12 +9,21 @@ function onDisconnect() {
 // When the user connects.. perform this
 function onConnect(socket, name) {
   // When the client emits 'info', this listens and executes
-  // console.log(name, ' is connected');
+  console.log(name, 'socket is connected');
 
   socket.on('info', data => {
     socket.log(JSON.stringify(data, null, 2));
   });
 
+  socket.on('currentuser', username => {
+    console.log(username, 'is connected =====>');
+    users.push(username);
+
+    socket.on('chat', msg => {
+      console.log(msg, '<==============');
+      socket.emit('room', msg);
+    });
+  });
   // Insert sockets below require('../api/thing/thing.socket').register(socket);
 }
 
@@ -36,6 +46,7 @@ export default (socketio) => {
   socketio.on('connection', (socket) => {
     socket.address = `${socket.request.connection.remoteAddress}:${socket.request.connection.remotePort}`;
 
+    console.log(socket.request.session, '#########');
     socket.connectedAt = new Date();
 
     socket.log = function(...data) {
@@ -53,15 +64,16 @@ export default (socketio) => {
     socket.log('CONNECTED');
   });
 
-  socketio.of('/chat').on('connection', chat => {
+  const chat = socketio.of('/chat');
+  chat.on('connection', chatSocket => {
     onConnect(chat, 'chat');
-    chat.on('current-user', data => {
-      console.log('============>', data.username, data.id);
-      // chat.broadcast.emit(`${data.username} is connected`);
-      chat.on(`sendMessage—${data.username}`, msgObj => {
-        console.log('onSendMessage ===>', msgObj);
-        chat.emit(`messages-${data.username}`, msgObj);
-      });
-    });
+    // chatSocket.on('current-user', data => {
+    //   console.log('============>', data.username);
+    //   // chat.broadcast.emit(`${data.username} is connected`);
+    //   chatSocket.on(`sendMessage`, msgObj => {
+    //     console.log('onSendMessage ===>', msgObj);
+    //     chatSocket.emit(`messages-${data.username}`, msgObj);
+    //   });
+    // });
   });
-}
+};

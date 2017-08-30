@@ -1,6 +1,5 @@
 import createStore from 'fluxible/addons/createStore';
 import _ from 'lodash';
-import openSocket from 'socket.io-client';
 import { env } from '../utils';
 
 const UserStore = createStore({
@@ -41,8 +40,6 @@ const UserStore = createStore({
     this.currentUploadedImage = null;
     this.authenticated = false;
     this.loginUserImage = null;
-    this.chatSocket = openSocket.connect('http://192.168.0.158:3000/chat');
-
   },
 
   loadKennySuccess(res) {
@@ -102,9 +99,22 @@ const UserStore = createStore({
 
     this.currentUser = res.user;
     this.authenticated = true;
-    this.chatSocket.emit('current-user', { id: res.user.id_str, username: res.user.username });
+    this.emitCurrentUserLoggedin();
+    this.listenCurrentUserConnect();
     this.setCurrentUserConnection();
     this.emitChange(response);
+  },
+
+  emitCurrentUserLoggedin() {
+    console.log('emitCurrentUserLoggedin');
+    chatSocket.emit('currentuser', this.currentUser.username);
+  },
+
+  listenCurrentUserConnect() {
+    console.log('listenCurrentUserConnect', this.currentUser.username);
+    chatSocket.on('room', data => {
+      console.log('room:', data);
+    });
   },
 
   loginFail(res) {

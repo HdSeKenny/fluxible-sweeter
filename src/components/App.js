@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import openSocket from 'socket.io-client';
 import { FullScreen, MainSliders } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { UserStore } from '../stores';
@@ -33,8 +32,7 @@ export default class App extends React.Component {
     super();
     this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
-      showMessages: false,
-      socket: openSocket('http://192.168.0.158:3000')
+      showMessages: false
     };
   }
 
@@ -42,10 +40,6 @@ export default class App extends React.Component {
     $(document).ready(() => {
       $('.loading').addClass('hide');
     });
-    // this.state.socket.emit('subscribeToTimer', 1000);
-    // this.state.socket.on('timer', (data) => {
-      // console.log(data);
-    // });
 
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
   }
@@ -57,10 +51,6 @@ export default class App extends React.Component {
   _onStoreChange(res) {
     if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
       this.setState({ showMessages: true });
-    }
-
-    if (res.msg === 'CHAT_SOCKET_USER_LOGGED_IN') {
-      console.log(`${res.data.username} logged in`)
     }
   }
 
