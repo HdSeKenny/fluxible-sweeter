@@ -6,24 +6,19 @@ function onDisconnect() {
 }
 
 // When the user connects.. perform this
-function onConnect(socket, name) {
+function onConnect(io, socket) {
   // When the client emits 'info', this listens and executes
-  console.log(name, 'socket is connected');
-
   socket.on('info', data => {
     socket.log(JSON.stringify(data, null, 2));
   });
 
   socket.on('message:send', messageobj => {
     messageobj.class = 'you';
-    console.log('Message sent from client, the user is:', messageobj.user_from);
-    socket.emit('message:receive', messageobj);
+    io.sockets.emit('message:receive', messageobj);
   });
-
-  // Insert sockets below require('../api/thing/thing.socket').register(socket);
 }
 
-export default (socketio) => {
+export default (io) => {
   // socket.io (v1.x.x) is powered by debug.
   // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   //
@@ -39,7 +34,7 @@ export default (socketio) => {
   //   handshake: true
   // }));
 
-  socketio.on('connection', (socket) => {
+  io.on('connection', (socket) => {
     socket.address = `${socket.request.connection.remoteAddress}:${socket.request.connection.remotePort}`;
     socket.connectedAt = new Date();
     socket.log = function(...data) {
@@ -51,7 +46,7 @@ export default (socketio) => {
       socket.log('DISCONNECTED');
     });
 
-    onConnect(socket, 'main');
+    onConnect(io, socket);
     socket.log('CONNECTED');
   });
 };

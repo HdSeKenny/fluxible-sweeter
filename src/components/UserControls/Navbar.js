@@ -164,8 +164,7 @@ const Navbar = CreateReactClass({
               <li className={this.isActive([''])}><Link to="/">Home</Link></li>
               <li className={this.isActive(['list'])}><Link to="/list">List</Link></li>
               <li className={this.isActive(['about'])}><Link to="/about">About</Link></li>
-              {authenticated && <li className="mr-30"><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
-
+              {authenticated && <li><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
               {!authenticated && <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>}
               {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}
               {authenticated &&

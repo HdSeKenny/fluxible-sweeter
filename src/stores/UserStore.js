@@ -386,6 +386,9 @@ const UserStore = createStore({
     const parsedConection = JSON.parse(connection);
     parsedConection.active_user = thisUserId;
     localStorage.setItem('current_user_connection', JSON.stringify(parsedConection));
+    this.emitChange({
+      msg: 'SET_ACTIVE_USER_SUCCESS'
+    });
   },
 
   setUserConnection(connection) {
@@ -394,6 +397,9 @@ const UserStore = createStore({
     }
 
     localStorage.setItem('current_user_connection', JSON.stringify(connection));
+    this.emitChange({
+      msg: 'SET_USER_CONNECTION_SUCCESS'
+    });
   },
 
   setCurrentUserConnection(thisUserId) {

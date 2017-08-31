@@ -5,6 +5,13 @@ import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
 import { swal } from '../../../plugins';
 
+/**
+ * ChatBox component - Kenny
+ *
+ * @export
+ * @class ChatBox
+ * @extends {React.Component}
+ */
 export default class ChatBox extends React.Component {
 
   static displayName = 'ChatBox';
@@ -16,67 +23,31 @@ export default class ChatBox extends React.Component {
 
   static propTypes = {
     currentUser: PropTypes.object,
-    user: PropTypes.object,
-    query: PropTypes.object,
-    isCurrentUser: PropTypes.bool,
     hideMessages: PropTypes.func,
-    activeChatId: PropTypes.string
+    activeUser: PropTypes.string,
+    localChat: PropTypes.object
   };
 
   constructor(props, context) {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
-    this.context = context;
+    this.UserStore = context.getStore(UserStore);
     this.state = {
-      activeUserId: context.getStore(UserStore).getActiveUserId(),
-      localChat: context.getStore(UserStore).getUserConnection(),
       message: ''
     };
   }
 
   componentDidMount() {
-    this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
-
-    const chatBox = document.getElementsByClassName('chat')[0];
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    socket.on('message:receive', (messageObj) => this._recieveMessages(messageObj));
-  }
-
-
-  _recieveMessages(messageObj) {
-    console.log('_recieveMessages ===>');
-
-    const { currentUser } = this.props;
-    if (messageObj.user_to === currentUser.id_str) {
-      const { user_from } = messageObj;
-      const { localChat } = this.state;
-      const connections = localChat.recent_chat_connections;
-      const thisUserConnect = connections.find(c => c.this_user_id === user_from);
-
-      thisUserConnect.messages.push(messageObj);
-      this.setState({ localChat }, () => {
-        this.context.getStore(UserStore).setUserConnection(localChat);
-      });
-    }
+    this.UserStore.addChangeListener(this._onStoreChange);
+    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   componentWillUnmount() {
-    this.context.getStore(UserStore).removeChangeListener(this._onStoreChange);
+    this.UserStore.removeChangeListener(this._onStoreChange);
   }
 
   _onStoreChange(res) {
-    const connectionMessages = [
-      'ADD_MESSAGE_CONNECTION_SUCCESS',
-      'DELETE_MESSAGE_CONNECTION_SUCCESS'
-    ];
 
-    if (res.msg && connectionMessages.includes(res.msg)) {
-      this.setState({
-        activeUserId: this.context.getStore(UserStore).getActiveUserId(),
-        localChat: this.context.getStore(UserStore).getUserConnection()
-      });
-    }
   }
 
   onMessageChange(e) {
@@ -88,13 +59,11 @@ export default class ChatBox extends React.Component {
   }
 
   setActiveUser(thisUserId) {
-    this.setState({ activeUserId: thisUserId }, () => {
-      this.context.getStore(UserStore).setActiveUser(thisUserId);
-    });
+    this.UserStore.setActiveUser(thisUserId);
   }
 
   getActiveUser() {
-    this.context.getStore(UserStore).getActiveUserId();
+    this.UserStore.getActiveUserId();
   }
 
   hasActiveUser(connections, activeUserId) {
@@ -116,32 +85,32 @@ export default class ChatBox extends React.Component {
   sendMessage() {
     const msg = this.state.message.trim();
     const now = new Date();
-    const { activeUserId, localChat } = this.state;
+    const { activeUser, localChat, currentUser } = this.props;
     if (!msg) {
       return swal.warning('Invalid message!');
     }
     const newMessage = {
       content: msg,
       date: now,
-      user_to: activeUserId,
-      user_from: this.props.currentUser.id_str,
+      user_to: activeUser,
+      user_from: currentUser.id_str,
       class: 'me'
     };
 
     const connections = localChat.recent_chat_connections;
-    const thisUserConnect = connections.find(c => c.this_user_id === activeUserId);
+    const thisUserConnect = connections.find(c => c.this_user_id === activeUser);
     thisUserConnect.messages.push(newMessage);
 
-    this.setState({ localChat }, () => {
-      this.context.getStore(UserStore).setUserConnection(localChat);
+    this.setState({ message: '' }, () => {
+      this.UserStore.setUserConnection(localChat);
       socket.emit('message:send', newMessage);
     });
   }
 
-  _renderConnectionMessage(currentUser, activeUserId) {
-    const connections = this.state.localChat.recent_chat_connections;
+  _renderConnectionMessage(currentUser, activeUserId, localChat) {
+    const connections = localChat.recent_chat_connections;
     const currentConnect = connections.find(c => c.this_user_id === activeUserId);
-    const thisUser = this.context.getStore(UserStore).getUserById(activeUserId);
+    const thisUser = this.UserStore.getUserById(activeUserId);
     const { connect_date, messages } = currentConnect;
     return (
       <div>
@@ -159,15 +128,15 @@ export default class ChatBox extends React.Component {
     );
   }
 
-  _renderPeopleList(currentUser, activeUserId) {
-    const connections = this.state.localChat.recent_chat_connections;
+  _renderPeopleList(currentUser, activeUserId, localChat) {
+    const connections = localChat.recent_chat_connections;
     if (!connections.length) return null;
     const hasActiveUser = this.hasActiveUser(connections, activeUserId);
     return (
       <ul className="people">
         {connections.map((connection, index) => {
           const thisUserId = connection.this_user_id;
-          const thisUser = this.context.getStore(UserStore).getUserById(thisUserId);
+          const thisUser = this.UserStore.getUserById(thisUserId);
           const { username, last_msg_date, image_url } = thisUser;
           const isActive = activeUserId === thisUserId;
           let classes = isActive ? 'person active' : 'person';
@@ -195,8 +164,8 @@ export default class ChatBox extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props;
-    const { activeUserId, message } = this.state;
+    const { currentUser, activeUser, localChat } = this.props;
+    const { message } = this.state;
 
     if (!currentUser) return null;
     return (
@@ -204,10 +173,10 @@ export default class ChatBox extends React.Component {
         <div className="wrapper">
           <div className="left">
             <div className="top"><input type="text" /></div>
-            {this._renderPeopleList(currentUser, activeUserId)}
+            {this._renderPeopleList(currentUser, activeUser, localChat)}
           </div>
           <div className="right">
-            {this._renderConnectionMessage(currentUser, activeUserId)}
+            {this._renderConnectionMessage(currentUser, activeUser, localChat)}
             <div className="write">
               <Row className="">
                 <Col size="9 p-0">

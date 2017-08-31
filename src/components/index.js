@@ -7,8 +7,6 @@ export UserHome from './Users/UserHome';
 export UserBlogs from './Users/UserBlogs';
 export UserInfo from './Users/UserInfo';
 export ChangePassword from './Users/ChangePassword';
-export UserMore from './Users/UserMore';
-export UserMessages from './Users/UserMessages';
 export UserMoments from './Users/UserMoments';
 export List from './Pages/List';
 export About from './Pages/About';

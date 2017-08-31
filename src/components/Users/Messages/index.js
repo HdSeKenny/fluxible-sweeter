@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import { FluxibleMixin } from 'fluxible-addons-react';
-import { format, jsUtils } from '../../../utils';
-import { swal } from '../../../plugins';
-import { BlogActions } from '../../../actions';
 import { UserStore } from '../../../stores';
 import { Row, Col } from '../../UI/Layout';
 import ChatBox from './ChatBox';
 
+/**
+ * User messages component
+ *
+ * @export
+ * @class Messages
+ * @extends {React.Component}
+ */
 export default class Messages extends React.Component {
 
   static displayName = 'Messages';
@@ -19,10 +21,6 @@ export default class Messages extends React.Component {
   };
 
   static propTypes = {
-    currentUser: PropTypes.object,
-    user: PropTypes.object,
-    query: PropTypes.object,
-    isCurrentUser: PropTypes.bool,
     hideMessages: PropTypes.func,
     showMessages: PropTypes.bool
   };
@@ -30,31 +28,59 @@ export default class Messages extends React.Component {
   constructor(props, context) {
     super(props);
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.context = context;
+    this.UserStore = context.getStore(UserStore);
     this.state = {
-      currentUser: context.getStore(UserStore).getCurrentUser()
+      currentUser: this.UserStore.getCurrentUser(),
+      activeUser: this.UserStore.getActiveUserId(),
+      localChat: this.UserStore.getUserConnection()
     };
   }
 
-  focus = () => {
-    this.editor.focus();
-  };
-
   componentDidMount() {
-    this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+    this.UserStore.addChangeListener(this._onStoreChange);
+
+    // Chat socket receive messages from server
+    socket.on('message:receive', (messageObj) => this._recieveMessages(messageObj));
   }
 
   componentWillUnmount() {
-    this.context.getStore(UserStore).removeChangeListener(this._onStoreChange);
+    this.UserStore.removeChangeListener(this._onStoreChange);
+  }
+
+  _recieveMessages(messageObj) {
+    const { currentUser, localChat } = this.state;
+    const { user_from, user_to } = messageObj;
+    if (user_to === currentUser.id_str) {
+      const connections = localChat.recent_chat_connections;
+      const thisUserConnect = connections.find(c => c.this_user_id === user_from);
+      thisUserConnect.messages.push(messageObj);
+      this.setState({ localChat }, () => {
+        this.UserStore.setUserConnection(localChat);
+      });
+    }
   }
 
   _onStoreChange(res) {
-    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'ADD_MESSAGE_CONNECTION_SUCCESS'];
-    const currentUser = this.context.getStore(UserStore).getCurrentUser();
-    const result = {
-      currentUser
-    };
+    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
+    const connectMessages = [
+      'ADD_MESSAGE_CONNECTION_SUCCESS',
+      'SET_ACTIVE_USER_SUCCESS',
+      'DELETE_MESSAGE_CONNECTION_SUCCESS',
+      'SET_USER_CONNECTION_SUCCESS'
+    ];
+
+    const result = {};
+    if (connectMessages.includes(res.msg)) {
+      result.activeUser = this.UserStore.getActiveUserId();
+      result.localChat = this.UserStore.getUserConnection();
+    }
 
     if (authMessages.includes(res.msg)) {
+      result.currentUser = this.UserStore.getCurrentUser();
+    }
+
+    if (Object.keys(result).length > 0) {
       this.setState(result);
     }
   }
@@ -64,7 +90,7 @@ export default class Messages extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.state;
+    const { currentUser, localChat, activeUser } = this.state;
     const { showMessages } = this.props;
     if (!currentUser) return null;
 
@@ -82,6 +108,8 @@ export default class Messages extends React.Component {
           <ChatBox
             hideMessages={() => this.hideMessages()}
             currentUser={currentUser}
+            localChat={localChat}
+            activeUser={activeUser}
           />
         }
       </div>
