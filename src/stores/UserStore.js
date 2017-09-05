@@ -1,6 +1,7 @@
 import createStore from 'fluxible/addons/createStore';
 import _ from 'lodash';
 import { env } from '../utils';
+import store from '../utils/indexedDB';
 
 const UserStore = createStore({
 
@@ -21,8 +22,6 @@ const UserStore = createStore({
     'EDIT_USER_IMAGE': 'editUserImage',
     'CANCEL_EDIT_USER_IMAGE': 'cancelEditUserImage',
     'UPLOAD_IMAGE_SUCCESS': 'uploadImageSuccess',
-    'FOLLOW_USER_WITH_SUCCESS': 'followUserWithSuccess',
-    'CANCEL_FOLLOW_USER_WITH_SUCCESS': 'cancelFollowUserWithSuccess',
     'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
     'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess',
     'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
@@ -48,7 +47,6 @@ const UserStore = createStore({
 
   loadUsersSuccess(res) {
     this.users = res.data;
-    this.save = res.save;
     this.emitChange();
   },
 
@@ -58,9 +56,10 @@ const UserStore = createStore({
 
   registerSuccess(res) {
     this.currentUser = res.user;
-    this.users.push(res.user);
     this.authenticated = true;
+    this.users.push(res.user);
 
+    this.updateIndexedDB();
     this.setCurrentUserConnection();
     this.emitChange({
       msg: 'USER_REGISTER_SUCCESS',
@@ -105,9 +104,12 @@ const UserStore = createStore({
   },
 
   updateUserSuccess(res) {
-    const response = { msg: 'UPDATE_USER_SUCCESS' };
     this.currentUser = res;
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'UPDATE_USER_SUCCESS'
+    });
   },
 
   changePasswordSuccess(res) {
@@ -175,29 +177,22 @@ const UserStore = createStore({
   },
 
   followUserSuccess(res) {
-    const response = {
-      msg: 'FOLLOW_USER_SUCCESS'
-    };
-
     const thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
 
     this.users[thisUserIndex].fans.push(res.currentUser);
     this.currentUser.focuses.push(res.thisUser);
-
     if (this.currentUser.focuses_list) {
       this.currentUser.focuses_list.no_groups.push(res.thisUser);
     }
 
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'FOLLOW_USER_SUCCESS'
+    });
   },
 
   cancelFollowUserSuccess(res) {
-    const response = {
-      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
-      currentUser: res.currentUser,
-      user: res.thisUser
-    };
-
     const _thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
     const new_fans = this.users[_thisUserIndex].fans.filter(f => f.id_str !== res.currentUser.id_str);
 
@@ -212,35 +207,20 @@ const UserStore = createStore({
       special_focuses
     };
 
-    this.emitChange(response);
-  },
-
-  followUserWithSuccess(res) {
-    const response = { msg: 'FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
-    this.currentUser.focuses.push(res.thisUser);
-    this.users[usrIdx] = this.currentUser;
-    this.emitChange(response);
-  },
-
-  cancelFollowUserWithSuccess(res) {
-    const response = { msg: 'CANCEL_FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
-    this.currentUser.focuses.forEach((focus, fsIdx) => {
-      if (focus.id_str === res.thisUser.id_str) {
-        this.currentUser.focuses.splice(fsIdx, 1);
-      }
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
+      currentUser: res.currentUser,
+      user: res.thisUser
     });
-    this.users[usrIdx] = this.currentUser;
-    this.emitChange(response);
   },
 
   getLoginUserImageSuccess(res) {
-    const response = {
-      msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
-    };
     this.loginUserImage = res;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
+    });
   },
 
   getLoginUserloginUserImage() {
@@ -260,38 +240,44 @@ const UserStore = createStore({
   },
 
   editUserImage(image) {
-    const response = {
-      msg: 'EDIT_IMAGE_SUCCESS'
-    };
     this.currentUploadedImage = image;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'EDIT_IMAGE_SUCCESS'
+    });
   },
 
   cancelEditUserImage() {
-    const response = {
-      msg: 'CANCEL_IMAGE_SUCCESS'
-    };
     this.currentUploadedImage = null;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'CANCEL_IMAGE_SUCCESS'
+    });
   },
 
   uploadImageSuccess(newuser) {
-    const response = {
-      msg: 'UPLOAD_IMAGE_SUCCESS'
-    };
     this.currentUser.image_url = newuser.image_url;
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'UPLOAD_IMAGE_SUCCESS'
+    });
   },
 
 
   addMessageConnectionSuccess(connection) {
-    if (!this.currentUser.recent_chat_connections) {
+    const connections = this.currentUser.recent_chat_connections;
+    const isNotExist = connections.findIndex(c => c.this_user_id === connection.this_user_id) < 0;
+
+    if (!connections) {
       this.currentUser.recent_chat_connections = [];
     }
 
-    this.currentUser.recent_chat_connections.push(connection);
+    if (isNotExist) {
+      this.currentUser.recent_chat_connections.push(connection);
+    }
 
     this.setCurrentUserConnection(connection.this_user_id);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection
@@ -309,6 +295,8 @@ const UserStore = createStore({
       });
     }
 
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
     this.emitChange({
       msg: 'DELETE_MESSAGE_CONNECTION_SUCCESS',
       connections: res.connections
@@ -365,6 +353,18 @@ const UserStore = createStore({
 
   clearUserConnection() {
     // TODO
+  },
+
+  updateCurrentUserIntoUsers() {
+    this.users.forEach((user, idx) => {
+      if (user.id_str === this.currentUser.id_str) {
+        this.users[idx] = this.currentUser;
+      }
+    });
+  },
+
+  updateIndexedDB() {
+    store.set('users', this.users);
   },
 
   dehydrate() {

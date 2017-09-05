@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute, History } from 'react-router';
 import config from './configs';
-import Mode from './utils/mode';
+import Mode from './configs/mode';
 import env from './utils/env';
 import { UserActions } from './actions';
 import { UserFollows, UserPhotos } from './components/Users';

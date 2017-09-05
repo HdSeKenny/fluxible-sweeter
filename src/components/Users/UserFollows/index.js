@@ -49,42 +49,6 @@ export default CreateReactClass({
     }
   },
 
-  componentDidMount() {
-
-  },
-
-  onFollowThisUser(followUser) {
-    const { currentUser, user } = this.state;
-    if (!currentUser) {
-      return swal.error('Login first please!');
-    }
-
-    const followObj = {
-      userId: user._id,
-      type: followUser.type,
-      thisUserId: followUser.user._id,
-      currentUserId: currentUser._id
-    };
-
-    this.executeAction(UserActions.FollowThisUserWithFollow, followObj);
-  },
-
-  onCancelFollowThisUser(followUser) {
-    const { currentUser, user } = this.state;
-    if (!currentUser) {
-      return swal.error('Login first please!');
-    }
-
-    const cancelFollowObj = {
-      userId: user._id,
-      type: followUser.type,
-      thisUserId: followUser.user._id,
-      currentUserId: currentUser._id
-    };
-
-    this.executeAction(UserActions.CancelFollowThisUserWithFollow, cancelFollowObj);
-  },
-
   render() {
     const { pathname, query } = this.props.location;
     const { currentUser, user, isCurrentUser } = this.state;

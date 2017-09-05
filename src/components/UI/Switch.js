@@ -63,7 +63,7 @@ class Switch extends React.Component {
     const buttonStyleOff = {
       left: 0
     };
-    const { before, after } = this.props;
+    const {/* before,*/ after } = this.props;
     const spanMergeParam = !this.state.on ? switchStyleOff : {};
     const btnMergeParam = !this.state.on ? buttonStyleOff : {};
     const switchSpan = Update(switchStyleOn, { $merge: spanMergeParam });

@@ -1,5 +1,5 @@
 /* eslint-disable all, no-param-reassign */
-import Mode from '../utils/mode';
+import Mode from '../configs/mode';
 import fetchClientConfig from '../utils/fetchClientConfig';
 import store from '../utils/indexedDB';
 
@@ -7,6 +7,7 @@ const { isPublic } = Mode;
 const endpoint = 'users';
 
 export default {
+
   LoadKennyUser(context, payload, done) {
     const callback = (err, res, save) => {
       context.dispatch('LOAD_KENNY_SUCCESS', { data: res, save });
@@ -69,11 +70,6 @@ export default {
     });
   },
 
-  isAuthenticated(context, payload, done) {
-    context.dispatch('IS_AUTHENTICATED');
-    done();
-  },
-
   UpdateUserInfo(context, payload, done) {
     context.service.create('users.updateUserInfo', {}, payload, fetchClientConfig, (err, res) => {
       context.dispatch('UPDATE_USER_SUCCESS', res);
@@ -98,24 +94,6 @@ export default {
   CancelFollowThisUser(context, payload, done) {
     context.service.create('users.cancelFollowThisUser', {}, payload, fetchClientConfig, (err, res) => {
       context.dispatch('CANCEL_FOLLOW_USER_SUCCESS', res);
-      done();
-    });
-  },
-
-  FollowThisUserWithFollow(context, payload, done) {
-    context.service.create('users.followThisUser', {}, payload, fetchClientConfig, (err, res) => {
-      res.userId = payload.userId;
-      res.followType = payload.type;
-      context.dispatch('FOLLOW_USER_WITH_SUCCESS', res);
-      done();
-    });
-  },
-
-  CancelFollowThisUserWithFollow(context, payload, done) {
-    context.service.create('users.cancelFollowThisUser', {}, payload, fetchClientConfig, (err, res) => {
-      res.userId = payload.userId;
-      res.followType = payload.type;
-      context.dispatch('CANCEL_FOLLOW_USER_WITH_SUCCESS', res);
       done();
     });
   },
