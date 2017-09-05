@@ -8,15 +8,10 @@ const UserStore = createStore({
 
   handlers: {
     'USER_REGISTER_SUCCESS': 'registerSuccess',
-    'USER_REGISTER_FAIL': 'registerFail',
     'USER_LOGIN_SUCCESS': 'loginSuccess',
-    'USER_LOGIN_FAIL': 'loginFail',
     'LOGOUT_SUCCESS': 'logoutSuccess',
-    'LOGOUT_FAIL': 'logoutFail',
     'LOAD_SESSION_USER_SUCCESS': 'loadSessionUserSuccess',
-    'LOAD_SESSION_USER_FAIL': 'loadSessionUserFail',
     'LOAD_USERS_SUCCESS': 'loadUsersSuccess',
-    'LOAD_USERS_FAIL': 'loadUsersFail',
     'IS_LOGGED_IN': 'isLoggedIn',
     'LOAD_KENNY_SUCCESS': 'loadKennySuccess',
     'UPDATE_USER_SUCCESS': 'updateUserSuccess',
@@ -43,7 +38,7 @@ const UserStore = createStore({
   },
 
   loadKennySuccess(res) {
-    this.kenny = res;
+    this.kenny = res.data;
     this.emitChange();
   },
 
@@ -52,71 +47,35 @@ const UserStore = createStore({
   },
 
   loadUsersSuccess(res) {
-    this.users = res;
-    this.emitChange({
-      msg: 'LOAD_USERS_SUCCESS'
-    });
+    this.users = res.data;
+    this.save = res.save;
+    this.emitChange();
   },
 
   getUsernames() {
     return this.users.map(user => user.username);
   },
 
-  loadUsersFail() {
-    const response = {
-      resCode: 404,
-      msg: 'LOAD_USERS_FAIL'
-    };
-    this.users = null;
-    this.emitChange(response);
-  },
-
   registerSuccess(res) {
-    const response = {
-      msg: 'USER_REGISTER_SUCCESS',
-      stat: res.msg,
-      user: res.user
-    };
-
     this.currentUser = res.user;
     this.users.push(res.user);
     this.authenticated = true;
 
     this.setCurrentUserConnection();
-    this.emitChange(response);
-  },
-
-  registerFail(res) {
-    const response = {
-      msg: 'USER_REGISTER_FAIL',
+    this.emitChange({
+      msg: 'USER_REGISTER_SUCCESS',
       stat: res.msg,
       user: res.user
-    };
-
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(response);
+    });
   },
 
   loginSuccess(res) {
-    const response = {
-      msg: 'USER_LOGIN_SUCCESS'
-    };
-
     this.currentUser = res.user;
     this.authenticated = true;
     this.setCurrentUserConnection();
-    this.emitChange(response);
-  },
-
-  loginFail(res) {
-    const response = {
-      msg: 'USER_LOGIN_FAIL',
-      errorMsg: res.auth.msg
-    };
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'USER_LOGIN_SUCCESS'
+    });
   },
 
   logoutSuccess() {
@@ -143,12 +102,6 @@ const UserStore = createStore({
     this.currentUser = res.user;
     this.authenticated = true;
     this.emitChange(res);
-  },
-
-  loadSessionUserFail(res) {
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(res.auth.stat);
   },
 
   updateUserSuccess(res) {

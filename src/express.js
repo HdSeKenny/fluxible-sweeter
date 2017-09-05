@@ -18,9 +18,8 @@ import createRoutes from './routes';
 import fetchData from './utils/fetchData';
 import app from './app';
 import Html from './components/Html';
-import config from './configs';
 import assets from './utils/assets';
-import serverConfig from './configs/server';
+import configs from './configs';
 import htmlToPdf from './plugins/htmlToPdf';
 import sharp from './plugins/sharp';
 
@@ -30,12 +29,13 @@ export default (server) => {
   server.set('views', path.join(__dirname, 'views')); // view engine setup
   server.set('view engine', 'pug');
 
-  if (serverConfig.server.logEnable && env !== 'production') {
+  if (configs.server.logEnable && env !== 'production') {
     // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
     server.use(morgan(':method :url :status :response-time ms'));
   }
+
   if (env === 'development') {
-    server.use(express.static(path.join(serverConfig.server.root, '.tmp')));
+    server.use(express.static(path.join('..', 'dev')));
   }
 
   server.use(bodyParser.json({ limit: '20mb' }));
@@ -43,14 +43,14 @@ export default (server) => {
   server.use(cookieParser());
   server.use(cors());
 
-  server.use(`${config.path_prefix}/`, express.static(path.join(__dirname, 'public')));
+  server.use(`${configs.path_prefix}/`, express.static(path.join(__dirname, 'public')));
   server.use(favicon(`${__dirname}/public/styles/images/favicon.ico`));
   server.use(useragent.express());
 
   const MongoStore = connectMongo(session);
   server.use(session({
     secret: 'sweeter-secret',
-    store: new MongoStore(serverConfig.mongo.session),
+    store: new MongoStore(configs.mongo.session),
     resave: false,
     saveUninitialized: false
   }));
@@ -70,7 +70,7 @@ export default (server) => {
     const context = app.createContext({
       req,
       res,
-      config,
+      configs,
       authenticated: req.session.user && req.session.user.authenticated
     });
     const routes = createRoutes(context);

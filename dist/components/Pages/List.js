@@ -81,8 +81,9 @@ exports.default = (0, _createReactClass2.default)({
     }
 
     if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
+      const currentUser = this.getStore(_stores.UserStore).getCurrentUser();
       this.setState({
-        currentUser: this.getStore(_stores.UserStore).getCurrentUser()
+        currentUser: currentUser
       });
     }
   },

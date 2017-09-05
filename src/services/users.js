@@ -1,7 +1,7 @@
 /* eslint-disable all, no-param-reassign, no-shadow */
 import md5 from 'md5';
 import MongoClient from 'mongodb';
-import serverConfig from '../configs/server';
+import serverConfig from '../configs';
 
 const ObjectID = MongoClient.ObjectID;
 const MongoUrl = serverConfig.mongo.sweeter.url;

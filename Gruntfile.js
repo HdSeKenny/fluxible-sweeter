@@ -1,6 +1,8 @@
 const path = require('path');
 const makeWebpackConfig = require('./webpack.config');
-const env = require('./src/configs/development');
+const env = require('./src/configs');
+
+const { hot_server_host, hot_server_port } = env.development;
 
 module.exports = function(grunt) {
   // load npm grunt tasks
@@ -192,10 +194,10 @@ module.exports = function(grunt) {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         },
-        port: env.hot_server_port,
+        port: hot_server_port,
         webpack: makeWebpackConfig({ model: 'dev' }),
-        public: env.hot_server_host,
-        publicPath: `http://${env.hot_server_host}:${env.hot_server_port}`
+        public: hot_server_host,
+        publicPath: `http://${hot_server_host}:${hot_server_port}`
       },
 
       start: {}
@@ -396,9 +398,9 @@ module.exports = function(grunt) {
   grunt.registerTask('assets', () => {
     grunt.file.write('dev/configs/assets.json', JSON.stringify({
       assets: {
-        'style': `http://${env.hot_server_host}:${env.hot_server_port}/main.css`,
-        'main': `http://${env.hot_server_host}:${env.hot_server_port}/main.js`,
-        'common': `http://${env.hot_server_host}:${env.hot_server_port}/common.js`
+        'style': `http://${hot_server_host}:${hot_server_port}/main.css`,
+        'main': `http://${hot_server_host}:${hot_server_port}/main.js`,
+        'common': `http://${hot_server_host}:${hot_server_port}/common.js`
       }
     }, null, 2));
 

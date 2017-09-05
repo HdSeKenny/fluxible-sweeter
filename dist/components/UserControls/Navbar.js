@@ -217,7 +217,7 @@ const Navbar = (0, _createReactClass2.default)({
             ),
             authenticated && _react2.default.createElement(
               'li',
-              { className: 'mr-30' },
+              null,
               _react2.default.createElement(
                 _reactRouter.Link,
                 { to: '/about' },
@@ -247,7 +247,7 @@ const Navbar = (0, _createReactClass2.default)({
               { className: 'mr-0 pr-0' },
               _react2.default.createElement(
                 'a',
-                { className: 'm-0', href: `/${currentUser.username}` },
+                { className: 'm-0', href: '/' + currentUser.username },
                 _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url })
               ),
               _react2.default.createElement(

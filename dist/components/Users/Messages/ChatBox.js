@@ -14,64 +14,171 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _stores = require('../../../stores');
 
+var _actions = require('../../../actions');
+
 var _Layout = require('../../UI/Layout');
+
+var _plugins = require('../../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * ChatBox component - Kenny
+ *
+ * @export
+ * @class ChatBox
+ * @extends {React.Component}
+ */
 class ChatBox extends _react2.default.Component {
 
   constructor(props, context) {
     super(props);
-
-    this.focus = () => {
-      this.editor.focus();
-    };
-
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.UserStore = context.getStore(_stores.UserStore);
     this.state = {
-      activeUserId: context.getStore(_stores.UserStore).getActiveUserId()
+      message: ''
     };
   }
 
   componentDidMount() {
-    this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
-
-    const chatBox = document.getElementsByClassName('chat')[0];
-    chatBox.scrollTop = chatBox.scrollHeight;
+    this.UserStore.addChangeListener(this._onStoreChange);
+    this.jumpToMessagsBottom();
   }
 
   componentWillUnmount() {
-    this.context.getStore(_stores.UserStore).removeChangeListener(this._onStoreChange);
+    this.UserStore.removeChangeListener(this._onStoreChange);
   }
 
-  _onStoreChange(res) {
-    if (res.msg && res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
-      this.setState({
-        activeUserId: res.connection.this_user_id
-      });
+  componentDidUpdate() {
+    this.jumpToMessagsBottom();
+  }
+
+  _onStoreChange() {}
+
+  onMessageChange(e) {
+    this.setState({ message: e.target.value });
+  }
+
+  jumpToMessagsBottom() {
+    let chatScrollTop = $('.chat')[0].scrollTop;
+    const chatScrollHeight = $('.chat')[0].scrollHeight;
+
+    if (chatScrollTop !== chatScrollHeight) {
+      chatScrollTop = chatScrollHeight;
     }
   }
 
   toggleChatBox() {
-    this.props.toggleChatBox();
+    this.props.hideMessages();
   }
 
   setActiveUser(thisUserId) {
-    this.context.getStore(_stores.UserStore).setActiveUserId(thisUserId);
-    this.setState({ activeUserId: thisUserId });
+    this.UserStore.setActiveUser(thisUserId);
+    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   getActiveUser() {
-    this.context.getStore(_stores.UserStore).getActiveUserId();
+    this.UserStore.getActiveUserId();
   }
 
   hasActiveUser(connections, activeUserId) {
-    const idx = connections.findIndex(c => c.this_user_id === activeUserId);
-    return idx >= 0;
+    return connections.findIndex(c => c.this_user_id === activeUserId) >= 0;
   }
 
-  _renderPeopleList(currentUser, activeUserId) {
-    const connections = currentUser.recent_chat_connections;
+  closeUserConnection(thisUserId) {
+    this.context.executeAction(_actions.UserActions.closeUserConnection, {
+      myId: this.props.currentUser.id_str,
+      thisUserId: thisUserId
+    });
+  }
+
+  onSubmitMessage(e) {
+    e.preventDefault();
+    this.sendMessage();
+  }
+
+  sendMessage() {
+    const msg = this.state.message.trim();
+    const now = new Date();
+    const { activeUser: activeUser, localChat: localChat, currentUser: currentUser } = this.props;
+    if (!msg) {
+      return _plugins.swal.warning('Invalid message!');
+    }
+    const newMessage = {
+      content: msg,
+      date: now,
+      user_to: activeUser,
+      user_from: currentUser.id_str,
+      class: 'me'
+    };
+
+    const connections = localChat.recent_chat_connections;
+    const thisUserConnect = connections.find(c => c.this_user_id === activeUser);
+    thisUserConnect.messages.push(newMessage);
+
+    this.setState({ message: '' }, () => {
+      this.UserStore.setUserConnection(localChat);
+      socket.emit('message:send', newMessage);
+    });
+  }
+
+  _renderConnectionMessage(currentUser, activeUserId, localChat) {
+    const connections = localChat.recent_chat_connections;
+    const currentConnect = connections.find(c => c.this_user_id === activeUserId);
+    const thisUser = this.UserStore.getUserById(activeUserId);
+    const { connect_date: connect_date, messages: messages } = currentConnect;
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        _Layout.Row,
+        { className: 'top' },
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '8 p-0' },
+          _react2.default.createElement(
+            'h4',
+            { className: 'm-0' },
+            _react2.default.createElement(
+              'i',
+              null,
+              thisUser.username
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '4 tar p-0' },
+          _react2.default.createElement(
+            'span',
+            { className: 'close-box', onClick: () => this.toggleChatBox() },
+            '\xD7'
+          )
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'chat' },
+        _react2.default.createElement(
+          'div',
+          { className: 'conversation-start' },
+          _react2.default.createElement(
+            'span',
+            null,
+            connect_date
+          )
+        ),
+        messages.map((msg, idx) => _react2.default.createElement(
+          'div',
+          { className: `bubble ${msg.class}`, key: idx },
+          msg.content
+        ))
+      )
+    );
+  }
+
+  _renderPeopleList(currentUser, activeUserId, localChat) {
+    const connections = localChat.recent_chat_connections;
     if (!connections.length) return null;
     const hasActiveUser = this.hasActiveUser(connections, activeUserId);
     return _react2.default.createElement(
@@ -79,7 +186,7 @@ class ChatBox extends _react2.default.Component {
       { className: 'people' },
       connections.map((connection, index) => {
         const thisUserId = connection.this_user_id;
-        const thisUser = this.context.getStore(_stores.UserStore).getUserById(thisUserId);
+        const thisUser = this.UserStore.getUserById(thisUserId);
         const { username: username, last_msg_date: last_msg_date, image_url: image_url } = thisUser;
         const isActive = activeUserId === thisUserId;
         let classes = isActive ? 'person active' : 'person';
@@ -89,31 +196,48 @@ class ChatBox extends _react2.default.Component {
         }
         return _react2.default.createElement(
           _Layout.Row,
-          { className: classes, key: index, onClick: () => this.setActiveUser(thisUserId) },
+          { className: classes, key: index },
           _react2.default.createElement(
             _Layout.Col,
-            { size: '3 p-0' },
-            _react2.default.createElement('img', { src: image_url, alt: 'chat-user', width: '40' })
+            { size: '10 p-0', onClick: () => this.setActiveUser(thisUserId) },
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '4 p-0' },
+              _react2.default.createElement('img', { src: image_url, alt: 'chat-user', width: '30' })
+            ),
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '8 p-0' },
+              _react2.default.createElement(
+                _Layout.Row,
+                { className: 'name' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  username
+                )
+              ),
+              _react2.default.createElement(
+                _Layout.Row,
+                { className: 'time' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  last_msg_date
+                )
+              )
+            )
           ),
           _react2.default.createElement(
             _Layout.Col,
-            { size: '9 pr-0 pl-10' },
+            { size: '2 p-0 tar' },
             _react2.default.createElement(
               _Layout.Row,
-              { className: 'name' },
+              { className: 'close-connect' },
               _react2.default.createElement(
                 'span',
-                null,
-                username
-              )
-            ),
-            _react2.default.createElement(
-              _Layout.Row,
-              { className: 'time' },
-              _react2.default.createElement(
-                'span',
-                null,
-                last_msg_date
+                { onClick: () => this.closeUserConnection(thisUserId) },
+                '\xD7'
               )
             )
           )
@@ -123,10 +247,10 @@ class ChatBox extends _react2.default.Component {
   }
 
   render() {
-    const { currentUser: currentUser } = this.props;
-    const { activeUserId: activeUserId } = this.state;
-    if (!currentUser) return null;
+    const { currentUser: currentUser, activeUser: activeUser, localChat: localChat } = this.props;
+    const { message: message } = this.state;
 
+    if (!currentUser) return null;
     return _react2.default.createElement(
       'div',
       { className: 'chat-box' },
@@ -139,110 +263,40 @@ class ChatBox extends _react2.default.Component {
           _react2.default.createElement(
             'div',
             { className: 'top' },
-            _react2.default.createElement('input', { type: 'text' }),
-            _react2.default.createElement(
-              'button',
-              { className: 'btn btn-default btn-sm' },
-              '\u5341'
-            )
+            _react2.default.createElement('input', { type: 'text' })
           ),
-          this._renderPeopleList(currentUser, activeUserId)
+          this._renderPeopleList(currentUser, activeUser, localChat)
         ),
         _react2.default.createElement(
           'div',
           { className: 'right' },
-          _react2.default.createElement(
-            _Layout.Row,
-            { className: 'top' },
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '8 p-0' },
-              _react2.default.createElement(
-                'h4',
-                { className: 'm-0' },
-                _react2.default.createElement(
-                  'i',
-                  null,
-                  'TDog Woofson'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '4 msg-event tar p-0' },
-              _react2.default.createElement(
-                'span',
-                { className: 'close-box', onClick: () => this.toggleChatBox() },
-                '\xD7'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'chat', 'data-chat': 'person2' },
-            _react2.default.createElement(
-              'div',
-              { className: 'conversation-start' },
-              _react2.default.createElement(
-                'span',
-                null,
-                'Today, 5:38 PM'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'Hello, can you hear me?'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'I\'m in California dreaming'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble me' },
-              '... about who we used to be.'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble me' },
-              'Are you serious?'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'When we were younger and free...'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'I\'ve forgotten how it felt before'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'I\'ve forgotten how it felt before'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bubble you' },
-              'I\'ve forgotten how it felt before'
-            )
-          ),
+          this._renderConnectionMessage(currentUser, activeUser, localChat),
           _react2.default.createElement(
             'div',
             { className: 'write' },
             _react2.default.createElement(
               _Layout.Row,
-              { className: 'icons' },
+              { className: '' },
               _react2.default.createElement(
-                'span',
-                { className: 'emoji' },
-                _react2.default.createElement('i', { className: 'fa fa-smile-o fa-lg', 'aria-hidden': 'true' })
+                _Layout.Col,
+                { size: '9 p-0' },
+                _react2.default.createElement(
+                  'form',
+                  { onSubmit: this.onSubmitMessage.bind(this) },
+                  _react2.default.createElement('input', { onChange: e => this.onMessageChange(e), value: message })
+                )
+              ),
+              _react2.default.createElement(
+                _Layout.Col,
+                { size: '3 p-0 tar' },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-info send', onClick: () => this.sendMessage() },
+                  _react2.default.createElement('i', { className: 'fa fa-paper-plane mr-5', 'aria-hidden': 'true' }),
+                  'Send'
+                )
               )
-            ),
-            _react2.default.createElement('textarea', { rows: '1' })
+            )
           )
         )
       )
@@ -257,10 +311,8 @@ ChatBox.contextTypes = {
 };
 ChatBox.propTypes = {
   currentUser: _propTypes2.default.object,
-  user: _propTypes2.default.object,
-  query: _propTypes2.default.object,
-  isCurrentUser: _propTypes2.default.bool,
-  toggleChatBox: _propTypes2.default.func,
-  activeChatId: _propTypes2.default.string
+  hideMessages: _propTypes2.default.func,
+  activeUser: _propTypes2.default.string,
+  localChat: _propTypes2.default.object
 };
 module.exports = exports['default'];

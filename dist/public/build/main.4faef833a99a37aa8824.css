@@ -14104,7 +14104,7 @@ License: http://codecanyon.net/licenses
   min-height: 40px;
   line-height: 15.6px;
   margin: 0;
-  padding: 10px 15px;
+  padding: 0;
   position: fixed;
   right: 0;
   bottom: 0;
@@ -14117,6 +14117,9 @@ License: http://codecanyon.net/licenses
   padding: 0;
   list-style: none;
 }
+.messages .small-chat-box {
+  padding: 10px 15px;
+}
 .messages .row .msg-event p {
   margin-top: 2.5px;
 }
@@ -14124,26 +14127,29 @@ License: http://codecanyon.net/licenses
   font-size: 19px;
   color: #00a9da;
 }
-.messages .row .msg-event i.fa-remove {
+.messages .row .msg-event i.fa-cog {
+  margin-top: 2px;
+  font-size: 16px;
   color: gray;
   font-weight: 400;
 }
 .messages .row .msg-event:hover {
   cursor: pointer;
 }
-.messages .row .msg-event .close-box {
-  margin-right: 1px;
-  font-size: 25px;
-  color: gray;
-}
-.messages .row .msg-event .close-box:hover {
-  color: #00a9da;
-}
 .messages .row .msg-event .close-message {
-  font-size: 25px;
+  font-size: 20px;
   color: gray;
 }
 .messages .row .msg-event .close-message:hover {
+  color: #00a9da;
+}
+.messages .row .close-box {
+  margin-right: 10px;
+  font-size: 25px;
+  color: gray;
+}
+.messages .row .close-box:hover {
+  cursor: pointer;
   color: #00a9da;
 }
 .chat-box .wrapper {
@@ -14158,14 +14164,14 @@ License: http://codecanyon.net/licenses
 }
 .chat-box .wrapper .left {
   float: left;
-  width: 35%;
+  width: 30%;
   height: 100%;
   background-color: #fff;
   border-right: 1px solid #ECEFF1;
 }
 .chat-box .wrapper .left input {
   float: left;
-  width: 75%;
+  width: 100%;
   height: 30px;
   padding: 5px 10px;
   border: 1px solid #e6e6e6;
@@ -14193,13 +14199,18 @@ License: http://codecanyon.net/licenses
 }
 .chat-box .wrapper .left .people .person {
   position: relative;
-  padding: 5px 10px;
+  padding: 8px 10px;
   cursor: pointer;
   background-color: #fff;
 }
-.chat-box .wrapper .left .people .person.active,
+.chat-box .wrapper .left .people .person.active {
+  background-color: #ECEFF1;
+}
 .chat-box .wrapper .left .people .person:hover {
   background-color: #ECEFF1;
+}
+.chat-box .wrapper .left .people .person:hover .close-connect {
+  display: block;
 }
 .chat-box .wrapper .left .people .person img {
   border-radius: 50%;
@@ -14207,15 +14218,21 @@ License: http://codecanyon.net/licenses
 .chat-box .wrapper .left .people .person .name {
   padding: 3px 0;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
 }
 .chat-box .wrapper .left .people .person .time {
   color: gray;
 }
+.chat-box .wrapper .left .people .person .close-connect {
+  margin: 5px 0;
+  font-size: 18px;
+  color: gray;
+  display: none;
+}
 .chat-box .wrapper .right {
   position: relative;
   float: left;
-  width: 65%;
+  width: 70%;
   height: 100%;
 }
 .chat-box .wrapper .right .top {
@@ -14301,32 +14318,28 @@ License: http://codecanyon.net/licenses
   background-color: #eceff1;
 }
 .chat-box .wrapper .right .write {
-  position: absolute;
   width: 100%;
   bottom: 0;
-  height: 66px;
+  height: 45px;
+  position: absolute;
+  padding: 5px;
   border-top: 1px solid #e6e6e6;
 }
-.chat-box .wrapper .right .write textarea {
+.chat-box .wrapper .right .write input {
   font-size: 13px;
-  height: 40px;
-  width: 100%;
-  padding: 5px 10px;
-  color: #1a1a1a;
-  border: 0;
-  outline: none;
-  background-color: #eceff1;
   font-family: 'Source Sans Pro', sans-serif;
+  color: #1a1a1a;
+  height: 35px;
+  width: 105%;
+  padding: 10px;
+  border: 0;
+  background-color: #eceff1;
+  border-radius: 3px;
+  outline: none;
+  overflow: auto;
 }
-.chat-box .wrapper .right .write .icons {
-  background: #eceff1;
-  padding: 5px 10px;
-}
-.chat-box .wrapper .right .write .icons span {
-  color: gray;
-}
-.chat-box .wrapper .right .write .icons span:hover {
-  cursor: pointer;
+.chat-box .wrapper .right .write .send {
+  outline: none;
 }
 .sweet-editor {
   box-sizing: border-box;
@@ -14383,4 +14396,4 @@ License: http://codecanyon.net/licenses
   opacity: 0;
 }
 
-/*# sourceMappingURL=main.00e097352445de688609.css.map*/
+/*# sourceMappingURL=main.4faef833a99a37aa8824.css.map*/

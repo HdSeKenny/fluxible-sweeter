@@ -14,9 +14,9 @@ var _assert2 = _interopRequireDefault(_assert);
 
 require('colors');
 
-var _server = require('./server');
+var _configs = require('../configs');
 
-var _server2 = _interopRequireDefault(_server);
+var _configs2 = _interopRequireDefault(_configs);
 
 var _seed = require('./seed');
 
@@ -24,7 +24,7 @@ var _seed2 = _interopRequireDefault(_seed);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const { mongo: mongo } = _server2.default;
+const { mongo: mongo } = _configs2.default;
 
 const insertDefaultData = (url, db) => {
   if (url === mongo.sweeter.url) {

@@ -12,15 +12,15 @@ var _mongodb = require('mongodb');
 
 var _mongodb2 = _interopRequireDefault(_mongodb);
 
-var _server = require('../configs/server');
+var _configs = require('../configs');
 
-var _server2 = _interopRequireDefault(_server);
+var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign, no-shadow */
 
-const MongoUrl = _server2.default.mongo.sweeter.url;
+const MongoUrl = _configs2.default.mongo.sweeter.url;
 
 const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
   _mongodb2.default.connect(MongoUrl, (err, db) => {
@@ -129,7 +129,6 @@ exports.default = {
     });
   },
   register: function (req, resource, params, body, config, callback) {
-
     _mongodb2.default.connect(MongoUrl, (err, db) => {
       const User = db.collection('users');
       User.findOne({ email: body.email }, (err, user) => {
@@ -401,16 +400,38 @@ exports.default = {
           currentUser.recent_chat_connections = [];
         }
 
-        const connecttion = {
-          this_user_id: body.thisUserId,
-          connect_date: body.connectDate,
-          messages: []
-        };
+        const recentConnections = currentUser.recent_chat_connections;
+        const connectionIndex = recentConnections.findIndex(c => c.this_user_id === body.thisUserId);
 
-        currentUser.recent_chat_connections.push(connecttion);
+        let connection;
+        if (connectionIndex < 0) {
+          connection = {
+            this_user_id: body.thisUserId,
+            connect_date: body.connectDate,
+            messages: []
+          };
+          currentUser.recent_chat_connections.push(connection);
+        } else {
+          connection = currentUser.recent_chat_connections[connectionIndex];
+        }
 
         User.save(currentUser).then(() => {
-          callback(err, connecttion);
+          callback(err, connection);
+        });
+      });
+    });
+  },
+  deleteMessageConnection: function (req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, (err, db) => {
+      const User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.myId) }).then(currentUser => {
+        const connecttions = currentUser.recent_chat_connections.filter(c => {
+          return c.this_user_id !== body.thisUserId;
+        });
+
+        currentUser.recent_chat_connections = connecttions;
+        User.save(currentUser).then(() => {
+          callback(err, connecttions);
         });
       });
     });

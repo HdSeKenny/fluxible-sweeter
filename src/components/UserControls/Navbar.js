@@ -169,7 +169,7 @@ const Navbar = CreateReactClass({
               {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}
               {authenticated &&
                 <li className="mr-0 pr-0">
-                  <a className="m-0" href={`/${currentUser.username}`}>
+                  <a className="m-0" href={'/' + currentUser.username}>
                     <img alt="currentUser" src={currentUser.image_url} />
                   </a>
                   <ul className="dropdown">

@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import socketIo from 'socket.io';
 import 'colors';
-import config from '../configs/server';
+import config from '../configs';
 import mongodbConnection from '../configs/mongodb';
 
 const app = express();

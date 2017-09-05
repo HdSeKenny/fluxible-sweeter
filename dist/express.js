@@ -76,17 +76,13 @@ var _Html = require('./components/Html');
 
 var _Html2 = _interopRequireDefault(_Html);
 
-var _configs = require('./configs');
-
-var _configs2 = _interopRequireDefault(_configs);
-
 var _assets = require('./utils/assets');
 
 var _assets2 = _interopRequireDefault(_assets);
 
-var _server2 = require('./configs/server');
+var _configs = require('./configs');
 
-var _server3 = _interopRequireDefault(_server2);
+var _configs2 = _interopRequireDefault(_configs);
 
 var _htmlToPdf = require('./plugins/htmlToPdf');
 
@@ -104,12 +100,13 @@ exports.default = server => {
   server.set('views', _path2.default.join(__dirname, 'views')); // view engine setup
   server.set('view engine', 'pug');
 
-  if (_server3.default.server.logEnable && env !== 'production') {
+  if (_configs2.default.server.logEnable && env !== 'production') {
     // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
     server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
   }
+
   if (env === 'development') {
-    server.use(_express2.default.static(_path2.default.join(_server3.default.server.root, '.tmp')));
+    server.use(_express2.default.static(_path2.default.join('..', 'dev')));
   }
 
   server.use(_bodyParser2.default.json({ limit: '20mb' }));
@@ -123,8 +120,8 @@ exports.default = server => {
 
   const MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
   server.use((0, _expressSession2.default)({
-    secret: 'secret',
-    store: new MongoStore(_server3.default.mongo.session),
+    secret: 'sweeter-secret',
+    store: new MongoStore(_configs2.default.mongo.session),
     resave: false,
     saveUninitialized: false
   }));
@@ -144,7 +141,7 @@ exports.default = server => {
     const context = _app2.default.createContext({
       req: req,
       res: res,
-      config: _configs2.default,
+      configs: _configs2.default,
       authenticated: req.session.user && req.session.user.authenticated
     });
     const routes = (0, _routes2.default)(context);

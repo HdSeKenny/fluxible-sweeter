@@ -1,16 +1,29 @@
-// Designed by Kenny - 9/5/2017
-import config from '../../configs';
-import env from '../../utils/env';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _configs = require('../../configs');
+
+var _configs2 = _interopRequireDefault(_configs);
+
+var _env = require('../../utils/env');
+
+var _env2 = _interopRequireDefault(_env);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Designed by Kenny - 9/5/2017
 const dbHelper = {
-  version: config.indexedDB.version,
-  name: config.indexedDB.name,
+  version: _configs2.default.indexedDB.version,
+  name: _configs2.default.indexedDB.name,
   expired: 30
 };
 
 let indexedStore;
-if (env.is_client) {
-  const { indexedDB, mozIndexedDB, webkitIndexedDB, msIndexedDB } = window;
+if (_env2.default.is_client) {
+  const { indexedDB: indexedDB, mozIndexedDB: mozIndexedDB, webkitIndexedDB: webkitIndexedDB, msIndexedDB: msIndexedDB } = window;
   indexedStore = indexedDB || mozIndexedDB || webkitIndexedDB || msIndexedDB;
 }
 
@@ -24,20 +37,20 @@ const store = {
       const open = indexedStore.open(dbHelper.name, dbHelper.version);
 
       // Init tables in the Sweeter indexedDB
-      open.onupgradeneeded = (event) => {
+      open.onupgradeneeded = event => {
         const _db = event.target.result;
         _db.createObjectStore(dbHelper.name, { keyPath: 'key' });
       };
 
-      open.onsuccess = (event) => {
+      open.onsuccess = event => {
         dbHelper.db = event.target.result;
         const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
         const _objectStore = transaction.objectStore(dbHelper.name);
-        _objectStore.getAllKeys().onsuccess = (e) => {
-          const { result } = e.target;
-          if (!result.includes(config.indexedDB.dateKey)) {
+        _objectStore.getAllKeys().onsuccess = e => {
+          const { result: result } = e.target;
+          if (!result.includes(_configs2.default.indexedDB.dateKey)) {
             // Put new date for indexedDB at first time.
-            _objectStore.put({ key: config.indexedDB.dateKey, value: new Date() });
+            _objectStore.put({ key: _configs2.default.indexedDB.dateKey, value: new Date() });
           }
 
           resolve();
@@ -58,30 +71,30 @@ const store = {
    * @param  {function} fail
    * @return {}
    */
-  retrieve(endpoint, payload, success, fail) {
+  retrieve: function (endpoint, payload, success, fail) {
     const save = { key: endpoint, expired: dbHelper.expired };
     if (dbHelper.db) {
       const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
       const _objectStore = transaction.objectStore(dbHelper.name);
       const request = _objectStore.get(endpoint);
-      request.onsuccess = (event) => {
-        const { result } = event.target;
+      request.onsuccess = event => {
+        const { result: result } = event.target;
         // Put new date for indexedDB
-        _objectStore.put({ key: config.indexedDB.dateKey, value: new Date() });
+        _objectStore.put({ key: _configs2.default.indexedDB.dateKey, value: new Date() });
 
         if (result) {
           // Execute actions callback to put data into react store
           success(null, result.value, save);
         } else {
           // Execute actions callback to get data from API
-          fail((res) => {
+          fail(res => {
             this.set(endpoint, res, dbHelper.expired);
           }, save);
         }
       };
 
-      request.onerror = (event) => {
-        const { errorCode } = event.target;
+      request.onerror = event => {
+        const { errorCode: errorCode } = event.target;
         // eslint-disable-next-line no-console
         console.log('Sweeter indexedDB error on retrieve.', errorCode);
       };
@@ -90,19 +103,21 @@ const store = {
     }
   },
 
+
   /**
    * Set value into indexedDB
    *
    * @param {any} key
    * @param {any} value
    */
-  set(key, value) {
+  set: function (key, value) {
     if (dbHelper.db) {
       const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
       const _objectStore = transaction.objectStore(dbHelper.name);
-      _objectStore.put({ key, value });
+      _objectStore.put({ key: key, value: value });
     }
   },
+
 
   /**
    * Get data from indexedDB
@@ -110,7 +125,7 @@ const store = {
    * @param {any} key
    * @returns
    */
-  get: (key) => new Promise((resolve, reject) => {
+  get: key => new Promise((resolve, reject) => {
     if (!dbHelper.db) {
       return reject('IndexedDB is not available now.');
     }
@@ -118,11 +133,11 @@ const store = {
     const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
     const _objectStore = transaction.objectStore(dbHelper.name);
     const request = _objectStore.get(key);
-    request.onsuccess = (event) => {
+    request.onsuccess = event => {
       // Put new date for indexedDB
-      _objectStore.put({ key: config.indexedDB.dateKey, value: new Date() });
+      _objectStore.put({ key: _configs2.default.indexedDB.dateKey, value: new Date() });
 
-      const { result } = event.target;
+      const { result: result } = event.target;
       if (result) {
         return resolve(result);
       }
@@ -130,8 +145,8 @@ const store = {
       return resolve(null);
     };
 
-    request.onerror = (event) => {
-      const { errorCode } = event.target;
+    request.onerror = event => {
+      const { errorCode: errorCode } = event.target;
       // eslint-disable-next-line no-console
       console.log('Sweeter indexedDB error on checkIndexedDBClear.', errorCode);
     };
@@ -140,7 +155,7 @@ const store = {
   /**
    * Clear the indexedDB
    */
-  clear() {
+  clear: function () {
     if (dbHelper.db) {
       const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
       const _objectStore = transaction.objectStore(dbHelper.name);
@@ -150,32 +165,31 @@ const store = {
         console.log('Sweeter indexedDB clear success');
       };
 
-      request.onerror = (event) => {
-        const { errorCode } = event.target;
+      request.onerror = event => {
+        const { errorCode: errorCode } = event.target;
         // eslint-disable-next-line no-console
         console.log('Sweeter indexedDB error on clear.', errorCode);
       };
     }
   },
-
-  checkIndexedDBClear() {
+  checkIndexedDBClear: function () {
     if (dbHelper.db) {
       const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
       const _objectStore = transaction.objectStore(dbHelper.name);
-      const request = _objectStore.get(config.indexedDB.dateKey);
-      request.onsuccess = (event) => {
-        const { result } = event.target;
+      const request = _objectStore.get(_configs2.default.indexedDB.dateKey);
+      request.onsuccess = event => {
+        const { result: result } = event.target;
         if (result) {
           const diff = new Date() - result.value;
-          const { expired } = config.indexedDB;
+          const { expired: expired } = _configs2.default.indexedDB;
           if (diff > expired) {
             dbHelper.clear();
           }
         }
       };
 
-      request.onerror = (event) => {
-        const { errorCode } = event.target;
+      request.onerror = event => {
+        const { errorCode: errorCode } = event.target;
         // eslint-disable-next-line no-console
         console.log('Sweeter indexedDB error on checkIndexedDBClear.', errorCode);
       };
@@ -188,28 +202,28 @@ const store = {
  * @param  {array} fluxibleStores
  * @return {}
  */
-dbHelper._syncDataBetweenTabs = (fluxibleStores) => {
+dbHelper._syncDataBetweenTabs = fluxibleStores => {
   if (dbHelper.db) {
     const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
     const _objectStore = transaction.objectStore(dbHelper.name);
-    _objectStore.getAll().onsuccess = (event) => {
-      const { result } = event.target;
+    _objectStore.getAll().onsuccess = event => {
+      const { result: result } = event.target;
       if (result && result.length) {
         // const versionIndexedStore = result.find(db => db.value.name === 'versions');
         // const versionFluxStore = fluxibleStores.find(db => store.name === 'versions');
 
         result.forEach(idxedStore => {
-          const { name, updatedNumber, save } = idxedStore.value;
+          const { name: name, updatedNumber: updatedNumber, save: save } = idxedStore.value;
           const fluxStore = fluxibleStores.find(fStore => fStore.name === name);
           if (fluxStore && fluxStore.updatedNumber !== updatedNumber) {
-            fluxStore.syncDataFromIndexedDB({ data: idxedStore.value, save, isSync: true });
+            fluxStore.syncDataFromIndexedDB({ data: idxedStore.value, save: save, isSync: true });
           }
         });
       }
     };
 
-    _objectStore.getAll().onerror = (event) => {
-      const { errorCode } = event.target;
+    _objectStore.getAll().onerror = event => {
+      const { errorCode: errorCode } = event.target;
       // eslint-disable-next-line no-console
       console.log('Sweeter indexedDB error on _syncDataBetweenTabs.', errorCode);
     };
@@ -222,13 +236,14 @@ dbHelper._syncDataBetweenTabs = (fluxibleStores) => {
  * @param  {object} store
  * @return {}
  */
-dbHelper.initEventListenersBetweenTabs = (fluxibleStores) => {
+dbHelper.initEventListenersBetweenTabs = fluxibleStores => {
   if (!dbHelper.db) {
     return;
   }
 
   let hidden, visibilityChange;
-  if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
+  if (typeof document.hidden !== 'undefined') {
+    // Opera 12.10 and Firefox 18 and later support
     hidden = 'hidden';
     visibilityChange = 'visibilitychange';
   } else if (typeof document.msHidden !== 'undefined') {
@@ -253,4 +268,5 @@ dbHelper.initEventListenersBetweenTabs = (fluxibleStores) => {
   }, false);
 };
 
-export default store;
+exports.default = store;
+module.exports = exports['default'];

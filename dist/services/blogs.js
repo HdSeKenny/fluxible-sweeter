@@ -8,15 +8,15 @@ var _mongodb = require('mongodb');
 
 var _mongodb2 = _interopRequireDefault(_mongodb);
 
-var _server = require('../configs/server');
+var _configs = require('../configs');
 
-var _server2 = _interopRequireDefault(_server);
+var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* eslint-disable all, no-param-reassign */
 const ObjectID = _mongodb2.default.ObjectID;
-const MongoUrl = _server2.default.mongo.sweeter.url;
+const MongoUrl = _configs2.default.mongo.sweeter.url;
 
 exports.default = {
 

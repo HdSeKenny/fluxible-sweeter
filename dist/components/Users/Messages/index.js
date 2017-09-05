@@ -12,16 +12,6 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRouter = require('react-router');
-
-var _fluxibleAddonsReact = require('fluxible-addons-react');
-
-var _utils = require('../../../utils');
-
-var _plugins = require('../../../plugins');
-
-var _actions = require('../../../actions');
-
 var _stores = require('../../../stores');
 
 var _Layout = require('../../UI/Layout');
@@ -32,68 +22,93 @@ var _ChatBox2 = _interopRequireDefault(_ChatBox);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * User messages component
+ *
+ * @export
+ * @class Messages
+ * @extends {React.Component}
+ */
 class Messages extends _react2.default.Component {
 
   constructor(props, context) {
     super(props);
-
-    this.focus = () => {
-      this.editor.focus();
-    };
-
     this._onStoreChange = this._onStoreChange.bind(this);
+    this.context = context;
+    this.UserStore = context.getStore(_stores.UserStore);
     this.state = {
-      currentUser: context.getStore(_stores.UserStore).getCurrentUser(),
-      showChatBox: false
+      currentUser: this.UserStore.getCurrentUser(),
+      activeUser: this.UserStore.getActiveUserId(),
+      localChat: this.UserStore.getUserConnection()
     };
   }
 
   componentDidMount() {
-    this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
+    this.UserStore.addChangeListener(this._onStoreChange);
+
+    // Chat socket receive messages from server
+    socket.on('message:receive', messageObj => this._recieveMessages(messageObj));
   }
 
   componentWillUnmount() {
-    this.context.getStore(_stores.UserStore).removeChangeListener(this._onStoreChange);
+    this.UserStore.removeChangeListener(this._onStoreChange);
+  }
+
+  _recieveMessages(messageObj) {
+    const { currentUser: currentUser, localChat: localChat } = this.state;
+    const { user_from: user_from, user_to: user_to } = messageObj;
+    if (user_to === currentUser.id_str) {
+      const connections = localChat.recent_chat_connections;
+      const thisUserConnect = connections.find(c => c.this_user_id === user_from);
+      thisUserConnect.messages.push(messageObj);
+      this.setState({ localChat: localChat }, () => {
+        this.UserStore.setUserConnection(localChat);
+      });
+    }
   }
 
   _onStoreChange(res) {
-    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'ADD_MESSAGE_CONNECTION_SUCCESS'];
-    const currentUser = this.context.getStore(_stores.UserStore).getCurrentUser();
-    const result = {
-      currentUser: currentUser
-    };
+    const authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
+    const connectMessages = ['ADD_MESSAGE_CONNECTION_SUCCESS', 'SET_ACTIVE_USER_SUCCESS', 'DELETE_MESSAGE_CONNECTION_SUCCESS', 'SET_USER_CONNECTION_SUCCESS'];
+
+    const result = {};
+    if (connectMessages.includes(res.msg)) {
+      result.activeUser = this.UserStore.getActiveUserId();
+      result.localChat = this.UserStore.getUserConnection();
+    }
 
     if (authMessages.includes(res.msg)) {
-      if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
-        result.showChatBox = true;
-      }
+      result.currentUser = this.UserStore.getCurrentUser();
+    }
 
+    if (Object.keys(result).length > 0) {
       this.setState(result);
     }
   }
 
-  toggleChatBox() {
-    this.setState({ showChatBox: !this.state.showChatBox });
+  hideMessages() {
+    this.props.hideMessages();
   }
 
   render() {
-    const { currentUser: currentUser, showChatBox: showChatBox } = this.state;
+    const { currentUser: currentUser, localChat: localChat, activeUser: activeUser } = this.state;
+    const { showMessages: showMessages } = this.props;
     if (!currentUser) return null;
 
     return _react2.default.createElement(
       'div',
       { className: 'messages' },
-      !showChatBox && _react2.default.createElement(
+      !showMessages && _react2.default.createElement(
         _Layout.Row,
-        null,
+        { className: 'small-chat-box' },
         _react2.default.createElement(
           _Layout.Col,
-          { size: '2 p-0 msg-event', onClick: () => this.toggleChatBox() },
+          { size: '2 p-0 msg-event' },
           _react2.default.createElement('i', { className: 'fa fa-envelope' })
         ),
         _react2.default.createElement(
           _Layout.Col,
-          { size: '8 p-0 msg-event', onClick: () => this.toggleChatBox() },
+          { size: '8 p-0 msg-event' },
           _react2.default.createElement(
             'p',
             null,
@@ -103,16 +118,14 @@ class Messages extends _react2.default.Component {
         _react2.default.createElement(
           _Layout.Col,
           { size: '2 pr-0 msg-event' },
-          _react2.default.createElement(
-            'p',
-            { className: 'close-message' },
-            '\xD7'
-          )
+          _react2.default.createElement('i', { className: 'fa fa-cog' })
         )
       ),
-      showChatBox && _react2.default.createElement(_ChatBox2.default, {
-        toggleChatBox: () => this.toggleChatBox(),
-        currentUser: currentUser
+      showMessages && _react2.default.createElement(_ChatBox2.default, {
+        hideMessages: () => this.hideMessages(),
+        currentUser: currentUser,
+        localChat: localChat,
+        activeUser: activeUser
       })
     );
   }
@@ -124,9 +137,7 @@ Messages.contextTypes = {
   executeAction: _propTypes2.default.func
 };
 Messages.propTypes = {
-  currentUser: _propTypes2.default.object,
-  user: _propTypes2.default.object,
-  query: _propTypes2.default.object,
-  isCurrentUser: _propTypes2.default.bool
+  hideMessages: _propTypes2.default.func,
+  showMessages: _propTypes2.default.bool
 };
 module.exports = exports['default'];

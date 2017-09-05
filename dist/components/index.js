@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Custom = exports.About = exports.List = exports.UserMoments = exports.UserMessages = exports.UserMore = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
+exports.Custom = exports.About = exports.List = exports.UserMoments = exports.ChangePassword = exports.UserInfo = exports.UserBlogs = exports.UserHome = exports.Details = exports.AddBlog = exports.Home = exports.App = exports.NotFound = undefined;
 
 var _NotFound2 = require('./NotFound');
 
@@ -41,14 +41,6 @@ var _ChangePassword2 = require('./Users/ChangePassword');
 
 var _ChangePassword3 = _interopRequireDefault(_ChangePassword2);
 
-var _UserMore2 = require('./Users/UserMore');
-
-var _UserMore3 = _interopRequireDefault(_UserMore2);
-
-var _UserMessages2 = require('./Users/UserMessages');
-
-var _UserMessages3 = _interopRequireDefault(_UserMessages2);
-
 var _UserMoments2 = require('./Users/UserMoments');
 
 var _UserMoments3 = _interopRequireDefault(_UserMoments2);
@@ -76,8 +68,6 @@ exports.UserHome = _UserHome3.default;
 exports.UserBlogs = _UserBlogs3.default;
 exports.UserInfo = _UserInfo3.default;
 exports.ChangePassword = _ChangePassword3.default;
-exports.UserMore = _UserMore3.default;
-exports.UserMessages = _UserMessages3.default;
 exports.UserMoments = _UserMoments3.default;
 exports.List = _List3.default;
 exports.About = _About3.default;

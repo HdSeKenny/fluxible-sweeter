@@ -1,7 +1,7 @@
 import MongoClient from 'mongodb';
 import assert from 'assert';
 import 'colors';
-import config from './server';
+import config from '../configs';
 import seed from './seed';
 
 const { mongo } = config;

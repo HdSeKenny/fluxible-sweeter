@@ -22,15 +22,10 @@ const UserStore = (0, _createStore2.default)({
 
   handlers: {
     'USER_REGISTER_SUCCESS': 'registerSuccess',
-    'USER_REGISTER_FAIL': 'registerFail',
     'USER_LOGIN_SUCCESS': 'loginSuccess',
-    'USER_LOGIN_FAIL': 'loginFail',
     'LOGOUT_SUCCESS': 'logoutSuccess',
-    'LOGOUT_FAIL': 'logoutFail',
     'LOAD_SESSION_USER_SUCCESS': 'loadSessionUserSuccess',
-    'LOAD_SESSION_USER_FAIL': 'loadSessionUserFail',
     'LOAD_USERS_SUCCESS': 'loadUsersSuccess',
-    'LOAD_USERS_FAIL': 'loadUsersFail',
     'IS_LOGGED_IN': 'isLoggedIn',
     'LOAD_KENNY_SUCCESS': 'loadKennySuccess',
     'UPDATE_USER_SUCCESS': 'updateUserSuccess',
@@ -43,11 +38,12 @@ const UserStore = (0, _createStore2.default)({
     'FOLLOW_USER_WITH_SUCCESS': 'followUserWithSuccess',
     'CANCEL_FOLLOW_USER_WITH_SUCCESS': 'cancelFollowUserWithSuccess',
     'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
-    'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess'
+    'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess',
+    'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
   },
 
   initialize: function () {
-    this.users = null;
+    this.users = [];
     this.kenny = null;
     this.currentUser = null;
     this.currentUploadedImage = null;
@@ -55,61 +51,39 @@ const UserStore = (0, _createStore2.default)({
     this.loginUserImage = null;
   },
   loadKennySuccess: function (res) {
-    this.kenny = res;
+    this.kenny = res.data;
     this.emitChange();
   },
   getKennyUser: function () {
     return this.kenny;
   },
   loadUsersSuccess: function (res) {
-    this.users = res;
+    this.users = res.data;
+    this.save = res.save;
     this.emitChange();
   },
-  loadUsersFail: function () {
-    const response = {
-      resCode: 404,
-      msg: 'LOAD_USERS_FAIL'
-    };
-    this.users = null;
-    this.emitChange(response);
+  getUsernames: function () {
+    return this.users.map(user => user.username);
   },
   registerSuccess: function (res) {
-    const response = {
-      msg: 'USER_REGISTER_SUCCESS',
-      stat: res.msg,
-      user: res.user
-    };
     this.currentUser = res.user;
     this.users.push(res.user);
     this.authenticated = true;
-    this.emitChange(response);
-  },
-  registerFail: function (res) {
-    const response = {
-      msg: 'USER_REGISTER_FAIL',
+
+    this.setCurrentUserConnection();
+    this.emitChange({
+      msg: 'USER_REGISTER_SUCCESS',
       stat: res.msg,
       user: res.user
-    };
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(response);
+    });
   },
   loginSuccess: function (res) {
-    const response = {
-      msg: 'USER_LOGIN_SUCCESS'
-    };
     this.currentUser = res.user;
     this.authenticated = true;
-    this.emitChange(response);
-  },
-  loginFail: function (res) {
-    const response = {
-      msg: 'USER_LOGIN_FAIL',
-      errorMsg: res.auth.msg
-    };
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(response);
+    this.setCurrentUserConnection();
+    this.emitChange({
+      msg: 'USER_LOGIN_SUCCESS'
+    });
   },
   logoutSuccess: function () {
     const response = {
@@ -118,6 +92,8 @@ const UserStore = (0, _createStore2.default)({
     };
     this.currentUser = null;
     this.authenticated = false;
+
+    this.clearUserConnection();
     this.emitChange(response);
   },
   isLoggedIn: function () {
@@ -130,11 +106,6 @@ const UserStore = (0, _createStore2.default)({
     this.currentUser = res.user;
     this.authenticated = true;
     this.emitChange(res);
-  },
-  loadSessionUserFail: function (res) {
-    this.currentUser = null;
-    this.authenticated = false;
-    this.emitChange(res.auth.stat);
   },
   updateUserSuccess: function (res) {
     const response = { msg: 'UPDATE_USER_SUCCESS' };
@@ -302,25 +273,73 @@ const UserStore = (0, _createStore2.default)({
 
     this.currentUser.recent_chat_connections.push(connection);
 
-    this.setActiveUserId(connection.this_user_id);
+    this.setCurrentUserConnection(connection.this_user_id);
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection: connection
+    });
+  },
+  deleteMessageConnectionSuccess: function (res) {
+    this.currentUser.recent_chat_connections = res.connections;
+
+    if (res.thisUserId === this.getActiveUserId()) {
+      this.setUserConnection({
+        current_user: this.currentUser.id_str,
+        active_user: res.connections[0].this_user_id,
+        recent_chat_connections: this.currentUser.recent_chat_connections
+      });
+    }
+
+    this.emitChange({
+      msg: 'DELETE_MESSAGE_CONNECTION_SUCCESS',
+      connections: res.connections
     });
   },
   getActiveUserId: function () {
     if (!_utils.env.is_client) {
       return '';
     }
-
-    return localStorage.getItem('active-user');
+    const connection = localStorage.getItem('current_user_connection');
+    return JSON.parse(connection).active_user;
   },
-  setActiveUserId: function (id) {
+  getUserConnection: function () {
+    if (!_utils.env.is_client) {
+      return '';
+    }
+    const connection = localStorage.getItem('current_user_connection');
+    return JSON.parse(connection);
+  },
+  setActiveUser: function (thisUserId) {
+    if (!_utils.env.is_client) {
+      return '';
+    }
+    const connection = localStorage.getItem('current_user_connection');
+    const parsedConection = JSON.parse(connection);
+    parsedConection.active_user = thisUserId;
+    localStorage.setItem('current_user_connection', JSON.stringify(parsedConection));
+    this.emitChange({
+      msg: 'SET_ACTIVE_USER_SUCCESS'
+    });
+  },
+  setUserConnection: function (connection) {
     if (!_utils.env.is_client) {
       return '';
     }
 
-    localStorage.setItem('active-user', id);
+    localStorage.setItem('current_user_connection', JSON.stringify(connection));
+    this.emitChange({
+      msg: 'SET_USER_CONNECTION_SUCCESS'
+    });
+  },
+  setCurrentUserConnection: function (thisUserId) {
+    this.setUserConnection({
+      current_user: this.currentUser.id_str,
+      active_user: thisUserId || this.currentUser.recent_chat_connections[0].this_user_id,
+      recent_chat_connections: this.currentUser.recent_chat_connections
+    });
+  },
+  clearUserConnection: function () {
+    // TODO
   },
   dehydrate: function () {
     return {

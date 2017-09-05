@@ -1,7 +1,7 @@
 import MongoClient from 'mongodb';
 import multer from 'multer';
 import fs from 'fs';
-import serverConfig from '../../configs/server';
+import serverConfig from '../../configs';
 
 const getSlashPosition = (string, word, index) => {
   return string.split(word, index).join(word).length;

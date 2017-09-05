@@ -16,9 +16,9 @@ var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _server = require('../../configs/server');
+var _configs = require('../../configs');
 
-var _server2 = _interopRequireDefault(_server);
+var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53,7 +53,7 @@ const upload = (0, _multer2.default)({ storage: storage }).single('slim');
 
 const copyImageIntoFolder = filename => {
   const src = convertImagePath();
-  const destDir = `${_server2.default.server.root}/src/public/styles/images/upload/`;
+  const destDir = `${_configs2.default.server.root}/src/public/styles/images/upload/`;
   const inStr = _fs2.default.createReadStream(`${src}${filename}`);
   const outStr = _fs2.default.createWriteStream(`${destDir}${filename}`);
 
@@ -62,7 +62,7 @@ const copyImageIntoFolder = filename => {
 
 exports.default = {
   changeProfileImage: function (req, res) {
-    _mongodb2.default.connect(_server2.default.mongo.sweeter.url, (err, db) => {
+    _mongodb2.default.connect(_configs2.default.mongo.sweeter.url, (err, db) => {
       const userId = _mongodb2.default.ObjectID(req.params.userId);
       const User = db.collection('users');
       upload(req, res, uploadError => {

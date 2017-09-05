@@ -5,7 +5,9 @@ const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const wbsap = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
-const env = require('./src/configs/development');
+const env = require('./src/configs');
+
+const { hot_server_host, hot_server_port } = env.development;
 
 module.exports = function makeWebpackConfig(options) {
 
@@ -31,7 +33,7 @@ module.exports = function makeWebpackConfig(options) {
     path: isProd ? `${__dirname}/dist/public/build/` : `${__dirname}/dist/`,
 
     // Uses webpack-dev-server in development
-    publicPath: isProd ? '/' : `http://${env.hot_server_host}:${env.hot_server_port}/`,
+    publicPath: isProd ? '/' : `http://${hot_server_host}:${hot_server_port}/`,
 
     // Filename for entry points
     filename: isProd ? '[name].[chunkhash].js' : '[name].js',
