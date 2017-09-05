@@ -39,11 +39,16 @@ export default class ChatBox extends React.Component {
 
   componentDidMount() {
     this.UserStore.addChangeListener(this._onStoreChange);
-    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
+    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight; // ===>
   }
 
   componentWillUnmount() {
     this.UserStore.removeChangeListener(this._onStoreChange);
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
+    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight; // ===>
   }
 
   _onStoreChange(res) {
@@ -60,6 +65,7 @@ export default class ChatBox extends React.Component {
 
   setActiveUser(thisUserId) {
     this.UserStore.setActiveUser(thisUserId);
+    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   getActiveUser() {
@@ -104,6 +110,7 @@ export default class ChatBox extends React.Component {
     this.setState({ message: '' }, () => {
       this.UserStore.setUserConnection(localChat);
       socket.emit('message:send', newMessage);
+      // $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
     });
   }
 

@@ -5,10 +5,13 @@ const dbHelper = {
   name: config.indexedDB.name,
 };
 
-dbHelper.init = () => {
-  return new Promise((resolve, reject) => {
-    const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-    if (indexedDB) {
+const { indexedDB, mozIndexedDB, webkitIndexedDB, msIndexedDB } = window;
+const store = indexedDB || mozIndexedDB || webkitIndexedDB || msIndexedDB;
+
+const indexedStore = {
+
+  init: () => new Promise((resolve, reject) => {
+    if (store) {
       // Init indexedDB for MetadataExplorer, the version is 1
       const open = indexedDB.open(dbHelper.name, dbHelper.version);
 
@@ -35,106 +38,84 @@ dbHelper.init = () => {
     } else {
       reject('Client did not support indexedDB');
     }
-  });
-};
+  }),
 
-/**
- * Used to get a save key to store data into indexedDB
- * @param  {string} endpoint
- * @param  {object} payload
- * @return {string} saveKey
- */
-function getIndexedDBSaveKey(endpoint, payload) {
-  let saveKey = endpoint;
-  const params = shrinkQuery(endpoint, payload);
-  if (params) {
-    Object.keys(params).forEach((key) => {
-      if (!['isUpLoad', 'version', 'isRevert'].includes(key)) {
-        saveKey += ('_' + key + '_' + encodeURIComponent(payload[key]));
-      }
-    });
-  }
-  return saveKey;
-}
+  /**
+   * Used to get data from indexedDB if the data is avaliable
+   * If avaliable, get the data, execute the success function
+   * else execute the fail callback to get data from API
+   * @param  {string} endpoint
+   * @param  {object} payload
+   * @param  {function} success
+   * @param  {function} fail
+   * @return {}
+   */
+  retrieve(endpoint, payload, success, fail) {
+    const saveKey = getIndexedDBSaveKey(endpoint, payload);
+    const expired = API[endpoint.toLowerCase()].save.expired;
+    const saveOpts = { key: saveKey, expired };
 
-/**
- * Used to put data into indexedDB
- * @param  {string} saveKey
- * @param  {object} data
- * @param  {number} expired
- * @return {}
- */
-dbHelper.set = (saveKey, value, expired) => {
-  if (dbHelper.db) {
-    const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
-    const _objectStore = transaction.objectStore(dbHelper.name);
-    _objectStore.put({ key: saveKey, value });
-  }
-};
+    // Click revert button to revert data
+    if (payload.isRevert) {
+      return fail((res) => {
+        // Used to set isUpdate to false in the corresponding store
+        res.isRevert = true; // eslint-disable-line no-param-reassign
+        dbHelper.set(saveKey, res, expired);
+      }, saveOpts);
+    }
 
-/**
- * Used to get data from indexedDB if the data is avaliable
- * If avaliable, get the data, execute the success function
- * else execute the fail callback to get data from API
- * @param  {string} endpoint
- * @param  {object} payload
- * @param  {function} success
- * @param  {function} fail
- * @return {}
- */
-dbHelper.retrieve = (endpoint, payload, success, fail) => {
-  const saveKey = getIndexedDBSaveKey(endpoint, payload);
-  const expired = API[endpoint.toLowerCase()].save.expired;
-  const saveOpts = { key: saveKey, expired };
+    if (dbHelper.db) {
+      const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
+      const _objectStore = transaction.objectStore(dbHelper.name);
+      const request = _objectStore.get(saveKey);
+      request.onsuccess = (event) => {
+        const { result } = event.target;
 
-  // Click revert button to revert data
-  if (payload.isRevert) {
-    return fail((res) => {
-      // Used to set isUpdate to false in the corresponding store
-      res.isRevert = true; // eslint-disable-line no-param-reassign
-      dbHelper.set(saveKey, res, expired);
-    }, saveOpts);
-  }
+        // Put new date for indexedDB
+        _objectStore.put({ key: config.indexedDB.dateKey, value: new Date() });
 
-  if (dbHelper.db) {
-    const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
-    const _objectStore = transaction.objectStore(dbHelper.name);
-    const request = _objectStore.get(saveKey);
-    request.onsuccess = (event) => {
-      const { result } = event.target;
+        if (result) {
+          // Execute actions callback to put data into react store
+          success(null, result.value, saveOpts);
+        } else {
+          // Execute actions callback to get data from API
+          fail((res) => {
+            dbHelper.set(saveKey, res, expired);
+          }, saveOpts);
+        }
+      };
 
-      // Put new date for indexedDB
-      _objectStore.put({ key: config.indexedDB.dateKey, value: new Date() });
+      request.onerror = (event) => {
+        const { errorCode } = event.target;
+        // eslint-disable-next-line no-console
+        console.log('MetadataExplorer indexedDB error on retrieve.', errorCode);
+      };
+    } else {
+      fail(() => {}, saveOpts);
+    }
+  },
 
-      if (result) {
-        // Execute actions callback to put data into react store
-        success(null, result.value, saveOpts);
-      } else {
-        // Execute actions callback to get data from API
-        fail((res) => {
-          dbHelper.set(saveKey, res, expired);
-        }, saveOpts);
-      }
-    };
+  /**
+   * Set value into indexedDB
+   *
+   * @param {any} key
+   * @param {any} value
+   */
+  set(key, value) {
+    if (dbHelper.db) {
+      const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
+      const _objectStore = transaction.objectStore(dbHelper.name);
+      _objectStore.put({ key, value });
+    }
+  },
 
-    request.onerror = (event) => {
-      const { errorCode } = event.target;
-      // eslint-disable-next-line no-console
-      console.log('MetadataExplorer indexedDB error on retrieve.', errorCode);
-    };
-  } else {
-    fail(() => {}, saveOpts);
-  }
-};
-
-/**
- * get data from indexedDB by th saveKey
- * @param  {string}   key
- * @param  {function} callback
- * @return {object} result
- */
-dbHelper.get = (key) => {
-  return new Promise((resolve, reject) => {
+  /**
+   * Get data from indexedDB
+   *
+   * @param {any} key
+   * @returns
+   */
+  get: (key) => new Promise((resolve, reject) => {
     if (!dbHelper.db) {
       return reject('IndexedDB is not available now.');
     }
@@ -157,27 +138,42 @@ dbHelper.get = (key) => {
     request.onerror = (event) => {
       const { errorCode } = event.target;
       // eslint-disable-next-line no-console
-      console.log('MetadataExplorer indexedDB error on checkIndexedDBClear.', errorCode);
+      console.log('Sweeter indexedDB error on checkIndexedDBClear.', errorCode);
     };
-  });
-};
+  }),
 
-dbHelper.clear = () => {
-  if (dbHelper.db) {
-    const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
-    const _objectStore = transaction.objectStore(dbHelper.name);
-    const request = _objectStore.clear();
-    request.onsuccess = () => {
-      // eslint-disable-next-line no-console
-      console.log('MetadataExplorer indexedDB clear success');
-    };
-    request.onerror = (event) => {
-      const { errorCode } = event.target;
-      // eslint-disable-next-line no-console
-      console.log('MetadataExplorer indexedDB error on clear.', errorCode);
-    };
+  /**
+   * Clear the indexedDB
+   */
+  clear() {
+    if (dbHelper.db) {
+      const transaction = dbHelper.db.transaction(dbHelper.name, 'readwrite');
+      const _objectStore = transaction.objectStore(dbHelper.name);
+      const request = _objectStore.clear();
+      request.onsuccess = () => {
+        // eslint-disable-next-line no-console
+        console.log('Sweeter indexedDB clear success');
+      };
+
+      request.onerror = (event) => {
+        const { errorCode } = event.target;
+        // eslint-disable-next-line no-console
+        console.log('Sweeter indexedDB error on clear.', errorCode);
+      };
+    }
   }
 };
+
+/**
+ * Used to get a save key to store data into indexedDB
+ * @param  {string} endpoint
+ * @param  {object} payload
+ * @return {string} saveKey
+ */
+function getIndexedDBSaveKey(endpoint, payload) {
+
+
+}
 
 dbHelper.checkIndexedDBClear = () => {
   if (dbHelper.db) {
@@ -287,4 +283,4 @@ dbHelper.initEventListenersBetweenTabs = (fluxibleStores) => {
   }, false);
 };
 
-export default dbHelper;
+export default indexedStore;
