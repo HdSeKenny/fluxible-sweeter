@@ -1,6 +1,5 @@
-# Fluxible - KBlog
+# Sweeter
 This project is a blog web application which is developed with [fluxible](http://fluxible.io/) framework.
-
 
 ## Requirements
 
@@ -13,18 +12,28 @@ This project is a blog web application which is developed with [fluxible](http:/
 
 Download Zip file or run the command below:
 ```shell
-$ git clone git@github.com:HdSeKenny/fluxible-kblog.git
+$ git clone git@github.com:HdSeKenny/fluxible-sweeter.git
 ```
 
-Then get into the folder directory `Fluxible-KBlog`, run command:
+Then get into the folder directory `fluxible-sweeter`, run command:
 
 ```shell
 $ npm install
 ```
+If you use yarn, run command:
+```shell
+$ yarn install
+```
 
 It will take some minutes. When finished, run command:
 ```shell
+$ npm run build
 $ npm start
+```
+
+For development mode, run command:
+```shell
+$ grunt serve
 ```
 
 Finally, open browser, enter: [http://localhost:3000/](http://localhost:3000/)
