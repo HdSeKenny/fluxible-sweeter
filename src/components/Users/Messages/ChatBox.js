@@ -71,7 +71,6 @@ export default class ChatBox extends React.Component {
 
   setActiveUser(thisUserId) {
     this.UserStore.setActiveUser(thisUserId);
-    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   getActiveUser() {

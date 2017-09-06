@@ -96,7 +96,17 @@ export default class Messages extends React.Component {
       thisUserConnect.messages.push(messageObj);
       this.setState({ localChat }, () => {
         this.UserStore.setUserConnection(localChat);
+        this.jumpToMessagsBottom();
       });
+    }
+  }
+
+  jumpToMessagsBottom() {
+    let chatScrollTop = $('.chat')[0].scrollTop;
+    const chatScrollHeight = $('.chat')[0].scrollHeight;
+
+    if (chatScrollTop !== chatScrollHeight) {
+      chatScrollTop = chatScrollHeight;
     }
   }
 
