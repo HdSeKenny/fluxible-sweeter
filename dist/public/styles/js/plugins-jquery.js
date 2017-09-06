@@ -1930,14 +1930,13 @@ Design and Developed by:
      */
     Lazy.Defaults = {
         lazyLoad: false
-    };
 
-    /**
-     * Loads all resources of an item at the specified position.
-     * @param {Number} position - The absolute position of the item.
-     * @protected
-     */
-    Lazy.prototype.load = function (position) {
+        /**
+         * Loads all resources of an item at the specified position.
+         * @param {Number} position - The absolute position of the item.
+         * @protected
+         */
+    };Lazy.prototype.load = function (position) {
         var $item = this._core.$stage.children().eq(position),
             $elements = $item && $item.find('.owl-lazy');
 
@@ -2744,13 +2743,12 @@ Design and Developed by:
         dotsSpeed: false,
         dotsContainer: false,
         controlsClass: 'owl-controls'
-    };
 
-    /**
-     * Initializes the layout of the plugin and extends the carousel.
-     * @protected
-     */
-    Navigation.prototype.initialize = function () {
+        /**
+         * Initializes the layout of the plugin and extends the carousel.
+         * @protected
+         */
+    };Navigation.prototype.initialize = function () {
         var $container,
             override,
             options = this._core.settings;
@@ -3060,13 +3058,12 @@ Design and Developed by:
      */
     Hash.Defaults = {
         URLhashListener: false
-    };
 
-    /**
-     * Destroys the plugin.
-     * @public
-     */
-    Hash.prototype.destroy = function () {
+        /**
+         * Destroys the plugin.
+         * @public
+         */
+    };Hash.prototype.destroy = function () {
         var handler, property;
 
         $(window).off('hashchange.owl.navigation');

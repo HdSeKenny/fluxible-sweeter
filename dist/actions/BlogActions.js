@@ -8,123 +8,92 @@ var _fetchClientConfig = require('../utils/fetchClientConfig');
 
 var _fetchClientConfig2 = _interopRequireDefault(_fetchClientConfig);
 
+var _indexedDB = require('../utils/indexedDB');
+
+var _indexedDB2 = _interopRequireDefault(_indexedDB);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const BlogActions = {
-  LoadBlogs: (context, payload, done) => {
-    context.service.read('blogs.loadBlogs', payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`Load blogs error: ${err}`);
-      } else {
-        context.dispatch('LOAD_BLOGS_SUCCESS', res);
-      }
+const endpoint = 'blogs';
+
+exports.default = {
+  LoadBlogs: function (context, payload, done) {
+    const callback = (err, res, save) => {
+      context.dispatch('LOAD_BLOGS_SUCCESS', { data: res, save: save });
       done();
+    };
+    _indexedDB2.default.retrieve(endpoint, payload, callback, (saveCallback, saveOptions) => {
+      context.service.read('blogs.loadBlogs', payload, _fetchClientConfig2.default, (err, res) => {
+        saveCallback(res);
+        callback(err, res, saveOptions);
+      });
     });
   },
-
-  AddBlog: (context, payload, done) => {
+  AddBlog: function (context, payload, done) {
     context.service.create('blogs.addBlog', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`Create blog error: ${err}`);
-      } else {
-        context.dispatch('ADD_BLOG_SUCCESS', res);
-      }
+      context.dispatch('ADD_BLOG_SUCCESS', res);
       done();
     });
   },
-
-  EditBlog: (context, payload, done) => {
+  EditBlog: function (context, payload, done) {
     context.dispatch('EDIT_BLOG', payload);
     done();
   },
-
-  CancelEditBlog: (context, payload, done) => {
+  CancelEditBlog: function (context, payload, done) {
     context.dispatch('CANCEL_EDIT_BLOG');
     done();
   },
-
-  DeleteBlog: (context, payload, done) => {
+  DeleteBlog: function (context, payload, done) {
     context.service.delete('blogs', payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        context.dispatch('DELETE_BLOG_FAIL', err);
-      } else {
-        context.dispatch('DELETE_BLOG_SUCCESS', res);
-      }
+      context.dispatch('DELETE_BLOG_SUCCESS', res);
     });
     done();
   },
-
-  ConfirmDeleteBlog: (context, payload, done) => {
+  ConfirmDeleteBlog: function (context, payload, done) {
     context.dispatch('CONFIRM_DELETE_BLOG', payload);
     done();
   },
-
-  CancelDeleteBlog: (context, payload, done) => {
+  CancelDeleteBlog: function (context, payload, done) {
     context.dispatch('CANCEL_DELETE_BLOG');
     done();
   },
-
-  UpdateBlog: (context, payload, done) => {
+  UpdateBlog: function (context, payload, done) {
     context.service.update('blogs', {}, payload, _fetchClientConfig2.default, (err, res) => {
       context.dispatch('UPDATE_BLOG_SUCCESS', res);
     });
     done();
   },
-
-  UpdateCurrentBlogId: (context, payload, done) => {
+  UpdateCurrentBlogId: function (context, payload, done) {
     context.dispatch('UPDATE_BLOG_ID', payload.id);
     done();
   },
-
-  ThumbsUpBlog: (context, payload, done) => {
+  ThumbsUpBlog: function (context, payload, done) {
     context.service.create('blogs.thumbsUpBlog', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`ThumbsUpBlog callback err: ${err}`);
-      } else {
-        context.dispatch('THUMBS_UP_BLOG_SUCCESS', res);
-      }
+      context.dispatch('THUMBS_UP_BLOG_SUCCESS', res);
       done();
     });
   },
-
-  CancelThumbsUpBlog: (context, payload, done) => {
+  CancelThumbsUpBlog: function (context, payload, done) {
     context.service.create('blogs.cancelThumbsUpBlog', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`CancelThumbsUpBlog callback err: ${err}`);
-      } else {
-        context.dispatch('CANCEL_THUMBS_UP_BLOG_SUCCESS', res);
-      }
+      context.dispatch('CANCEL_THUMBS_UP_BLOG_SUCCESS', res);
       done();
     });
   },
-
-  AddBlogComment: (context, payload, done) => {
+  AddBlogComment: function (context, payload, done) {
     context.service.create('comments.addBlogComment', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`Add comment err: ${err}`);
-      } else {
-        context.dispatch('ADD_COMMENT_SUCCESS', res);
-      }
+      context.dispatch('ADD_COMMENT_SUCCESS', res);
       done();
     });
   },
-
-  DeleteBlogComment: (context, payload, done) => {
+  DeleteBlogComment: function (context, payload, done) {
     context.service.delete('comments', payload, _fetchClientConfig2.default, (err, res) => {
-      if (err) {
-        console.log(`Delete comment err: ${err}`);
-      } else {
-        context.dispatch('DELETE_COMMENT_SUCCESS', res);
-      }
+      context.dispatch('DELETE_COMMENT_SUCCESS', res);
       done();
     });
   },
-
-  UploadImageSuccess: (context, payload, done) => {
+  UploadImageSuccess: function (context, payload, done) {
     context.dispatch('UPLOAD_IAMGE_SUCCESS', payload);
     done();
   }
 };
-
-exports.default = BlogActions;
 module.exports = exports['default'];

@@ -14,6 +14,10 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _utils = require('../utils');
 
+var _indexedDB = require('../utils/indexedDB');
+
+var _indexedDB2 = _interopRequireDefault(_indexedDB);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const UserStore = (0, _createStore2.default)({
@@ -22,7 +26,9 @@ const UserStore = (0, _createStore2.default)({
 
   handlers: {
     'USER_REGISTER_SUCCESS': 'registerSuccess',
+    'USER_REGISTER_FAIL': 'registerFail',
     'USER_LOGIN_SUCCESS': 'loginSuccess',
+    'USER_LOGIN_FAIL': 'loginFail',
     'LOGOUT_SUCCESS': 'logoutSuccess',
     'LOAD_SESSION_USER_SUCCESS': 'loadSessionUserSuccess',
     'LOAD_USERS_SUCCESS': 'loadUsersSuccess',
@@ -35,8 +41,6 @@ const UserStore = (0, _createStore2.default)({
     'EDIT_USER_IMAGE': 'editUserImage',
     'CANCEL_EDIT_USER_IMAGE': 'cancelEditUserImage',
     'UPLOAD_IMAGE_SUCCESS': 'uploadImageSuccess',
-    'FOLLOW_USER_WITH_SUCCESS': 'followUserWithSuccess',
-    'CANCEL_FOLLOW_USER_WITH_SUCCESS': 'cancelFollowUserWithSuccess',
     'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
     'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess',
     'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
@@ -59,7 +63,6 @@ const UserStore = (0, _createStore2.default)({
   },
   loadUsersSuccess: function (res) {
     this.users = res.data;
-    this.save = res.save;
     this.emitChange();
   },
   getUsernames: function () {
@@ -67,12 +70,22 @@ const UserStore = (0, _createStore2.default)({
   },
   registerSuccess: function (res) {
     this.currentUser = res.user;
-    this.users.push(res.user);
     this.authenticated = true;
+    this.users.push(res.user);
 
+    this.updateIndexedDB();
     this.setCurrentUserConnection();
     this.emitChange({
       msg: 'USER_REGISTER_SUCCESS',
+      stat: res.msg,
+      user: res.user
+    });
+  },
+  registerFail: function (res) {
+    this.currentUser = null;
+    this.authenticated = false;
+    this.emitChange({
+      msg: 'USER_REGISTER_FAIL',
       stat: res.msg,
       user: res.user
     });
@@ -85,16 +98,22 @@ const UserStore = (0, _createStore2.default)({
       msg: 'USER_LOGIN_SUCCESS'
     });
   },
-  logoutSuccess: function () {
-    const response = {
-      resCode: 200,
-      msg: 'LOGOUT_SUCCESS'
-    };
+  loginFail: function (res) {
     this.currentUser = null;
     this.authenticated = false;
-
+    this.emitChange({
+      msg: 'USER_LOGIN_FAIL',
+      errorMsg: res.auth.msg
+    });
+  },
+  logoutSuccess: function () {
+    this.currentUser = null;
+    this.authenticated = false;
     this.clearUserConnection();
-    this.emitChange(response);
+    this.emitChange({
+      resCode: 200,
+      msg: 'LOGOUT_SUCCESS'
+    });
   },
   isLoggedIn: function () {
     return this.currentUser !== null;
@@ -108,9 +127,12 @@ const UserStore = (0, _createStore2.default)({
     this.emitChange(res);
   },
   updateUserSuccess: function (res) {
-    const response = { msg: 'UPDATE_USER_SUCCESS' };
     this.currentUser = res;
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'UPDATE_USER_SUCCESS'
+    });
   },
   changePasswordSuccess: function (res) {
     if (res.stat) {
@@ -170,28 +192,21 @@ const UserStore = (0, _createStore2.default)({
     return flag;
   },
   followUserSuccess: function (res) {
-    const response = {
-      msg: 'FOLLOW_USER_SUCCESS'
-    };
-
     const thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
 
     this.users[thisUserIndex].fans.push(res.currentUser);
     this.currentUser.focuses.push(res.thisUser);
-
     if (this.currentUser.focuses_list) {
       this.currentUser.focuses_list.no_groups.push(res.thisUser);
     }
 
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'FOLLOW_USER_SUCCESS'
+    });
   },
   cancelFollowUserSuccess: function (res) {
-    const response = {
-      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
-      currentUser: res.currentUser,
-      user: res.thisUser
-    };
-
     const _thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
     const new_fans = this.users[_thisUserIndex].fans.filter(f => f.id_str !== res.currentUser.id_str);
 
@@ -206,32 +221,19 @@ const UserStore = (0, _createStore2.default)({
       special_focuses: special_focuses
     };
 
-    this.emitChange(response);
-  },
-  followUserWithSuccess: function (res) {
-    const response = { msg: 'FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
-    this.currentUser.focuses.push(res.thisUser);
-    this.users[usrIdx] = this.currentUser;
-    this.emitChange(response);
-  },
-  cancelFollowUserWithSuccess: function (res) {
-    const response = { msg: 'CANCEL_FOLLOW_USER_SUCCESS' };
-    const usrIdx = this.users.findIndex(user => user.id_str === this.currentUser.id_str);
-    this.currentUser.focuses.forEach((focus, fsIdx) => {
-      if (focus.id_str === res.thisUser.id_str) {
-        this.currentUser.focuses.splice(fsIdx, 1);
-      }
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'CANCEL_FOLLOW_USER_SUCCESS',
+      currentUser: res.currentUser,
+      user: res.thisUser
     });
-    this.users[usrIdx] = this.currentUser;
-    this.emitChange(response);
   },
   getLoginUserImageSuccess: function (res) {
-    const response = {
-      msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
-    };
     this.loginUserImage = res;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
+    });
   },
   getLoginUserloginUserImage: function () {
     return this.loginUserImage;
@@ -246,34 +248,40 @@ const UserStore = (0, _createStore2.default)({
     return this.currentUploadedImage;
   },
   editUserImage: function (image) {
-    const response = {
-      msg: 'EDIT_IMAGE_SUCCESS'
-    };
     this.currentUploadedImage = image;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'EDIT_IMAGE_SUCCESS'
+    });
   },
   cancelEditUserImage: function () {
-    const response = {
-      msg: 'CANCEL_IMAGE_SUCCESS'
-    };
     this.currentUploadedImage = null;
-    this.emitChange(response);
+    this.emitChange({
+      msg: 'CANCEL_IMAGE_SUCCESS'
+    });
   },
   uploadImageSuccess: function (newuser) {
-    const response = {
-      msg: 'UPLOAD_IMAGE_SUCCESS'
-    };
     this.currentUser.image_url = newuser.image_url;
-    this.emitChange(response);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
+    this.emitChange({
+      msg: 'UPLOAD_IMAGE_SUCCESS'
+    });
   },
   addMessageConnectionSuccess: function (connection) {
-    if (!this.currentUser.recent_chat_connections) {
+    const connections = this.currentUser.recent_chat_connections;
+    const isNotExist = connections.findIndex(c => c.this_user_id === connection.this_user_id) < 0;
+
+    if (!connections) {
       this.currentUser.recent_chat_connections = [];
     }
 
-    this.currentUser.recent_chat_connections.push(connection);
+    if (isNotExist) {
+      this.currentUser.recent_chat_connections.push(connection);
+    }
 
     this.setCurrentUserConnection(connection.this_user_id);
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
     this.emitChange({
       msg: 'ADD_MESSAGE_CONNECTION_SUCCESS',
       connection: connection
@@ -290,6 +298,8 @@ const UserStore = (0, _createStore2.default)({
       });
     }
 
+    this.updateCurrentUserIntoUsers();
+    this.updateIndexedDB();
     this.emitChange({
       msg: 'DELETE_MESSAGE_CONNECTION_SUCCESS',
       connections: res.connections
@@ -300,7 +310,8 @@ const UserStore = (0, _createStore2.default)({
       return '';
     }
     const connection = localStorage.getItem('current_user_connection');
-    return JSON.parse(connection).active_user;
+    const conObj = JSON.parse(connection);
+    return conObj ? conObj.active_user : '';
   },
   getUserConnection: function () {
     if (!_utils.env.is_client) {
@@ -331,15 +342,63 @@ const UserStore = (0, _createStore2.default)({
       msg: 'SET_USER_CONNECTION_SUCCESS'
     });
   },
+  initialConnection: function () {
+    const KENNY = this.getUserByUsername('Kenny');
+    const firstMessage = {
+      content: 'My name is Kenny, the developer of this website. If you have any questions, ask me please!',
+      date: new Date(),
+      user_to: this.currentUser.id_str,
+      user_from: KENNY.id_str,
+      class: 'you'
+    };
+    const firstConnection = {
+      this_user_id: KENNY.id_str,
+      connect_date: new Date(),
+      messages: this.currentUser.username === 'Kenny' ? [] : [firstMessage]
+    };
+
+    return {
+      firstConnection: firstConnection,
+      firstMessage: firstMessage
+    };
+  },
   setCurrentUserConnection: function (thisUserId) {
-    this.setUserConnection({
-      current_user: this.currentUser.id_str,
-      active_user: thisUserId || this.currentUser.recent_chat_connections[0].this_user_id,
-      recent_chat_connections: this.currentUser.recent_chat_connections
-    });
+    const { id_str: id_str, recent_chat_connections: recent_chat_connections } = this.currentUser;
+    let firstConnection = recent_chat_connections[0];
+    const localConnection = {
+      current_user: id_str,
+      active_user: thisUserId,
+      recent_chat_connections: recent_chat_connections
+    };
+    const initialConnection = this.initialConnection();
+
+    if (!thisUserId) {
+      if (!firstConnection) {
+        firstConnection = initialConnection.firstConnection;
+        localConnection.recent_chat_connections[0] = firstConnection;
+      }
+
+      localConnection.active_user = firstConnection.this_user_id;
+
+      if (!firstConnection.messages.length) {
+        firstConnection.messages.push(initialConnection.firstMessage);
+      }
+    }
+
+    this.setUserConnection(localConnection);
   },
   clearUserConnection: function () {
     // TODO
+  },
+  updateCurrentUserIntoUsers: function () {
+    this.users.forEach((user, idx) => {
+      if (user.id_str === this.currentUser.id_str) {
+        this.users[idx] = this.currentUser;
+      }
+    });
+  },
+  updateIndexedDB: function () {
+    _indexedDB2.default.set('users', this.users);
   },
   dehydrate: function () {
     return {

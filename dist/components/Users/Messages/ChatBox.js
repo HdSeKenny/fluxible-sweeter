@@ -189,6 +189,7 @@ class ChatBox extends _react2.default.Component {
         const thisUser = this.UserStore.getUserById(thisUserId);
         const { username: username, last_msg_date: last_msg_date, image_url: image_url } = thisUser;
         const isActive = activeUserId === thisUserId;
+        const isAdmin = thisUser.role === 'admin';
         let classes = isActive ? 'person active' : 'person';
         if (!hasActiveUser && index === 0) {
           classes = 'person active';
@@ -233,7 +234,7 @@ class ChatBox extends _react2.default.Component {
             { size: '2 p-0 tar' },
             _react2.default.createElement(
               _Layout.Row,
-              { className: 'close-connect' },
+              { className: isAdmin ? 'close-connect admin' : 'close-connect user' },
               _react2.default.createElement(
                 'span',
                 { onClick: () => this.closeUserConnection(thisUserId) },

@@ -83,37 +83,6 @@ exports.default = (0, _createReactClass2.default)({
       this.setState(this.getStatesFromStores());
     }
   },
-  componentDidMount: function () {},
-  onFollowThisUser: function (followUser) {
-    const { currentUser: currentUser, user: user } = this.state;
-    if (!currentUser) {
-      return _plugins.swal.error('Login first please!');
-    }
-
-    const followObj = {
-      userId: user._id,
-      type: followUser.type,
-      thisUserId: followUser.user._id,
-      currentUserId: currentUser._id
-    };
-
-    this.executeAction(_actions.UserActions.FollowThisUserWithFollow, followObj);
-  },
-  onCancelFollowThisUser: function (followUser) {
-    const { currentUser: currentUser, user: user } = this.state;
-    if (!currentUser) {
-      return _plugins.swal.error('Login first please!');
-    }
-
-    const cancelFollowObj = {
-      userId: user._id,
-      type: followUser.type,
-      thisUserId: followUser.user._id,
-      currentUserId: currentUser._id
-    };
-
-    this.executeAction(_actions.UserActions.CancelFollowThisUserWithFollow, cancelFollowObj);
-  },
   render: function () {
     const { pathname: pathname, query: query } = this.props.location;
     const { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser } = this.state;

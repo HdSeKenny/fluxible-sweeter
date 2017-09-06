@@ -39,7 +39,8 @@ exports.default = (0, _createReactClass2.default)({
   displayName: 'List',
 
   contextTypes: {
-    executeAction: _propTypes2.default.func
+    executeAction: _propTypes2.default.func,
+    getStore: _propTypes2.default.func
   },
 
   mixins: [_fluxibleAddonsReact.FluxibleMixin],
@@ -55,7 +56,7 @@ exports.default = (0, _createReactClass2.default)({
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       kenny: this.getStore(_stores.UserStore).getKennyUser(),
-      blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
+      blogs: this.context.getStore(_stores.BlogStore).getAllBlogs(),
       selectedPin: {},
       showPinModal: false
     };
@@ -69,19 +70,20 @@ exports.default = (0, _createReactClass2.default)({
       _plugins.swal.success(res.msg);
       this.setState({
         selectedPin: res.newBlog,
-        blogs: this.getStore(_stores.BlogStore).getAllBlogs()
+        blogs: this.context.getStore(_stores.BlogStore).getAllBlogs()
       });
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      _plugins.swal.success(res.msg);
-      this.setState({
-        blogs: this.getStore(_stores.BlogStore).getAllBlogs()
+      _plugins.swal.success(res.msg, () => {
+        this.setState({
+          blogs: this.context.getStore(_stores.BlogStore).getAllBlogs()
+        });
       });
     }
 
     if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
-      const currentUser = this.getStore(_stores.UserStore).getCurrentUser();
+      const currentUser = this.context.getStore(_stores.UserStore).getCurrentUser();
       this.setState({
         currentUser: currentUser
       });
@@ -208,7 +210,7 @@ exports.default = (0, _createReactClass2.default)({
     return _react2.default.createElement(
       'div',
       { className: '' },
-      sortedPins.map((pin, index) => _react2.default.createElement(_UI.PinItem, { key: index, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser, readMore: false }))
+      sortedPins.map(pin => _react2.default.createElement(_UI.PinItem, { key: pin.id_str, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser, readMore: false }))
     );
   },
   render: function () {

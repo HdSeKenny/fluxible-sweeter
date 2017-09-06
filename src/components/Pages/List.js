@@ -96,14 +96,6 @@ export default CreateReactClass({
     }
   },
 
-  shouldComponetUpdate() {
-    // return true;
-  },
-
-  componentDidUpdate() {
-    console.log('componentDidUpdate')
-  },
-
   _renderUserCardInfo(displayUser) {
     const { image_url, username, profession, description } = displayUser;
     return (

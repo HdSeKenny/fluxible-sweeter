@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint-disable all, no-param-reassign */
 /**
  * Devices Plugin for fluxible
  * get the authenticated info from context.

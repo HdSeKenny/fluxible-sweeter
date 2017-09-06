@@ -38,7 +38,11 @@ export default {
 
   Login(context, payload, done) {
     context.service.create('users.login', {}, payload, fetchClientConfig, (err, res) => {
-      context.dispatch('USER_LOGIN_SUCCESS', res);
+      if (res.user) {
+        context.dispatch('USER_LOGIN_SUCCESS', res);
+      } else {
+        context.dispatch('USER_LOGIN_FAIL', res);
+      }
       done();
     });
   },
@@ -52,7 +56,11 @@ export default {
 
   UserRegister(context, payload, done) {
     context.service.create('users.register', {}, payload, fetchClientConfig, (err, res) => {
-      context.dispatch('USER_REGISTER_SUCCESS', res);
+      if (res.user) {
+        context.dispatch('USER_REGISTER_SUCCESS', res);
+      } else {
+        context.dispatch('USER_REGISTER_FAIL', res);
+      }
       done();
     });
   },

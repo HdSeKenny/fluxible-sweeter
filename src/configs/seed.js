@@ -4,6 +4,7 @@ const mongdb = require('mongodb');
 const seed = {
   blogs: [{
     "_id": mongdb.ObjectID("59af686ea22f3d43182fe3a8"),
+    "id_str": "59af686ea22f3d43182fe3a8",
     "text": "This is a test blog ... 😀 😀 😀 ",
     "content": {
       "entityMap": {
@@ -64,10 +65,10 @@ const seed = {
     "tags": [],
     "images": [
       "/styles/images/sliders/great-frontend.png"
-    ],
-    "id_str": "59af686ea22f3d43182fe3a8"
+    ]
   }, {
     "_id": mongdb.ObjectID("59af645ecb50fd0a3c118ae9"),
+    "id_str": "59af645ecb50fd0a3c118ae9",
     "type": "article",
     "title": "This is a test article",
     "content": {
@@ -140,8 +141,7 @@ const seed = {
     "comments": [],
     "images": [
       "/styles/images/sliders/great-frontend.png"
-    ],
-    "id_str": "59af645ecb50fd0a3c118ae9"
+    ]
   }],
   user: [{
     "_id": mongdb.ObjectID("583ff3d6a193d70f6946948e"),
@@ -171,7 +171,11 @@ const seed = {
     "fans_list": {
       "no_groups": []
     },
-    "recent_chat_connections": []
+    "recent_chat_connections": [{
+      "this_user_id": "583ff3d6a193d70f6946948e",
+      "connect_date": "2017-08-27T02:41:56.520Z",
+      "messages": []
+    }]
   }, {
     "_id": mongdb.ObjectID("583ff3d6a193d70f6946948f"),
     "id_str": "583ff3d6a193d70f6946948f",

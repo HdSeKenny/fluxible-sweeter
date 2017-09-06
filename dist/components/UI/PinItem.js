@@ -26,8 +26,11 @@ var _stores = require('../../stores');
 
 var _configs = require('../../configs');
 
+var _Draft = require('../../plugins/Draft');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-disable all, camelcase */
 class PinItem extends _react2.default.Component {
 
   goToUserCenter(author) {
@@ -157,7 +160,7 @@ class PinItem extends _react2.default.Component {
     );
   }
 
-  _renderTextPin(pin, readMore) {
+  _renderPinContent(pin, readMore) {
     const isArticle = pin.type === 'article';
     return _react2.default.createElement(
       'div',
@@ -174,32 +177,18 @@ class PinItem extends _react2.default.Component {
   _renderDisplayNumberText(pin, readMore, isArticle) {
     const display40Text = _utils.jsUtils.shorten(pin.text, 40);
     const display70Text = _utils.jsUtils.shorten(pin.text, 70);
+
     if (isArticle) {
-      if (readMore) {
-        return _react2.default.createElement(
-          'p',
-          { className: 'article' },
-          display40Text
-        );
-      } else {
-        return _react2.default.createElement(
-          'p',
-          { className: 'moment' },
-          display70Text
-        );
-      }
-    } else if (readMore) {
-      return _react2.default.createElement(
-        'p',
-        { className: 'moment' },
-        display70Text
-      );
+      // if (readMore) {
+      //   return <p className="article">{pin.text}</p>;
+      // }
+      // else {
+      //   return <p className="moment">{pin.tex}</p>;
+      // }
+    } else if (readMore) {} else if (pin.content) {
+      return _react2.default.createElement(_Draft.SweetEditor, { contentText: pin.text });
     } else {
-      return _react2.default.createElement(
-        'p',
-        { className: 'moment' },
-        pin.text
-      );
+      // return <p className="moment">{pin.text}</p>;
     }
   }
 
@@ -278,7 +267,7 @@ class PinItem extends _react2.default.Component {
       _react2.default.createElement(
         _Layout.Row,
         { className: 'mb-10' },
-        this._renderTextPin(pin, readMore)
+        this._renderPinContent(pin, readMore)
       ),
       _react2.default.createElement(
         _Layout.Row,
@@ -302,8 +291,7 @@ class PinItem extends _react2.default.Component {
     );
   }
 }
-exports.default = PinItem; /* eslint-disable all, camelcase */
-
+exports.default = PinItem;
 PinItem.displayName = 'PinItem';
 PinItem.contextTypes = {
   router: _reactRouter.routerShape.isRequired,

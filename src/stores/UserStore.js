@@ -9,7 +9,9 @@ const UserStore = createStore({
 
   handlers: {
     'USER_REGISTER_SUCCESS': 'registerSuccess',
+    'USER_REGISTER_FAIL': 'registerFail',
     'USER_LOGIN_SUCCESS': 'loginSuccess',
+    'USER_LOGIN_FAIL': 'loginFail',
     'LOGOUT_SUCCESS': 'logoutSuccess',
     'LOAD_SESSION_USER_SUCCESS': 'loadSessionUserSuccess',
     'LOAD_USERS_SUCCESS': 'loadUsersSuccess',
@@ -68,6 +70,16 @@ const UserStore = createStore({
     });
   },
 
+  registerFail(res) {
+    this.currentUser = null;
+    this.authenticated = false;
+    this.emitChange({
+      msg: 'USER_REGISTER_FAIL',
+      stat: res.msg,
+      user: res.user
+    });
+  },
+
   loginSuccess(res) {
     this.currentUser = res.user;
     this.authenticated = true;
@@ -77,16 +89,23 @@ const UserStore = createStore({
     });
   },
 
-  logoutSuccess() {
-    const response = {
-      resCode: 200,
-      msg: 'LOGOUT_SUCCESS'
-    };
+  loginFail(res) {
     this.currentUser = null;
     this.authenticated = false;
+    this.emitChange({
+      msg: 'USER_LOGIN_FAIL',
+      errorMsg: res.auth.msg
+    });
+  },
 
+  logoutSuccess() {
+    this.currentUser = null;
+    this.authenticated = false;
     this.clearUserConnection();
-    this.emitChange(response);
+    this.emitChange({
+      resCode: 200,
+      msg: 'LOGOUT_SUCCESS'
+    });
   },
 
   isLoggedIn() {
@@ -308,7 +327,8 @@ const UserStore = createStore({
       return '';
     }
     const connection = localStorage.getItem('current_user_connection');
-    return JSON.parse(connection).active_user;
+    const conObj = JSON.parse(connection);
+    return conObj ? conObj.active_user : '';
   },
 
   getUserConnection() {
@@ -343,12 +363,51 @@ const UserStore = createStore({
     });
   },
 
+  initialConnection() {
+    const KENNY = this.getUserByUsername('Kenny');
+    const firstMessage = {
+      content: 'My name is Kenny, the developer of this website. If you have any questions, ask me please!',
+      date: new Date(),
+      user_to: this.currentUser.id_str,
+      user_from: KENNY.id_str,
+      class: 'you'
+    };
+    const firstConnection = {
+      this_user_id: KENNY.id_str,
+      connect_date: new Date(),
+      messages: this.currentUser.username === 'Kenny' ? [] : [firstMessage]
+    };
+
+    return {
+      firstConnection,
+      firstMessage
+    };
+  },
+
   setCurrentUserConnection(thisUserId) {
-    this.setUserConnection({
-      current_user: this.currentUser.id_str,
-      active_user: thisUserId || this.currentUser.recent_chat_connections[0].this_user_id,
-      recent_chat_connections: this.currentUser.recent_chat_connections
-    });
+    const { id_str, recent_chat_connections } = this.currentUser;
+    let firstConnection = recent_chat_connections[0];
+    const localConnection = {
+      current_user: id_str,
+      active_user: thisUserId,
+      recent_chat_connections
+    };
+    const initialConnection = this.initialConnection();
+
+    if (!thisUserId) {
+      if (!firstConnection) {
+        firstConnection = initialConnection.firstConnection;
+        localConnection.recent_chat_connections[0] = firstConnection;
+      }
+
+      localConnection.active_user = firstConnection.this_user_id;
+
+      if (!firstConnection.messages.length) {
+        firstConnection.messages.push(initialConnection.firstMessage);
+      }
+    }
+
+    this.setUserConnection(localConnection);
   },
 
   clearUserConnection() {

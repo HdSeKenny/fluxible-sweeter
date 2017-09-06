@@ -448,15 +448,14 @@ exports.default = typeof window !== 'undefined' ? function () {
     jpeg: {
       0xffe1: [] // APP1 marker
     }
-  };
 
-  // Parses image meta data and calls the callback with an object argument
-  // with the following properties:
-  // * imageHead: The complete image head as ArrayBuffer (Uint8Array for IE10)
-  // The options arguments accepts an object and supports the following properties:
-  // * maxMetaDataSize: Defines the maximum number of bytes to parse.
-  // * disableImageHead: Disables creating the imageHead property.
-  loadImage.parseMetaData = function (file, callback, options) {
+    // Parses image meta data and calls the callback with an object argument
+    // with the following properties:
+    // * imageHead: The complete image head as ArrayBuffer (Uint8Array for IE10)
+    // The options arguments accepts an object and supports the following properties:
+    // * maxMetaDataSize: Defines the maximum number of bytes to parse.
+    // * disableImageHead: Disables creating the imageHead property.
+  };loadImage.parseMetaData = function (file, callback, options) {
     options = options || {};
     var that = this;
     // 256 KiB should contain all EXIF/ICC/IPTC segments:
@@ -611,9 +610,8 @@ exports.default = typeof window !== 'undefined' ? function () {
       },
       size: 8
     }
-  };
-  // undefined, 8-bit byte, value depending on field:
-  loadImage.exifTagTypes[7] = loadImage.exifTagTypes[1];
+    // undefined, 8-bit byte, value depending on field:
+  };loadImage.exifTagTypes[7] = loadImage.exifTagTypes[1];
 
   loadImage.getExifValue = function (dataView, tiffOffset, offset, type, length, littleEndian) {
     var tagType = loadImage.exifTagTypes[type];

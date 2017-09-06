@@ -10,7 +10,7 @@ var _configs = require('./configs');
 
 var _configs2 = _interopRequireDefault(_configs);
 
-var _mode = require('./utils/mode');
+var _mode = require('./configs/mode');
 
 var _mode2 = _interopRequireDefault(_mode);
 

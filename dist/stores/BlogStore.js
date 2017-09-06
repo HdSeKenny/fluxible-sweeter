@@ -8,9 +8,9 @@ var _createStore = require('fluxible/addons/createStore');
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _lodash = require('lodash');
+var _indexedDB = require('../utils/indexedDB');
 
-var _lodash2 = _interopRequireDefault(_lodash);
+var _indexedDB2 = _interopRequireDefault(_indexedDB);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22,9 +22,7 @@ const BlogStore = (0, _createStore2.default)({
   handlers: {
     'LOAD_BLOGS_SUCCESS': 'loadBlogsSuccess',
     'DELETE_BLOG_SUCCESS': 'deleteBlogSuccess',
-    'DELETE_BLOG_FAIL': 'deleteBlogFail',
     'ADD_BLOG_SUCCESS': 'addBlogSuccess',
-    'ADD_BLOG_FAIL': 'addBlogFail',
     'EDIT_BLOG': 'editBlog',
     'CANCEL_EDIT_BLOG': 'cancelEditBlog',
     'UPDATE_BLOG_SUCCESS': 'updateBlogSuccess',
@@ -43,35 +41,42 @@ const BlogStore = (0, _createStore2.default)({
     this.currentBlog = null;
     this.deletedBlog = null;
     this.showLoading = true;
-    this.listKeyNumber = 0;
     this.isUpdated = false;
     this.isThumbedUp = false;
   },
+  findBlogIndexById: function (id) {
+    return this.blogs.findIndex(b => b.id_str === id);
+  },
   loadBlogsSuccess: function (res) {
-    this.blogs = res;
+    this.blogs = res.data;
     this.emitChange();
   },
 
 
   // Blogs comments
   addCommentSuccess: function (res) {
-    const newBlog = this.blogs.find(b => b.id_str === res.blogId);
-    newBlog.comments.push(res);
-    const resObj = { msg: 'COMMENT_SUCCESS', newBlog: newBlog };
+    const idx = this.findBlogIndexById(res.blogId);
+    this.blogs[idx].comments.push(res);
 
-    const idx = this.blogs.findIndex(b => b.id_str === res.blogId);
-    this.blogs[idx] = newBlog;
-    this.emitChange(resObj);
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      msg: 'COMMENT_SUCCESS',
+      newBlog: this.blogs[idx]
+    });
   },
   deleteCommentSuccess: function (res) {
     const deletedCommentBlog = this.blogs.find(b => b.id_str === res.blogId);
     const deletedCommentIndex = deletedCommentBlog.comments.findIndex(c => c.id_str === res.deletedCommentId);
     deletedCommentBlog.comments.splice(deletedCommentIndex, 1);
 
-    const resObj = { msg: 'DELETE_COMMENT_SUCCESS', newBlog: deletedCommentBlog };
     const idx = this.blogs.findIndex(b => b.id_str === res.blogId);
     this.blogs[idx] = deletedCommentBlog;
-    this.emitChange(resObj);
+
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      msg: 'DELETE_COMMENT_SUCCESS',
+      newBlog: deletedCommentBlog
+    });
   },
   getAllComments: function () {
     return this.comments;
@@ -80,18 +85,12 @@ const BlogStore = (0, _createStore2.default)({
   /* Blogs comments end*/
 
   addBlogSuccess: function (res) {
-    const resObj = {
+    this.blogs.push(res);
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
       msg: 'CREATE_BLOG_SUCCESS',
       newBlog: res
-    };
-    this.blogs.push(res);
-    this.emitChange(resObj);
-  },
-  addBlogFail: function () {
-    const resObj = {
-      msg: 'ADD_BLOG_FAIL'
-    };
-    this.emitChange(resObj);
+    });
   },
   getAllBlogs: function () {
     return this.blogs;
@@ -145,16 +144,13 @@ const BlogStore = (0, _createStore2.default)({
     return displayUserBlogs;
   },
   deleteBlogSuccess: function (res) {
-    const resObj = {
-      resCode: 200,
-      msg: 'DELETE_BLOG_SUCCESS'
-    };
     this.blogs = this.blogs.filter(blog => blog.id_str !== res.deletedBlogId);
     this.deletedBlog = null;
-    this.emitChange(resObj);
-  },
-  deleteBlogFail: function (err) {
-    this.emitChange(err);
+
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      msg: 'DELETE_BLOG_SUCCESS'
+    });
   },
   getBlogById: function (blogId) {
     return this.blogs.find(blog => blog.id_str === blogId);
@@ -197,21 +193,18 @@ const BlogStore = (0, _createStore2.default)({
     return sortText === 'all blogs' ? thisUserBlogs : sortedBlogs;
   },
   editBlog: function (blog) {
-    const resObj = {
-      msg: 'EDIT_BLOG'
-    };
-    const currentBlog = this.blogs.find(item => item.id_str === blog.id_str);
+    const currentBlog = this.getBlogById(blog.id_str);
     this.currentBlog = currentBlog;
     this.deletedBlog = null;
-    this.listKeyNumber += 1;
-    this.emitChange(resObj);
+    this.emitChange({
+      msg: 'EDIT_BLOG'
+    });
   },
   cancelEditBlog: function () {
-    const resObj = {
-      msg: 'CANCEL_EDIT_BLOG'
-    };
     this.currentBlog = null;
-    this.emitChange(resObj);
+    this.emitChange({
+      msg: 'CANCEL_EDIT_BLOG'
+    });
   },
   getCurrentBlog: function () {
     return this.currentBlog;
@@ -223,54 +216,47 @@ const BlogStore = (0, _createStore2.default)({
     return this.isUpdated;
   },
   updateBlogSuccess: function (newBlog) {
-    const blogs = _lodash2.default.cloneDeep(this.blogs);
-    blogs.forEach((item, index) => {
-      if (_lodash2.default.isEqual(item.id_str, newBlog.id_str)) {
-        blogs[index] = newBlog;
-      }
-    });
-    const resObj = {
-      blogs: blogs,
-      msg: 'UPDATE_BLOG_SUCCESS'
-    };
+    const idx = this.findBlogIndexById(newBlog.id_str);
+    this.blogs[idx] = newBlog;
     this.currentBlog = null;
-    this.blogs = blogs;
     this.isUpdated = true;
-    this.emitChange(resObj);
+
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      blogs: this.blogs,
+      msg: 'UPDATE_BLOG_SUCCESS'
+    });
   },
   confirmDeleteBlog: function (blog) {
-    const resObj = {
-      msg: 'CONFIRM_DELETE_BLOG'
-    };
     this.deletedBlog = blog;
-    this.emitChange(resObj);
+    this.emitChange({
+      msg: 'CONFIRM_DELETE_BLOG'
+    });
   },
   cancelDeleteBlog: function () {
-    const resObj = {
-      msg: 'CANCEL_DELETE_BLOG'
-    };
     this.deletedBlog = null;
-    this.emitChange(resObj);
+    this.emitChange({
+      msg: 'CANCEL_DELETE_BLOG'
+    });
   },
   thumbsUpBlogSuccess: function (res) {
-    const newBlog = this.blogs.find(b => b.id_str === res.id_str);
-    newBlog.likers = res.likers;
-    const resObj = { msg: 'THUMBS_UP_BLOG_SUCCESS', newBlog: newBlog };
-
-    const idx = this.blogs.findIndex(b => b.id_str === res.id_str);
-    this.blogs[idx] = newBlog;
-
-    this.emitChange(resObj);
+    const idx = this.findBlogIndexById(res.id_str);
+    this.blogs[idx].likers = res.likers;
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      msg: 'THUMBS_UP_BLOG_SUCCESS',
+      newBlog: this.blogs[idx]
+    });
   },
   cancelThumbsUpBlogSuccess: function (res) {
-    const newBlog = _lodash2.default.cloneDeep(this.blogs).find(b => b.id_str === res.id_str);
-    newBlog.likers = res.likers;
-    const resObj = { msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS', newBlog: newBlog };
+    const idx = this.findBlogIndexById(res.id_str);
+    this.blogs[idx].likers = res.likers;
 
-    const idx = this.blogs.findIndex(b => b.id_str === res.id_str);
-    this.blogs[idx] = newBlog;
-
-    this.emitChange(resObj);
+    this.updateBlogsIntoIndexedDB();
+    this.emitChange({
+      msg: 'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      newBlog: this.blogs[idx]
+    });
   },
   uploadImageSuccess: function (newUser) {
     this.blogs.forEach((blog, idx) => {
@@ -279,9 +265,13 @@ const BlogStore = (0, _createStore2.default)({
       }
     });
 
+    this.updateBlogsIntoIndexedDB();
     this.emitChange({
       msg: 'BLOG_CHANGE_IMAGE_SUCCESS'
     });
+  },
+  updateBlogsIntoIndexedDB: function () {
+    _indexedDB2.default.set('blogs', this.blogs);
   },
   dehydrate: function () {
     return {

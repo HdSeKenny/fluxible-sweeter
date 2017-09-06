@@ -58,7 +58,7 @@ class Switch extends _react2.default.Component {
     const buttonStyleOff = {
       left: 0
     };
-    const { before: before, after: after } = this.props;
+    const { /* before,*/after: after } = this.props;
     const spanMergeParam = !this.state.on ? switchStyleOff : {};
     const btnMergeParam = !this.state.on ? buttonStyleOff : {};
     const switchSpan = (0, _reactAddonsUpdate2.default)(switchStyleOn, { $merge: spanMergeParam });

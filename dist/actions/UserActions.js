@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _mode = require('../utils/mode');
+var _mode = require('../configs/mode');
 
 var _mode2 = _interopRequireDefault(_mode);
 
@@ -51,7 +51,11 @@ exports.default = {
   },
   Login: function (context, payload, done) {
     context.service.create('users.login', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      context.dispatch('USER_LOGIN_SUCCESS', res);
+      if (res.user) {
+        context.dispatch('USER_LOGIN_SUCCESS', res);
+      } else {
+        context.dispatch('USER_LOGIN_FAIL', res);
+      }
       done();
     });
   },
@@ -63,7 +67,11 @@ exports.default = {
   },
   UserRegister: function (context, payload, done) {
     context.service.create('users.register', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      context.dispatch('USER_REGISTER_SUCCESS', res);
+      if (res.user) {
+        context.dispatch('USER_REGISTER_SUCCESS', res);
+      } else {
+        context.dispatch('USER_REGISTER_FAIL', res);
+      }
       done();
     });
   },
@@ -78,10 +86,6 @@ exports.default = {
       }
       done();
     });
-  },
-  isAuthenticated: function (context, payload, done) {
-    context.dispatch('IS_AUTHENTICATED');
-    done();
   },
   UpdateUserInfo: function (context, payload, done) {
     context.service.create('users.updateUserInfo', {}, payload, _fetchClientConfig2.default, (err, res) => {
@@ -104,22 +108,6 @@ exports.default = {
   CancelFollowThisUser: function (context, payload, done) {
     context.service.create('users.cancelFollowThisUser', {}, payload, _fetchClientConfig2.default, (err, res) => {
       context.dispatch('CANCEL_FOLLOW_USER_SUCCESS', res);
-      done();
-    });
-  },
-  FollowThisUserWithFollow: function (context, payload, done) {
-    context.service.create('users.followThisUser', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      res.userId = payload.userId;
-      res.followType = payload.type;
-      context.dispatch('FOLLOW_USER_WITH_SUCCESS', res);
-      done();
-    });
-  },
-  CancelFollowThisUserWithFollow: function (context, payload, done) {
-    context.service.create('users.cancelFollowThisUser', {}, payload, _fetchClientConfig2.default, (err, res) => {
-      res.userId = payload.userId;
-      res.followType = payload.type;
-      context.dispatch('CANCEL_FOLLOW_USER_WITH_SUCCESS', res);
       done();
     });
   },

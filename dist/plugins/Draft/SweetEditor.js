@@ -16,72 +16,55 @@ var _draftJsPluginsEditor = require('draft-js-plugins-editor');
 
 var _draftJsPluginsEditor2 = _interopRequireDefault(_draftJsPluginsEditor);
 
-var _draftJs = require('draft-js');
+var _draftJsEmojiPlugin = require('draft-js-emoji-plugin');
 
-var _stores = require('../../stores');
+var _draftJsEmojiPlugin2 = _interopRequireDefault(_draftJsEmojiPlugin);
+
+var _configs = require('../../configs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const emojiPlugin = (0, _draftJsEmojiPlugin2.default)(_configs.params.emojiConfig);
+const plugins = [emojiPlugin];
+
 class SweetEditor extends _react2.default.Component {
+  constructor(...args) {
+    var _temp;
 
-  constructor() {
-    super();
-
-    this.onChange = editorState => {
-      const editorContent = (0, _draftJs.convertToRaw)(editorState.getCurrentContent());
-      const plainText = editorState.getCurrentContent().getPlainText();
-      this.setState({ editorState: editorState }, () => {
-        this.props.onSweetChange(editorContent, plainText);
-      });
-    };
-
-    this.focus = () => {
-      this.editor.focus();
-    };
-
-    this.state = {
-      editorState: _draftJs.EditorState.createEmpty()
-    };
-    this._onStoreChange = this._onStoreChange.bind(this);
+    return _temp = super(...args), this.state = {
+      emojiState: (0, _draftJsPluginsEditor.createEditorStateWithText)(this.props.contentText)
+    }, this.onEmojiChange = editorState => {
+      this.setState({ emojiState: editorState });
+    }, _temp;
   }
 
-  componentDidMount() {
-    this.context.getStore(_stores.BlogStore).addChangeListener(this._onStoreChange);
-  }
-
-  componentWillUnmount() {
-    this.context.getStore(_stores.BlogStore).removeChangeListener(this._onStoreChange);
-  }
-
-  _onStoreChange(res) {
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      this.setState({ editorState: _draftJs.EditorState.createEmpty() });
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    // Add new sweet record caused previous record re-render
+    return this.state.emojiState.getCurrentContent() != nextState.emojiState.getCurrentContent();
   }
 
   render() {
-    const { EmojiPlugins: EmojiPlugins } = this.props;
     return _react2.default.createElement(
       'div',
-      { className: 'sweet-editor', onClick: this.focus },
+      { className: 'pin-editor' },
       _react2.default.createElement(_draftJsPluginsEditor2.default, {
-        editorState: this.state.editorState,
-        onChange: this.onChange,
-        plugins: EmojiPlugins,
+        editorState: this.state.emojiState,
+        onChange: editorState => this.onEmojiChange(editorState),
+        plugins: plugins,
         ref: element => {
           this.editor = element;
-        }
+        },
+        readOnly: true
       })
     );
   }
 }
 exports.default = SweetEditor;
-SweetEditor.contextTypes = {
-  getStore: _propTypes2.default.func.isRequired
-};
 SweetEditor.propTypes = {
   EmojiPlugins: _propTypes2.default.array,
   onSweetChange: _propTypes2.default.func,
-  editorState: _propTypes2.default.object
+  editorState: _propTypes2.default.object,
+  contentText: _propTypes2.default.string,
+  isPinItem: _propTypes2.default.bool
 };
 module.exports = exports['default'];

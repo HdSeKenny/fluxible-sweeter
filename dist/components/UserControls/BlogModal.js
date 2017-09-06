@@ -16,6 +16,12 @@ var _draftJsEmojiPlugin = require('draft-js-emoji-plugin');
 
 var _draftJsEmojiPlugin2 = _interopRequireDefault(_draftJsEmojiPlugin);
 
+var _draftJsPluginsEditor = require('draft-js-plugins-editor');
+
+var _draftJsPluginsEditor2 = _interopRequireDefault(_draftJsPluginsEditor);
+
+var _draftJs = require('draft-js');
+
 var _reactRouter = require('react-router');
 
 var _actions = require('../../actions');
@@ -24,42 +30,41 @@ var _Layout = require('../UI/Layout');
 
 var _plugins = require('../../plugins');
 
-var _Draft = require('../../plugins/Draft');
+var _stores = require('../../stores');
 
 var _configs = require('../../configs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const config = {
-  selectGroups: [{
-    title: 'People',
-    icon: _react2.default.createElement('i', { className: 'fa fa-smile-o' }),
-    categories: ['people']
-  }, {
-    title: 'Food & Drink',
-    icon: _react2.default.createElement('i', { className: 'fa fa-cutlery' }),
-    categories: ['food']
-  }, {
-    title: 'Symbols',
-    icon: _react2.default.createElement('i', { className: 'fa fa-heart' }),
-    categories: ['symbols']
-  }]
-}; /**
-    * Copyright 2017, created by Kuan Lu
-    * @ui BlogModal
-    */
+const emojiPlugin = (0, _draftJsEmojiPlugin2.default)(_configs.params.emojiConfig); /**
+                                                                                     * Copyright 2017, created by Kuan Lu
+                                                                                     * @ui BlogModal
+                                                                                     */
 
-const emojiPlugin = _configs.params.showEmoji ? (0, _draftJsEmojiPlugin2.default)(config) : {};
 const { EmojiSuggestions: EmojiSuggestions, EmojiSelect: EmojiSelect } = emojiPlugin;
-const EmojiPlugins = _configs.params.showEmoji ? [emojiPlugin] : [];
+const plugins = _configs.params.showEmoji ? [emojiPlugin] : [];
 
 class BlogModal extends _react2.default.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
+    this.focus = () => {
+      this.editor.focus();
+    };
+
+    this.onChange = editorState => {
+      const editorContent = (0, _draftJs.convertToRaw)(editorState.getCurrentContent());
+      const plainText = editorState.getCurrentContent().getPlainText();
+      this.setState({ blogText: plainText, editorContent: editorContent, editorState: editorState });
+    };
+
+    this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
       welcomeText: 'Calm down, just a bad day, not a bad life !',
       blogText: '',
+      editorContent: '',
+      editorState: _draftJs.EditorState.createEmpty(),
       loadEmoji: false
     };
   }
@@ -85,6 +90,21 @@ class BlogModal extends _react2.default.Component {
   componentDidMount() {
     // eslint-disable-next-line
     this.setState({ loadEmoji: true });
+    this.context.getStore(_stores.BlogStore).addChangeListener(this._onStoreChange);
+  }
+
+  componentWillUnmount() {
+    this.context.getStore(_stores.BlogStore).removeChangeListener(this._onStoreChange);
+  }
+
+  _onStoreChange(res) {
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      this.setState({
+        blogText: '',
+        editorState: _draftJs.EditorState.createEmpty(),
+        editorContent: ''
+      });
+    }
   }
 
   goToArticleCreatePage() {
@@ -94,12 +114,6 @@ class BlogModal extends _react2.default.Component {
     }
 
     this.context.router.push(`/${currentUser.username}/create`);
-  }
-
-  onSweetChange(editorContent, plainText) {
-    if (editorContent && plainText) {
-      this.setState({ blogText: plainText, editorContent: editorContent });
-    }
   }
 
   _renderCreateBtns(isDisabled) {
@@ -125,19 +139,27 @@ class BlogModal extends _react2.default.Component {
     );
   }
 
-  _renderSweetEditor(isDisabled, showEmoji) {
+  _renderSweetEditor(isDisabled) {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'textarea-row' },
-      _react2.default.createElement(_Draft.SweetEditor, {
-        EmojiPlugins: EmojiPlugins,
-        onSweetChange: (editorContent, plainText) => this.onSweetChange(editorContent, plainText)
-      }),
-      showEmoji && _react2.default.createElement(EmojiSuggestions, null),
       _react2.default.createElement(
+        'div',
+        { className: 'sweet-editor', onClick: this.focus },
+        _react2.default.createElement(_draftJsPluginsEditor2.default, {
+          editorState: this.state.editorState,
+          onChange: this.onChange,
+          plugins: plugins,
+          ref: element => {
+            this.editor = element;
+          }
+        }),
+        _configs.params.showEmoji && _react2.default.createElement(EmojiSuggestions, null)
+      ),
+      _configs.params.showEmoji && _react2.default.createElement(
         _Layout.Col,
         { size: '8 p-0' },
-        showEmoji && _react2.default.createElement(EmojiSelect, null)
+        _react2.default.createElement(EmojiSelect, null)
       ),
       _react2.default.createElement(
         _Layout.Col,
@@ -194,7 +216,7 @@ class BlogModal extends _react2.default.Component {
           )
         )
       ),
-      loadEmoji && this._renderSweetEditor(isDisabled, _configs.params.showEmoji)
+      loadEmoji && this._renderSweetEditor(isDisabled)
     );
   }
 }
@@ -202,6 +224,7 @@ exports.default = BlogModal;
 BlogModal.displayName = 'BlogModal';
 BlogModal.contextTypes = {
   executeAction: _propTypes2.default.func,
+  getStore: _propTypes2.default.func.isRequired,
   router: _reactRouter.routerShape.isRequired
 };
 BlogModal.propTypes = {
