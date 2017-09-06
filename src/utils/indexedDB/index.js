@@ -169,7 +169,7 @@ const store = {
           const diff = new Date() - result.value;
           const { expired } = config.indexedDB;
           if (diff > expired) {
-            dbHelper.clear();
+            this.clear();
           }
         }
       };

@@ -25,6 +25,7 @@ module.exports = {
     hot_server_port: 5858
   },
   userRoles: ['guest', 'user', 'admin'],
+  kenny: '583ff3d6a193d70f6946948e',
   requestBodySize: '20mb',
   indexedDB: {
     name: 'sweeter',

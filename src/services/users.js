@@ -16,7 +16,7 @@ const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => 
       else {
         user.fans[faIdx] = fan;
       }
-      db.close();
+      // db.close();
       resolve();
     });
   });
@@ -32,7 +32,7 @@ const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject
       else {
         user.focuses[fsIdx] = focus;
       }
-      db.close();
+      // db.close();
       resolve();
     });
   });
@@ -48,7 +48,7 @@ const getBlogsPromise = (user, blogId, bgIdx) => new Promise((resolve, reject) =
       else {
         user.blogs[bgIdx] = blog;
       }
-      db.close();
+      // db.close();
       resolve();
     });
   });
@@ -142,7 +142,7 @@ export default {
             const insertedUser = res.ops[0];
             insertedUser.id_str = insertedUser._id.toString();
             User.save(insertedUser);
-            db.close();
+            // db.close();
 
             req.session.userId = insertedUser._id;
             req.session.authenticated = true;
@@ -179,7 +179,7 @@ export default {
           auth.msg = 'This email is not registered !';
           user = null;
         }
-        db.close();
+        // db.close();
         req.session.authenticated = auth.stat;
         callback(err, { user, auth });
       });
@@ -453,4 +453,3 @@ export default {
     });
   }
 };
-

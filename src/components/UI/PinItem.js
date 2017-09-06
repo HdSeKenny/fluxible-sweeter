@@ -8,6 +8,7 @@ import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { params } from '../../configs';
+import { SweetEditor } from '../../plugins/Draft';
 
 export default class PinItem extends React.Component {
 
@@ -101,6 +102,7 @@ export default class PinItem extends React.Component {
     $(`#${pin.id_str}`).fadeOut();
   }
 
+
   _renderPinitemImage(pin) {
     const imageUrls = pin.images;
     const displayImgUrl = imageUrls[0];
@@ -145,7 +147,7 @@ export default class PinItem extends React.Component {
     );
   }
 
-  _renderTextPin(pin, readMore) {
+  _renderPinContent(pin, readMore) {
     const isArticle = pin.type === 'article';
     return (
       <div className="pin-body-text mt-5" onClick={() => this.pinTextActions(pin)}>
@@ -158,19 +160,24 @@ export default class PinItem extends React.Component {
   _renderDisplayNumberText(pin, readMore, isArticle) {
     const display40Text = jsUtils.shorten(pin.text, 40);
     const display70Text = jsUtils.shorten(pin.text, 70);
+
     if (isArticle) {
-      if (readMore) {
-        return <p className="article">{display40Text}</p>;
-      }
-      else {
-        return <p className="moment">{display70Text}</p>;
-      }
+      // if (readMore) {
+      //   return <p className="article">{pin.text}</p>;
+      // }
+      // else {
+      //   return <p className="moment">{pin.tex}</p>;
+      // }
     }
     else if (readMore) {
-      return <p className="moment">{display70Text}</p>;
+
     }
-    else {
-      return <p className="moment">{pin.text}</p>;
+    else if (pin.content) {
+      return (
+        <SweetEditor contentText={pin.text} />
+      );
+    } else {
+      // return <p className="moment">{pin.text}</p>;
     }
   }
 
@@ -217,7 +224,7 @@ export default class PinItem extends React.Component {
       <div className="">
         {showImage && <Row className="mb-15">{this._renderPinitemImage(pin)}</Row>}
         <Row className="mb-10">{this._renderPinUserInfo(pin)}</Row>
-        <Row className="mb-10">{this._renderTextPin(pin, readMore)}</Row>
+        <Row className="mb-10">{this._renderPinContent(pin, readMore)}</Row>
         <Row className="">{this._renderPinFooterIcons(pin)}</Row>
       </div>
     );

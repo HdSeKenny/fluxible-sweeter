@@ -15,7 +15,8 @@ export default CreateReactClass({
   displayName: 'List',
 
   contextTypes: {
-    executeAction: PropTypes.func
+    executeAction: PropTypes.func,
+    getStore: PropTypes.func
   },
 
   mixins: [FluxibleMixin],
@@ -32,7 +33,7 @@ export default CreateReactClass({
     return {
       currentUser: this.getStore(UserStore).getCurrentUser(),
       kenny: this.getStore(UserStore).getKennyUser(),
-      blogs: this.getStore(BlogStore).getAllBlogs(),
+      blogs: this.context.getStore(BlogStore).getAllBlogs(),
       selectedPin: {},
       showPinModal: false
     };
@@ -55,19 +56,20 @@ export default CreateReactClass({
       swal.success(res.msg);
       this.setState({
         selectedPin: res.newBlog,
-        blogs: this.getStore(BlogStore).getAllBlogs()
+        blogs: this.context.getStore(BlogStore).getAllBlogs()
       });
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      swal.success(res.msg);
-      this.setState({
-        blogs: this.getStore(BlogStore).getAllBlogs(),
+      swal.success(res.msg, () => {
+        this.setState({
+          blogs: this.context.getStore(BlogStore).getAllBlogs()
+        });
       });
     }
 
     if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
-      const currentUser = this.getStore(UserStore).getCurrentUser();
+      const currentUser = this.context.getStore(UserStore).getCurrentUser();
       this.setState({
         currentUser
       });
@@ -92,6 +94,14 @@ export default CreateReactClass({
     if (listDom && listDom.length) {
       this.setState({ selectedPin: {}, showPinModal: false });
     }
+  },
+
+  shouldComponetUpdate() {
+    // return true;
+  },
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
   },
 
   _renderUserCardInfo(displayUser) {
@@ -135,8 +145,8 @@ export default CreateReactClass({
     const sortedPins = jsUtils.sortByDate(pins);
     return (
       <div className="">
-        {sortedPins.map((pin, index) =>
-          <PinItem key={index} onSelect={(id) => this.onViewPinItem(id)} pin={pin} currentUser={currentUser} readMore={false} />
+        {sortedPins.map((pin) =>
+          <PinItem key={pin.id_str} onSelect={(id) => this.onViewPinItem(id)} pin={pin} currentUser={currentUser} readMore={false} />
         )}
       </div>
     );

@@ -1,3 +1,5 @@
+const React = require('react');
+
 module.exports = {
   navbar: {
     sticky_header_height: 250,
@@ -8,8 +10,21 @@ module.exports = {
     left_nav_height: 900,
     fade_speed: 300
   },
-
-  showEmoji: false,
-
-  showUserCard: false
+  showUserCard: false,
+  showEmoji: true,
+  emojiConfig: {
+    selectGroups: [{
+      title: 'People',
+      icon: React.createElement('i', { className: 'fa fa-smile-o' }),
+      categories: ['people'],
+    }, {
+      title: 'Food & Drink',
+      icon: React.createElement('i', { className: 'fa fa-cutlery' }),
+      categories: ['food'],
+    }, {
+      title: 'Symbols',
+      icon: React.createElement('i', { className: 'fa fa-heart' }),
+      categories: ['symbols'],
+    }]
+  }
 };

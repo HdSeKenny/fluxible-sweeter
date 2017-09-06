@@ -151,6 +151,7 @@ export default class ChatBox extends React.Component {
           const thisUser = this.UserStore.getUserById(thisUserId);
           const { username, last_msg_date, image_url } = thisUser;
           const isActive = activeUserId === thisUserId;
+          const isAdmin = thisUser.role === 'admin';
           let classes = isActive ? 'person active' : 'person';
           if (!hasActiveUser && index === 0) {
             classes = 'person active';
@@ -166,7 +167,9 @@ export default class ChatBox extends React.Component {
                 </Col>
               </Col>
               <Col size="2 p-0 tar">
-                <Row className="close-connect"><span onClick={() => this.closeUserConnection(thisUserId)}>×</span></Row>
+                <Row className={isAdmin ? 'close-connect admin' : 'close-connect user'}>
+                  <span onClick={() => this.closeUserConnection(thisUserId)}>×</span>
+                </Row>
               </Col>
             </Row>
           );

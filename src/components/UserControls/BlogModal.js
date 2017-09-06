@@ -6,32 +6,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
+import Editor from 'draft-js-plugins-editor';
+import { EditorState, convertToRaw } from 'draft-js';
 import { routerShape } from 'react-router';
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
 import { swal } from '../../plugins';
-import { SweetEditor } from '../../plugins/Draft';
+import { BlogStore } from '../../stores';
 import { params } from '../../configs';
 
-const config = {
-  selectGroups: [{
-    title: 'People',
-    icon: React.createElement('i', { className: 'fa fa-smile-o' }),
-    categories: ['people'],
-  }, {
-    title: 'Food & Drink',
-    icon: React.createElement('i', { className: 'fa fa-cutlery' }),
-    categories: ['food'],
-  }, {
-    title: 'Symbols',
-    icon: React.createElement('i', { className: 'fa fa-heart' }),
-    categories: ['symbols'],
-  }]
-};
-
-const emojiPlugin = params.showEmoji ? createEmojiPlugin(config) : {};
+const emojiPlugin = createEmojiPlugin(params.emojiConfig);
 const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
-const EmojiPlugins = params.showEmoji ? [emojiPlugin] : [];
+const plugins = params.showEmoji ? [emojiPlugin] : [];
 
 export default class BlogModal extends React.Component {
 
@@ -39,6 +25,7 @@ export default class BlogModal extends React.Component {
 
   static contextTypes = {
     executeAction: PropTypes.func,
+    getStore: PropTypes.func.isRequired,
     router: routerShape.isRequired
   };
 
@@ -49,11 +36,14 @@ export default class BlogModal extends React.Component {
     isUserHome: PropTypes.bool
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this._onStoreChange = this._onStoreChange.bind(this);
     this.state = {
       welcomeText: 'Calm down, just a bad day, not a bad life !',
       blogText: '',
+      editorContent: '',
+      editorState: EditorState.createEmpty(),
       loadEmoji: false
     };
   }
@@ -79,6 +69,21 @@ export default class BlogModal extends React.Component {
   componentDidMount() {
     // eslint-disable-next-line
     this.setState({ loadEmoji: true });
+    this.context.getStore(BlogStore).addChangeListener(this._onStoreChange);
+  }
+
+  componentWillUnmount() {
+    this.context.getStore(BlogStore).removeChangeListener(this._onStoreChange);
+  }
+
+  _onStoreChange(res) {
+    if (res.msg === 'CREATE_BLOG_SUCCESS') {
+      this.setState({
+        blogText: '',
+        editorState: EditorState.createEmpty(),
+        editorContent: ''
+      });
+    }
   }
 
   goToArticleCreatePage() {
@@ -90,10 +95,14 @@ export default class BlogModal extends React.Component {
     this.context.router.push(`/${currentUser.username}/create`);
   }
 
-  onSweetChange(editorContent, plainText) {
-    if (editorContent && plainText) {
-      this.setState({ blogText: plainText, editorContent });
-    }
+  focus = () => {
+    this.editor.focus();
+  }
+
+  onChange = (editorState) => {
+    const editorContent = convertToRaw(editorState.getCurrentContent());
+    const plainText = editorState.getCurrentContent().getPlainText();
+    this.setState({ blogText: plainText, editorContent, editorState });
   }
 
   _renderCreateBtns(isDisabled) {
@@ -107,17 +116,20 @@ export default class BlogModal extends React.Component {
     );
   }
 
-  _renderSweetEditor(isDisabled, showEmoji) {
+  _renderSweetEditor(isDisabled) {
     return (
       <Row className="textarea-row">
-        <SweetEditor
-          EmojiPlugins={EmojiPlugins}
-          onSweetChange={(editorContent, plainText) => this.onSweetChange(editorContent, plainText)}
-        />
-        {showEmoji && <EmojiSuggestions />}
-        <Col size="8 p-0">
-          {showEmoji && <EmojiSelect />}
-        </Col>
+        <div className="sweet-editor" onClick={this.focus}>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            plugins={plugins}
+            ref={(element) => { this.editor = element; }}
+          />
+
+          {params.showEmoji && <EmojiSuggestions />}
+        </div>
+        {params.showEmoji && <Col size="8 p-0"><EmojiSelect /></Col>}
         <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
       </Row>
     );
@@ -142,7 +154,7 @@ export default class BlogModal extends React.Component {
           </Col>
         </Row>
 
-        {loadEmoji && this._renderSweetEditor(isDisabled, params.showEmoji)}
+        {loadEmoji && this._renderSweetEditor(isDisabled)}
       </div>
     );
   }

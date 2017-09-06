@@ -49,7 +49,7 @@ const AddBlog = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      swal.successWirhCallback(res.msg, () => {
+      swal.success(res.msg, () => {
         const newBlogId = res.newBlog.id_str;
         this.context.router.push(`${newBlogId}/details`);
       });

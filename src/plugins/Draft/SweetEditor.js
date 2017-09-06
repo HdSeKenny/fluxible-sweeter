@@ -1,64 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Editor from 'draft-js-plugins-editor';
-import { EditorState, convertToRaw } from 'draft-js';
-import { BlogStore } from '../../stores';
+import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
+import createEmojiPlugin from 'draft-js-emoji-plugin';
+import { params } from '../../configs';
+
+const emojiPlugin = createEmojiPlugin(params.emojiConfig);
+const plugins = [emojiPlugin];
 
 export default class SweetEditor extends React.Component {
-
-  static contextTypes = {
-    getStore: PropTypes.func.isRequired
-  };
 
   static propTypes = {
     EmojiPlugins: PropTypes.array,
     onSweetChange: PropTypes.func,
-    editorState: PropTypes.object
+    editorState: PropTypes.object,
+    contentText: PropTypes.string,
+    isPinItem: PropTypes.bool
   };
 
-  constructor() {
-    super();
-    this.state = {
-      editorState: EditorState.createEmpty()
-    };
-    this._onStoreChange = this._onStoreChange.bind(this);
-  }
-
-  onChange = (editorState) => {
-    const editorContent = convertToRaw(editorState.getCurrentContent());
-    const plainText = editorState.getCurrentContent().getPlainText();
-    this.setState({ editorState }, () => {
-      this.props.onSweetChange(editorContent, plainText);
-    });
+  state = {
+    emojiState: createEditorStateWithText(this.props.contentText),
   };
 
-  focus = () => {
-    this.editor.focus();
-  };
-
-  componentDidMount() {
-    this.context.getStore(BlogStore).addChangeListener(this._onStoreChange);
+  shouldComponentUpdate(nextProps, nextState) {
+    // Add new sweet record caused previous record re-render
+    return this.state.emojiState.getCurrentContent() != nextState.emojiState.getCurrentContent();
   }
 
-  componentWillUnmount() {
-    this.context.getStore(BlogStore).removeChangeListener(this._onStoreChange);
-  }
-
-  _onStoreChange(res) {
-    if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      this.setState({ editorState: EditorState.createEmpty() });
-    }
+  onEmojiChange = (editorState) => {
+    this.setState({ emojiState: editorState });
   }
 
   render() {
-    const { EmojiPlugins } = this.props;
     return (
-      <div className="sweet-editor" onClick={this.focus}>
+      <div className="pin-editor">
         <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={EmojiPlugins}
+          editorState={this.state.emojiState}
+          onChange={(editorState) => this.onEmojiChange(editorState)}
+          plugins={plugins}
           ref={(element) => { this.editor = element; }}
+          readOnly={true}
         />
       </div>
     );
