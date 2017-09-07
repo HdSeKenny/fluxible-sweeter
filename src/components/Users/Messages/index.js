@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import ChatBox from './ChatBox';
 import { UserStore } from '../../../stores';
 import { Row, Col } from '../../UI/Layout';
-import { env } from '../../../utils';
-
 /**
- * User messages component
+ * User messages component - Kenny
  *
  * @export
  * @class Messages
@@ -34,31 +32,26 @@ export default class Messages extends React.Component {
     this.state = {
       currentUser: this.UserStore.getCurrentUser(),
       activeUser: this.UserStore.getActiveUserId(),
-      localChat: this.UserStore.getUserConnection()
+      localChat: this.UserStore.getUserConnection(),
+      newMessagesNumSum: this.UserStore.getNewMessagesNumSum(this.props.showMessages)
     };
   }
-
-  // initialize(currentUser) {
-  //   const { recent_chat_connections } = currentUser;
-  //   const activeUser = this.UserStore.getActiveUserId();
-  //   const localChat = this.UserStore.getUserConnection();
-  //   if (!activeUser || !localChat) {
-  //     {
-  //       current_user: id_str,
-  //       active_user: thisUserId || firstConnection ? firstConnection.this_user_id : '',
-  //       recent_chat_connections
-  //     }
-  //   }
-  // }
 
   componentDidMount() {
     this.UserStore.addChangeListener(this._onStoreChange);
 
     // Chat socket receive messages from server
     socket.on('message:receive', (messageObj) => this._recieveMessages(messageObj));
+  }
 
-    if (this.state.currentUser) {
-      // this.checkUserConnectionWithAdmin();
+  componentDidUpdate() {
+    this.jumpToMessagsBottom();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.showMessages) {
+      const newMessagesNumSum = this.UserStore.getNewMessagesNumSum(nextProps.showMessages);
+      this.setState({ newMessagesNumSum });
     }
   }
 
@@ -66,47 +59,29 @@ export default class Messages extends React.Component {
     this.UserStore.removeChangeListener(this._onStoreChange);
   }
 
-  checkUserConnectionWithAdmin() {
-    console.log('checkUserConnectionWithAdmin');
-    const activeUserId = this.state.activeUser;
-    const currentUser = this.state.currentUser;
-    const localChat = this.state.localChat || currentUser.recent_chat_connections;
-    const connections = localChat.recent_chat_connections;
-    const connection = connections.find(c => c.this_user_id === activeUserId);
-    const activeUser = this.UserStore.getUserById(activeUserId);
-    if (activeUser.username === 'Kenny' && !connection.messages.length) {
-      const newMessage = {
-        content: 'My name is Kenny, the developer of this website. If you have any questions, ask me please!',
-        date: new Date(),
-        user_to: currentUser.id_str,
-        user_from: activeUserId,
-        class: 'you'
-      };
-      connection.connect_date = new Date();
-      socket.emit('message:send', newMessage);
-    }
-  }
-
   _recieveMessages(messageObj) {
-    const { currentUser, localChat } = this.state;
+    const { currentUser, localChat, activeUser } = this.state;
     const { user_from, user_to } = messageObj;
     if (user_from !== user_to && user_to === currentUser.id_str) {
       const connections = localChat.recent_chat_connections;
       const thisUserConnect = connections.find(c => c.this_user_id === user_from);
       thisUserConnect.messages.push(messageObj);
+      if (activeUser !== user_from) {
+        thisUserConnect.new_messages_number += 1;
+      }
+      else if (!this.props.showMessages) {
+        thisUserConnect.new_messages_number += 1;
+      }
+
       this.setState({ localChat }, () => {
         this.UserStore.setUserConnection(localChat);
-        this.jumpToMessagsBottom();
       });
     }
   }
 
   jumpToMessagsBottom() {
-    let chatScrollTop = $('.chat')[0].scrollTop;
-    const chatScrollHeight = $('.chat')[0].scrollHeight;
-
-    if (chatScrollTop !== chatScrollHeight) {
-      chatScrollTop = chatScrollHeight;
+    if ($('.chat')[0]) {
+      $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
     }
   }
 
@@ -123,15 +98,14 @@ export default class Messages extends React.Component {
     if (connectMessages.includes(res.msg)) {
       result.activeUser = this.UserStore.getActiveUserId();
       result.localChat = this.UserStore.getUserConnection();
+      result.newMessagesNumSum = this.UserStore.getNewMessagesNumSum();
     }
 
     if (authMessages.includes(res.msg)) {
       result.currentUser = this.UserStore.getCurrentUser();
     }
 
-    if (Object.keys(result).length > 0) {
-      this.setState(result);
-    }
+    if (Object.keys(result).length > 0) this.setState(result);
   }
 
   hideMessages() {
@@ -139,7 +113,7 @@ export default class Messages extends React.Component {
   }
 
   render() {
-    const { currentUser, localChat, activeUser } = this.state;
+    const { currentUser, localChat, activeUser, newMessagesNumSum } = this.state;
     const { showMessages } = this.props;
     if (!currentUser) return null;
 
@@ -148,7 +122,9 @@ export default class Messages extends React.Component {
         {!showMessages &&
           <Row className="small-chat-box">
             <Col size="2 p-0 msg-event"><i className="fa fa-envelope" /></Col>
-            <Col size="8 p-0 msg-event"><p>Chat Messages 0</p></Col>
+            <Col size="8 p-0 msg-event">
+              <p>Chat Messages {newMessagesNumSum ? <b className="badge bg-danger ml-5">{newMessagesNumSum}</b> : ''}</p>
+            </Col>
             <Col size="2 pr-0 msg-event"><i className="fa fa-cog" /></Col>
           </Row>
         }

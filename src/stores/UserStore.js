@@ -322,6 +322,25 @@ const UserStore = createStore({
     });
   },
 
+  getNewMessagesNumSum(showMessages) {
+    let newMessageSum = 0;
+    if (this.currentUser) {
+      const localChatString = localStorage.getItem('current_user_connection');
+      const localChat = JSON.parse(localChatString);
+      const connections = localChat.recent_chat_connections;
+      const activeUser = localChat.active_user;
+      const activeUserConnect = connections.find(c => c.this_user_id === activeUser);
+      if (showMessages) {
+        activeUserConnect.new_messages_number = 0;
+        this.setUserConnection(localChat);
+      }
+      connections.forEach(c => {
+        newMessageSum += c.new_messages_number;
+      });
+    }
+    return newMessageSum;
+  },
+
   getActiveUserId() {
     if (!env.is_client) {
       return '';
@@ -345,7 +364,9 @@ const UserStore = createStore({
     }
     const connection = localStorage.getItem('current_user_connection');
     const parsedConection = JSON.parse(connection);
+    const thisUserConnect = parsedConection.recent_chat_connections.find(rcc => rcc.this_user_id === thisUserId);
     parsedConection.active_user = thisUserId;
+    thisUserConnect.new_messages_number = 0;
     localStorage.setItem('current_user_connection', JSON.stringify(parsedConection));
     this.emitChange({
       msg: 'SET_ACTIVE_USER_SUCCESS'

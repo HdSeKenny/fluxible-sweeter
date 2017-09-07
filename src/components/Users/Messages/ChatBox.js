@@ -4,6 +4,7 @@ import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
 import { swal } from '../../../plugins';
+import { format } from '../../../utils';
 
 /**
  * ChatBox component - Kenny
@@ -57,11 +58,8 @@ export default class ChatBox extends React.Component {
   }
 
   jumpToMessagsBottom() {
-    let chatScrollTop = $('.chat')[0].scrollTop;
-    const chatScrollHeight = $('.chat')[0].scrollHeight;
-
-    if (chatScrollTop !== chatScrollHeight) {
-      chatScrollTop = chatScrollHeight;
+    if ($('.chat')[0]) {
+      $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
     }
   }
 
@@ -147,8 +145,9 @@ export default class ChatBox extends React.Component {
       <ul className="people">
         {connections.map((connection, index) => {
           const thisUserId = connection.this_user_id;
+          const newNumber = connection.new_messages_number;
           const thisUser = this.UserStore.getUserById(thisUserId);
-          const { username, last_msg_date, image_url } = thisUser;
+          const { username, image_url } = thisUser;
           const isActive = activeUserId === thisUserId;
           const isAdmin = thisUser.role === 'admin';
           let classes = isActive ? 'person active' : 'person';
@@ -156,13 +155,18 @@ export default class ChatBox extends React.Component {
             classes = 'person active';
             this.setActiveUser(thisUserId);
           }
+
           return (
             <Row className={classes} key={index}>
               <Col size="10 p-0" onClick={() => this.setActiveUser(thisUserId)}>
-                <Col size="4 p-0"><img src={image_url} alt="chat-user" width="30" /></Col>
-                <Col size="8 p-0">
+                <Col size="4 p-0">
+                  <img src={image_url} alt="chat-user" width="30" /></Col>
+                <Col size="7 p-0">
                   <Row className="name"><span>{username}</span></Row>
-                  <Row className="time"><span>{last_msg_date}</span></Row>
+                  <Row className="time"><span>{format.fromNow(connection.connect_date)}</span></Row>
+                </Col>
+                <Col size="1 p-0">
+                  {newNumber > 0 && <b className="badge bg-danger">{newNumber}</b>}
                 </Col>
               </Col>
               <Col size="2 p-0 tar">
