@@ -323,6 +323,7 @@ const UserStore = createStore({
   },
 
   getNewMessagesNumSum(showMessages) {
+    if (!env.is_client) return 0;
     let newMessageSum = 0;
     if (this.currentUser) {
       const localChatString = localStorage.getItem('current_user_connection');

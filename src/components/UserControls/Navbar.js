@@ -156,20 +156,20 @@ const Navbar = CreateReactClass({
               <li className="search">
                 <form className="iconic-input">
                   <i className="fa fa-search"></i>
-                  <input type="text" className="form-control search-input" name="keyword" placeholder="Search..." />
+                  <input type="text" className="form-control search-input" name="keyword" placeholder="Search blog..." />
                 </form>
               </li>
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
               <li className={this.isActive([''])}><Link to="/">Home</Link></li>
-              <li className={this.isActive(['list'])}><Link to="/list">List</Link></li>
+              <li className={this.isActive(['list'])}><a href="/list">List</a></li>
               <li className={this.isActive(['about'])}><Link to="/about">About</Link></li>
               {authenticated && <li><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
               {!authenticated && <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>}
               {!authenticated && <li className="mr-0 pr-0"><span onClick={() => this.openNavbarModals('signupModal')}>Sign up</span></li>}
               {authenticated &&
                 <li className="mr-0 pr-0">
-                  <a className="m-0" href={'/' + currentUser.username}>
+                  <a className="m-0" href={`/${currentUser.username}`}>
                     <img alt="currentUser" src={currentUser.image_url} />
                   </a>
                   <ul className="dropdown">

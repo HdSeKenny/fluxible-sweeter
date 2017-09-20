@@ -186,7 +186,13 @@ const Home = CreateReactClass({
     const { blogs, selectedPin, currentUser, showPinModal } = this.state;
     return (
       <div className="home-page">
+        <div className="left">
+
+        </div>
         <div className="main">{this._renderPinItems(blogs)}</div>
+        <div className="right">
+
+        </div>
         <Page>
           <ModalsFactory
             modalref="pinModal"

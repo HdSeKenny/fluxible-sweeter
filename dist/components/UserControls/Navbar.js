@@ -181,7 +181,7 @@ const Navbar = (0, _createReactClass2.default)({
                 'form',
                 { className: 'iconic-input' },
                 _react2.default.createElement('i', { className: 'fa fa-search' }),
-                _react2.default.createElement('input', { type: 'text', className: 'form-control search-input', name: 'keyword', placeholder: 'Search...' })
+                _react2.default.createElement('input', { type: 'text', className: 'form-control search-input', name: 'keyword', placeholder: 'Search blog...' })
               )
             )
           ),
@@ -201,8 +201,8 @@ const Navbar = (0, _createReactClass2.default)({
               'li',
               { className: this.isActive(['list']) },
               _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/list' },
+                'a',
+                { href: '/list' },
                 'List'
               )
             ),
@@ -247,7 +247,7 @@ const Navbar = (0, _createReactClass2.default)({
               { className: 'mr-0 pr-0' },
               _react2.default.createElement(
                 'a',
-                { className: 'm-0', href: '/' + currentUser.username },
+                { className: 'm-0', href: `/${currentUser.username}` },
                 _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url })
               ),
               _react2.default.createElement(

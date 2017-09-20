@@ -89,6 +89,10 @@ export default CreateReactClass({
     ModalsFactory.show('pinModal');
   },
 
+  componentDidMount() {
+
+  },
+
   hidePinModal() {
     const listDom = $('.list-page');
     if (listDom && listDom.length) {

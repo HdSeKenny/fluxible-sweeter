@@ -156,6 +156,9 @@ const UserBar = CreateReactClass({
   },
 
   openChatConnection(user) {
+    if (!this.state.currentUser) {
+      return swal.warning('Login first!');
+    }
     const connection = {
       myId: this.state.currentUser.id_str,
       thisUserId: user.id_str,

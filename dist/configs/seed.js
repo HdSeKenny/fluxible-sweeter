@@ -162,6 +162,7 @@ const seed = {
     "recent_chat_connections": [{
       "this_user_id": "583ff3d6a193d70f6946948e",
       "connect_date": "2017-08-27T02:41:56.520Z",
+      "new_messsges_number": 0,
       "messages": []
     }]
   }, {
@@ -180,7 +181,7 @@ const seed = {
     "background_image_url": "/styles/images/users/user-center-bg.jpg",
     "lq_background_url": "/styles/images/lqip/users/user-center-bg.jpg",
     "signature": "This guy has no signature...",
-    "role": "admin",
+    "role": "user",
     'blogs': [],
     "focuses": [],
     "focuses_list": {
@@ -195,6 +196,7 @@ const seed = {
     "recent_chat_connections": [{
       "this_user_id": "583ff3d6a193d70f6946948e",
       "connect_date": "2017-08-27T02:41:56.520Z",
+      "new_messsges_number": 0,
       "messages": []
     }]
   }]

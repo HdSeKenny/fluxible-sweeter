@@ -101,6 +101,7 @@ exports.default = (0, _createReactClass2.default)({
     });
     _UI.ModalsFactory.show('pinModal');
   },
+  componentDidMount: function () {},
   hidePinModal: function () {
     const listDom = $('.list-page');
     if (listDom && listDom.length) {

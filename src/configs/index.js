@@ -21,7 +21,7 @@ module.exports = {
     logEnable: true  // enable logger middleware
   },
   development: {
-    hot_server_host: '192.168.0.179',
+    hot_server_host: 'localhost',
     hot_server_port: 5858
   },
   userRoles: ['guest', 'user', 'admin'],

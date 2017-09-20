@@ -20,6 +20,8 @@ var _Layout = require('../../UI/Layout');
 
 var _plugins = require('../../../plugins');
 
+var _utils = require('../../../utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -60,12 +62,7 @@ class ChatBox extends _react2.default.Component {
   }
 
   jumpToMessagsBottom() {
-    let chatScrollTop = $('.chat')[0].scrollTop;
-    const chatScrollHeight = $('.chat')[0].scrollHeight;
-
-    if (chatScrollTop !== chatScrollHeight) {
-      chatScrollTop = chatScrollHeight;
-    }
+    if ($('.chat')[0]) $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   toggleChatBox() {
@@ -74,7 +71,6 @@ class ChatBox extends _react2.default.Component {
 
   setActiveUser(thisUserId) {
     this.UserStore.setActiveUser(thisUserId);
-    $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   getActiveUser() {
@@ -186,8 +182,9 @@ class ChatBox extends _react2.default.Component {
       { className: 'people' },
       connections.map((connection, index) => {
         const thisUserId = connection.this_user_id;
+        const newNumber = connection.new_messages_number;
         const thisUser = this.UserStore.getUserById(thisUserId);
-        const { username: username, last_msg_date: last_msg_date, image_url: image_url } = thisUser;
+        const { username: username, image_url: image_url } = thisUser;
         const isActive = activeUserId === thisUserId;
         const isAdmin = thisUser.role === 'admin';
         let classes = isActive ? 'person active' : 'person';
@@ -195,6 +192,7 @@ class ChatBox extends _react2.default.Component {
           classes = 'person active';
           this.setActiveUser(thisUserId);
         }
+
         return _react2.default.createElement(
           _Layout.Row,
           { className: classes, key: index },
@@ -208,7 +206,7 @@ class ChatBox extends _react2.default.Component {
             ),
             _react2.default.createElement(
               _Layout.Col,
-              { size: '8 p-0' },
+              { size: '7 p-0' },
               _react2.default.createElement(
                 _Layout.Row,
                 { className: 'name' },
@@ -224,8 +222,17 @@ class ChatBox extends _react2.default.Component {
                 _react2.default.createElement(
                   'span',
                   null,
-                  last_msg_date
+                  _utils.format.fromNow(connection.connect_date)
                 )
+              )
+            ),
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '1 p-0' },
+              newNumber > 0 && _react2.default.createElement(
+                'b',
+                { className: 'badge bg-danger' },
+                newNumber
               )
             )
           ),

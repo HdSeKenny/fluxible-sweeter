@@ -13,6 +13,7 @@ module.exports = {
   showUserCard: false,
   showEmoji: true,
   emojiConfig: {
+    imagePath: '/assets/emojione/svg/',
     selectGroups: [{
       title: 'People',
       icon: React.createElement('i', { className: 'fa fa-smile-o' }),

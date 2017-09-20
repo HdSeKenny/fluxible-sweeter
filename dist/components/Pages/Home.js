@@ -199,11 +199,13 @@ const Home = (0, _createReactClass2.default)({
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
+      _react2.default.createElement('div', { className: 'left' }),
       _react2.default.createElement(
         'div',
         { className: 'main' },
         this._renderPinItems(blogs)
       ),
+      _react2.default.createElement('div', { className: 'right' }),
       _react2.default.createElement(
         _Layout.Page,
         null,

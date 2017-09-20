@@ -169,6 +169,9 @@ const UserBar = (0, _createReactClass2.default)({
     return isFollowed;
   },
   openChatConnection: function (user) {
+    if (!this.state.currentUser) {
+      return _plugins.swal.warning('Login first!');
+    }
     const connection = {
       myId: this.state.currentUser.id_str,
       thisUserId: user.id_str,

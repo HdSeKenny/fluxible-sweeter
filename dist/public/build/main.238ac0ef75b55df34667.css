@@ -14217,18 +14217,21 @@ License: http://codecanyon.net/licenses
   border-radius: 50%;
 }
 .chat-box .wrapper .left .people .person .name {
-  padding: 3px 0;
   font-weight: 500;
   font-size: 12px;
 }
 .chat-box .wrapper .left .people .person .time {
   color: gray;
+  font-size: 9px;
 }
 .chat-box .wrapper .left .people .person .close-connect {
   margin: 5px 0;
   font-size: 18px;
   color: gray;
   display: none;
+}
+.chat-box .wrapper .left .people .person .badge.bg-danger {
+  padding: 2px 5px;
 }
 .chat-box .wrapper .right {
   position: relative;
@@ -14397,4 +14400,4 @@ License: http://codecanyon.net/licenses
   opacity: 0;
 }
 
-/*# sourceMappingURL=main.14b14912f79d46a73bf5.css.map*/
+/*# sourceMappingURL=main.238ac0ef75b55df34667.css.map*/

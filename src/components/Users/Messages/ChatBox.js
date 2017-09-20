@@ -58,9 +58,7 @@ export default class ChatBox extends React.Component {
   }
 
   jumpToMessagsBottom() {
-    if ($('.chat')[0]) {
-      $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
-    }
+    if ($('.chat')[0]) $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
   }
 
   toggleChatBox() {

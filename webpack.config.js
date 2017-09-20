@@ -106,7 +106,7 @@ module.exports = function makeWebpackConfig(options) {
 
     // generates webpack assets config to use hashed assets in production mode
     new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: isProd ? 'common.[hash].js' : 'common.js' }),
-    new wbsap('webpack.json')
+    new wbsap('../webpack.json')
   ];
 
   // Add build specific plugins

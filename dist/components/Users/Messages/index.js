@@ -20,12 +20,10 @@ var _stores = require('../../../stores');
 
 var _Layout = require('../../UI/Layout');
 
-var _utils = require('../../../utils');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * User messages component
+ * User messages component - Kenny
  *
  * @export
  * @class Messages
@@ -41,31 +39,26 @@ class Messages extends _react2.default.Component {
     this.state = {
       currentUser: this.UserStore.getCurrentUser(),
       activeUser: this.UserStore.getActiveUserId(),
-      localChat: this.UserStore.getUserConnection()
+      localChat: this.UserStore.getUserConnection(),
+      newMessagesNumSum: this.UserStore.getNewMessagesNumSum(this.props.showMessages)
     };
   }
-
-  // initialize(currentUser) {
-  //   const { recent_chat_connections } = currentUser;
-  //   const activeUser = this.UserStore.getActiveUserId();
-  //   const localChat = this.UserStore.getUserConnection();
-  //   if (!activeUser || !localChat) {
-  //     {
-  //       current_user: id_str,
-  //       active_user: thisUserId || firstConnection ? firstConnection.this_user_id : '',
-  //       recent_chat_connections
-  //     }
-  //   }
-  // }
 
   componentDidMount() {
     this.UserStore.addChangeListener(this._onStoreChange);
 
     // Chat socket receive messages from server
     socket.on('message:receive', messageObj => this._recieveMessages(messageObj));
+  }
 
-    if (this.state.currentUser) {
-      // this.checkUserConnectionWithAdmin();
+  componentDidUpdate() {
+    this.jumpToMessagsBottom();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.showMessages) {
+      const newMessagesNumSum = this.UserStore.getNewMessagesNumSum(nextProps.showMessages);
+      this.setState({ newMessagesNumSum: newMessagesNumSum });
     }
   }
 
@@ -73,37 +66,28 @@ class Messages extends _react2.default.Component {
     this.UserStore.removeChangeListener(this._onStoreChange);
   }
 
-  checkUserConnectionWithAdmin() {
-    console.log('checkUserConnectionWithAdmin');
-    const activeUserId = this.state.activeUser;
-    const currentUser = this.state.currentUser;
-    const localChat = this.state.localChat || currentUser.recent_chat_connections;
-    const connections = localChat.recent_chat_connections;
-    const connection = connections.find(c => c.this_user_id === activeUserId);
-    const activeUser = this.UserStore.getUserById(activeUserId);
-    if (activeUser.username === 'Kenny' && !connection.messages.length) {
-      const newMessage = {
-        content: 'My name is Kenny, the developer of this website. If you have any questions, ask me please!',
-        date: new Date(),
-        user_to: currentUser.id_str,
-        user_from: activeUserId,
-        class: 'you'
-      };
-      connection.connect_date = new Date();
-      socket.emit('message:send', newMessage);
-    }
-  }
-
   _recieveMessages(messageObj) {
-    const { currentUser: currentUser, localChat: localChat } = this.state;
+    const { currentUser: currentUser, localChat: localChat, activeUser: activeUser } = this.state;
     const { user_from: user_from, user_to: user_to } = messageObj;
     if (user_from !== user_to && user_to === currentUser.id_str) {
       const connections = localChat.recent_chat_connections;
       const thisUserConnect = connections.find(c => c.this_user_id === user_from);
       thisUserConnect.messages.push(messageObj);
+      if (activeUser !== user_from) {
+        thisUserConnect.new_messages_number += 1;
+      } else if (!this.props.showMessages) {
+        thisUserConnect.new_messages_number += 1;
+      }
+
       this.setState({ localChat: localChat }, () => {
         this.UserStore.setUserConnection(localChat);
       });
+    }
+  }
+
+  jumpToMessagsBottom() {
+    if ($('.chat')[0]) {
+      $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
     }
   }
 
@@ -115,15 +99,14 @@ class Messages extends _react2.default.Component {
     if (connectMessages.includes(res.msg)) {
       result.activeUser = this.UserStore.getActiveUserId();
       result.localChat = this.UserStore.getUserConnection();
+      result.newMessagesNumSum = this.UserStore.getNewMessagesNumSum();
     }
 
     if (authMessages.includes(res.msg)) {
       result.currentUser = this.UserStore.getCurrentUser();
     }
 
-    if (Object.keys(result).length > 0) {
-      this.setState(result);
-    }
+    if (Object.keys(result).length > 0) this.setState(result);
   }
 
   hideMessages() {
@@ -131,7 +114,7 @@ class Messages extends _react2.default.Component {
   }
 
   render() {
-    const { currentUser: currentUser, localChat: localChat, activeUser: activeUser } = this.state;
+    const { currentUser: currentUser, localChat: localChat, activeUser: activeUser, newMessagesNumSum: newMessagesNumSum } = this.state;
     const { showMessages: showMessages } = this.props;
     if (!currentUser) return null;
 
@@ -152,7 +135,12 @@ class Messages extends _react2.default.Component {
           _react2.default.createElement(
             'p',
             null,
-            'Chat Messages 0'
+            'Chat Messages ',
+            newMessagesNumSum ? _react2.default.createElement(
+              'b',
+              { className: 'badge bg-danger ml-5' },
+              newMessagesNumSum
+            ) : ''
           )
         ),
         _react2.default.createElement(
