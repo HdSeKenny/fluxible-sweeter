@@ -4,36 +4,37 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const wbsap = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
+const wbsap = require('webpack-bundle-size-analyzer');
 const env = require('./src/configs');
 
 const { hot_server_host, hot_server_port } = env.development;
 
-module.exports = function makeWebpackConfig(options) {
+module.exports = function makeWebpackConfig(mode) {
 
-  const isDev = options.model === 'dev';
-  const isProd = options.model === 'prod';
-  const isTest = options.model === 'test';
+  const isDev = mode === 'dev';
+  const isProd = mode === 'prod';
+  // const isTest = mode === 'test';
 
   const config = {};
-
-  config.resolve = {
-    extensions: ['.js', '.jsx']
+  const paths = {
+    ENTRY: './src/client.js',
+    PROD_PATH: `${__dirname}/dist/build`,
+    DEV_PATH: `${__dirname}/.tmp`,
+    DEV_PUBLIC_PATH: `http://${hot_server_host}:${hot_server_port}/`
   };
 
-  config.entry = ['./src/client.js'];
+  config.resolve = {
+    extensions: ['.js']
+  };
 
-  // config.externals = {
-  //   sharp: 'commonjs sharp'
-  // };
+  config.entry = [paths.ENTRY];
 
   config.output = {
     // Absolute output directory
-    // path: path.join(__dirname, '/src/public/build/'),
-    path: isProd ? `${__dirname}/dist/public/build/` : `${__dirname}/dist/`,
+    path: isProd ? paths.PROD_PATH : paths.DEV_PATH,
 
     // Uses webpack-dev-server in development
-    publicPath: isProd ? '/' : `http://${hot_server_host}:${hot_server_port}/`,
+    publicPath: isProd ? paths.PROD_PATH : paths.DEV_PUBLIC_PATH,
 
     // Filename for entry points
     filename: isProd ? '[name].[chunkhash].js' : '[name].js',
@@ -42,13 +43,12 @@ module.exports = function makeWebpackConfig(options) {
     chunkFilename: isProd ? '[name].[chunkhash].js' : '[name].js'
   };
 
-
   // webpakc module
   config.module = {
     rules: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loaders: ['react-hot-loader', 'babel-loader']
+      test: /\.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/
     }, {
       test: /\.json$/,
       exclude: /node_modules/,
@@ -82,13 +82,11 @@ module.exports = function makeWebpackConfig(options) {
     // Reference: https://github.com/webpack/extract-text-webpack-plugin
     // Extract css files
     // Disabled when in test mode or not in build mode
-    new ExtractTextPlugin({ filename: isProd ? '[name].[hash].css' : '[name].css', disable: false, allChunks: true }),
-
-    // Set jquery for global, used for bootstrap
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery'
-    // }),
+    new ExtractTextPlugin({
+      filename: isProd ? '[name].[hash].css' : '[name].css',
+      disable: false,
+      allChunks: !isDev
+    }),
 
     // LoaderOptionsPlugin
     new webpack.LoaderOptionsPlugin({
@@ -100,22 +98,19 @@ module.exports = function makeWebpackConfig(options) {
       }
     }),
 
-    new webpack.IgnorePlugin(/vertx/),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-
     // generates webpack assets config to use hashed assets in production mode
-    new webpack.optimize.CommonsChunkPlugin({ name: 'common', filename: isProd ? 'common.[hash].js' : 'common.js' }),
-    new wbsap('../webpack.json')
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      filename: isProd ? 'common.[hash].js' : 'common.js'
+    }),
+
+    new wbsap.WebpackBundleSizeAnalyzerPlugin('../webpack.json')
   ];
 
   // Add build specific plugins
   if (isProd) {
+    config.devtool = 'source-map';
     config.plugins.push(
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-      // Only emit files when there are no errors
-      new webpack.NoEmitOnErrorsPlugin(),
-
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
       // Minify all javascript, switch loaders to minimizing mode
       new webpack.optimize.UglifyJsPlugin({
@@ -174,7 +169,18 @@ module.exports = function makeWebpackConfig(options) {
 
   // Add dev specific plugins
   if (isDev) {
+    config.devtool = 'eval-source-map';
+        // This is for development mode to reload page
+    // Work with 'HotModuleReplacementPlugin'
+    config.entry.unshift(
+      `webpack-dev-server/client?${paths.DEV_PUBLIC_PATH}`,
+      'webpack/hot/dev-server'
+    );
+
     config.plugins.push(
+      new webpack.HotModuleReplacementPlugin(),
+
+      // new webpack.ProgressPlugin({ profile: false }),
       // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
       // Define free global variables
       new webpack.DefinePlugin({
@@ -185,29 +191,12 @@ module.exports = function makeWebpackConfig(options) {
     );
   }
 
-  // set webpack devtool
-  if (isTest) {
-    config.devtool = 'inline-source-map';
-  } else if (isProd) {
-    config.devtool = 'source-map';
-  } else {
-    config.devtool = 'eval-source-map';
-  }
-
   /**
    * Dev server configuration
    * Reference: http://webpack.github.io/docs/configuration.html#devserver
    * Reference: http://webpack.github.io/docs/webpack-dev-server.html
    */
-  config.devServer = {
-    contentBase: './src/',
-    stats: {
-      modules: false,
-      cached: false,
-      colors: true,
-      chunk: false
-    }
-  };
+  config.devServer = {};
 
   config.node = {
     global: true,

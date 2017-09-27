@@ -22,65 +22,66 @@ var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const getSlashPosition = (string, word, index) => {
+var getSlashPosition = function getSlashPosition(string, word, index) {
   return string.split(word, index).join(word).length;
 };
 
-const getSlashNumber = string => {
+var getSlashNumber = function getSlashNumber(string) {
   return string.length > 0 ? string.split('/').length : 0;
 };
 
-const convertImagePath = () => {
-  const slashNumber = getSlashNumber(__dirname);
-  const slashPositon = getSlashPosition(__dirname, '/', slashNumber - 2);
-  const uri = __dirname.substring(0, slashPositon);
-  return `${uri}/public/styles/images/upload/`;
+var convertImagePath = function convertImagePath() {
+  var slashNumber = getSlashNumber(__dirname);
+  var slashPositon = getSlashPosition(__dirname, '/', slashNumber - 2);
+  var uri = __dirname.substring(0, slashPositon);
+  return uri + '/public/styles/images/upload/';
 };
 
-const storage = _multer2.default.diskStorage({
-  destination: function (req, file, cb) {
+var storage = _multer2.default.diskStorage({
+  destination: function destination(req, file, cb) {
     cb(null, convertImagePath());
   },
-  filename: function (req, file, cb) {
-    const datetimestamp = Date.now();
-    const fileParams = file.originalname.split('.');
-    const fileFormat = fileParams[fileParams.length - 1];
-    cb(null, `${datetimestamp}.${fileFormat}`);
+  filename: function filename(req, file, cb) {
+    var datetimestamp = Date.now();
+    var fileParams = file.originalname.split('.');
+    var fileFormat = fileParams[fileParams.length - 1];
+    cb(null, datetimestamp + '.' + fileFormat);
   }
 });
 
-const upload = (0, _multer2.default)({ storage: storage }).single('slim');
+var upload = (0, _multer2.default)({ storage: storage }).single('slim');
 
-const copyImageIntoFolder = filename => {
-  const src = convertImagePath();
-  const destDir = `${_configs2.default.server.root}/src/public/styles/images/upload/`;
-  const inStr = _fs2.default.createReadStream(`${src}${filename}`);
-  const outStr = _fs2.default.createWriteStream(`${destDir}${filename}`);
+var copyImageIntoFolder = function copyImageIntoFolder(filename) {
+  var src = convertImagePath();
+  var destDir = _configs2.default.server.root + '/src/public/styles/images/upload/';
+  var inStr = _fs2.default.createReadStream('' + src + filename);
+  var outStr = _fs2.default.createWriteStream('' + destDir + filename);
 
   inStr.pipe(outStr);
 };
 
 exports.default = {
-  changeProfileImage: function (req, res) {
-    _mongodb2.default.connect(_configs2.default.mongo.sweeter.url, (err, db) => {
-      const userId = _mongodb2.default.ObjectID(req.params.userId);
-      const User = db.collection('users');
-      upload(req, res, uploadError => {
+  changeProfileImage: function changeProfileImage(req, res) {
+    _mongodb2.default.connect(_configs2.default.mongo.sweeter.url, function (err, db) {
+      var userId = _mongodb2.default.ObjectID(req.params.userId);
+      var User = db.collection('users');
+      upload(req, res, function (uploadError) {
         if (uploadError) {
           throw uploadError;
         }
-        const { filename: filename } = req.file;
+        var filename = req.file.filename;
 
         // Copy the image file into src
+
         copyImageIntoFolder(filename);
 
-        const newImgUri = `/styles/images/upload/${filename}`;
-        const updateData = { $set: { 'image_url': newImgUri } };
-        User.updateOne({ '_id': userId }, updateData, updateErr => {
+        var newImgUri = '/styles/images/upload/' + filename;
+        var updateData = { $set: { 'image_url': newImgUri } };
+        User.updateOne({ '_id': userId }, updateData, function (updateErr) {
           if (updateErr) {
             throw updateErr;
           }
-          User.findOne({ '_id': userId }, (findErr, newUser) => {
+          User.findOne({ '_id': userId }, function (findErr, newUser) {
             if (findErr) {
               throw findErr;
             }

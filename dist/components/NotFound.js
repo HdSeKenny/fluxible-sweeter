@@ -17,10 +17,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * not found page
  */
-const NotFound = (0, _createReactClass2.default)({
-  render: function () {
-    const { classes: classes } = this.props;
-    const classNames = `not-found ${classes}`;
+var NotFound = (0, _createReactClass2.default)({
+  render: function render() {
+    var classes = this.props.classes;
+
+    var classNames = 'not-found ' + classes;
     return _react2.default.createElement(
       'div',
       { className: classNames },

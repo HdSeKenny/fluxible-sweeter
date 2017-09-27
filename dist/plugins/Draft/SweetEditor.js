@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -24,42 +26,68 @@ var _configs = require('../../configs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const emojiPlugin = (0, _draftJsEmojiPlugin2.default)(_configs.params.emojiConfig);
-const plugins = [emojiPlugin];
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-class SweetEditor extends _react2.default.Component {
-  constructor(...args) {
-    var _temp;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    return _temp = super(...args), this.state = {
-      emojiState: (0, _draftJsPluginsEditor.createEditorStateWithText)(this.props.contentText)
-    }, this.onEmojiChange = editorState => {
-      this.setState({ emojiState: editorState });
-    }, _temp;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var emojiPlugin = (0, _draftJsEmojiPlugin2.default)(_configs.params.emojiConfig);
+var plugins = [emojiPlugin];
+
+var SweetEditor = function (_React$Component) {
+  _inherits(SweetEditor, _React$Component);
+
+  function SweetEditor() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, SweetEditor);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SweetEditor.__proto__ || Object.getPrototypeOf(SweetEditor)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      emojiState: (0, _draftJsPluginsEditor.createEditorStateWithText)(_this.props.contentText)
+    }, _this.onEmojiChange = function (editorState) {
+      _this.setState({ emojiState: editorState });
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // Add new sweet record caused previous record re-render
-    return this.state.emojiState.getCurrentContent() != nextState.emojiState.getCurrentContent();
-  }
+  _createClass(SweetEditor, [{
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      // Add new sweet record caused previous record re-render
+      return this.state.emojiState.getCurrentContent() != nextState.emojiState.getCurrentContent();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
-  render() {
-    return _react2.default.createElement(
-      'div',
-      { className: 'pin-editor' },
-      _react2.default.createElement(_draftJsPluginsEditor2.default, {
-        editorState: this.state.emojiState,
-        onChange: editorState => this.onEmojiChange(editorState),
-        plugins: plugins,
-        ref: element => {
-          this.editor = element;
-        },
-        readOnly: true
-      })
-    );
-  }
-}
-exports.default = SweetEditor;
+      return _react2.default.createElement(
+        'div',
+        { className: 'pin-editor' },
+        _react2.default.createElement(_draftJsPluginsEditor2.default, {
+          editorState: this.state.emojiState,
+          onChange: function onChange(editorState) {
+            return _this2.onEmojiChange(editorState);
+          },
+          plugins: plugins,
+          ref: function ref(element) {
+            _this2.editor = element;
+          },
+          readOnly: true
+        })
+      );
+    }
+  }]);
+
+  return SweetEditor;
+}(_react2.default.Component);
+
 SweetEditor.propTypes = {
   EmojiPlugins: _propTypes2.default.array,
   onSweetChange: _propTypes2.default.func,
@@ -67,4 +95,5 @@ SweetEditor.propTypes = {
   contentText: _propTypes2.default.string,
   isPinItem: _propTypes2.default.bool
 };
+exports.default = SweetEditor;
 module.exports = exports['default'];

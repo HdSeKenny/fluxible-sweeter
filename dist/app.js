@@ -27,12 +27,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // init namespace for current App
 // sessionStorage.setNamespace('sweeter');
 
-const app = new _fluxible2.default({ component: _routes2.default });
+var app = new _fluxible2.default({ component: _routes2.default });
 
 // import sessionStorage from './utils/sessionStorage';
 
 app.plug((0, _fluxiblePluginFetchr2.default)({
-  xhrPath: `${_configs2.default.path_prefix}/api`,
+  xhrPath: _configs2.default.path_prefix + '/api',
   xhrTimeout: 30000
 }));
 

@@ -34,7 +34,7 @@ var _plugins = require('../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserInfo = (0, _createReactClass2.default)({
+var UserInfo = (0, _createReactClass2.default)({
 
   displayName: 'UserInfo',
 
@@ -52,11 +52,12 @@ const UserInfo = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
-    const { username: username } = this.props.params;
+  getStatesFromStores: function getStatesFromStores() {
+    var username = this.props.params.username;
+
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       user: this.getStore(_stores.UserStore).getUserByUsername(username),
@@ -80,14 +81,15 @@ const UserInfo = (0, _createReactClass2.default)({
       day: ''
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
     if (res.resMsg === 'UPDATE_USER_SUCCESS') {
       // alert(res.resMsg);
     }
     this.setState(this.getStatesFromStores());
   },
-  editInputValues: function () {
-    const { currentUser: currentUser } = this.state;
+  editInputValues: function editInputValues() {
+    var currentUser = this.state.currentUser;
+
     if (this.state.editable) {
       this.setState({ editable: false });
     } else {
@@ -110,12 +112,12 @@ const UserInfo = (0, _createReactClass2.default)({
       });
     }
   },
-  cancelEditInfo: function () {
+  cancelEditInfo: function cancelEditInfo() {
     this.setState(this.getStatesFromStores());
   },
-  validateFirstName: function (firstName) {
-    const regex = /^[a-zA-Z']*$/;
-    let flag = false;
+  validateFirstName: function validateFirstName(firstName) {
+    var regex = /^[a-zA-Z']*$/;
+    var flag = false;
     if (!firstName) {
       this.setState({
         firstNameMsg: '* First name is required !',
@@ -132,9 +134,9 @@ const UserInfo = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateLastName: function (lastName) {
-    const regex = /^[a-zA-Z']*$/;
-    let flag = false;
+  validateLastName: function validateLastName(lastName) {
+    var regex = /^[a-zA-Z']*$/;
+    var flag = false;
     if (!lastName) {
       this.setState({ lastNameMsg: '* Last name is required !', lastNameValidate: 'has-error' });
     } else if (!regex.test(lastName)) {
@@ -148,9 +150,9 @@ const UserInfo = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateUsername: function (username) {
-    const regex = /^[a-zA-Z0-9_]+$/;
-    let flag = false;
+  validateUsername: function validateUsername(username) {
+    var regex = /^[a-zA-Z0-9_]+$/;
+    var flag = false;
     if (!username) {
       this.setState({ usernameMsg: '* Username is required !', usernameValidate: 'has-error' });
     } else if (!regex.test(username)) {
@@ -169,9 +171,9 @@ const UserInfo = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateEmail: function (email) {
-    const regex = /.+@.+/;
-    let flag = false;
+  validateEmail: function validateEmail(email) {
+    var regex = /.+@.+/;
+    var flag = false;
     if (!email) {
       this.setState({ emailMsg: '* Email address is required !', emailValidate: 'has-error' });
     } else if (!regex.test(email)) {
@@ -182,9 +184,9 @@ const UserInfo = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validatePhone: function (phone) {
-    const regex = /^\d+$/;
-    let flag = true;
+  validatePhone: function validatePhone(phone) {
+    var regex = /^\d+$/;
+    var flag = true;
     if (phone) {
       if (!regex.test(phone)) {
         this.setState({ phoneMsg: 'Phone should be number only !', phoneValidate: 'has-error' });
@@ -195,9 +197,9 @@ const UserInfo = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateProfession: function (profession) {
-    const regex = /^[a-zA-Z]*$/;
-    let flag = true;
+  validateProfession: function validateProfession(profession) {
+    var regex = /^[a-zA-Z]*$/;
+    var flag = true;
     if (profession) {
       if (!regex.test(profession)) {
         this.setState({ professionMsg: 'Profession should be characters only !', professionValidate: 'has-error' });
@@ -209,8 +211,8 @@ const UserInfo = (0, _createReactClass2.default)({
 
     return flag;
   },
-  validateBirthday: function (month, day, year) {
-    let flag = true;
+  validateBirthday: function validateBirthday(month, day, year) {
+    var flag = true;
     if (month || day || year) {
       if (!(month && day && year)) {
         this.setState({ birthdayMsg: 'Please pick full date!', birthdayValidate: 'has-error' });
@@ -222,73 +224,73 @@ const UserInfo = (0, _createReactClass2.default)({
 
     return flag;
   },
-  handleFirstName: function (e) {
+  handleFirstName: function handleFirstName(e) {
     this.validateFirstName(e.target.value);
     this.setState({ firstName: e.target.value });
   },
-  handleLastName: function (e) {
+  handleLastName: function handleLastName(e) {
     this.validateLastName(e.target.value);
     this.setState({ lastName: e.target.value });
   },
-  handleUsername: function (e) {
+  handleUsername: function handleUsername(e) {
     this.validateUsername(e.target.value);
     this.setState({ username: e.target.value });
   },
-  handleEmail: function (e) {
+  handleEmail: function handleEmail(e) {
     this.validateEmail(e.target.value);
     this.setState({ email: e.target.value });
   },
-  handlePhone: function (e) {
+  handlePhone: function handlePhone(e) {
     this.validatePhone(e.target.value);
     this.setState({ phone: e.target.value });
   },
-  handleProfession: function (e) {
+  handleProfession: function handleProfession(e) {
     this.validateProfession(e.target.value);
     this.setState({ profession: e.target.value });
   },
-  handleChangeDay: function (data) {
+  handleChangeDay: function handleChangeDay(data) {
     if (data.day !== 'Day') {
       this.setState({ day: data.day });
     } else {
       this.setState({ day: '' });
     }
   },
-  handleChangeMonth: function (data) {
+  handleChangeMonth: function handleChangeMonth(data) {
     if (data.month !== 'Month') {
       this.setState({ month: data.month });
     } else {
       this.setState({ month: '' });
     }
   },
-  handleChangeYear: function (data) {
+  handleChangeYear: function handleChangeYear(data) {
     if (data.year !== 'Year') {
       this.setState({ year: data.year });
     } else {
       this.setState({ year: '' });
     }
   },
-  handleNewInfo: function (e) {
+  handleNewInfo: function handleNewInfo(e) {
     e.preventDefault();
-    const {
-      year: year,
-      month: month,
-      day: day,
-      profession: profession,
-      phone: phone,
-      firstName: firstName,
-      lastName: lastName,
-      username: username,
-      email: email
-    } = this.state;
-    const isFirstName = this.validateFirstName(firstName);
-    const isLastName = this.validateLastName(lastName);
-    const isUsername = this.validateUsername(username);
-    const isEmail = this.validateEmail(email);
-    const isPhone = this.validatePhone(phone);
-    const isProfession = this.validateProfession(profession);
-    const isBirthday = this.validateBirthday(month, day, year);
+    var _state = this.state,
+        year = _state.year,
+        month = _state.month,
+        day = _state.day,
+        profession = _state.profession,
+        phone = _state.phone,
+        firstName = _state.firstName,
+        lastName = _state.lastName,
+        username = _state.username,
+        email = _state.email;
 
-    const newUser = {
+    var isFirstName = this.validateFirstName(firstName);
+    var isLastName = this.validateLastName(lastName);
+    var isUsername = this.validateUsername(username);
+    var isEmail = this.validateEmail(email);
+    var isPhone = this.validatePhone(phone);
+    var isProfession = this.validateProfession(profession);
+    var isBirthday = this.validateBirthday(month, day, year);
+
+    var newUser = {
       _id: this.state.currentUser._id,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -297,7 +299,7 @@ const UserInfo = (0, _createReactClass2.default)({
     };
 
     if (year && month && day) {
-      newUser.birthday = `${month}/${day}/${year}`;
+      newUser.birthday = month + '/' + day + '/' + year;
     }
 
     if (profession && isProfession) {
@@ -314,11 +316,16 @@ const UserInfo = (0, _createReactClass2.default)({
       _plugins.swal.error('Update failed !');
     }
   },
-  _renderNameGroup: function (currentUser, editable) {
-    const { firstNameValidate: firstNameValidate, lastNameValidate: lastNameValidate, firstName: firstName, lastName: lastName } = this.state;
+  _renderNameGroup: function _renderNameGroup(currentUser, editable) {
+    var _state2 = this.state,
+        firstNameValidate = _state2.firstNameValidate,
+        lastNameValidate = _state2.lastNameValidate,
+        firstName = _state2.firstName,
+        lastName = _state2.lastName;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${firstNameValidate}` },
+      { className: 'form-group ' + firstNameValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'name' },
@@ -344,7 +351,7 @@ const UserInfo = (0, _createReactClass2.default)({
       ),
       _react2.default.createElement(
         'div',
-        { className: `col-sm-4 ${lastNameValidate}` },
+        { className: 'col-sm-4 ' + lastNameValidate },
         editable && _react2.default.createElement('input', { type: 'text', className: 'form-control', value: lastName, onChange: this.handleLastName }),
         editable && _react2.default.createElement(
           'p',
@@ -355,11 +362,14 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderUserNameGroup: function (currentUser, editable) {
-    const { username: username, usernameValidate: usernameValidate } = this.state;
+  _renderUserNameGroup: function _renderUserNameGroup(currentUser, editable) {
+    var _state3 = this.state,
+        username = _state3.username,
+        usernameValidate = _state3.usernameValidate;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${usernameValidate}` },
+      { className: 'form-group ' + usernameValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'username' },
@@ -383,11 +393,14 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderEmailGroup: function (currentUser, editable) {
-    const { email: email, emailValidate: emailValidate } = this.state;
+  _renderEmailGroup: function _renderEmailGroup(currentUser, editable) {
+    var _state4 = this.state,
+        email = _state4.email,
+        emailValidate = _state4.emailValidate;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${emailValidate}` },
+      { className: 'form-group ' + emailValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'email' },
@@ -415,11 +428,14 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderPhoneGroup: function (currentUser, editable) {
-    const { phone: phone, phoneValidate: phoneValidate } = this.state;
+  _renderPhoneGroup: function _renderPhoneGroup(currentUser, editable) {
+    var _state5 = this.state,
+        phone = _state5.phone,
+        phoneValidate = _state5.phoneValidate;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${phoneValidate}` },
+      { className: 'form-group ' + phoneValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'phone' },
@@ -448,11 +464,12 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderBirthdayGroup: function (currentUser, editable) {
-    const { birthdayValidate: birthdayValidate } = this.state;
+  _renderBirthdayGroup: function _renderBirthdayGroup(currentUser, editable) {
+    var birthdayValidate = this.state.birthdayValidate;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${birthdayValidate}` },
+      { className: 'form-group ' + birthdayValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'birthday' },
@@ -485,11 +502,14 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderProfessionGroup: function (currentUser, editable) {
-    const { profession: profession, professionValidate: professionValidate } = this.state;
+  _renderProfessionGroup: function _renderProfessionGroup(currentUser, editable) {
+    var _state6 = this.state,
+        profession = _state6.profession,
+        professionValidate = _state6.professionValidate;
+
     return _react2.default.createElement(
       'div',
-      { className: `form-group ${professionValidate}` },
+      { className: 'form-group ' + professionValidate },
       _react2.default.createElement(
         'label',
         { className: 'col-sm-1 control-label', htmlFor: 'profession' },
@@ -518,7 +538,7 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderOptionsGroup: function (editable) {
+  _renderOptionsGroup: function _renderOptionsGroup(editable) {
     return _react2.default.createElement(
       'div',
       { className: 'form-group options' },
@@ -548,10 +568,15 @@ const UserInfo = (0, _createReactClass2.default)({
       )
     );
   },
-  render: function () {
-    const { pathname: pathname } = this.props.location;
-    const { currentUser: currentUser, editable: editable, user: user, isCurrentUser: isCurrentUser } = this.state;
-    const displayUser = isCurrentUser ? currentUser : user;
+  render: function render() {
+    var pathname = this.props.location.pathname;
+    var _state7 = this.state,
+        currentUser = _state7.currentUser,
+        editable = _state7.editable,
+        user = _state7.user,
+        isCurrentUser = _state7.isCurrentUser;
+
+    var displayUser = isCurrentUser ? currentUser : user;
     return _react2.default.createElement(
       'div',
       { className: 'user-settings' },

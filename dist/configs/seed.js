@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 /* eslint-disable all, quotes */
-const mongdb = require('mongodb');
+var mongdb = require('mongodb');
 
-const seed = {
+var seed = {
   blogs: [{
     "_id": mongdb.ObjectID("59af686ea22f3d43182fe3a8"),
     "id_str": "59af686ea22f3d43182fe3a8",

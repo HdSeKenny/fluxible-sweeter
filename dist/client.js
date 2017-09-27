@@ -39,20 +39,20 @@ require('./public/styles/main.less');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import './polyfills';
-const socket = _socket2.default.connect();
+var socket = _socket2.default.connect();
 
 window.React = _react2.default;
 window.socket = socket;
 
-const dehydratedState = window.__DATA__;
-let firstRender = true;
+var dehydratedState = window.__DATA__;
+var firstRender = true;
 
 // const dehydratedStores = dehydratedState.context.dispatcher.stores;
-_indexedDB2.default.init().then(() => {
+_indexedDB2.default.init().then(function () {
   // Check if it should clear the indexedDB
   _indexedDB2.default.checkIndexedDBClear();
 
-  _app2.default.rehydrate(dehydratedState, (err, context) => {
+  _app2.default.rehydrate(dehydratedState, function (err, context) {
     if (err) {
       throw err;
     }
@@ -63,14 +63,14 @@ _indexedDB2.default.init().then(() => {
     //   return context.getStore(key);
     // });
 
-    const routes = (0, _routes2.default)(context);
-    const scrollRoutes = ['list', 'about', ':blogId/details', ':username'];
+    var routes = (0, _routes2.default)(context);
+    var scrollRoutes = ['list', 'about', ':blogId/details', ':username'];
     function UpdateRoute() {
       if (!firstRender) {
         (0, _fetchData2.default)(context, this.state);
       }
       firstRender = false;
-      const targetPath = this.state.routes[1].path;
+      var targetPath = this.state.routes[1].path;
       if (!targetPath || scrollRoutes.includes(targetPath) && this.state.routes.length < 3) {
         window.scrollTo(0, 0);
       }
@@ -82,7 +82,7 @@ _indexedDB2.default.init().then(() => {
       onUpdate: UpdateRoute
     })), document.getElementById('main'));
   });
-}).catch(initError => {
+}).catch(function (initError) {
   // eslint-disable-next-line no-console
   console.log('initError', initError);
 });

@@ -1,7 +1,7 @@
 'use strict';
 
-const concurrent = require('contra').concurrent;
-const _ = require('lodash');
+var concurrent = require('contra').concurrent;
+var _ = require('lodash');
 
 function fetchData(context, routerState, cb) {
   cb = cb || function noop() {};

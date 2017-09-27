@@ -14,25 +14,26 @@ var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const animations = {
+var animations = {
   configs: {
     main_sliders_did_load: false
   },
 
-  sticky_header: function (element) {
+  sticky_header: function sticky_header(element) {
     if (_env2.default.is_client) {
-      const $window = $(window);
-      const $nav = $(element);
-      const { navbar: navbar } = _configs2.default.params;
-      const stickyHeight = navbar.sticky_header_height;
-      const fadeSpeed = navbar.fade_speed;
-      let isScroll = true;
+      var $window = $(window);
+      var $nav = $(element);
+      var navbar = _configs2.default.params.navbar;
 
-      $window.on('scroll', () => {
-        const scrollTop = $window.scrollTop();
+      var stickyHeight = navbar.sticky_header_height;
+      var fadeSpeed = navbar.fade_speed;
+      var isScroll = true;
+
+      $window.on('scroll', function () {
+        var scrollTop = $window.scrollTop();
         if (scrollTop > stickyHeight) {
           if (isScroll === true) {
-            $nav.fadeOut(fadeSpeed, () => {
+            $nav.fadeOut(fadeSpeed, function () {
               $nav.addClass('sticky').fadeIn(fadeSpeed);
             });
             isScroll = false;
@@ -47,20 +48,21 @@ const animations = {
       });
     }
   },
-  fixed_left_nav: function (element) {
+  fixed_left_nav: function fixed_left_nav(element) {
     if (_env2.default.is_client) {
-      const $window = $(window);
-      const $ele = $(element);
-      const { leftNav: leftNav } = _configs2.default.params;
-      const leftNavHeight = leftNav.left_nav_height;
-      const fadeSpeed = leftNav.fade_speed;
-      let isScroll = true;
+      var $window = $(window);
+      var $ele = $(element);
+      var leftNav = _configs2.default.params.leftNav;
 
-      $window.on('scroll', () => {
-        const scrollTop = $window.scrollTop();
+      var leftNavHeight = leftNav.left_nav_height;
+      var fadeSpeed = leftNav.fade_speed;
+      var isScroll = true;
+
+      $window.on('scroll', function () {
+        var scrollTop = $window.scrollTop();
         if (scrollTop > leftNavHeight) {
           if (isScroll === true) {
-            $ele.fadeOut(fadeSpeed, () => {
+            $ele.fadeOut(fadeSpeed, function () {
               $ele.addClass('fixed').fadeIn(fadeSpeed);
             });
             isScroll = false;
@@ -75,9 +77,9 @@ const animations = {
       });
     }
   },
-  main_sliders: function (callback) {
-    jQuery(document).ready(() => {
-      const revol = jQuery('.tp-banner').show().revolution({
+  main_sliders: function main_sliders(callback) {
+    jQuery(document).ready(function () {
+      var revol = jQuery('.tp-banner').show().revolution({
         // dottedOverlay: 'none',
         delay: 8000,
         startwidth: 1170,

@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -24,6 +26,12 @@ var _utils = require('../../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 /**
  * ChatBox component - Kenny
  *
@@ -31,287 +39,350 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @class ChatBox
  * @extends {React.Component}
  */
-class ChatBox extends _react2.default.Component {
+var ChatBox = function (_React$Component) {
+  _inherits(ChatBox, _React$Component);
 
-  constructor(props, context) {
-    super(props);
-    this._onStoreChange = this._onStoreChange.bind(this);
-    this.UserStore = context.getStore(_stores.UserStore);
-    this.state = {
+  function ChatBox(props, context) {
+    _classCallCheck(this, ChatBox);
+
+    var _this = _possibleConstructorReturn(this, (ChatBox.__proto__ || Object.getPrototypeOf(ChatBox)).call(this, props));
+
+    _this._onStoreChange = _this._onStoreChange.bind(_this);
+    _this.UserStore = context.getStore(_stores.UserStore);
+    _this.state = {
       message: ''
     };
+    return _this;
   }
 
-  componentDidMount() {
-    this.UserStore.addChangeListener(this._onStoreChange);
-    this.jumpToMessagsBottom();
-  }
-
-  componentWillUnmount() {
-    this.UserStore.removeChangeListener(this._onStoreChange);
-  }
-
-  componentDidUpdate() {
-    this.jumpToMessagsBottom();
-  }
-
-  _onStoreChange() {}
-
-  onMessageChange(e) {
-    this.setState({ message: e.target.value });
-  }
-
-  jumpToMessagsBottom() {
-    if ($('.chat')[0]) $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
-  }
-
-  toggleChatBox() {
-    this.props.hideMessages();
-  }
-
-  setActiveUser(thisUserId) {
-    this.UserStore.setActiveUser(thisUserId);
-  }
-
-  getActiveUser() {
-    this.UserStore.getActiveUserId();
-  }
-
-  hasActiveUser(connections, activeUserId) {
-    return connections.findIndex(c => c.this_user_id === activeUserId) >= 0;
-  }
-
-  closeUserConnection(thisUserId) {
-    this.context.executeAction(_actions.UserActions.closeUserConnection, {
-      myId: this.props.currentUser.id_str,
-      thisUserId: thisUserId
-    });
-  }
-
-  onSubmitMessage(e) {
-    e.preventDefault();
-    this.sendMessage();
-  }
-
-  sendMessage() {
-    const msg = this.state.message.trim();
-    const now = new Date();
-    const { activeUser: activeUser, localChat: localChat, currentUser: currentUser } = this.props;
-    if (!msg) {
-      return _plugins.swal.warning('Invalid message!');
+  _createClass(ChatBox, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.UserStore.addChangeListener(this._onStoreChange);
+      this.jumpToMessagsBottom();
     }
-    const newMessage = {
-      content: msg,
-      date: now,
-      user_to: activeUser,
-      user_from: currentUser.id_str,
-      class: 'me'
-    };
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.UserStore.removeChangeListener(this._onStoreChange);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.jumpToMessagsBottom();
+    }
+  }, {
+    key: '_onStoreChange',
+    value: function _onStoreChange() {}
+  }, {
+    key: 'onMessageChange',
+    value: function onMessageChange(e) {
+      this.setState({ message: e.target.value });
+    }
+  }, {
+    key: 'jumpToMessagsBottom',
+    value: function jumpToMessagsBottom() {
+      if ($('.chat')[0]) $('.chat')[0].scrollTop = $('.chat')[0].scrollHeight;
+    }
+  }, {
+    key: 'toggleChatBox',
+    value: function toggleChatBox() {
+      this.props.hideMessages();
+    }
+  }, {
+    key: 'setActiveUser',
+    value: function setActiveUser(thisUserId) {
+      this.UserStore.setActiveUser(thisUserId);
+    }
+  }, {
+    key: 'getActiveUser',
+    value: function getActiveUser() {
+      this.UserStore.getActiveUserId();
+    }
+  }, {
+    key: 'hasActiveUser',
+    value: function hasActiveUser(connections, activeUserId) {
+      return connections.findIndex(function (c) {
+        return c.this_user_id === activeUserId;
+      }) >= 0;
+    }
+  }, {
+    key: 'closeUserConnection',
+    value: function closeUserConnection(thisUserId) {
+      this.context.executeAction(_actions.UserActions.closeUserConnection, {
+        myId: this.props.currentUser.id_str,
+        thisUserId: thisUserId
+      });
+    }
+  }, {
+    key: 'onSubmitMessage',
+    value: function onSubmitMessage(e) {
+      e.preventDefault();
+      this.sendMessage();
+    }
+  }, {
+    key: 'sendMessage',
+    value: function sendMessage() {
+      var _this2 = this;
 
-    const connections = localChat.recent_chat_connections;
-    const thisUserConnect = connections.find(c => c.this_user_id === activeUser);
-    thisUserConnect.messages.push(newMessage);
+      var msg = this.state.message.trim();
+      var now = new Date();
+      var _props = this.props,
+          activeUser = _props.activeUser,
+          localChat = _props.localChat,
+          currentUser = _props.currentUser;
 
-    this.setState({ message: '' }, () => {
-      this.UserStore.setUserConnection(localChat);
-      socket.emit('message:send', newMessage);
-    });
-  }
+      if (!msg) {
+        return _plugins.swal.warning('Invalid message!');
+      }
+      var newMessage = {
+        content: msg,
+        date: now,
+        user_to: activeUser,
+        user_from: currentUser.id_str,
+        class: 'me'
+      };
 
-  _renderConnectionMessage(currentUser, activeUserId, localChat) {
-    const connections = localChat.recent_chat_connections;
-    const currentConnect = connections.find(c => c.this_user_id === activeUserId);
-    const thisUser = this.UserStore.getUserById(activeUserId);
-    const { connect_date: connect_date, messages: messages } = currentConnect;
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        _Layout.Row,
-        { className: 'top' },
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '8 p-0' },
-          _react2.default.createElement(
-            'h4',
-            { className: 'm-0' },
-            _react2.default.createElement(
-              'i',
-              null,
-              thisUser.username
-            )
-          )
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4 tar p-0' },
-          _react2.default.createElement(
-            'span',
-            { className: 'close-box', onClick: () => this.toggleChatBox() },
-            '\xD7'
-          )
-        )
-      ),
-      _react2.default.createElement(
+      var connections = localChat.recent_chat_connections;
+      var thisUserConnect = connections.find(function (c) {
+        return c.this_user_id === activeUser;
+      });
+      thisUserConnect.messages.push(newMessage);
+
+      this.setState({ message: '' }, function () {
+        _this2.UserStore.setUserConnection(localChat);
+        socket.emit('message:send', newMessage);
+      });
+    }
+  }, {
+    key: '_renderConnectionMessage',
+    value: function _renderConnectionMessage(currentUser, activeUserId, localChat) {
+      var _this3 = this;
+
+      var connections = localChat.recent_chat_connections;
+      var currentConnect = connections.find(function (c) {
+        return c.this_user_id === activeUserId;
+      });
+      var thisUser = this.UserStore.getUserById(activeUserId);
+      var connect_date = currentConnect.connect_date,
+          messages = currentConnect.messages;
+
+      return _react2.default.createElement(
         'div',
-        { className: 'chat' },
+        null,
         _react2.default.createElement(
-          'div',
-          { className: 'conversation-start' },
-          _react2.default.createElement(
-            'span',
-            null,
-            connect_date
-          )
-        ),
-        messages.map((msg, idx) => _react2.default.createElement(
-          'div',
-          { className: `bubble ${msg.class}`, key: idx },
-          msg.content
-        ))
-      )
-    );
-  }
-
-  _renderPeopleList(currentUser, activeUserId, localChat) {
-    const connections = localChat.recent_chat_connections;
-    if (!connections.length) return null;
-    const hasActiveUser = this.hasActiveUser(connections, activeUserId);
-    return _react2.default.createElement(
-      'ul',
-      { className: 'people' },
-      connections.map((connection, index) => {
-        const thisUserId = connection.this_user_id;
-        const newNumber = connection.new_messages_number;
-        const thisUser = this.UserStore.getUserById(thisUserId);
-        const { username: username, image_url: image_url } = thisUser;
-        const isActive = activeUserId === thisUserId;
-        const isAdmin = thisUser.role === 'admin';
-        let classes = isActive ? 'person active' : 'person';
-        if (!hasActiveUser && index === 0) {
-          classes = 'person active';
-          this.setActiveUser(thisUserId);
-        }
-
-        return _react2.default.createElement(
           _Layout.Row,
-          { className: classes, key: index },
+          { className: 'top' },
           _react2.default.createElement(
             _Layout.Col,
-            { size: '10 p-0', onClick: () => this.setActiveUser(thisUserId) },
+            { size: '8 p-0' },
             _react2.default.createElement(
-              _Layout.Col,
-              { size: '4 p-0' },
-              _react2.default.createElement('img', { src: image_url, alt: 'chat-user', width: '30' })
-            ),
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '7 p-0' },
+              'h4',
+              { className: 'm-0' },
               _react2.default.createElement(
-                _Layout.Row,
-                { className: 'name' },
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  username
-                )
-              ),
-              _react2.default.createElement(
-                _Layout.Row,
-                { className: 'time' },
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  _utils.format.fromNow(connection.connect_date)
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '1 p-0' },
-              newNumber > 0 && _react2.default.createElement(
-                'b',
-                { className: 'badge bg-danger' },
-                newNumber
+                'i',
+                null,
+                thisUser.username
               )
             )
           ),
           _react2.default.createElement(
             _Layout.Col,
-            { size: '2 p-0 tar' },
+            { size: '4 tar p-0' },
             _react2.default.createElement(
-              _Layout.Row,
-              { className: isAdmin ? 'close-connect admin' : 'close-connect user' },
-              _react2.default.createElement(
-                'span',
-                { onClick: () => this.closeUserConnection(thisUserId) },
-                '\xD7'
-              )
+              'span',
+              { className: 'close-box', onClick: function onClick() {
+                  return _this3.toggleChatBox();
+                } },
+              '\xD7'
             )
           )
-        );
-      })
-    );
-  }
-
-  render() {
-    const { currentUser: currentUser, activeUser: activeUser, localChat: localChat } = this.props;
-    const { message: message } = this.state;
-
-    if (!currentUser) return null;
-    return _react2.default.createElement(
-      'div',
-      { className: 'chat-box' },
-      _react2.default.createElement(
-        'div',
-        { className: 'wrapper' },
-        _react2.default.createElement(
-          'div',
-          { className: 'left' },
-          _react2.default.createElement(
-            'div',
-            { className: 'top' },
-            _react2.default.createElement('input', { type: 'text' })
-          ),
-          this._renderPeopleList(currentUser, activeUser, localChat)
         ),
         _react2.default.createElement(
           'div',
-          { className: 'right' },
-          this._renderConnectionMessage(currentUser, activeUser, localChat),
+          { className: 'chat' },
           _react2.default.createElement(
             'div',
-            { className: 'write' },
+            { className: 'conversation-start' },
             _react2.default.createElement(
-              _Layout.Row,
-              { className: '' },
+              'span',
+              null,
+              connect_date
+            )
+          ),
+          messages.map(function (msg, idx) {
+            return _react2.default.createElement(
+              'div',
+              { className: 'bubble ' + msg.class, key: idx },
+              msg.content
+            );
+          })
+        )
+      );
+    }
+  }, {
+    key: '_renderPeopleList',
+    value: function _renderPeopleList(currentUser, activeUserId, localChat) {
+      var _this4 = this;
+
+      var connections = localChat.recent_chat_connections;
+      if (!connections.length) return null;
+      var hasActiveUser = this.hasActiveUser(connections, activeUserId);
+      return _react2.default.createElement(
+        'ul',
+        { className: 'people' },
+        connections.map(function (connection, index) {
+          var thisUserId = connection.this_user_id;
+          var newNumber = connection.new_messages_number;
+          var thisUser = _this4.UserStore.getUserById(thisUserId);
+          var username = thisUser.username,
+              image_url = thisUser.image_url;
+
+          var isActive = activeUserId === thisUserId;
+          var isAdmin = thisUser.role === 'admin';
+          var classes = isActive ? 'person active' : 'person';
+          if (!hasActiveUser && index === 0) {
+            classes = 'person active';
+            _this4.setActiveUser(thisUserId);
+          }
+
+          return _react2.default.createElement(
+            _Layout.Row,
+            { className: classes, key: index },
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '10 p-0', onClick: function onClick() {
+                  return _this4.setActiveUser(thisUserId);
+                } },
               _react2.default.createElement(
                 _Layout.Col,
-                { size: '9 p-0' },
+                { size: '4 p-0' },
+                _react2.default.createElement('img', { src: image_url, alt: 'chat-user', width: '30' })
+              ),
+              _react2.default.createElement(
+                _Layout.Col,
+                { size: '7 p-0' },
                 _react2.default.createElement(
-                  'form',
-                  { onSubmit: this.onSubmitMessage.bind(this) },
-                  _react2.default.createElement('input', { onChange: e => this.onMessageChange(e), value: message })
+                  _Layout.Row,
+                  { className: 'name' },
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    username
+                  )
+                ),
+                _react2.default.createElement(
+                  _Layout.Row,
+                  { className: 'time' },
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    _utils.format.fromNow(connection.connect_date)
+                  )
                 )
               ),
               _react2.default.createElement(
                 _Layout.Col,
-                { size: '3 p-0 tar' },
+                { size: '1 p-0' },
+                newNumber > 0 && _react2.default.createElement(
+                  'b',
+                  { className: 'badge bg-danger' },
+                  newNumber
+                )
+              )
+            ),
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '2 p-0 tar' },
+              _react2.default.createElement(
+                _Layout.Row,
+                { className: isAdmin ? 'close-connect admin' : 'close-connect user' },
                 _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-info send', onClick: () => this.sendMessage() },
-                  _react2.default.createElement('i', { className: 'fa fa-paper-plane mr-5', 'aria-hidden': 'true' }),
-                  'Send'
+                  'span',
+                  { onClick: function onClick() {
+                      return _this4.closeUserConnection(thisUserId);
+                    } },
+                  '\xD7'
+                )
+              )
+            )
+          );
+        })
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this5 = this;
+
+      var _props2 = this.props,
+          currentUser = _props2.currentUser,
+          activeUser = _props2.activeUser,
+          localChat = _props2.localChat;
+      var message = this.state.message;
+
+
+      if (!currentUser) return null;
+      return _react2.default.createElement(
+        'div',
+        { className: 'chat-box' },
+        _react2.default.createElement(
+          'div',
+          { className: 'wrapper' },
+          _react2.default.createElement(
+            'div',
+            { className: 'left' },
+            _react2.default.createElement(
+              'div',
+              { className: 'top' },
+              _react2.default.createElement('input', { type: 'text' })
+            ),
+            this._renderPeopleList(currentUser, activeUser, localChat)
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'right' },
+            this._renderConnectionMessage(currentUser, activeUser, localChat),
+            _react2.default.createElement(
+              'div',
+              { className: 'write' },
+              _react2.default.createElement(
+                _Layout.Row,
+                { className: '' },
+                _react2.default.createElement(
+                  _Layout.Col,
+                  { size: '9 p-0' },
+                  _react2.default.createElement(
+                    'form',
+                    { onSubmit: this.onSubmitMessage.bind(this) },
+                    _react2.default.createElement('input', { onChange: function onChange(e) {
+                        return _this5.onMessageChange(e);
+                      }, value: message })
+                  )
+                ),
+                _react2.default.createElement(
+                  _Layout.Col,
+                  { size: '3 p-0 tar' },
+                  _react2.default.createElement(
+                    'button',
+                    { className: 'btn btn-info send', onClick: function onClick() {
+                        return _this5.sendMessage();
+                      } },
+                    _react2.default.createElement('i', { className: 'fa fa-paper-plane mr-5', 'aria-hidden': 'true' }),
+                    'Send'
+                  )
                 )
               )
             )
           )
         )
-      )
-    );
-  }
-}
-exports.default = ChatBox;
+      );
+    }
+  }]);
+
+  return ChatBox;
+}(_react2.default.Component);
+
 ChatBox.displayName = 'ChatBox';
 ChatBox.contextTypes = {
   getStore: _propTypes2.default.func,
@@ -323,4 +394,5 @@ ChatBox.propTypes = {
   activeUser: _propTypes2.default.string,
   localChat: _propTypes2.default.object
 };
+exports.default = ChatBox;
 module.exports = exports['default'];

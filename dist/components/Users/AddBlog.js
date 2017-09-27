@@ -36,7 +36,7 @@ var _ = require('..');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const AddBlog = (0, _createReactClass2.default)({
+var AddBlog = (0, _createReactClass2.default)({
 
   displayName: 'AddBlog',
 
@@ -56,12 +56,13 @@ const AddBlog = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore, _stores.BlogStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStateFromStores();
   },
-  getStateFromStores: function () {
-    const { username: username } = this.props.params;
-    const store = this.getStore(_stores.UserStore);
+  getStateFromStores: function getStateFromStores() {
+    var username = this.props.params.username;
+
+    var store = this.getStore(_stores.UserStore);
     return {
       currentUser: store.getCurrentUser(),
       user: store.getUserByUsername(username),
@@ -71,24 +72,31 @@ const AddBlog = (0, _createReactClass2.default)({
       tags: []
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
+    var _this = this;
+
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _plugins.swal.success(res.msg, () => {
-        const newBlogId = res.newBlog.id_str;
-        this.context.router.push(`${newBlogId}/details`);
+      _plugins.swal.success(res.msg, function () {
+        var newBlogId = res.newBlog.id_str;
+        _this.context.router.push(newBlogId + '/details');
       });
     }
   },
-  onHandleTitle: function (e) {
+  onHandleTitle: function onHandleTitle(e) {
     this.setState({ title: e.target.value });
   },
-  onHanleTagsChange: function (val) {
+  onHanleTagsChange: function onHanleTagsChange(val) {
     this.setState({ tags: val });
   },
-  onCreateArticle: function (editorState) {
-    const { editorContent: editorContent, plainText: plainText } = editorState;
-    const { title: title, tags: tags, currentUser: currentUser } = this.state;
-    const now = new Date();
+  onCreateArticle: function onCreateArticle(editorState) {
+    var editorContent = editorState.editorContent,
+        plainText = editorState.plainText;
+    var _state = this.state,
+        title = _state.title,
+        tags = _state.tags,
+        currentUser = _state.currentUser;
+
+    var now = new Date();
     if (!title.trim()) {
       return _plugins.swal.error('Please enter title !');
     }
@@ -101,9 +109,9 @@ const AddBlog = (0, _createReactClass2.default)({
       return _plugins.swal.error('Please choose a tag !');
     }
 
-    const newBlog = {
+    var newBlog = {
       type: 'article',
-      title: `${title.trim()}`,
+      title: '' + title.trim(),
       content: editorContent,
       text: plainText,
       author: currentUser.id_str,
@@ -113,9 +121,15 @@ const AddBlog = (0, _createReactClass2.default)({
 
     this.executeAction(_actions.BlogActions.AddBlog, newBlog);
   },
-  render: function () {
-    const { title: title, tags: tags, currentUser: currentUser } = this.state;
-    const options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
+  render: function render() {
+    var _this2 = this;
+
+    var _state2 = this.state,
+        title = _state2.title,
+        tags = _state2.tags,
+        currentUser = _state2.currentUser;
+
+    var options = [{ value: 'one', label: 'One' }, { value: 'two', label: 'Two' }];
 
     if (!currentUser) return _react2.default.createElement(_.NotFound, { classes: 'create-article-page' });
 
@@ -146,7 +160,9 @@ const AddBlog = (0, _createReactClass2.default)({
               placeholder: 'Select or create tags',
               value: tags,
               options: options,
-              onChange: val => this.onHanleTagsChange(val),
+              onChange: function onChange(val) {
+                return _this2.onHanleTagsChange(val);
+              },
               multi: true,
               deleteRemoves: false })
           )

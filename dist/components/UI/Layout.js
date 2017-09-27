@@ -5,13 +5,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Page = exports.Col = exports.Row = undefined;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* eslint-disable react/prop-types */
+
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Layout = {};
+var Layout = {};
 
 /**
  * [getColSizeClassName description]
@@ -19,16 +22,15 @@ const Layout = {};
  * @return {string}
  * example col-xs-1, col-md-1...
  */
-/* eslint-disable react/prop-types */
 function getColSizeClassName(size) {
-  let colSize = '';
+  var colSize = '';
   if (size) {
-    if (typeof size === 'object') {
-      colSize = Object.keys(size).map(k => {
-        return `col-${k}-${size[k]} `;
+    if ((typeof size === 'undefined' ? 'undefined' : _typeof(size)) === 'object') {
+      colSize = Object.keys(size).map(function (k) {
+        return 'col-' + k + '-' + size[k] + ' ';
       }).join(' ');
     } else {
-      colSize = `col-xs-${size}`;
+      colSize = 'col-xs-' + size;
     }
   }
 
@@ -42,26 +44,31 @@ function getColSizeClassName(size) {
  * example col-xs-offset-1, col-md-offset-1...
  */
 function getOffsetSizeClassName(offset) {
-  let offsetSize = '';
+  var offsetSize = '';
   if (offset) {
-    if (typeof offset === 'object') {
-      offsetSize = Object.keys(offset).map(k => {
-        return `col-${k}-offset-${offset[k]} `;
+    if ((typeof offset === 'undefined' ? 'undefined' : _typeof(offset)) === 'object') {
+      offsetSize = Object.keys(offset).map(function (k) {
+        return 'col-' + k + '-offset-' + offset[k] + ' ';
       }).join(' ');
     } else {
-      offsetSize = `col-xs-offset-${offset}`;
+      offsetSize = 'col-xs-offset-' + offset;
     }
   }
 
   return offsetSize;
 }
 
-Layout.Row = ({ children: children, className: className, mason: mason, onClick: onClick }) => {
-  let classesString = 'row';
+Layout.Row = function (_ref) {
+  var children = _ref.children,
+      className = _ref.className,
+      mason = _ref.mason,
+      onClick = _ref.onClick;
+
+  var classesString = 'row';
   if (className) {
-    classesString = `${classesString} ${className}`;
+    classesString = classesString + ' ' + className;
     if (mason) {
-      classesString = `${classesString} ${mason}`;
+      classesString = classesString + ' ' + mason;
     }
   }
   return _react2.default.createElement(
@@ -71,19 +78,26 @@ Layout.Row = ({ children: children, className: className, mason: mason, onClick:
   );
 };
 
-Layout.Col = ({ children: children, size: size, offset: offset, className: className, style: style, onClick: onClick }) => {
-  const colSize = getColSizeClassName(size);
-  const offsetSize = getOffsetSizeClassName(offset);
-  let classesString = '';
+Layout.Col = function (_ref2) {
+  var children = _ref2.children,
+      size = _ref2.size,
+      offset = _ref2.offset,
+      className = _ref2.className,
+      style = _ref2.style,
+      onClick = _ref2.onClick;
+
+  var colSize = getColSizeClassName(size);
+  var offsetSize = getOffsetSizeClassName(offset);
+  var classesString = '';
   if (colSize) {
     classesString = colSize;
 
     if (offsetSize) {
-      classesString = `${classesString} ${offsetSize}`;
+      classesString = classesString + ' ' + offsetSize;
     }
 
     if (className) {
-      classesString = `${classesString} ${offsetSize} ${className}`;
+      classesString = classesString + ' ' + offsetSize + ' ' + className;
     }
   }
   return _react2.default.createElement(
@@ -93,28 +107,36 @@ Layout.Col = ({ children: children, size: size, offset: offset, className: class
   );
 };
 
-Layout.Page = ({ children: children, height: height }) => _react2.default.createElement(
-  'section',
-  { className: 'vbox', style: height ? { height: height } : {} },
-  _react2.default.createElement(
+Layout.Page = function (_ref3) {
+  var children = _ref3.children,
+      height = _ref3.height;
+  return _react2.default.createElement(
     'section',
-    { className: 'scrollable' },
+    { className: 'vbox', style: height ? { height: height } : {} },
     _react2.default.createElement(
-      'div',
-      { className: 'container full content-body' },
-      children
+      'section',
+      { className: 'scrollable' },
+      _react2.default.createElement(
+        'div',
+        { className: 'container full content-body' },
+        children
+      )
     )
-  )
-);
+  );
+};
 
-Layout.Scroller = ({ children: children, height: height }) => _react2.default.createElement(
-  'div',
-  { className: 'scrollable', style: { height: height } },
-  children
-);
+Layout.Scroller = function (_ref4) {
+  var children = _ref4.children,
+      height = _ref4.height;
+  return _react2.default.createElement(
+    'div',
+    { className: 'scrollable', style: { height: height } },
+    children
+  );
+};
 
-const Row = exports.Row = Layout.Row;
-const Col = exports.Col = Layout.Col;
-const Page = exports.Page = Layout.Page;
+var Row = exports.Row = Layout.Row;
+var Col = exports.Col = Layout.Col;
+var Page = exports.Page = Layout.Page;
 
 exports.default = Layout;

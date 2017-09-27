@@ -32,7 +32,7 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserBlogs = (0, _createReactClass2.default)({
+var UserBlogs = (0, _createReactClass2.default)({
 
   displayName: 'UserBlogs',
 
@@ -51,15 +51,16 @@ const UserBlogs = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
-    const { username: username } = this.props.params;
-    const userStore = this.getStore(_stores.UserStore);
-    const user = userStore.getUserByUsername(username);
-    const currentUser = userStore.getCurrentUser();
-    const isCurrentUser = userStore.isCurrentUser();
+  getStatesFromStores: function getStatesFromStores() {
+    var username = this.props.params.username;
+
+    var userStore = this.getStore(_stores.UserStore);
+    var user = userStore.getUserByUsername(username);
+    var currentUser = userStore.getCurrentUser();
+    var isCurrentUser = userStore.isCurrentUser();
 
     return {
       currentUser: currentUser,
@@ -67,8 +68,8 @@ const UserBlogs = (0, _createReactClass2.default)({
       isCurrentUser: isCurrentUser
     };
   },
-  onChange: function () {},
-  onUpdateBlog: function (blog) {
+  onChange: function onChange() {},
+  onUpdateBlog: function onUpdateBlog(blog) {
     if (!blog.title) {
       return _plugins.swal.error('Please enter title !');
     }
@@ -79,13 +80,17 @@ const UserBlogs = (0, _createReactClass2.default)({
 
     this.executeAction(_actions.BlogActions.UpdateBlog, blog);
   },
-  onDeleteBlog: function (blog) {
-    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', () => {
-      this.executeAction(_actions.BlogActions.DeleteBlog, blog);
+  onDeleteBlog: function onDeleteBlog(blog) {
+    var _this = this;
+
+    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', function () {
+      _this.executeAction(_actions.BlogActions.DeleteBlog, blog);
     });
   },
-  _renderCurrentUserContentRight: function (displayBlogs) {
-    const sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
+  _renderCurrentUserContentRight: function _renderCurrentUserContentRight(displayBlogs) {
+    var _this2 = this;
+
+    var sortedBlogs = _utils.jsUtils.sortByDate(displayBlogs);
     return _react2.default.createElement(
       'div',
       { className: 'list-blogs' },
@@ -98,10 +103,10 @@ const UserBlogs = (0, _createReactClass2.default)({
           _react2.default.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
         )
       ),
-      sortedBlogs.map((blog, index) => {
-        const fromNow = _utils.format.fromNow(blog.created_at);
-        const isArticle = blog.type === 'article';
-        const text = _utils.jsUtils.shorten(blog.text, 40);
+      sortedBlogs.map(function (blog, index) {
+        var fromNow = _utils.format.fromNow(blog.created_at);
+        var isArticle = blog.type === 'article';
+        var text = _utils.jsUtils.shorten(blog.text, 40);
         return _react2.default.createElement(
           _Layout.Row,
           { key: index, className: 'mb-10' },
@@ -118,7 +123,7 @@ const UserBlogs = (0, _createReactClass2.default)({
               { className: 'title' },
               _react2.default.createElement(
                 _reactRouter.Link,
-                { to: `/${blog.id_str}/details` },
+                { to: '/' + blog.id_str + '/details' },
                 blog.title
               )
             ),
@@ -138,13 +143,17 @@ const UserBlogs = (0, _createReactClass2.default)({
             { size: '4 tar pr-0 option-btns' },
             isArticle && _react2.default.createElement(
               'button',
-              { className: 'btn btn-warning btn-sm', onClick: () => this.onEditBlog(blog) },
+              { className: 'btn btn-warning btn-sm', onClick: function onClick() {
+                  return _this2.onEditBlog(blog);
+                } },
               _react2.default.createElement('i', { className: 'fa fa-pencil' }),
               ' Edit'
             ),
             _react2.default.createElement(
               'button',
-              { className: 'btn btn-danger btn-sm ml-10', onClick: () => this.onDeleteBlog(blog) },
+              { className: 'btn btn-danger btn-sm ml-10', onClick: function onClick() {
+                  return _this2.onDeleteBlog(blog);
+                } },
               _react2.default.createElement('i', { className: 'fa fa-trash' }),
               ' Delete'
             )
@@ -153,9 +162,10 @@ const UserBlogs = (0, _createReactClass2.default)({
       })
     );
   },
-  render: function () {
-    const { isCurrentUser: isCurrentUser } = this.state;
-    const { displayMineBlogs: displayMineBlogs } = this.props;
+  render: function render() {
+    var isCurrentUser = this.state.isCurrentUser;
+    var displayMineBlogs = this.props.displayMineBlogs;
+
     return _react2.default.createElement(
       'div',
       { className: '' },

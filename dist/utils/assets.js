@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 // const path = require('path');
-let webpackAssets;
+var webpackAssets = void 0;
 
 try {
   webpackAssets = require('../configs/assets.json');
@@ -12,7 +12,7 @@ try {
   throw new Error('Please run `grunt prod or grunt` to generate the js assets.');
 }
 
-const assets = {};
+var assets = {};
 
 assets.common = webpackAssets.assets.common;
 assets.main = webpackAssets.assets.main;

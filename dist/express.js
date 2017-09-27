@@ -94,8 +94,8 @@ var _sharp2 = _interopRequireDefault(_sharp);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = server => {
-  const env = server.get('env');
+exports.default = function (server) {
+  var env = server.get('env');
 
   server.set('views', _path2.default.join(__dirname, 'views')); // view engine setup
   server.set('view engine', 'pug');
@@ -114,11 +114,11 @@ exports.default = server => {
   server.use((0, _cookieParser2.default)());
   server.use((0, _cors2.default)());
 
-  server.use(`${_configs2.default.path_prefix}/`, _express2.default.static(_path2.default.join(__dirname, 'public')));
-  server.use((0, _serveFavicon2.default)(`${__dirname}/public/styles/images/favicon.ico`));
+  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, 'public')));
+  server.use((0, _serveFavicon2.default)(__dirname + '/public/styles/images/favicon.ico'));
   server.use(_expressUseragent2.default.express());
 
-  const MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
+  var MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
   server.use((0, _expressSession2.default)({
     secret: 'sweeter-secret',
     store: new MongoStore(_configs2.default.mongo.session),
@@ -126,7 +126,7 @@ exports.default = server => {
     saveUninitialized: false
   }));
 
-  const fetchrPlugin = _app2.default.getPlugin('FetchrPlugin');
+  var fetchrPlugin = _app2.default.getPlugin('FetchrPlugin');
   fetchrPlugin.registerService(_services.blogs);
   fetchrPlugin.registerService(_services.users);
   fetchrPlugin.registerService(_services.comments);
@@ -137,27 +137,27 @@ exports.default = server => {
 
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
-  server.use((req, res) => {
-    const context = _app2.default.createContext({
+  server.use(function (req, res) {
+    var context = _app2.default.createContext({
       req: req,
       res: res,
       configs: _configs2.default,
       authenticated: req.session.user && req.session.user.authenticated
     });
-    const routes = (0, _routes2.default)(context);
+    var routes = (0, _routes2.default)(context);
 
-    (0, _reactRouter.match)({ routes: routes, location: req.url }, (error, redirectLocation, routerState) => {
+    (0, _reactRouter.match)({ routes: routes, location: req.url }, function (error, redirectLocation, routerState) {
       if (error) {
         res.send(500, error.message);
       } else if (redirectLocation) {
         res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (routerState) {
-        (0, _fetchData2.default)(context, routerState, err => {
+        (0, _fetchData2.default)(context, routerState, function (err) {
           if (err) throw err;
-          const exposed = `window.__DATA__=${(0, _serializeJavascript2.default)(_app2.default.dehydrate(context))}`;
-          const doctype = '<!DOCTYPE html>';
-          const markup = (0, _server.renderToString)(_react2.default.createElement(_components.Custom, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.RouterContext, routerState)));
-          const html = (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Html2.default, { assets: _assets2.default, markup: markup, exposed: exposed }));
+          var exposed = 'window.__DATA__=' + (0, _serializeJavascript2.default)(_app2.default.dehydrate(context));
+          var doctype = '<!DOCTYPE html>';
+          var markup = (0, _server.renderToString)(_react2.default.createElement(_components.Custom, { context: context.getComponentContext() }, _react2.default.createElement(_reactRouter.RouterContext, routerState)));
+          var html = (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Html2.default, { assets: _assets2.default, markup: markup, exposed: exposed }));
 
           res.send(doctype + html);
         });

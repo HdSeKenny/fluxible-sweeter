@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var areIntlLocalesSupported = require('intl-locales-supported');
 
 var localesMyAppSupports = [
@@ -7,9 +9,9 @@ var localesMyAppSupports = [
 ];
 
 var _globalObject = {};
-if (typeof global === 'object') {
+if ((typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object') {
   _globalObject = global;
-} else if (typeof window === 'object') {
+} else if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object') {
   _globalObject = window;
 }
 

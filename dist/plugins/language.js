@@ -1,15 +1,15 @@
 'use strict';
 
 /* eslint-disable all, no-param-reassign*/
-const Language = require('../utils/language');
+var Language = require('../utils/language');
 
 module.exports = {
 
   name: 'LanguagePlugin',
 
-  plugContext: function (options) {
+  plugContext: function plugContext(options) {
     return {
-      plugActionContext: function (actionContext) {
+      plugActionContext: function plugActionContext(actionContext) {
         actionContext.language = new Language({
           req: options.req,
           res: options.res

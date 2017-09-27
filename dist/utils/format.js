@@ -10,24 +10,24 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const formatWithYear = 'DD/MM/YYYY';
-const formatWithoutYear = 'h:mm A, DD/MM';
+var formatWithYear = 'DD/MM/YYYY';
+var formatWithoutYear = 'h:mm A, DD/MM';
 
-const format = {
-  fromNow: function (date) {
+var format = {
+  fromNow: function fromNow(date) {
     if (!date && typeof date !== 'string') {
       console.log('invalid date..');
       return '';
     }
 
-    const dateHoursDiff = (0, _moment2.default)().diff(date, 'hours');
-    const thisYear = (0, _moment2.default)().year();
-    const dateYear = (0, _moment2.default)(date).year();
-    const dateYearsDiff = thisYear - dateYear;
-    const momented = (0, _moment2.default)(date);
-    const fromNow = momented.fromNow();
+    var dateHoursDiff = (0, _moment2.default)().diff(date, 'hours');
+    var thisYear = (0, _moment2.default)().year();
+    var dateYear = (0, _moment2.default)(date).year();
+    var dateYearsDiff = thisYear - dateYear;
+    var momented = (0, _moment2.default)(date);
+    var fromNow = momented.fromNow();
 
-    let displayDate = fromNow;
+    var displayDate = fromNow;
 
     if (dateHoursDiff > 11 && dateYearsDiff < 1) {
       displayDate = momented.format(formatWithoutYear);

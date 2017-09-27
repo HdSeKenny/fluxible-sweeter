@@ -20,7 +20,7 @@ var _indexedDB2 = _interopRequireDefault(_indexedDB);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserStore = (0, _createStore2.default)({
+var UserStore = (0, _createStore2.default)({
 
   storeName: 'UserStore',
 
@@ -46,7 +46,7 @@ const UserStore = (0, _createStore2.default)({
     'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
   },
 
-  initialize: function () {
+  initialize: function initialize() {
     this.users = [];
     this.kenny = null;
     this.currentUser = null;
@@ -54,21 +54,23 @@ const UserStore = (0, _createStore2.default)({
     this.authenticated = false;
     this.loginUserImage = null;
   },
-  loadKennySuccess: function (res) {
+  loadKennySuccess: function loadKennySuccess(res) {
     this.kenny = res.data;
     this.emitChange();
   },
-  getKennyUser: function () {
+  getKennyUser: function getKennyUser() {
     return this.kenny;
   },
-  loadUsersSuccess: function (res) {
+  loadUsersSuccess: function loadUsersSuccess(res) {
     this.users = res.data;
     this.emitChange();
   },
-  getUsernames: function () {
-    return this.users.map(user => user.username);
+  getUsernames: function getUsernames() {
+    return this.users.map(function (user) {
+      return user.username;
+    });
   },
-  registerSuccess: function (res) {
+  registerSuccess: function registerSuccess(res) {
     this.currentUser = res.user;
     this.authenticated = true;
     this.users.push(res.user);
@@ -81,7 +83,7 @@ const UserStore = (0, _createStore2.default)({
       user: res.user
     });
   },
-  registerFail: function (res) {
+  registerFail: function registerFail(res) {
     this.currentUser = null;
     this.authenticated = false;
     this.emitChange({
@@ -90,7 +92,7 @@ const UserStore = (0, _createStore2.default)({
       user: res.user
     });
   },
-  loginSuccess: function (res) {
+  loginSuccess: function loginSuccess(res) {
     this.currentUser = res.user;
     this.authenticated = true;
     this.setCurrentUserConnection();
@@ -98,7 +100,7 @@ const UserStore = (0, _createStore2.default)({
       msg: 'USER_LOGIN_SUCCESS'
     });
   },
-  loginFail: function (res) {
+  loginFail: function loginFail(res) {
     this.currentUser = null;
     this.authenticated = false;
     this.emitChange({
@@ -106,7 +108,7 @@ const UserStore = (0, _createStore2.default)({
       errorMsg: res.auth.msg
     });
   },
-  logoutSuccess: function () {
+  logoutSuccess: function logoutSuccess() {
     this.currentUser = null;
     this.authenticated = false;
     this.clearUserConnection();
@@ -115,18 +117,18 @@ const UserStore = (0, _createStore2.default)({
       msg: 'LOGOUT_SUCCESS'
     });
   },
-  isLoggedIn: function () {
+  isLoggedIn: function isLoggedIn() {
     return this.currentUser !== null;
   },
-  isAuthenticated: function () {
+  isAuthenticated: function isAuthenticated() {
     return this.authenticated;
   },
-  loadSessionUserSuccess: function (res) {
+  loadSessionUserSuccess: function loadSessionUserSuccess(res) {
     this.currentUser = res.user;
     this.authenticated = true;
     this.emitChange(res);
   },
-  updateUserSuccess: function (res) {
+  updateUserSuccess: function updateUserSuccess(res) {
     this.currentUser = res;
     this.updateCurrentUserIntoUsers();
     this.updateIndexedDB();
@@ -134,35 +136,41 @@ const UserStore = (0, _createStore2.default)({
       msg: 'UPDATE_USER_SUCCESS'
     });
   },
-  changePasswordSuccess: function (res) {
+  changePasswordSuccess: function changePasswordSuccess(res) {
     if (res.stat) {
       this.authenticated = false;
     }
     this.emitChange(res);
   },
-  getCurrentUser: function () {
+  getCurrentUser: function getCurrentUser() {
     return this.currentUser;
   },
-  getUserByUsername: function (username) {
-    return this.users.find(user => user.username === username);
+  getUserByUsername: function getUserByUsername(username) {
+    return this.users.find(function (user) {
+      return user.username === username;
+    });
   },
-  getBlogsWithUsername: function (isCurrentUser, username) {
-    const displayBlogs = [];
-    const users = _lodash2.default.cloneDeep(this.users);
-    const currentUser = _lodash2.default.cloneDeep(this.currentUser);
-    const thisUser = users.find(user => user.username === username);
+  getBlogsWithUsername: function getBlogsWithUsername(isCurrentUser, username) {
+    var displayBlogs = [];
+    var users = _lodash2.default.cloneDeep(this.users);
+    var currentUser = _lodash2.default.cloneDeep(this.currentUser);
+    var thisUser = users.find(function (user) {
+      return user.username === username;
+    });
 
     if (isCurrentUser && currentUser) {
-      currentUser.blogs.forEach(b => {
+      currentUser.blogs.forEach(function (b) {
         // eslint-disable-next-line no-param-reassign
         b.author = currentUser;
         displayBlogs.push(b);
       });
 
-      currentUser.focuses.forEach(focuse => {
-        const focuseUser = users.find(user => user.id_str === focuse.id_str);
+      currentUser.focuses.forEach(function (focuse) {
+        var focuseUser = users.find(function (user) {
+          return user.id_str === focuse.id_str;
+        });
         if (focuseUser.blogs.length) {
-          focuseUser.blogs.forEach(b => {
+          focuseUser.blogs.forEach(function (b) {
             // eslint-disable-next-line no-param-reassign
             b.author = focuseUser;
             displayBlogs.push(b);
@@ -170,7 +178,7 @@ const UserStore = (0, _createStore2.default)({
         }
       });
     } else if (thisUser) {
-      thisUser.blogs.forEach(b => {
+      thisUser.blogs.forEach(function (b) {
         // eslint-disable-next-line no-param-reassign
         b.author = thisUser;
         displayBlogs.push(b);
@@ -179,11 +187,11 @@ const UserStore = (0, _createStore2.default)({
 
     return displayBlogs;
   },
-  isThumbedUp: function (blog) {
+  isThumbedUp: function isThumbedUp(blog) {
     return blog.likers.indexOf(this.currentUser.id_str) !== -1;
   },
-  isCurrentUser: function (username) {
-    let flag = false;
+  isCurrentUser: function isCurrentUser(username) {
+    var flag = false;
     if (this.currentUser && username) {
       flag = this.currentUser.username === username;
     } else if (this.currentUser) {
@@ -191,8 +199,10 @@ const UserStore = (0, _createStore2.default)({
     }
     return flag;
   },
-  followUserSuccess: function (res) {
-    const thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
+  followUserSuccess: function followUserSuccess(res) {
+    var thisUserIndex = this.users.findIndex(function (u) {
+      return u.id_str === res.thisUser.id_str;
+    });
 
     this.users[thisUserIndex].fans.push(res.currentUser);
     this.currentUser.focuses.push(res.thisUser);
@@ -206,12 +216,22 @@ const UserStore = (0, _createStore2.default)({
       msg: 'FOLLOW_USER_SUCCESS'
     });
   },
-  cancelFollowUserSuccess: function (res) {
-    const _thisUserIndex = this.users.findIndex(u => u.id_str === res.thisUser.id_str);
-    const new_fans = this.users[_thisUserIndex].fans.filter(f => f.id_str !== res.currentUser.id_str);
+  cancelFollowUserSuccess: function cancelFollowUserSuccess(res) {
+    var _thisUserIndex = this.users.findIndex(function (u) {
+      return u.id_str === res.thisUser.id_str;
+    });
+    var new_fans = this.users[_thisUserIndex].fans.filter(function (f) {
+      return f.id_str !== res.currentUser.id_str;
+    });
 
-    const focuses = this.currentUser.focuses.filter(f => f.id_str !== res.thisUser.id_str);
-    const { no_groups: no_groups, friends: friends, special_focuses: special_focuses } = res.currentUser.focuses_list;
+    var focuses = this.currentUser.focuses.filter(function (f) {
+      return f.id_str !== res.thisUser.id_str;
+    });
+    var _res$currentUser$focu = res.currentUser.focuses_list,
+        no_groups = _res$currentUser$focu.no_groups,
+        friends = _res$currentUser$focu.friends,
+        special_focuses = _res$currentUser$focu.special_focuses;
+
 
     this.users[_thisUserIndex].fans = new_fans;
     this.currentUser.focuses = focuses;
@@ -229,37 +249,41 @@ const UserStore = (0, _createStore2.default)({
       user: res.thisUser
     });
   },
-  getLoginUserImageSuccess: function (res) {
+  getLoginUserImageSuccess: function getLoginUserImageSuccess(res) {
     this.loginUserImage = res;
     this.emitChange({
       msg: 'LOAD_LOGIN_USER_IMAGE_SUCCESS'
     });
   },
-  getLoginUserloginUserImage: function () {
+  getLoginUserloginUserImage: function getLoginUserloginUserImage() {
     return this.loginUserImage;
   },
-  getCommenter: function (userId) {
-    return this.users ? this.users.find(user => user.id_str === userId) : null;
+  getCommenter: function getCommenter(userId) {
+    return this.users ? this.users.find(function (user) {
+      return user.id_str === userId;
+    }) : null;
   },
-  getUserById: function (userId) {
-    return this.users ? this.users.find(user => user.id_str === userId) : null;
+  getUserById: function getUserById(userId) {
+    return this.users ? this.users.find(function (user) {
+      return user.id_str === userId;
+    }) : null;
   },
-  getCurrentUploadedImage: function () {
+  getCurrentUploadedImage: function getCurrentUploadedImage() {
     return this.currentUploadedImage;
   },
-  editUserImage: function (image) {
+  editUserImage: function editUserImage(image) {
     this.currentUploadedImage = image;
     this.emitChange({
       msg: 'EDIT_IMAGE_SUCCESS'
     });
   },
-  cancelEditUserImage: function () {
+  cancelEditUserImage: function cancelEditUserImage() {
     this.currentUploadedImage = null;
     this.emitChange({
       msg: 'CANCEL_IMAGE_SUCCESS'
     });
   },
-  uploadImageSuccess: function (newuser) {
+  uploadImageSuccess: function uploadImageSuccess(newuser) {
     this.currentUser.image_url = newuser.image_url;
     this.updateCurrentUserIntoUsers();
     this.updateIndexedDB();
@@ -267,9 +291,11 @@ const UserStore = (0, _createStore2.default)({
       msg: 'UPLOAD_IMAGE_SUCCESS'
     });
   },
-  addMessageConnectionSuccess: function (connection) {
-    const connections = this.currentUser.recent_chat_connections;
-    const isNotExist = connections.findIndex(c => c.this_user_id === connection.this_user_id) < 0;
+  addMessageConnectionSuccess: function addMessageConnectionSuccess(connection) {
+    var connections = this.currentUser.recent_chat_connections;
+    var isNotExist = connections.findIndex(function (c) {
+      return c.this_user_id === connection.this_user_id;
+    }) < 0;
 
     if (!connections) {
       this.currentUser.recent_chat_connections = [];
@@ -287,7 +313,7 @@ const UserStore = (0, _createStore2.default)({
       connection: connection
     });
   },
-  deleteMessageConnectionSuccess: function (res) {
+  deleteMessageConnectionSuccess: function deleteMessageConnectionSuccess(res) {
     this.currentUser.recent_chat_connections = res.connections;
 
     if (res.thisUserId === this.getActiveUserId()) {
@@ -305,47 +331,51 @@ const UserStore = (0, _createStore2.default)({
       connections: res.connections
     });
   },
-  getNewMessagesNumSum: function (showMessages) {
+  getNewMessagesNumSum: function getNewMessagesNumSum(showMessages) {
     if (!_utils.env.is_client) return 0;
-    let newMessageSum = 0;
+    var newMessageSum = 0;
     if (this.currentUser) {
-      const localChatString = localStorage.getItem('current_user_connection');
-      const localChat = JSON.parse(localChatString);
-      const connections = localChat.recent_chat_connections;
-      const activeUser = localChat.active_user;
-      const activeUserConnect = connections.find(c => c.this_user_id === activeUser);
+      var localChatString = localStorage.getItem('current_user_connection');
+      var localChat = JSON.parse(localChatString);
+      var connections = localChat.recent_chat_connections;
+      var activeUser = localChat.active_user;
+      var activeUserConnect = connections.find(function (c) {
+        return c.this_user_id === activeUser;
+      });
       if (showMessages) {
         activeUserConnect.new_messages_number = 0;
         this.setUserConnection(localChat);
       }
-      connections.forEach(c => {
+      connections.forEach(function (c) {
         newMessageSum += c.new_messages_number;
       });
     }
     return newMessageSum;
   },
-  getActiveUserId: function () {
+  getActiveUserId: function getActiveUserId() {
     if (!_utils.env.is_client) {
       return '';
     }
-    const connection = localStorage.getItem('current_user_connection');
-    const conObj = JSON.parse(connection);
+    var connection = localStorage.getItem('current_user_connection');
+    var conObj = JSON.parse(connection);
     return conObj ? conObj.active_user : '';
   },
-  getUserConnection: function () {
+  getUserConnection: function getUserConnection() {
     if (!_utils.env.is_client) {
       return '';
     }
-    const connection = localStorage.getItem('current_user_connection');
+    var connection = localStorage.getItem('current_user_connection');
     return JSON.parse(connection);
   },
-  setActiveUser: function (thisUserId) {
+  setActiveUser: function setActiveUser(thisUserId) {
     if (!_utils.env.is_client) {
       return '';
     }
-    const connection = localStorage.getItem('current_user_connection');
-    const parsedConection = JSON.parse(connection);
-    const thisUserConnect = parsedConection.recent_chat_connections.find(rcc => rcc.this_user_id === thisUserId);
+    var connection = localStorage.getItem('current_user_connection');
+    var parsedConection = JSON.parse(connection);
+    var thisUserConnect = parsedConection.recent_chat_connections.find(function (rcc) {
+      return rcc.this_user_id === thisUserId;
+    });
     parsedConection.active_user = thisUserId;
     thisUserConnect.new_messages_number = 0;
     localStorage.setItem('current_user_connection', JSON.stringify(parsedConection));
@@ -353,7 +383,7 @@ const UserStore = (0, _createStore2.default)({
       msg: 'SET_ACTIVE_USER_SUCCESS'
     });
   },
-  setUserConnection: function (connection) {
+  setUserConnection: function setUserConnection(connection) {
     if (!_utils.env.is_client) {
       return '';
     }
@@ -363,16 +393,16 @@ const UserStore = (0, _createStore2.default)({
       msg: 'SET_USER_CONNECTION_SUCCESS'
     });
   },
-  initialConnection: function () {
-    const KENNY = this.getUserByUsername('Kenny');
-    const firstMessage = {
+  initialConnection: function initialConnection() {
+    var KENNY = this.getUserByUsername('Kenny');
+    var firstMessage = {
       content: 'My name is Kenny, the developer of this website. If you have any questions, ask me please!',
       date: new Date(),
       user_to: this.currentUser.id_str,
       user_from: KENNY.id_str,
       class: 'you'
     };
-    const firstConnection = {
+    var firstConnection = {
       this_user_id: KENNY.id_str,
       connect_date: new Date(),
       messages: this.currentUser.username === 'Kenny' ? [] : [firstMessage]
@@ -383,15 +413,18 @@ const UserStore = (0, _createStore2.default)({
       firstMessage: firstMessage
     };
   },
-  setCurrentUserConnection: function (thisUserId) {
-    const { id_str: id_str, recent_chat_connections: recent_chat_connections } = this.currentUser;
-    let firstConnection = recent_chat_connections[0];
-    const localConnection = {
+  setCurrentUserConnection: function setCurrentUserConnection(thisUserId) {
+    var _currentUser = this.currentUser,
+        id_str = _currentUser.id_str,
+        recent_chat_connections = _currentUser.recent_chat_connections;
+
+    var firstConnection = recent_chat_connections[0];
+    var localConnection = {
       current_user: id_str,
       active_user: thisUserId,
       recent_chat_connections: recent_chat_connections
     };
-    const initialConnection = this.initialConnection();
+    var initialConnection = this.initialConnection();
 
     if (!thisUserId) {
       if (!firstConnection) {
@@ -408,20 +441,22 @@ const UserStore = (0, _createStore2.default)({
 
     this.setUserConnection(localConnection);
   },
-  clearUserConnection: function () {
+  clearUserConnection: function clearUserConnection() {
     // TODO
   },
-  updateCurrentUserIntoUsers: function () {
-    this.users.forEach((user, idx) => {
-      if (user.id_str === this.currentUser.id_str) {
-        this.users[idx] = this.currentUser;
+  updateCurrentUserIntoUsers: function updateCurrentUserIntoUsers() {
+    var _this = this;
+
+    this.users.forEach(function (user, idx) {
+      if (user.id_str === _this.currentUser.id_str) {
+        _this.users[idx] = _this.currentUser;
       }
     });
   },
-  updateIndexedDB: function () {
+  updateIndexedDB: function updateIndexedDB() {
     _indexedDB2.default.set('users', this.users);
   },
-  dehydrate: function () {
+  dehydrate: function dehydrate() {
     return {
       currentUser: this.currentUser,
       authenticated: this.authenticated,
@@ -431,7 +466,7 @@ const UserStore = (0, _createStore2.default)({
       kenny: this.kenny
     };
   },
-  rehydrate: function (state) {
+  rehydrate: function rehydrate(state) {
     this.currentUser = state.currentUser;
     this.authenticated = state.authenticated;
     this.users = state.users;

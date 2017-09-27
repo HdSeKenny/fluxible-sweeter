@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-const env = require('./env');
-const _ = require('lodash');
+var env = require('./env');
+var _ = require('lodash');
 
 function Cookie(options) {
   // eslint-disable-next-line
@@ -25,10 +25,10 @@ Cookie.prototype.get = function (name) {
   if (env.is_server) {
     return this._req.cookies[name];
   }
-  const pairs = document.cookie.split(';');
-  let cookieValue;
-  _.each(pairs, p => {
-    const key = p.replace(/[\s\n]/g, '').split('=');
+  var pairs = document.cookie.split(';');
+  var cookieValue = void 0;
+  _.each(pairs, function (p) {
+    var key = p.replace(/[\s\n]/g, '').split('=');
     if (key.length == 2 || key[0] == name) {
       cookieValue = key[1];
     }
@@ -40,15 +40,15 @@ Cookie.prototype.set = function (name, value) {
   if (env.is_server) {
     return this._res.cookie(name, value);
   }
-  document.cookie = `${name}=${value}`;
+  document.cookie = name + '=' + value;
 };
 
 Cookie.prototype.clear = function (name) {
   if (env.is_server) {
     return this._res.clearCookie(name);
   }
-  const expDate = new Date(1970, 0, 1).toGMTString();
-  document.cookie = `${name}=;expires=${expDate};`;
+  var expDate = new Date(1970, 0, 1).toGMTString();
+  document.cookie = name + '=;expires=' + expDate + ';';
 };
 
 exports.default = Cookie;

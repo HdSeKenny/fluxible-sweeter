@@ -1,41 +1,41 @@
 'use strict';
 
 module.exports = {
-    addDays: function (d, days) {
-        let newDate = this.clone(d);
+    addDays: function addDays(d, days) {
+        var newDate = this.clone(d);
         newDate.setDate(d.getDate() + days);
         return newDate;
     },
-    addMonths: function (d, months) {
-        let newDate = this.clone(d);
+    addMonths: function addMonths(d, months) {
+        var newDate = this.clone(d);
         newDate.setMonth(d.getMonth() + months);
         return newDate;
     },
-    addYears: function (d, years) {
-        let newDate = this.clone(d);
+    addYears: function addYears(d, years) {
+        var newDate = this.clone(d);
         newDate.setFullYear(d.getFullYear() + years);
         return newDate;
     },
-    clone: function (d) {
+    clone: function clone(d) {
         return new Date(d.getTime());
     },
-    cloneAsDate: function (d) {
-        let clonedDate = this.clone(d);
+    cloneAsDate: function cloneAsDate(d) {
+        var clonedDate = this.clone(d);
         clonedDate.setHours(0, 0, 0, 0);
         return clonedDate;
     },
-    getDaysInMonth: function (d) {
-        let resultDate = this.getFirstDayOfMonth(d);
+    getDaysInMonth: function getDaysInMonth(d) {
+        var resultDate = this.getFirstDayOfMonth(d);
 
         resultDate.setMonth(resultDate.getMonth() + 1);
         resultDate.setDate(resultDate.getDate() - 1);
 
         return resultDate.getDate();
     },
-    getFirstDayOfMonth: function (d) {
+    getFirstDayOfMonth: function getFirstDayOfMonth(d) {
         return new Date(d.getFullYear(), d.getMonth(), 1);
     },
-    getFullMonth: function (month) {
+    getFullMonth: function getFullMonth(month) {
         switch (month) {
             case 1:
                 return 'January';
@@ -63,7 +63,7 @@ module.exports = {
                 return 'December';
         }
     },
-    getShortMonth: function (month) {
+    getShortMonth: function getShortMonth(month) {
         switch (month) {
             case 0:
                 return 'Jan';
@@ -91,8 +91,8 @@ module.exports = {
                 return 'Dec';
         }
     },
-    getDayOfWeek: function (d) {
-        let dow = d.getDay();
+    getDayOfWeek: function getDayOfWeek(d) {
+        var dow = d.getDay();
         switch (dow) {
             case 0:
                 return 'Sunday';
@@ -110,16 +110,16 @@ module.exports = {
                 return 'Saturday';
         }
     },
-    getWeekArray: function (d) {
-        let dayArray = [];
-        let daysInMonth = this.getDaysInMonth(d);
-        let daysInWeek;
-        let emptyDays;
-        let firstDayOfWeek;
-        let week;
-        let weekArray = [];
+    getWeekArray: function getWeekArray(d) {
+        var dayArray = [];
+        var daysInMonth = this.getDaysInMonth(d);
+        var daysInWeek = void 0;
+        var emptyDays = void 0;
+        var firstDayOfWeek = void 0;
+        var week = void 0;
+        var weekArray = [];
 
-        for (let i = 1; i <= daysInMonth; i++) {
+        for (var i = 1; i <= daysInMonth; i++) {
             dayArray.push(new Date(d.getFullYear(), d.getMonth(), i));
         }
 
@@ -129,7 +129,7 @@ module.exports = {
             emptyDays = 7 - daysInWeek;
             week = dayArray.splice(0, daysInWeek);
 
-            for (let i = 0; i < emptyDays; i++) {
+            for (var _i = 0; _i < emptyDays; _i++) {
                 week.unshift(null);
             }
 
@@ -138,10 +138,10 @@ module.exports = {
 
         return weekArray;
     },
-    format: function (date) {
-        let m = date.getMonth() + 1;
-        let d = date.getDate();
-        let y = date.getFullYear();
+    format: function format(date) {
+        var m = date.getMonth() + 1;
+        var d = date.getDate();
+        var y = date.getFullYear();
         if (m < 10) {
             m = '0' + m;
         }
@@ -150,35 +150,35 @@ module.exports = {
         }
         return m + '/' + d + '/' + y;
     },
-    isEqualDate: function (d1, d2) {
+    isEqualDate: function isEqualDate(d1, d2) {
         return d1 && d2 && d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
     },
-    isBeforeDate: function (d1, d2) {
-        let date1 = this.cloneAsDate(d1);
-        let date2 = this.cloneAsDate(d2);
+    isBeforeDate: function isBeforeDate(d1, d2) {
+        var date1 = this.cloneAsDate(d1);
+        var date2 = this.cloneAsDate(d2);
 
         return date1.getTime() < date2.getTime();
     },
-    isAfterDate: function (d1, d2) {
-        let date1 = this.cloneAsDate(d1);
-        let date2 = this.cloneAsDate(d2);
+    isAfterDate: function isAfterDate(d1, d2) {
+        var date1 = this.cloneAsDate(d1);
+        var date2 = this.cloneAsDate(d2);
 
         return date1.getTime() > date2.getTime();
     },
-    isBetweenDates: function (dateToCheck, startDate, endDate) {
+    isBetweenDates: function isBetweenDates(dateToCheck, startDate, endDate) {
         return !this.isBeforeDate(dateToCheck, startDate) && !this.isAfterDate(dateToCheck, endDate);
     },
-    isDateObject: function (d) {
+    isDateObject: function isDateObject(d) {
         return d instanceof Date;
     },
-    monthDiff: function (d1, d2) {
-        let m;
+    monthDiff: function monthDiff(d1, d2) {
+        var m = void 0;
         m = (d1.getFullYear() - d2.getFullYear()) * 12;
         m += d1.getMonth();
         m -= d2.getMonth();
         return m;
     },
-    yearDiff: function (d1, d2) {
+    yearDiff: function yearDiff(d1, d2) {
         return ~~(this.monthDiff(d1, d2) / 12);
     }
 };

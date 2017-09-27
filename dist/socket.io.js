@@ -13,17 +13,17 @@ function onDisconnect() {}
 // When the user connects.. perform this
 function onConnect(io, socket) {
   // When the client emits 'info', this listens and executes
-  socket.on('info', data => {
+  socket.on('info', function (data) {
     socket.log(JSON.stringify(data, null, 2));
   });
 
-  socket.on('message:send', messageobj => {
+  socket.on('message:send', function (messageobj) {
     messageobj.class = 'you';
     io.sockets.emit('message:receive', messageobj);
   });
 }
 
-exports.default = io => {
+exports.default = function (io) {
   // socket.io (v1.x.x) is powered by debug.
   // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   //
@@ -39,14 +39,20 @@ exports.default = io => {
   //   handshake: true
   // }));
 
-  io.on('connection', socket => {
-    socket.address = `${socket.request.connection.remoteAddress}:${socket.request.connection.remotePort}`;
+  io.on('connection', function (socket) {
+    socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
     socket.connectedAt = new Date();
-    socket.log = function (...data) {
-      console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
+    socket.log = function () {
+      var _console;
+
+      for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+        data[_key] = arguments[_key];
+      }
+
+      (_console = console).log.apply(_console, ['SocketIO ' + socket.nsp.name + ' [' + socket.address + ']'].concat(data));
     };
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', function () {
       onDisconnect(socket);
       socket.log('DISCONNECTED');
     });

@@ -40,10 +40,10 @@ exports.default = (0, _createReactClass2.default)({
      * Provides the current context as a child context
      * @method getChildContext
      */
-  getChildContext: function () {
+  getChildContext: function getChildContext() {
     return { getStore: this.props.context.getStore, executeAction: this.props.context.executeAction, config: this.props.context.config };
   },
-  render: function () {
+  render: function render() {
     return _react2.default.cloneElement(this.props.children, { context: this.props.context });
   }
 });

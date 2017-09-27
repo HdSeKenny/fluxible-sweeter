@@ -55,15 +55,16 @@ exports.default = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
-    const { username: username } = this.props.params;
-    const userStore = this.getStore(_stores.UserStore);
-    const user = userStore.getUserByUsername(username);
-    const currentUser = userStore.getCurrentUser();
-    const isCurrentUser = userStore.isCurrentUser();
+  getStatesFromStores: function getStatesFromStores() {
+    var username = this.props.params.username;
+
+    var userStore = this.getStore(_stores.UserStore);
+    var user = userStore.getUserByUsername(username);
+    var currentUser = userStore.getCurrentUser();
+    var isCurrentUser = userStore.isCurrentUser();
 
     return {
       currentUser: currentUser,
@@ -71,10 +72,14 @@ exports.default = (0, _createReactClass2.default)({
       isCurrentUser: isCurrentUser
     };
   },
-  onChange: function () {},
-  render: function () {
-    const { isCurrentUser: isCurrentUser, user: user, currentUser: currentUser } = this.state;
-    const { pathname: pathname } = this.props.location;
+  onChange: function onChange() {},
+  render: function render() {
+    var _state = this.state,
+        isCurrentUser = _state.isCurrentUser,
+        user = _state.user,
+        currentUser = _state.currentUser;
+    var pathname = this.props.location.pathname;
+
     return _react2.default.createElement(
       'div',
       { className: 'user-photos' },

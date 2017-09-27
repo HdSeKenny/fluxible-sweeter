@@ -32,7 +32,7 @@ var _UserControls = require('../UserControls');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const HotBlogsTabs = (0, _createReactClass2.default)({
+var HotBlogsTabs = (0, _createReactClass2.default)({
 
   displayName: 'HotBlogsTabs',
 
@@ -46,42 +46,44 @@ const HotBlogsTabs = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore, _stores.BlogStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
+  getStatesFromStores: function getStatesFromStores() {
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       blogs: this.getStore(_stores.BlogStore).getAllBlogs()
     };
   },
-  onChange: function () {
+  onChange: function onChange() {
     // this.setState(this.getStatesFromStores());
   },
-  onDisplayEllipsis: function (hotBlog) {
-    const hotBlogTitle = hotBlog.title.split(' ');
-    let blogTitle = '';
+  onDisplayEllipsis: function onDisplayEllipsis(hotBlog) {
+    var hotBlogTitle = hotBlog.title.split(' ');
+    var blogTitle = '';
     if (hotBlogTitle.length > 8) {
-      hotBlogTitle.forEach((word, index) => {
+      hotBlogTitle.forEach(function (word, index) {
         if (index < 9) {
-          blogTitle = `${blogTitle} ${word}`;
+          blogTitle = blogTitle + ' ' + word;
         }
       });
-      blogTitle = `${blogTitle}...`;
+      blogTitle = blogTitle + '...';
     } else {
       blogTitle = hotBlog.title;
     }
     return blogTitle;
   },
-  _renderHotBlogs: function (tabsBlogs) {
+  _renderHotBlogs: function _renderHotBlogs(tabsBlogs) {
+    var _this = this;
+
     return _react2.default.createElement(
       'div',
       { className: 'hot-blogs' },
-      tabsBlogs.sort((a, b) => {
+      tabsBlogs.sort(function (a, b) {
         return b.likers.length - a.likers.length;
-      }).map(hotBlog => {
+      }).map(function (hotBlog) {
         if (hotBlog.type === 'article') {
-          const blogTitle = this.onDisplayEllipsis(hotBlog);
+          var blogTitle = _this.onDisplayEllipsis(hotBlog);
           return _react2.default.createElement(
             'div',
             { key: hotBlog._id, className: 'row hot-blog-row' },
@@ -93,7 +95,7 @@ const HotBlogsTabs = (0, _createReactClass2.default)({
                 null,
                 _react2.default.createElement(
                   _reactRouter.Link,
-                  { to: `/blog-details/${hotBlog._id}` },
+                  { to: '/blog-details/' + hotBlog._id },
                   blogTitle
                 )
               )
@@ -110,9 +112,12 @@ const HotBlogsTabs = (0, _createReactClass2.default)({
       })
     );
   },
-  render: function () {
-    const { currentUser: currentUser, blogs: blogs } = this.state;
-    const tabsBlogs = _lodash2.default.cloneDeep(blogs);
+  render: function render() {
+    var _state = this.state,
+        currentUser = _state.currentUser,
+        blogs = _state.blogs;
+
+    var tabsBlogs = _lodash2.default.cloneDeep(blogs);
     return _react2.default.createElement(
       _UserControls.Tabs,
       null,

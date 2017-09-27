@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -22,104 +24,141 @@ var _schema2 = _interopRequireDefault(_schema);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class LeftNav extends _react2.default.Component {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  isActive(title, tab) {
-    const { query: query } = this.props;
-    let isActive = false;
-    if (tab || query.tab) {
-      isActive = query.title === query.title && query.tab === tab;
-    } else {
-      isActive = query.title === title;
-    }
-    return isActive ? 'active' : '';
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var LeftNav = function (_React$Component) {
+  _inherits(LeftNav, _React$Component);
+
+  function LeftNav() {
+    _classCallCheck(this, LeftNav);
+
+    return _possibleConstructorReturn(this, (LeftNav.__proto__ || Object.getPrototypeOf(LeftNav)).apply(this, arguments));
   }
 
-  onChooseFollowsNavTitle(title) {
-    const { pathname: pathname } = this.props;
-    _reactRouter.browserHistory.push({
-      pathname: pathname,
-      query: {
-        title: title
+  _createClass(LeftNav, [{
+    key: 'isActive',
+    value: function isActive(title, tab) {
+      var query = this.props.query;
+
+      var isActive = false;
+      if (tab || query.tab) {
+        isActive = query.title === query.title && query.tab === tab;
+      } else {
+        isActive = query.title === title;
       }
-    });
-  }
+      return isActive ? 'active' : '';
+    }
+  }, {
+    key: 'onChooseFollowsNavTitle',
+    value: function onChooseFollowsNavTitle(title) {
+      var pathname = this.props.pathname;
 
-  getGroupSourceNumber(isCurrentUser, group) {
-    const { currentUser: currentUser, user: user } = this.props;
-    const displayUser = isCurrentUser ? currentUser : user;
-    return displayUser[group.default_source] ? displayUser[group.default_source].length : 0;
-  }
-
-  getTabSourceNumber(currentUser, default_source, tab) {
-    return currentUser[default_source] ? currentUser[default_source][tab].length : 0;
-  }
-
-  isFollowedThisUser(currentUser, user) {
-    let isFollowed = false;
-    if (currentUser && user) {
-      currentUser.focuses.forEach(focus => {
-        if (focus.strId === user.strId) {
-          isFollowed = true;
+      _reactRouter.browserHistory.push({
+        pathname: pathname,
+        query: {
+          title: title
         }
       });
     }
-    return isFollowed;
-  }
+  }, {
+    key: 'getGroupSourceNumber',
+    value: function getGroupSourceNumber(isCurrentUser, group) {
+      var _props = this.props,
+          currentUser = _props.currentUser,
+          user = _props.user;
 
-  _renderNavGroups(currentUser, user, isCurrentUser) {
-    const navGroupsKeys = Object.keys(_schema2.default.navGroups);
-    const pathname = this.props.pathname;
-    return navGroupsKeys.map((key, index) => {
-      const group = _schema2.default.navGroups[key];
-      const groupNumber = this.getGroupSourceNumber(isCurrentUser, group);
-      return _react2.default.createElement(
-        _Layout.Row,
-        { className: 'nav-group', key: index },
-        _react2.default.createElement(
-          'h5',
-          { className: `nav-title ${this.isActive(key)}`, onClick: () => this.onChooseFollowsNavTitle(key) },
-          _react2.default.createElement('i', { className: group.icon }),
-          group.value,
+      var displayUser = isCurrentUser ? currentUser : user;
+      return displayUser[group.default_source] ? displayUser[group.default_source].length : 0;
+    }
+  }, {
+    key: 'getTabSourceNumber',
+    value: function getTabSourceNumber(currentUser, default_source, tab) {
+      return currentUser[default_source] ? currentUser[default_source][tab].length : 0;
+    }
+  }, {
+    key: 'isFollowedThisUser',
+    value: function isFollowedThisUser(currentUser, user) {
+      var isFollowed = false;
+      if (currentUser && user) {
+        currentUser.focuses.forEach(function (focus) {
+          if (focus.strId === user.strId) {
+            isFollowed = true;
+          }
+        });
+      }
+      return isFollowed;
+    }
+  }, {
+    key: '_renderNavGroups',
+    value: function _renderNavGroups(currentUser, user, isCurrentUser) {
+      var _this2 = this;
+
+      var navGroupsKeys = Object.keys(_schema2.default.navGroups);
+      var pathname = this.props.pathname;
+      return navGroupsKeys.map(function (key, index) {
+        var group = _schema2.default.navGroups[key];
+        var groupNumber = _this2.getGroupSourceNumber(isCurrentUser, group);
+        return _react2.default.createElement(
+          _Layout.Row,
+          { className: 'nav-group', key: index },
           _react2.default.createElement(
-            'span',
-            { className: 'ml-5' },
-            groupNumber
+            'h5',
+            { className: 'nav-title ' + _this2.isActive(key), onClick: function onClick() {
+                return _this2.onChooseFollowsNavTitle(key);
+              } },
+            _react2.default.createElement('i', { className: group.icon }),
+            group.value,
+            _react2.default.createElement(
+              'span',
+              { className: 'ml-5' },
+              groupNumber
+            )
+          ),
+          group.tabs.length > 0 && isCurrentUser && _react2.default.createElement(
+            'div',
+            { className: 'nav-list' },
+            group.tabs.map(function (tab, tIdex) {
+              var url = { pathname: pathname, query: { title: key, tab: tab.tag } };
+              var tabNum = _this2.getTabSourceNumber(currentUser, key, tab.tag);
+              return _react2.default.createElement(
+                'li',
+                { className: _this2.isActive(key, tab.tag), key: tIdex },
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: url },
+                  tab.value,
+                  ' ',
+                  tabNum
+                )
+              );
+            })
           )
-        ),
-        group.tabs.length > 0 && isCurrentUser && _react2.default.createElement(
-          'div',
-          { className: 'nav-list' },
-          group.tabs.map((tab, tIdex) => {
-            const url = { pathname: pathname, query: { title: key, tab: tab.tag } };
-            const tabNum = this.getTabSourceNumber(currentUser, key, tab.tag);
-            return _react2.default.createElement(
-              'li',
-              { className: this.isActive(key, tab.tag), key: tIdex },
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: url },
-                tab.value,
-                ' ',
-                tabNum
-              )
-            );
-          })
-        )
-      );
-    });
-  }
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props,
+          currentUser = _props2.currentUser,
+          user = _props2.user,
+          isCurrentUser = _props2.isCurrentUser;
 
-  render() {
-    const { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser } = this.props;
-    return _react2.default.createElement(
-      'div',
-      { className: 'follows-navs' },
-      this._renderNavGroups(currentUser, user, isCurrentUser)
-    );
-  }
-}
-exports.default = LeftNav;
+      return _react2.default.createElement(
+        'div',
+        { className: 'follows-navs' },
+        this._renderNavGroups(currentUser, user, isCurrentUser)
+      );
+    }
+  }]);
+
+  return LeftNav;
+}(_react2.default.Component);
+
 LeftNav.displayName = 'LeftNav';
 LeftNav.contextTypes = {
   executeAction: _propTypes2.default.func
@@ -131,4 +170,5 @@ LeftNav.propTypes = {
   pathname: _propTypes2.default.string,
   isCurrentUser: _propTypes2.default.bool
 };
+exports.default = LeftNav;
 module.exports = exports['default'];

@@ -36,7 +36,7 @@ var _UserNavs = require('../UserNavs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ChangePassword = (0, _createReactClass2.default)({
+var ChangePassword = (0, _createReactClass2.default)({
 
   displayName: 'ChangePassword',
 
@@ -55,10 +55,10 @@ const ChangePassword = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
+  getStatesFromStores: function getStatesFromStores() {
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       oldPassword: '',
@@ -68,17 +68,19 @@ const ChangePassword = (0, _createReactClass2.default)({
       confirmPasswordValidate: ''
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
+    var _this = this;
+
     if (res.stat) {
-      _plugins.swal.success(res.msg, () => {
-        this.context.router.push('/login');
+      _plugins.swal.success(res.msg, function () {
+        _this.context.router.push('/login');
       });
     } else {
       this.setState({ oldPasswordMsg: res.msg });
     }
   },
-  validatePassword: function (password) {
-    let flag = false;
+  validatePassword: function validatePassword(password) {
+    var flag = false;
     if (!password) {
       this.setState({
         passwordMsg: '* Password is required !',
@@ -99,8 +101,8 @@ const ChangePassword = (0, _createReactClass2.default)({
 
     return flag;
   },
-  validateOldPassword: function (password) {
-    let flag = false;
+  validateOldPassword: function validateOldPassword(password) {
+    var flag = false;
     if (!password) {
       this.setState({ oldPasswordMsg: '* Password is required !' });
     } else {
@@ -109,8 +111,8 @@ const ChangePassword = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateConfirmPassword: function (confirmPassword) {
-    let flag = false;
+  validateConfirmPassword: function validateConfirmPassword(confirmPassword) {
+    var flag = false;
     if (!confirmPassword) {
       this.setState({
         confirmPasswordMsg: '* Please enter password again !',
@@ -130,33 +132,33 @@ const ChangePassword = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  handleOldPassword: function (e) {
+  handleOldPassword: function handleOldPassword(e) {
     this.validateOldPassword(e.target.value);
     this.setState({ oldPassword: e.target.value });
   },
-  handlePassword: function (e) {
+  handlePassword: function handlePassword(e) {
     this.validatePassword(e.target.value);
     this.setState({ newPassword: e.target.value });
   },
-  handleConfirmPassword: function (e) {
+  handleConfirmPassword: function handleConfirmPassword(e) {
     this.validateConfirmPassword(e.target.value);
     this.setState({ confirmNewPassword: e.target.value });
   },
-  onSubmitChangePassword: function (e) {
+  onSubmitChangePassword: function onSubmitChangePassword(e) {
     e.preventDefault();
-    const {
-      currentUser: currentUser,
-      oldPassword: oldPassword,
-      newPassword: newPassword,
-      confirmNewPassword: confirmNewPassword
-    } = this.state;
+    var _state = this.state,
+        currentUser = _state.currentUser,
+        oldPassword = _state.oldPassword,
+        newPassword = _state.newPassword,
+        confirmNewPassword = _state.confirmNewPassword;
 
-    const isOldPassword = this.validateOldPassword(oldPassword);
-    const isNewPassword = this.validatePassword(newPassword);
-    const isConfirmNewPassword = this.validateConfirmPassword(confirmNewPassword);
+
+    var isOldPassword = this.validateOldPassword(oldPassword);
+    var isNewPassword = this.validatePassword(newPassword);
+    var isConfirmNewPassword = this.validateConfirmPassword(confirmNewPassword);
 
     if (isOldPassword && isNewPassword && isConfirmNewPassword) {
-      const newPasswordObj = {
+      var newPasswordObj = {
         userId: currentUser._id,
         oldPassword: oldPassword,
         newPassword: newPassword
@@ -166,9 +168,14 @@ const ChangePassword = (0, _createReactClass2.default)({
       _plugins.swal.error('Update password failed !');
     }
   },
-  render: function () {
-    const { pathname: pathname } = this.props.location;
-    const { currentUser: currentUser, oldPassword: oldPassword, newPassword: newPassword, confirmNewPassword: confirmNewPassword } = this.state;
+  render: function render() {
+    var pathname = this.props.location.pathname;
+    var _state2 = this.state,
+        currentUser = _state2.currentUser,
+        oldPassword = _state2.oldPassword,
+        newPassword = _state2.newPassword,
+        confirmNewPassword = _state2.confirmNewPassword;
+
     return _react2.default.createElement(
       'div',
       { className: 'user-settings' },
@@ -222,7 +229,7 @@ const ChangePassword = (0, _createReactClass2.default)({
               ),
               _react2.default.createElement(
                 'div',
-                { className: `form-group ${this.state.passwordValidate}` },
+                { className: 'form-group ' + this.state.passwordValidate },
                 _react2.default.createElement(
                   'label',
                   { className: 'col-sm-3 control-label', htmlFor: 'new-password' },
@@ -247,7 +254,7 @@ const ChangePassword = (0, _createReactClass2.default)({
               ),
               _react2.default.createElement(
                 'div',
-                { className: `form-group ${this.state.confirmPasswordValidate}` },
+                { className: 'form-group ' + this.state.confirmPasswordValidate },
                 _react2.default.createElement(
                   'label',
                   { className: 'col-sm-3 control-label', htmlFor: 'confirm-password' },

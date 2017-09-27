@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-const ErrorActions = {};
+var ErrorActions = {};
 
 ErrorActions.ErrorOccurred = function (context, payload, done) {
   context.dispatch('ERROR_OCCURRED', payload);

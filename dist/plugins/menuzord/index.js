@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 /* eslint-disable camelcase, no-param-reassign */
 
-exports.default = (element, options) => {
-  const settings = {
+exports.default = function (element, options) {
+  var settings = {
     showSpeed: 300,
     hideSpeed: 300,
     trigger: 'hover',
@@ -27,14 +27,14 @@ exports.default = (element, options) => {
   $.extend(settings, options);
 
   // variables
-  const menu_container = $(element);
-  const menu = $(menu_container).children('.sweet-nav-menu');
-  const menu_li = $(menu).find('li');
-  const mobileWidthBase = 768;
+  var menu_container = $(element);
+  var menu = $(menu_container).children('.sweet-nav-menu');
+  var menu_li = $(menu).find('li');
+  var mobileWidthBase = 768;
 
-  let showHideButton;
-  let bigScreenFlag = 2000; // a number greater than 'mobileWidthBase'
-  let smallScreenFlag = 200; // a number less than 'mobileWidthBase'
+  var showHideButton = void 0;
+  var bigScreenFlag = 2000; // a number greater than 'mobileWidthBase'
+  var smallScreenFlag = 200; // a number less than 'mobileWidthBase'
 
   // dropdown/megamenu indicators
   // $(menu).children('li').children('a').each(function() {
@@ -107,7 +107,7 @@ exports.default = (element, options) => {
         }
         window.location.href = $(this).attr('href');
       });
-      $(document).bind('click.menu touchstart.menu', ev => {
+      $(document).bind('click.menu touchstart.menu', function (ev) {
         if ($(ev.target).closest('.sweet-nav').length == 0) {
           $('.sweet-nav-menu').find('.dropdown, .megamenu').fadeOut(300);
         }
@@ -144,10 +144,10 @@ exports.default = (element, options) => {
 
   // Fix the submenu on the right side
   function fixSubmenuRight() {
-    const submenus = $(menu).children('li').children('.dropdown, .megamenu');
+    var submenus = $(menu).children('li').children('.dropdown, .megamenu');
     if ($(window).innerWidth() > mobileWidthBase) {
-      const menu_width = $(menu_container).outerWidth(true);
-      for (let i = 0; i < submenus.length; i++) {
+      var menu_width = $(menu_container).outerWidth(true);
+      for (var i = 0; i < submenus.length; i++) {
         if ($(submenus[i]).parent('li').position().left + $(submenus[i]).outerWidth() > menu_width) {
           $(submenus[i]).css('right', 0);
         } else {
@@ -165,7 +165,7 @@ exports.default = (element, options) => {
   // show the bar to show/hide menu items on mobile
   function showMobileBar() {
     $(menu).hide(0);
-    $(showHideButton).show(0).click(() => {
+    $(showHideButton).show(0).click(function () {
       if ($(menu).css('display') == 'none') {
         $(menu).slideDown(settings.showSpeed);
       } else {
@@ -189,8 +189,8 @@ exports.default = (element, options) => {
   // sweet-nav tabs
   function menuTabs() {
     function startTab(tab) {
-      const TabNavs = $(tab).find('.sweet-nav-tabs-nav > li');
-      const TabContents = $(tab).find('.sweet-nav-tabs-content');
+      var TabNavs = $(tab).find('.sweet-nav-tabs-nav > li');
+      var TabContents = $(tab).find('.sweet-nav-tabs-content');
       $(TabNavs).bind('click touchstart', function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -201,8 +201,8 @@ exports.default = (element, options) => {
       });
     }
     if ($(menu).find('.sweet-nav-tabs').length > 0) {
-      const navTabs = $(menu).find('.sweet-nav-tabs');
-      for (let i = 0; i < navTabs.length; i++) {
+      var navTabs = $(menu).find('.sweet-nav-tabs');
+      for (var i = 0; i < navTabs.length; i++) {
         startTab(navTabs[i]);
       }
     }
@@ -236,7 +236,7 @@ exports.default = (element, options) => {
     /* IE8 fix */
     if (/MSIE (\d+\.\d+);/.test(navigator.userAgent) && windowWidth() < mobileWidthBase) {
       // eslint-disable-next-line no-new-wrappers
-      const ieversion = new Number(RegExp.$1);
+      var ieversion = new Number(RegExp.$1);
       if (ieversion == 8) {
         $(showHideButton).hide(0);
         $(menu).show(0);
@@ -247,7 +247,7 @@ exports.default = (element, options) => {
   }
 
   startMenu();
-  $(window).resize(() => {
+  $(window).resize(function () {
     startMenu();
     fixSubmenuRight();
   });

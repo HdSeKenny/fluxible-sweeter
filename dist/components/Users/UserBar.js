@@ -40,7 +40,7 @@ var _plugins = require('../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const UserBar = (0, _createReactClass2.default)({
+var UserBar = (0, _createReactClass2.default)({
 
   displayName: 'UserBar',
 
@@ -59,22 +59,22 @@ const UserBar = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStateFromStores();
   },
-  getStateFromStores: function () {
-    const store = this.getStore(_stores.UserStore);
+  getStateFromStores: function getStateFromStores() {
+    var store = this.getStore(_stores.UserStore);
     return {
       currentUser: store.getCurrentUser(),
       showImageModal: false,
       defaultUserImageUrl: '/styles/images/users/default-user.svg'
     };
   },
-  onChange: function (res) {
-    const barMessages = ['FOLLOW_USER_SUCCESS', 'CANCEL_FOLLOW_USER_SUCCESS', 'UPLOAD_IMAGE_SUCCESS'];
+  onChange: function onChange(res) {
+    var barMessages = ['FOLLOW_USER_SUCCESS', 'CANCEL_FOLLOW_USER_SUCCESS', 'UPLOAD_IMAGE_SUCCESS'];
 
-    const store = this.getStore(_stores.UserStore);
-    const newState = {};
+    var store = this.getStore(_stores.UserStore);
+    var newState = {};
 
     if (barMessages.includes(res.msg)) {
       _plugins.swal.success(res.msg);
@@ -92,75 +92,79 @@ const UserBar = (0, _createReactClass2.default)({
       this.setState(newState);
     }
   },
-  componentDidMount: function () {
-    const imgDefer = document.getElementsByTagName('img');
-    for (let i = 0; i < imgDefer.length; i++) {
+  componentDidMount: function componentDidMount() {
+    var imgDefer = document.getElementsByTagName('img');
+    for (var i = 0; i < imgDefer.length; i++) {
       if (imgDefer[i].getAttribute('data-src')) {
         imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
       }
     }
   },
-  isActive: function (routes) {
-    const path = _utils.jsUtils.splitUrlBySlash(this.props.path, routes.length);
-    const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
+  isActive: function isActive(routes) {
+    var path = _utils.jsUtils.splitUrlBySlash(this.props.path, routes.length);
+    var isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
     return isActive ? 'active' : '';
   },
-  onEditUserImage: function () {
-    const { showImageModal: showImageModal } = this.state;
+  onEditUserImage: function onEditUserImage() {
+    var _this2 = this;
+
+    var showImageModal = this.state.showImageModal;
+
 
     if (!showImageModal) {
       this.setState({ showImageModal: true });
     }
 
-    $('#uploadModal').on('hidden.bs.modal', () => {
+    $('#uploadModal').on('hidden.bs.modal', function () {
       // eslint-disable-next-line
-      this.hideImageModal && this.hideImageModal();
+      _this2.hideImageModal && _this2.hideImageModal();
     });
 
     _UI.ModalsFactory.show('uploadModal');
   },
-  hideImageModal: function () {
+  hideImageModal: function hideImageModal() {
     this.setState({ showImageModal: false });
   },
-  onUploadImage: function (newImage) {
+  onUploadImage: function onUploadImage(newImage) {
     // eslint-disable-next-line
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append('file', newImage.file);
-    const _this = this;
+    var _this = this;
 
     $.ajax({
-      url: `/api/${newImage.userId}/changeProfileImage`,
+      url: '/api/' + newImage.userId + '/changeProfileImage',
       type: 'POST',
       data: formData,
       processData: false,
       contentType: false,
-      success: newUser => {
+      success: function success(newUser) {
         _this.executeAction(_actions.UserActions.UploadImageSuccess, newUser);
         _this.executeAction(_actions.BlogActions.UploadImageSuccess, newUser);
         _this.executeAction(_actions.UserActions.LoadSessionUser);
       }
     });
   },
-  onCancelUpload: function () {
+  onCancelUpload: function onCancelUpload() {
     this.executeAction(_actions.UserActions.CancelEditUserImage);
   },
-  onFollowThisUser: function (user) {
-    const { currentUser: currentUser } = this.state;
+  onFollowThisUser: function onFollowThisUser(user) {
+    var currentUser = this.state.currentUser;
+
     if (!currentUser) {
       return _plugins.swal.warning('Login first please!');
     }
 
-    const followObj = {
+    var followObj = {
       thisUserId: user.id_str,
       currentUserId: currentUser.id_str
     };
 
     this.executeAction(_actions.UserActions.FollowThisUser, followObj);
   },
-  isFollowedThisUser: function (currentUser, user) {
-    let isFollowed = false;
+  isFollowedThisUser: function isFollowedThisUser(currentUser, user) {
+    var isFollowed = false;
     if (currentUser && user) {
-      user.fans.forEach(fan => {
+      user.fans.forEach(function (fan) {
         if (fan.id_str === currentUser.id_str) {
           isFollowed = true;
         }
@@ -168,11 +172,11 @@ const UserBar = (0, _createReactClass2.default)({
     }
     return isFollowed;
   },
-  openChatConnection: function (user) {
+  openChatConnection: function openChatConnection(user) {
     if (!this.state.currentUser) {
       return _plugins.swal.warning('Login first!');
     }
-    const connection = {
+    var connection = {
       myId: this.state.currentUser.id_str,
       thisUserId: user.id_str,
       connectDate: new Date()
@@ -180,24 +184,30 @@ const UserBar = (0, _createReactClass2.default)({
 
     this.executeAction(_actions.UserActions.openChatConnection, connection);
   },
-  onCancelFollowThisUser: function (user) {
-    const { currentUser: currentUser } = this.state;
+  onCancelFollowThisUser: function onCancelFollowThisUser(user) {
+    var _this3 = this;
+
+    var currentUser = this.state.currentUser;
+
     if (!currentUser) {
       return _plugins.swal.warning('Login first please!');
     }
 
-    const cancelFollowObj = {
+    var cancelFollowObj = {
       thisUserId: user.id_str,
       currentUserId: currentUser.id_str
     };
 
-    _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
-      this.executeAction(_actions.UserActions.CancelFollowThisUser, cancelFollowObj);
+    _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
+      _this3.executeAction(_actions.UserActions.CancelFollowThisUser, cancelFollowObj);
     });
   },
-  _renderUserBarNavs: function (isCurrentUser, user) {
-    const { username: username } = user;
-    const navs = {
+  _renderUserBarNavs: function _renderUserBarNavs(isCurrentUser, user) {
+    var _this4 = this;
+
+    var username = user.username;
+
+    var navs = {
       Home: { label: 'Home', icon: 'fa fa-home' },
       Follows: { label: 'Follows', icon: 'fa fa-heart' },
       Photos: { label: 'Photos', icon: 'fa fa-picture-o' },
@@ -206,24 +216,24 @@ const UserBar = (0, _createReactClass2.default)({
         icon: isCurrentUser ? 'fa fa-cogs' : 'fa fa-user'
       }
     };
-    const colSize = '2';
-    const navKeys = Object.keys(navs);
+    var colSize = '2';
+    var navKeys = Object.keys(navs);
 
-    return navKeys.map((navli, index) => {
-      const lowcaseNav = navli.toLowerCase();
-      const isHome = lowcaseNav === 'home';
-      let isActive = false;
+    return navKeys.map(function (navli, index) {
+      var lowcaseNav = navli.toLowerCase();
+      var isHome = lowcaseNav === 'home';
+      var isActive = false;
       if (isHome) {
-        isActive = this.isActive([username]) || this.isActive(['create', username]) || this.isActive(['mine', username]);
+        isActive = _this4.isActive([username]) || _this4.isActive(['create', username]) || _this4.isActive(['mine', username]);
       } else {
-        isActive = this.isActive([lowcaseNav, username]);
+        isActive = _this4.isActive([lowcaseNav, username]);
       }
 
-      const classes = `${colSize} bar-nav ${isActive}`;
-      const url = isHome ? `/${username}` : `/${username}/${lowcaseNav}`;
-      const query = lowcaseNav === 'follows' ? { title: 'focuses_list' } : '';
-      const icon = navs[navli].icon;
-      const label = navs[navli].label;
+      var classes = colSize + ' bar-nav ' + isActive;
+      var url = isHome ? '/' + username : '/' + username + '/' + lowcaseNav;
+      var query = lowcaseNav === 'follows' ? { title: 'focuses_list' } : '';
+      var icon = navs[navli].icon;
+      var label = navs[navli].label;
       return _react2.default.createElement(
         _Layout.Col,
         { size: classes, key: index },
@@ -237,7 +247,9 @@ const UserBar = (0, _createReactClass2.default)({
       );
     });
   },
-  _renderUserInfo: function (isCurrentUser, user, isFollowed) {
+  _renderUserInfo: function _renderUserInfo(isCurrentUser, user, isFollowed) {
+    var _this5 = this;
+
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'user-info mt-0' },
@@ -262,16 +274,18 @@ const UserBar = (0, _createReactClass2.default)({
         ),
         _react2.default.createElement(
           'button',
-          { className: 'message-btn', onClick: () => this.openChatConnection(user) },
+          { className: 'message-btn', onClick: function onClick() {
+              return _this5.openChatConnection(user);
+            } },
           ' Message'
         )
       )
     );
   },
-  _renderUserImage: function (isCurrentUser, user, currentUser) {
-    const defaultImageUrl = this.state.defaultUserImageUrl;
-    const hasChangedImage = currentUser ? currentUser.image_url === defaultImageUrl : false;
-    const imageClass = isCurrentUser ? 'image-tooltip' : '';
+  _renderUserImage: function _renderUserImage(isCurrentUser, user, currentUser) {
+    var defaultImageUrl = this.state.defaultUserImageUrl;
+    var hasChangedImage = currentUser ? currentUser.image_url === defaultImageUrl : false;
+    var imageClass = isCurrentUser ? 'image-tooltip' : '';
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'user-img' },
@@ -293,14 +307,17 @@ const UserBar = (0, _createReactClass2.default)({
       )
     );
   },
-  render: function () {
-    const { user: user } = this.props;
-    const { currentUser: currentUser, showImageModal: showImageModal } = this.state;
-    const isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
-    const isFollowed = this.isFollowedThisUser(currentUser, user);
-    const displayUser = isCurrentUser ? currentUser : user;
-    const background = user ? user.background_image_url : '';
-    const background_lq = user ? user.lq_background_url : '';
+  render: function render() {
+    var user = this.props.user;
+    var _state = this.state,
+        currentUser = _state.currentUser,
+        showImageModal = _state.showImageModal;
+
+    var isCurrentUser = currentUser ? user.id_str === currentUser.id_str : false;
+    var isFollowed = this.isFollowedThisUser(currentUser, user);
+    var displayUser = isCurrentUser ? currentUser : user;
+    var background = user ? user.background_image_url : '';
+    var background_lq = user ? user.lq_background_url : '';
 
     return _react2.default.createElement(
       'div',
@@ -314,7 +331,7 @@ const UserBar = (0, _createReactClass2.default)({
       ),
       _react2.default.createElement(
         _Layout.Row,
-        { className: `nav ${isCurrentUser ? 'mine' : 'their'}` },
+        { className: 'nav ' + (isCurrentUser ? 'mine' : 'their') },
         user && this._renderUserBarNavs(isCurrentUser, displayUser)
       ),
       _react2.default.createElement(

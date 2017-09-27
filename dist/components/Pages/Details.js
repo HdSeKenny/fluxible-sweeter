@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -34,7 +36,7 @@ var _plugins = require('../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Details = (0, _createReactClass2.default)({
+var Details = (0, _createReactClass2.default)({
 
   displayName: 'Details',
 
@@ -53,11 +55,12 @@ const Details = (0, _createReactClass2.default)({
     storeListeners: [_stores.BlogStore, _stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
-    const { blogId: blogId } = this.props.params;
+  getStatesFromStores: function getStatesFromStores() {
+    var blogId = this.props.params.blogId;
+
     return {
       blog: this.getStore(_stores.BlogStore).getBlogById(blogId),
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
@@ -72,8 +75,8 @@ const Details = (0, _createReactClass2.default)({
       showEditor: false
     };
   },
-  onChange: function (res) {
-    const commentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
+  onChange: function onChange(res) {
+    var commentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
 
     if (commentMsgs.includes(res.msg)) {
       _plugins.swal.success(res.msg);
@@ -82,22 +85,24 @@ const Details = (0, _createReactClass2.default)({
       });
     }
   },
-  componentDidMount: function () {
+  componentDidMount: function componentDidMount() {
     // eslint-disable-next-line
     this.setState({ showEditor: true });
   },
-  goToUserCenter: function (username) {
-    this.context.router.push(`/${username}`);
+  goToUserCenter: function goToUserCenter(username) {
+    this.context.router.push('/' + username);
   },
-  downloadToPdf: function (blog) {
-    const data = {
+  downloadToPdf: function downloadToPdf(blog) {
+    var data = {
       id_str: blog.id_str,
       html: document.documentElement.outerHTML
     };
 
-    $.post('/api/download', data, () => {});
+    $.post('/api/download', data, function () {});
   },
-  _renderArticleHeader: function (blog) {
+  _renderArticleHeader: function _renderArticleHeader(blog) {
+    var _this = this;
+
     return _react2.default.createElement(
       'div',
       { className: 'article-header' },
@@ -118,18 +123,20 @@ const Details = (0, _createReactClass2.default)({
           { size: '1 p-0 tar' },
           _react2.default.createElement(
             'span',
-            { className: 'icon', onClick: () => this.downloadToPdf(blog) },
+            { className: 'icon', onClick: function onClick() {
+                return _this.downloadToPdf(blog);
+              } },
             _react2.default.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' })
           )
         )
       )
     );
   },
-  _renderDraftEditorContent: function (blog, styleMap) {
-    const isContent = blog.content && typeof blog.content === 'object';
+  _renderDraftEditorContent: function _renderDraftEditorContent(blog, styleMap) {
+    var isContent = blog.content && _typeof(blog.content) === 'object';
     if (isContent) {
-      const parsedContent = (0, _draftJs.convertFromRaw)(blog.content);
-      const editorState = _draftJs.EditorState.createWithContent(parsedContent);
+      var parsedContent = (0, _draftJs.convertFromRaw)(blog.content);
+      var editorState = _draftJs.EditorState.createWithContent(parsedContent);
       return _react2.default.createElement(
         'section',
         { className: 'content RichEditor-editor m-0' },
@@ -147,15 +154,20 @@ const Details = (0, _createReactClass2.default)({
       );
     }
   },
-  _renderArticleUserInfo: function (blog) {
-    const { author: author } = blog;
-    const fromNow = _utils.format.fromNow(blog.created_at);
-    const avatar = _react2.default.createElement('img', {
+  _renderArticleUserInfo: function _renderArticleUserInfo(blog) {
+    var _this2 = this;
+
+    var author = blog.author;
+
+    var fromNow = _utils.format.fromNow(blog.created_at);
+    var avatar = _react2.default.createElement('img', {
       src: author.image_url,
       alt: 'article-user',
       width: '40',
       height: '40',
-      onClick: () => this.goToUserCenter(author.username)
+      onClick: function onClick() {
+        return _this2.goToUserCenter(author.username);
+      }
     });
 
     return _react2.default.createElement(
@@ -177,7 +189,9 @@ const Details = (0, _createReactClass2.default)({
             { className: 'username' },
             _react2.default.createElement(
               'span',
-              { onClick: () => this.goToUserCenter(author.username) },
+              { onClick: function onClick() {
+                  return _this2.goToUserCenter(author.username);
+                } },
               author.username
             )
           ),
@@ -197,8 +211,8 @@ const Details = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderArticleComments: function (blog, currentUser) {
-    const commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
+  _renderArticleComments: function _renderArticleComments(blog, currentUser) {
+    var commentRefer = blog.comments.length > 1 ? 'comments' : 'comment';
     return _react2.default.createElement(
       'div',
       { className: 'comments' },
@@ -213,8 +227,13 @@ const Details = (0, _createReactClass2.default)({
       _react2.default.createElement(_Pages.Comments, { blog: blog, currentUser: currentUser })
     );
   },
-  render: function () {
-    const { styleMap: styleMap, showEditor: showEditor, blog: blog, currentUser: currentUser } = this.state;
+  render: function render() {
+    var _state = this.state,
+        styleMap = _state.styleMap,
+        showEditor = _state.showEditor,
+        blog = _state.blog,
+        currentUser = _state.currentUser;
+
     return _react2.default.createElement(
       'article',
       { className: 'details-page' },

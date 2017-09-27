@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _immutable = require('immutable');
 
-const mentions = (0, _immutable.fromJS)([{
+var mentions = (0, _immutable.fromJS)([{
   name: 'matthew',
   title: 'Senior Software Engineer',
   avatar: 'https://pbs.twimg.com/profile_images/517863945/mattsailing_400x400.jpg'

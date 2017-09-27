@@ -13,16 +13,16 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getPropFromErrorObject(error, prop) {
-  let result;
+  var result = void 0;
   if (error) {
     result = error[prop] // browser side error object
-    || _lodash2.default.get(error, `body.${prop}`) // ajax API error object
-    || _lodash2.default.get(error, `output.${prop}`); // server side API error object
+    || _lodash2.default.get(error, 'body.' + prop) // ajax API error object
+    || _lodash2.default.get(error, 'output.' + prop); // server side API error object
   }
   return result;
 }
 
-const ErrorStore = (0, _createStore2.default)({
+var ErrorStore = (0, _createStore2.default)({
 
   storeName: 'ErrorStore',
 
@@ -30,14 +30,16 @@ const ErrorStore = (0, _createStore2.default)({
     ERROR_OCCURRED: 'errorOccurred'
   },
 
-  initialize: function () {
+  initialize: function initialize() {
     this.errors = [];
     this.error = null;
     this.isNotHistoryBack = false;
     this.isInfoMessage = false;
   },
-  errorOccurred: function (error) {
-    let errorMessage, isNotHistoryBack, isInfoMessage;
+  errorOccurred: function errorOccurred(error) {
+    var errorMessage = void 0,
+        isNotHistoryBack = void 0,
+        isInfoMessage = void 0;
     if ((0, _jsUtils.isString)(error)) {
       errorMessage = error;
     } else {
@@ -51,24 +53,24 @@ const ErrorStore = (0, _createStore2.default)({
     this.isInfoMessage = isInfoMessage;
     this.emitChange();
   },
-  clearError: function () {
+  clearError: function clearError() {
     this.error = null;
     this.isNotHistoryBack = false;
     this.isInfoMessage = false;
   },
-  getError: function () {
+  getError: function getError() {
     return this.error;
   },
-  getIsNotHistoryBack: function () {
+  getIsNotHistoryBack: function getIsNotHistoryBack() {
     return this.isNotHistoryBack;
   },
-  getIsInfoMessage: function () {
+  getIsInfoMessage: function getIsInfoMessage() {
     return this.isInfoMessage;
   },
-  getErrors: function () {
+  getErrors: function getErrors() {
     return this.errors;
   },
-  dehydrate: function () {
+  dehydrate: function dehydrate() {
     return {
       error: this.error,
       errors: this.errors,
@@ -76,7 +78,7 @@ const ErrorStore = (0, _createStore2.default)({
       isInfoMessage: this.isInfoMessage
     };
   },
-  rehydrate: function (state) {
+  rehydrate: function rehydrate(state) {
     this.error = state.error;
     this.errors = state.errors;
     this.isNotHistoryBack = state.isNotHistoryBack;

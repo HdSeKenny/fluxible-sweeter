@@ -34,13 +34,13 @@ function strToArray(str, separator, defaultValue) {
 }
 
 function upperFirst(value) {
-  const str = value.split('');
+  var str = value.split('');
   str[0] = str[0].toUpperCase();
   return str.join('');
 }
 
 function shorten(s, n) {
-  return s.length > n ? `${s.substr(0, n - 1)} ...` : s;
+  return s.length > n ? s.substr(0, n - 1) + ' ...' : s;
 }
 
 /**
@@ -53,10 +53,10 @@ function shorten(s, n) {
  * @return {array} path
  */
 function splitUrlBySlash(url, number) {
-  const params = url.split('/');
-  const path = [];
-  let tmpNumer = 0;
-  let targetNumber = params.length;
+  var params = url.split('/');
+  var path = [];
+  var tmpNumer = 0;
+  var targetNumber = params.length;
 
   if (number && isNumeric(number)) {
     targetNumber = number;
@@ -65,7 +65,7 @@ function splitUrlBySlash(url, number) {
   }
 
   if (params.length) {
-    for (let i = params.length - 1; i >= 0; i--) {
+    for (var i = params.length - 1; i >= 0; i--) {
       if (tmpNumer < targetNumber) {
         path.push(params[i]);
         tmpNumer++;
@@ -95,10 +95,10 @@ function blobToFile(blob, name) {
  * @return {[type]}          [description]
  */
 function createBlob(data, mimeType) {
-  const BB = window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+  var BB = window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
 
   if (BB) {
-    const bb = new BB();
+    var bb = new BB();
     bb.append(data);
     return bb.getBlob(mimeType);
   }
@@ -109,8 +109,8 @@ function createBlob(data, mimeType) {
 
 /* eslint-disable */
 function getExtensionByMimeType(mimetype) {
-  const type = void 0;
-  const MimeTypes = {
+  var type = void 0;
+  var MimeTypes = {
     'jpeg': 'image/jpeg',
     'jpg': 'image/jpeg',
     'jpe': 'image/jpeg',
@@ -136,7 +136,7 @@ function getExtensionByMimeType(mimetype) {
  * @return {[type]}       [description]
  */
 function leftPad(value) {
-  const padding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var padding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
   return (padding + value).slice(-padding.length);
 }
 
@@ -146,13 +146,13 @@ function leftPad(value) {
  * @return {[type]}      [description]
  */
 function getDateString(date) {
-  const fullYear = date.getFullYear();
-  const leftPadMonth = leftPad(date.getMonth() + 1, '00');
-  const leftPadDate = leftPad(date.getDate(), '00');
-  const leftPadHours = leftPad(date.getHours(), '00');
-  const leftPadMinutes = leftPad(date.getMinutes(), '00');
-  const leftPadSeconds = leftPad(date.getSeconds(), '00');
-  return `${fullYear}-${leftPadMonth}-${leftPadDate}_${leftPadHours}-${leftPadMinutes}-${leftPadSeconds}`;
+  var fullYear = date.getFullYear();
+  var leftPadMonth = leftPad(date.getMonth() + 1, '00');
+  var leftPadDate = leftPad(date.getDate(), '00');
+  var leftPadHours = leftPad(date.getHours(), '00');
+  var leftPadMinutes = leftPad(date.getMinutes(), '00');
+  var leftPadSeconds = leftPad(date.getSeconds(), '00');
+  return fullYear + '-' + leftPadMonth + '-' + leftPadDate + '_' + leftPadHours + '-' + leftPadMinutes + '-' + leftPadSeconds;
 }
 
 /**
@@ -164,7 +164,7 @@ function getMimeTypeFromDataURI(dataUri) {
   if (!dataUri) {
     return null;
   }
-  const matches = dataUri.substr(0, 16).match(/^.+;/);
+  var matches = dataUri.substr(0, 16).match(/^.+;/);
   if (matches.length) {
     return matches[0].substring(5, matches[0].length - 1);
   }
@@ -178,9 +178,9 @@ function getMimeTypeFromDataURI(dataUri) {
  */
 function base64ToByteString(dataURI) {
   // get data part of string (remove data:image/jpeg...,)
-  const dataPart = dataURI.split(',')[1];
+  var dataPart = dataURI.split(',')[1];
   // remove any whitespace as that causes InvalidCharacterError in IE
-  const dataPartCleaned = dataPart.replace(/\s/g, '');
+  var dataPartCleaned = dataPart.replace(/\s/g, '');
   // eslint-disable-next-line
   return atob(dataPartCleaned);
 }
@@ -192,15 +192,15 @@ function base64ToByteString(dataURI) {
  * @return {[type]}          [description]
  */
 function base64ToBlob(dataURI, filename) {
-  const byteString = base64ToByteString(dataURI);
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
+  var byteString = base64ToByteString(dataURI);
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
 
-  for (let i = 0; i < byteString.length; i++) {
+  for (var i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
 
-  const mimeType = getMimeTypeFromDataURI(dataURI);
+  var mimeType = getMimeTypeFromDataURI(dataURI);
   if (typeof filename === 'undefined') {
     // eslint-disable-next-line
     filename = getDateString(new Date()) + '.' + getExtensionByMimeType(mimeType);
@@ -211,19 +211,21 @@ function base64ToBlob(dataURI, filename) {
 
 function sortByDate(arr) {
   if (Array.isArray(arr)) {
-    return arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return arr.sort(function (a, b) {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
   } else {
     return [];
   }
 }
 
 function searchFromArray(arr, text) {
-  const searched = [];
+  var searched = [];
   if (Array.isArray(arr)) {
-    arr.forEach(a => {
-      const textLowerCase = a.text.toLocaleLowerCase().replace(/\s/g, '');
+    arr.forEach(function (a) {
+      var textLowerCase = a.text.toLocaleLowerCase().replace(/\s/g, '');
       if (a.title) {
-        const titleLowerCase = a.title.toLocaleLowerCase().replace(/\s/g, '');
+        var titleLowerCase = a.title.toLocaleLowerCase().replace(/\s/g, '');
         if (titleLowerCase.includes(text) || textLowerCase.includes(text)) {
           searched.push(a);
         }

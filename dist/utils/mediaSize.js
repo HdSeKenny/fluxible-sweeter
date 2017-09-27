@@ -6,18 +6,18 @@ var _env2 = _interopRequireDefault(_env);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const MediaSize = {
+var MediaSize = {
   SMALL: 350,
   MEDIUM: 768,
   LARGE: 1024
 };
-const Media = {
+var Media = {
   SMALL: 'small',
   MEDIUM: 'medium',
   LARGE: 'large'
 };
 
-const OS = {
+var OS = {
   Windows: 'Win',
   MacOS: 'Mac',
   UNIX: 'X11',
@@ -30,7 +30,7 @@ const OS = {
  * @returns {{deviceSize: number, media: string}}
  */
 function getMediaFromDevicesInfo(devices) {
-  let media = {
+  var media = {
     deviceSize: MediaSize.LARGE,
     media: Media.LARGE
   };
@@ -59,12 +59,12 @@ function getMediaFromDevicesInfo(devices) {
  * @returns {{deviceSize: number, media: string}}
  */
 function getBrowserMediaInfo(isInnerWidth) {
-  let media = {
+  var media = {
     deviceSize: MediaSize.LARGE,
     media: Media.LARGE
   };
   if (_env2.default.is_client) {
-    const width = isInnerWidth ? window.innerWidth : window.screen.width;
+    var width = isInnerWidth ? window.innerWidth : window.screen.width;
     if (width > MediaSize.LARGE) {
       media = {
         deviceSize: MediaSize.LARGE,
@@ -128,20 +128,24 @@ function getScreenMediaInfo(devices) {
  * @return {[type]}               [description]
  */
 function getScreen(devices) {
-  const media = getScreenMediaInfo(devices);
-  const isIOS = devices && devices.os === 'iOS';
+  var media = getScreenMediaInfo(devices);
+  var isIOS = devices && devices.os === 'iOS';
 
-  let isHorizontalScreen = false;
-  let isNativeScaling = false;
+  var isHorizontalScreen = false;
+  var isNativeScaling = false;
   if (_env2.default.is_client) {
-    const { innerWidth: innerWidth, outerWidth: outerWidth, screen: screen } = window;
+    var _window = window,
+        innerWidth = _window.innerWidth,
+        outerWidth = _window.outerWidth,
+        screen = _window.screen;
+
     isHorizontalScreen = [90, -90].includes(window.orientation);
     if (isIOS) {
       // iOS devices: screen.width and screen.height will never change, not matter it is portrait or landscape mode
       isNativeScaling = isHorizontalScreen ? screen.height !== innerWidth : screen.width !== innerWidth;
     } else {
       // other devices screen.width and screen.height will switch, when rotating between landscape and portrait mode
-      const possibleScreenWidth = [document.documentElement && document.documentElement.clientWidth, screen.width];
+      var possibleScreenWidth = [document.documentElement && document.documentElement.clientWidth, screen.width];
       isNativeScaling = !(possibleScreenWidth.includes(innerWidth) || possibleScreenWidth.includes(outerWidth));
     }
   }
@@ -162,7 +166,7 @@ function getScreen(devices) {
  * @return {object}
  */
 function getDevice(devices) {
-  const deviceObj = {
+  var deviceObj = {
     isMobileDevice: false,
     isTabletDevice: false,
     isDesktopDevice: false

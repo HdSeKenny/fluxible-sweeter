@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -18,37 +20,59 @@ var _DraftStyleButton2 = _interopRequireDefault(_DraftStyleButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class BlockStyleControls extends _react2.default.Component {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  constructor(props) {
-    super(props);
-    this.state = {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BlockStyleControls = function (_React$Component) {
+  _inherits(BlockStyleControls, _React$Component);
+
+  function BlockStyleControls(props) {
+    _classCallCheck(this, BlockStyleControls);
+
+    var _this = _possibleConstructorReturn(this, (BlockStyleControls.__proto__ || Object.getPrototypeOf(BlockStyleControls)).call(this, props));
+
+    _this.state = {
       BLOCK_TYPES: [{ label: 'H1', style: 'header-one' }, { label: 'H2', style: 'header-two' }, { label: 'H3', style: 'header-three' }, { label: 'H4', style: 'header-four' }, { label: 'H5', style: 'header-five' }, { label: 'H6', style: 'header-six' }, { label: 'Blockquote', style: 'blockquote' }, { label: 'UL', style: 'unordered-list-item' }, { label: 'OL', style: 'ordered-list-item' }, { label: 'Code Block', style: 'code-block' }]
     };
+    return _this;
   }
 
-  render() {
-    const { BLOCK_TYPES: BLOCK_TYPES } = this.state;
-    const { editorState: editorState, onToggle: onToggle } = this.props;
-    const selection = editorState.getSelection();
-    const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+  _createClass(BlockStyleControls, [{
+    key: 'render',
+    value: function render() {
+      var BLOCK_TYPES = this.state.BLOCK_TYPES;
+      var _props = this.props,
+          editorState = _props.editorState,
+          onToggle = _props.onToggle;
 
-    return _react2.default.createElement(
-      'div',
-      { className: 'RichEditor-controls' },
-      BLOCK_TYPES.map(type => _react2.default.createElement(_DraftStyleButton2.default, {
-        key: type.label,
-        active: type.style === blockType,
-        label: type.label,
-        onToggle: onToggle,
-        style: type.style
-      }))
-    );
-  }
-}
-exports.default = BlockStyleControls;
+      var selection = editorState.getSelection();
+      var blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'RichEditor-controls' },
+        BLOCK_TYPES.map(function (type) {
+          return _react2.default.createElement(_DraftStyleButton2.default, {
+            key: type.label,
+            active: type.style === blockType,
+            label: type.label,
+            onToggle: onToggle,
+            style: type.style
+          });
+        })
+      );
+    }
+  }]);
+
+  return BlockStyleControls;
+}(_react2.default.Component);
+
 BlockStyleControls.propTypes = {
   editorState: _propTypes2.default.object,
   onToggle: _propTypes2.default.func
 };
+exports.default = BlockStyleControls;
 module.exports = exports['default'];

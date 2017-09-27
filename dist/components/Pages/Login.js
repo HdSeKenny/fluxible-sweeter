@@ -36,7 +36,7 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Login = (0, _createReactClass2.default)({
+var Login = (0, _createReactClass2.default)({
 
   displayName: 'Login',
 
@@ -59,10 +59,10 @@ const Login = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStateFromStores();
   },
-  getStateFromStores: function () {
+  getStateFromStores: function getStateFromStores() {
     return {
       switchOn: false,
       emailErrorMessage: '',
@@ -70,7 +70,7 @@ const Login = (0, _createReactClass2.default)({
       remember: false
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
       _plugins.swal.success(res.msg);
       _UI.ModalsFactory.hide('loginModal');
@@ -86,27 +86,30 @@ const Login = (0, _createReactClass2.default)({
       this.context.router.push('/');
     }
   },
-  onLoginSubmit: function (e) {
+  onLoginSubmit: function onLoginSubmit(e) {
     e.preventDefault();
-    const { email: email, password: password } = this.state;
-    const creds = { email: email, password: password };
-    const validateInfo = this.validateForm(creds);
+    var _state = this.state,
+        email = _state.email,
+        password = _state.password;
+
+    var creds = { email: email, password: password };
+    var validateInfo = this.validateForm(creds);
     if (validateInfo) {
       this.setState({ errorMessage: validateInfo, emailErrorMessage: '', passwordErrorMessage: '' });
     } else {
       this.executeAction(_actions.UserActions.Login, creds);
     }
   },
-  validateForm: function (creds) {
-    const emailValidation = this.validateEmail(creds.email);
-    const passwordValidation = this.validatePassword(creds.password);
+  validateForm: function validateForm(creds) {
+    var emailValidation = this.validateEmail(creds.email);
+    var passwordValidation = this.validatePassword(creds.password);
 
     return emailValidation.emailErrorMessage || passwordValidation.passwordErrorMessage;
   },
-  validateEmail: function (email) {
-    const isUnEmpty = _utils.jsUtils.isUnEmptyString(email);
-    const isEmail = _utils.validations.isEmail(email);
-    const result = {
+  validateEmail: function validateEmail(email) {
+    var isUnEmpty = _utils.jsUtils.isUnEmptyString(email);
+    var isEmail = _utils.validations.isEmail(email);
+    var result = {
       email: email,
       emailErrorMessage: ''
     };
@@ -119,10 +122,10 @@ const Login = (0, _createReactClass2.default)({
 
     return result;
   },
-  validatePassword: function (password) {
-    const isUnEmpty = _utils.jsUtils.isUnEmptyString(password);
+  validatePassword: function validatePassword(password) {
+    var isUnEmpty = _utils.jsUtils.isUnEmptyString(password);
 
-    const result = {
+    var result = {
       password: password,
       passwordErrorMessage: ''
     };
@@ -133,17 +136,17 @@ const Login = (0, _createReactClass2.default)({
 
     return result;
   },
-  onEmailChange: function (e) {
-    const email = e.target.value;
-    const result = this.validateEmail(email);
+  onEmailChange: function onEmailChange(e) {
+    var email = e.target.value;
+    var result = this.validateEmail(email);
     this.setState(result);
   },
-  onPasswordChange: function (e) {
-    const password = e.target.value;
-    const result = this.validatePassword(password);
+  onPasswordChange: function onPasswordChange(e) {
+    var password = e.target.value;
+    var result = this.validatePassword(password);
     this.setState(result);
   },
-  openSignupModal: function () {
+  openSignupModal: function openSignupModal() {
     this.props.switchOpenModal('signupModal');
 
     _UI.ModalsFactory.hide('loginModal');
@@ -157,12 +160,13 @@ const Login = (0, _createReactClass2.default)({
     //   $('body').addClass('modal-open');
     // }, 500);
   },
-  componentDidMount: function () {},
-  rememberMe: function () {
+  componentDidMount: function componentDidMount() {},
+  rememberMe: function rememberMe() {
     this.setState({ remember: !this.state.remember });
   },
-  _renderEmailInput: function (email, remember) {
-    const { emailErrorMessage: emailErrorMessage } = this.state;
+  _renderEmailInput: function _renderEmailInput(email, remember) {
+    var emailErrorMessage = this.state.emailErrorMessage;
+
     return _react2.default.createElement(_UI.SweetInput, {
       ref: 'emailRef',
       autoComplete: remember ? 'on' : 'off',
@@ -175,8 +179,9 @@ const Login = (0, _createReactClass2.default)({
       onChange: this.onEmailChange
     });
   },
-  _renderPasswordInput: function (password, remember) {
-    const { passwordErrorMessage: passwordErrorMessage } = this.state;
+  _renderPasswordInput: function _renderPasswordInput(password, remember) {
+    var passwordErrorMessage = this.state.passwordErrorMessage;
+
     return _react2.default.createElement(_UI.SweetInput, {
       ref: 'loginRef',
       autoComplete: remember ? 'on' : 'off',
@@ -189,7 +194,7 @@ const Login = (0, _createReactClass2.default)({
       onChange: this.onPasswordChange
     });
   },
-  _renderForgotPassword: function () {
+  _renderForgotPassword: function _renderForgotPassword() {
     return _react2.default.createElement(
       _Layout.Row,
       null,
@@ -209,7 +214,7 @@ const Login = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderLoginBtns: function () {
+  _renderLoginBtns: function _renderLoginBtns() {
     return _react2.default.createElement(
       _Layout.Row,
       null,
@@ -233,10 +238,10 @@ const Login = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderOtherAuths: function () {
-    const twitterImg = '/styles/images/svg/twitter.svg';
-    const googleImg = '/styles/images/google+.png';
-    const githubImg = '/styles/images/github.png';
+  _renderOtherAuths: function _renderOtherAuths() {
+    var twitterImg = '/styles/images/svg/twitter.svg';
+    var googleImg = '/styles/images/google+.png';
+    var githubImg = '/styles/images/github.png';
     return _react2.default.createElement(
       'div',
       { className: '' },
@@ -284,8 +289,13 @@ const Login = (0, _createReactClass2.default)({
       )
     );
   },
-  render: function () {
-    const { errorMessage: errorMessage, password: password, email: email, remember: remember } = this.state;
+  render: function render() {
+    var _state2 = this.state,
+        errorMessage = _state2.errorMessage,
+        password = _state2.password,
+        email = _state2.email,
+        remember = _state2.remember;
+
     return _react2.default.createElement(
       'section',
       { className: 'login-section mt-15 mr-15 ml-15' },

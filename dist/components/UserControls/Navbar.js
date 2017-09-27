@@ -38,7 +38,7 @@ var _Pages = require('../Pages');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Navbar = (0, _createReactClass2.default)({
+var Navbar = (0, _createReactClass2.default)({
 
   displayName: 'Navbar',
 
@@ -58,10 +58,10 @@ const Navbar = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStateFromStores();
   },
-  getStateFromStores: function () {
+  getStateFromStores: function getStateFromStores() {
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
@@ -74,8 +74,8 @@ const Navbar = (0, _createReactClass2.default)({
       }
     };
   },
-  onChange: function (res) {
-    const accountMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'USER_REGISTER_FAIL', 'USER_REGISTER_SUCCESS', 'UPLOAD_IMAGE_SUCCESS'];
+  onChange: function onChange(res) {
+    var accountMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS', 'USER_REGISTER_FAIL', 'USER_REGISTER_SUCCESS', 'UPLOAD_IMAGE_SUCCESS'];
 
     if (accountMessages.includes(res.msg)) {
       this.setState(this.getStateFromStores());
@@ -85,30 +85,35 @@ const Navbar = (0, _createReactClass2.default)({
       this.context.router.push('/');
     }
   },
-  isActive: function (routes) {
+  isActive: function isActive(routes) {
     // if (this.props.route && this.props.route === routes) return 'active';
-    const path = _utils.jsUtils.splitUrlBySlash(this.props.route, routes.length);
-    const isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
+    var path = _utils.jsUtils.splitUrlBySlash(this.props.route, routes.length);
+    var isActive = _lodash2.default.isEqual(routes.sort(), path.sort());
     return isActive ? 'active' : '';
   },
-  userCenterActive: function (username) {
-    const path = _utils.jsUtils.splitUrlBySlash(this.props.route);
-    const isActive = path.includes(username);
+  userCenterActive: function userCenterActive(username) {
+    var path = _utils.jsUtils.splitUrlBySlash(this.props.route);
+    var isActive = path.includes(username);
     return isActive ? 'active' : '';
   },
-  getRouteSlashPosition: function (string, word, index) {
+  getRouteSlashPosition: function getRouteSlashPosition(string, word, index) {
     return string.split(word, index).join(word).length;
   },
-  handleLogout: function () {
+  handleLogout: function handleLogout() {
     this.executeAction(_actions.UserActions.Logout);
   },
-  componentDidMount: function () {
+  componentDidMount: function componentDidMount() {
     _utils.animations.sticky_header('.sweet-nav');
   },
-  openNavbarModals: function (modalRef) {
-    const isLoginModal = modalRef === 'loginModal';
-    const isSignupModal = modalRef === 'signupModal';
-    const { showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
+  openNavbarModals: function openNavbarModals(modalRef) {
+    var _this = this;
+
+    var isLoginModal = modalRef === 'loginModal';
+    var isSignupModal = modalRef === 'signupModal';
+    var _state = this.state,
+        showLoginModal = _state.showLoginModal,
+        showSignupModal = _state.showSignupModal;
+
     if (isLoginModal && !showLoginModal) {
       this.setState({ showLoginModal: true });
     }
@@ -119,28 +124,29 @@ const Navbar = (0, _createReactClass2.default)({
 
     _UI.ModalsFactory.show(modalRef);
 
-    $(`#${modalRef}`).on('hidden.bs.modal', () => {
-      const { switchModal: switchModal } = this.state;
-      if (this.hideNavbarModals) {
-        this.hideNavbarModals(modalRef);
+    $('#' + modalRef).on('hidden.bs.modal', function () {
+      var switchModal = _this.state.switchModal;
+
+      if (_this.hideNavbarModals) {
+        _this.hideNavbarModals(modalRef);
       }
       if (switchModal.state) {
         if (switchModal.modalRef === 'loginModal') {
-          this.setState({ showLoginModal: true });
+          _this.setState({ showLoginModal: true });
         }
 
         if (switchModal.modalRef === 'signupModal') {
-          this.setState({ showSignupModal: true });
+          _this.setState({ showSignupModal: true });
         }
 
-        this.openNavbarModals(switchModal.modalRef);
-        this.setState({ switchModal: { modalRef: '', state: false } });
+        _this.openNavbarModals(switchModal.modalRef);
+        _this.setState({ switchModal: { modalRef: '', state: false } });
       }
     });
   },
-  hideNavbarModals: function (modalRef) {
-    const isLoginModal = modalRef === 'loginModal';
-    const isSignupModal = modalRef === 'signupModal';
+  hideNavbarModals: function hideNavbarModals(modalRef) {
+    var isLoginModal = modalRef === 'loginModal';
+    var isSignupModal = modalRef === 'signupModal';
     if (isLoginModal) {
       this.setState({ showLoginModal: false });
     }
@@ -149,14 +155,22 @@ const Navbar = (0, _createReactClass2.default)({
       this.setState({ showSignupModal: false });
     }
   },
-  switchOpenModal: function (modalRef) {
+  switchOpenModal: function switchOpenModal(modalRef) {
     this.setState({ switchModal: { modalRef: modalRef, state: true } });
   },
-  goTo: function (route) {
+  goTo: function goTo(route) {
     this.context.router.push(route);
   },
-  render: function () {
-    const { authenticated: authenticated, currentUser: currentUser, brandImage: brandImage, showLoginModal: showLoginModal, showSignupModal: showSignupModal } = this.state;
+  render: function render() {
+    var _this2 = this;
+
+    var _state2 = this.state,
+        authenticated = _state2.authenticated,
+        currentUser = _state2.currentUser,
+        brandImage = _state2.brandImage,
+        showLoginModal = _state2.showLoginModal,
+        showSignupModal = _state2.showSignupModal;
+
     return _react2.default.createElement(
       'section',
       { className: 'menuzord-section' },
@@ -229,7 +243,9 @@ const Navbar = (0, _createReactClass2.default)({
               null,
               _react2.default.createElement(
                 'span',
-                { onClick: () => this.openNavbarModals('loginModal') },
+                { onClick: function onClick() {
+                    return _this2.openNavbarModals('loginModal');
+                  } },
                 'Log in'
               )
             ),
@@ -238,7 +254,9 @@ const Navbar = (0, _createReactClass2.default)({
               { className: 'mr-0 pr-0' },
               _react2.default.createElement(
                 'span',
-                { onClick: () => this.openNavbarModals('signupModal') },
+                { onClick: function onClick() {
+                    return _this2.openNavbarModals('signupModal');
+                  } },
                 'Sign up'
               )
             ),
@@ -247,7 +265,7 @@ const Navbar = (0, _createReactClass2.default)({
               { className: 'mr-0 pr-0' },
               _react2.default.createElement(
                 'a',
-                { className: 'm-0', href: `/${currentUser.username}` },
+                { className: 'm-0', href: '/' + currentUser.username },
                 _react2.default.createElement('img', { alt: 'currentUser', src: currentUser.image_url })
               ),
               _react2.default.createElement(
@@ -258,7 +276,7 @@ const Navbar = (0, _createReactClass2.default)({
                   null,
                   _react2.default.createElement(
                     'a',
-                    { href: `/${currentUser.username}` },
+                    { href: '/' + currentUser.username },
                     'User center'
                   )
                 ),
@@ -267,7 +285,7 @@ const Navbar = (0, _createReactClass2.default)({
                   null,
                   _react2.default.createElement(
                     'a',
-                    { href: `/${currentUser.username}/personal` },
+                    { href: '/' + currentUser.username + '/personal' },
                     'Settings'
                   )
                 ),

@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /*
  * Slim v4.6.3 - Image Cropping Made Easy
  * Copyright (c) 2017 Rik Schennink - http://slimimagecropper.com
@@ -40,7 +43,7 @@ exports.default = typeof window !== 'undefined' ? function () {
   // Loads an image for a given File object.
   // Invokes the callback with an img or optional canvas
   // element (if supported by the browser) as parameter:
-  var loadImage = function (file, callback, options) {
+  var loadImage = function loadImage(file, callback, options) {
     var img = document.createElement('img');
     var url;
     var oUrl;
@@ -562,14 +565,14 @@ exports.default = typeof window !== 'undefined' ? function () {
   loadImage.exifTagTypes = {
     // byte, 8-bit unsigned int:
     1: {
-      getValue: function (dataView, dataOffset) {
+      getValue: function getValue(dataView, dataOffset) {
         return dataView.getUint8(dataOffset);
       },
       size: 1
     },
     // ascii, 8-bit byte:
     2: {
-      getValue: function (dataView, dataOffset) {
+      getValue: function getValue(dataView, dataOffset) {
         return String.fromCharCode(dataView.getUint8(dataOffset));
       },
       size: 1,
@@ -577,35 +580,35 @@ exports.default = typeof window !== 'undefined' ? function () {
     },
     // short, 16 bit int:
     3: {
-      getValue: function (dataView, dataOffset, littleEndian) {
+      getValue: function getValue(dataView, dataOffset, littleEndian) {
         return dataView.getUint16(dataOffset, littleEndian);
       },
       size: 2
     },
     // long, 32 bit int:
     4: {
-      getValue: function (dataView, dataOffset, littleEndian) {
+      getValue: function getValue(dataView, dataOffset, littleEndian) {
         return dataView.getUint32(dataOffset, littleEndian);
       },
       size: 4
     },
     // rational = two long values, first is numerator, second is denominator:
     5: {
-      getValue: function (dataView, dataOffset, littleEndian) {
+      getValue: function getValue(dataView, dataOffset, littleEndian) {
         return dataView.getUint32(dataOffset, littleEndian) / dataView.getUint32(dataOffset + 4, littleEndian);
       },
       size: 8
     },
     // slong, 32 bit signed int:
     9: {
-      getValue: function (dataView, dataOffset, littleEndian) {
+      getValue: function getValue(dataView, dataOffset, littleEndian) {
         return dataView.getInt32(dataOffset, littleEndian);
       },
       size: 4
     },
     // srational, two slongs, first is numerator, second is denominator:
     10: {
-      getValue: function (dataView, dataOffset, littleEndian) {
+      getValue: function getValue(dataView, dataOffset, littleEndian) {
         return dataView.getInt32(dataOffset, littleEndian) / dataView.getInt32(dataOffset + 4, littleEndian);
       },
       size: 8
@@ -646,7 +649,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       for (i = 0; i < values.length; i += 1) {
         c = values[i];
         // Ignore the terminating NULL byte(s):
-        if (c === '\u0000') {
+        if (c === '\0') {
           break;
         }
         str += c;
@@ -765,7 +768,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     if (vendorPrefix === 'webkit') transformProperty = 'webkitTransform';
 
     /* Entry point, only function to be called by user */
-    var snabbt = function (arg1, arg2, arg3) {
+    var snabbt = function snabbt(arg1, arg2, arg3) {
 
       var elements = arg1;
 
@@ -774,29 +777,29 @@ exports.default = typeof window !== 'undefined' ? function () {
       if (elements.length !== undefined) {
         var aggregateChainer = {
           chainers: [],
-          then: function (opts) {
+          then: function then(opts) {
             return this.snabbt(opts);
           },
-          snabbt: function (opts) {
+          snabbt: function snabbt(opts) {
             var len = this.chainers.length;
             this.chainers.forEach(function (chainer, index) {
               chainer.snabbt(preprocessOptions(opts, index, len));
             });
             return aggregateChainer;
           },
-          setValue: function (value) {
+          setValue: function setValue(value) {
             this.chainers.forEach(function (chainer) {
               chainer.setValue(value);
             });
             return aggregateChainer;
           },
-          finish: function () {
+          finish: function finish() {
             this.chainers.forEach(function (chainer) {
               chainer.finish();
             });
             return aggregateChainer;
           },
-          rollback: function () {
+          rollback: function rollback() {
             this.chainers.forEach(function (chainer) {
               chainer.rollback();
             });
@@ -813,7 +816,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       }
     };
 
-    var preprocessOptions = function (options, index, len) {
+    var preprocessOptions = function preprocessOptions(options, index, len) {
       if (!options) return options;
       var clone = cloneObject(options);
 
@@ -863,7 +866,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return clone;
     };
 
-    var snabbtSingleElement = function (element, arg2, arg3) {
+    var snabbtSingleElement = function snabbtSingleElement(element, arg2, arg3) {
 
       if (arg2 === 'attention') {
         return setupAttentionAnimation(element, arg3);
@@ -898,11 +901,11 @@ exports.default = typeof window !== 'undefined' ? function () {
       animation.updateElement(element, true);
       var queue = [];
       var chainer = {
-        snabbt: function (opts) {
+        snabbt: function snabbt(opts) {
           queue.unshift(preprocessOptions(opts, 0, 1));
           return chainer;
         },
-        then: function (opts) {
+        then: function then(opts) {
           return this.snabbt(opts);
         }
       };
@@ -948,7 +951,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return chainer;
     };
 
-    var setupAttentionAnimation = function (element, options) {
+    var setupAttentionAnimation = function setupAttentionAnimation(element, options) {
       var movement = stateFromOptions(options, createState({}));
       options.movement = movement;
       var animation = createAttentionAnimation(options);
@@ -974,7 +977,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       queueTick(tick);
     };
 
-    var stopAnimation = function (element) {
+    var stopAnimation = function stopAnimation(element) {
       for (var i = 0, len = runningAnimations.length; i < len; ++i) {
         var currentAnimation = runningAnimations[i];
         var animatedElement = currentAnimation[0];
@@ -986,7 +989,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       }
     };
 
-    var indexOfElement = function (arr, element) {
+    var indexOfElement = function indexOfElement(arr, element) {
       for (var i = 0, len = arr.length; i < len; ++i) {
         if (arr[i][0] === element) {
           return i;
@@ -995,7 +998,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return -1;
     };
 
-    var detachChildren = function (element) {
+    var detachChildren = function detachChildren(element) {
 
       var elements = [];
       var animations = runningAnimations.concat(completedAnimations);
@@ -1016,7 +1019,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       }
     };
 
-    var detachElement = function (element) {
+    var detachElement = function detachElement(element) {
 
       // stop animations
       stopAnimation(element);
@@ -1033,7 +1036,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       }
     };
 
-    var findAnimationState = function (animationList, element) {
+    var findAnimationState = function findAnimationState(animationList, element) {
       for (var i = 0, len = animationList.length; i < len; ++i) {
         var currentAnimation = animationList[i];
         var animatedElement = currentAnimation[0];
@@ -1047,13 +1050,13 @@ exports.default = typeof window !== 'undefined' ? function () {
       }
     };
 
-    var clearOphanedEndStates = function () {
+    var clearOphanedEndStates = function clearOphanedEndStates() {
       completedAnimations = completedAnimations.filter(function (animation) {
         return findUltimateAncestor(animation[0]).body;
       });
     };
 
-    var findUltimateAncestor = function (node) {
+    var findUltimateAncestor = function findUltimateAncestor(node) {
       var ancestor = node;
       while (ancestor.parentNode) {
         ancestor = ancestor.parentNode;
@@ -1066,7 +1069,7 @@ exports.default = typeof window !== 'undefined' ? function () {
      * animation releated to it. Will also call stop on the animation.
      * TODO: The stopping of the animation is better put somewhere else
      */
-    var currentAnimationState = function (element) {
+    var currentAnimationState = function currentAnimationState(element) {
       // Check if a completed animation is stored for this element
       var state = findAnimationState(runningAnimations, element);
       if (state) return state;
@@ -1077,7 +1080,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     /**
      * Parses an animation configuration object and returns a State instance
      */
-    var stateFromOptions = function (options, state, useFromPrefix) {
+    var stateFromOptions = function stateFromOptions(options, state, useFromPrefix) {
       if (!state) {
         state = createState({
           position: [0, 0, 0],
@@ -1122,7 +1125,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return state;
     };
 
-    var setupAnimationOptions = function (start, end, options) {
+    var setupAnimationOptions = function setupAnimationOptions(start, end, options) {
       options.startState = start;
       options.endState = end;
       return options;
@@ -1132,12 +1135,12 @@ exports.default = typeof window !== 'undefined' ? function () {
       return setTimeout(callback, 1000 / 60);
     };
 
-    var queueTick = function (func) {
+    var queueTick = function queueTick(func) {
       if (tickRequests.length === 0) polyFillrAF(tickAnimations);
       tickRequests.push(func);
     };
 
-    var tickAnimations = function (time) {
+    var tickAnimations = function tickAnimations(time) {
       var len = tickRequests.length;
       for (var i = 0; i < len; ++i) {
         tickRequests[i](time);
@@ -1168,7 +1171,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     };
 
     // Class for handling animation between two states
-    var createAnimation = function (options) {
+    var createAnimation = function createAnimation(options) {
       var startState = options.startState;
       var endState = options.endState;
       var duration = optionOrDefault(options.duration, 500);
@@ -1200,14 +1203,14 @@ exports.default = typeof window !== 'undefined' ? function () {
 
       // Public api
       return {
-        stop: function () {
+        stop: function stop() {
           stopped = true;
         },
-        isStopped: function () {
+        isStopped: function isStopped() {
           return stopped;
         },
 
-        finish: function (callback) {
+        finish: function finish(callback) {
           manual = false;
           var manualDuration = duration * manualValue;
           startTime = currentTime - manualDuration;
@@ -1215,7 +1218,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           easing.resetFrom = manualValue;
         },
 
-        rollback: function (callback) {
+        rollback: function rollback(callback) {
           manual = false;
           tweener.setReverse();
           var manualDuration = duration * (1 - manualValue);
@@ -1224,13 +1227,13 @@ exports.default = typeof window !== 'undefined' ? function () {
           easing.resetFrom = manualValue;
         },
 
-        restart: function () {
+        restart: function restart() {
           // Restart timer
           startTime = undefined;
           easing.resetFrom(0);
         },
 
-        tick: function (time) {
+        tick: function tick(time) {
           if (stopped) return;
 
           if (manual) {
@@ -1256,16 +1259,16 @@ exports.default = typeof window !== 'undefined' ? function () {
           }
         },
 
-        getCurrentState: function () {
+        getCurrentState: function getCurrentState() {
           return currentState;
         },
 
-        setValue: function (_manualValue) {
+        setValue: function setValue(_manualValue) {
           started = true;
           manualValue = Math.min(Math.max(_manualValue, 0.0001), 1 + manualDelayFactor);
         },
 
-        updateCurrentTransform: function () {
+        updateCurrentTransform: function updateCurrentTransform() {
           var tweenValue = easing.getValue();
           if (manual) {
             var val = Math.max(0.00001, manualValue - manualDelayFactor);
@@ -1275,7 +1278,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           tweener.tween(tweenValue);
         },
 
-        completed: function () {
+        completed: function completed() {
           if (stopped) return true;
           if (startTime === 0) {
             return false;
@@ -1283,7 +1286,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           return easing.completed();
         },
 
-        updateElement: function (element, forceUpdate) {
+        updateElement: function updateElement(element, forceUpdate) {
           if (!started && !forceUpdate) return;
           var matrix = tweener.asMatrix();
           var properties = tweener.getProperties();
@@ -1301,7 +1304,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     // -- AttentionAnimation --
     // ------------------------
 
-    var createAttentionAnimation = function (options) {
+    var createAttentionAnimation = function createAttentionAnimation(options) {
       var movement = options.movement;
       options.initialVelocity = 0.1;
       options.equilibriumPosition = 0;
@@ -1323,15 +1326,15 @@ exports.default = typeof window !== 'undefined' ? function () {
 
       // Public API
       return {
-        stop: function () {
+        stop: function stop() {
           stopped = true;
         },
 
-        isStopped: function (time) {
+        isStopped: function isStopped(time) {
           return stopped;
         },
 
-        tick: function (time) {
+        tick: function tick(time) {
           if (stopped) return;
           if (spring.equilibrium) return;
           spring.tick();
@@ -1339,7 +1342,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           this.updateMovement();
         },
 
-        updateMovement: function () {
+        updateMovement: function updateMovement() {
           var value = spring.getValue();
           if (tweenPosition) {
             currentMovement.position[0] = movement.position[0] * value;
@@ -1367,20 +1370,20 @@ exports.default = typeof window !== 'undefined' ? function () {
           }
         },
 
-        updateElement: function (element) {
+        updateElement: function updateElement(element) {
           updateElementTransform(element, currentMovement.asMatrix());
           updateElementProperties(element, currentMovement.getProperties());
         },
 
-        getCurrentState: function () {
+        getCurrentState: function getCurrentState() {
           return currentMovement;
         },
 
-        completed: function () {
+        completed: function completed() {
           return spring.equilibrium || stopped;
         },
 
-        restart: function () {
+        restart: function restart() {
           // Restart spring
           spring = createSpringEasing(options);
         }
@@ -1391,23 +1394,23 @@ exports.default = typeof window !== 'undefined' ? function () {
      * Easings *
      ***********/
 
-    var linearEasing = function (value) {
+    var linearEasing = function linearEasing(value) {
       return value;
     };
 
-    var ease = function (value) {
+    var ease = function ease(value) {
       return (Math.cos(value * Math.PI + Math.PI) + 1) / 2;
     };
 
-    var easeIn = function (value) {
+    var easeIn = function easeIn(value) {
       return value * value;
     };
 
-    var easeOut = function (value) {
+    var easeOut = function easeOut(value) {
       return -Math.pow(value - 1, 2) + 1;
     };
 
-    var createSpringEasing = function (options) {
+    var createSpringEasing = function createSpringEasing(options) {
       var position = optionOrDefault(options.startPosition, 0);
       var equilibriumPosition = optionOrDefault(options.equilibriumPosition, 1);
       var velocity = optionOrDefault(options.initialVelocity, 0);
@@ -1420,7 +1423,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       // Public API
       return {
 
-        tick: function (value) {
+        tick: function tick(value) {
           if (value === 0.0) return;
           if (equilibrium) return;
           var springForce = -(position - equilibriumPosition) * springConstant;
@@ -1440,17 +1443,17 @@ exports.default = typeof window !== 'undefined' ? function () {
           }
         },
 
-        resetFrom: function (value) {
+        resetFrom: function resetFrom(value) {
           position = value;
           velocity = 0;
         },
 
-        getValue: function () {
+        getValue: function getValue() {
           if (equilibrium) return equilibriumPosition;
           return position;
         },
 
-        completed: function () {
+        completed: function completed() {
           return equilibrium;
         }
       };
@@ -1463,7 +1466,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       'easeOut': easeOut
     };
 
-    var createEaser = function (easerName, options) {
+    var createEaser = function createEaser(easerName, options) {
       if (easerName == 'spring') {
         return createSpringEasing(options);
       }
@@ -1478,20 +1481,20 @@ exports.default = typeof window !== 'undefined' ? function () {
 
       // Public API
       return {
-        tick: function (v) {
+        tick: function tick(v) {
           value = easer(v);
           lastValue = v;
         },
 
-        resetFrom: function (value) {
+        resetFrom: function resetFrom(value) {
           lastValue = 0;
         },
 
-        getValue: function () {
+        getValue: function getValue() {
           return value;
         },
 
-        completed: function () {
+        completed: function completed() {
           if (lastValue >= 1) {
             return lastValue;
           }
@@ -1504,7 +1507,7 @@ exports.default = typeof window !== 'undefined' ? function () {
      * Matrix related
      */
 
-    var assignTranslate = function (matrix, x, y, z) {
+    var assignTranslate = function assignTranslate(matrix, x, y, z) {
       matrix[0] = 1;
       matrix[1] = 0;
       matrix[2] = 0;
@@ -1523,7 +1526,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignRotateX = function (matrix, rad) {
+    var assignRotateX = function assignRotateX(matrix, rad) {
       matrix[0] = 1;
       matrix[1] = 0;
       matrix[2] = 0;
@@ -1542,7 +1545,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignRotateY = function (matrix, rad) {
+    var assignRotateY = function assignRotateY(matrix, rad) {
       matrix[0] = Math.cos(rad);
       matrix[1] = 0;
       matrix[2] = Math.sin(rad);
@@ -1561,7 +1564,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignRotateZ = function (matrix, rad) {
+    var assignRotateZ = function assignRotateZ(matrix, rad) {
       matrix[0] = Math.cos(rad);
       matrix[1] = -Math.sin(rad);
       matrix[2] = 0;
@@ -1580,7 +1583,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignSkew = function (matrix, ax, ay) {
+    var assignSkew = function assignSkew(matrix, ax, ay) {
       matrix[0] = 1;
       matrix[1] = Math.tan(ax);
       matrix[2] = 0;
@@ -1599,7 +1602,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignScale = function (matrix, x, y) {
+    var assignScale = function assignScale(matrix, x, y) {
       matrix[0] = x;
       matrix[1] = 0;
       matrix[2] = 0;
@@ -1618,7 +1621,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var assignIdentity = function (matrix) {
+    var assignIdentity = function assignIdentity(matrix) {
       matrix[0] = 1;
       matrix[1] = 0;
       matrix[2] = 0;
@@ -1637,7 +1640,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       matrix[15] = 1;
     };
 
-    var copyArray = function (a, b) {
+    var copyArray = function copyArray(a, b) {
       b[0] = a[0];
       b[1] = a[1];
       b[2] = a[2];
@@ -1656,7 +1659,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       b[15] = a[15];
     };
 
-    var createMatrix = function () {
+    var createMatrix = function createMatrix() {
       var data = new Float32Array(16);
       var a = new Float32Array(16);
       var b = new Float32Array(16);
@@ -1665,7 +1668,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return {
         data: data,
 
-        asCSS: function () {
+        asCSS: function asCSS() {
           var css = 'matrix3d(';
           for (var i = 0; i < 15; ++i) {
             if (Math.abs(data[i]) < 0.0001) css += '0,';else css += data[i].toFixed(10) + ',';
@@ -1674,46 +1677,46 @@ exports.default = typeof window !== 'undefined' ? function () {
           return css;
         },
 
-        clear: function () {
+        clear: function clear() {
           assignIdentity(data);
         },
 
-        translate: function (x, y, z) {
+        translate: function translate(x, y, z) {
           copyArray(data, a);
           assignTranslate(b, x, y, z);
           assignedMatrixMultiplication(a, b, data);
           return this;
         },
 
-        rotateX: function (radians) {
+        rotateX: function rotateX(radians) {
           copyArray(data, a);
           assignRotateX(b, radians);
           assignedMatrixMultiplication(a, b, data);
           return this;
         },
 
-        rotateY: function (radians) {
+        rotateY: function rotateY(radians) {
           copyArray(data, a);
           assignRotateY(b, radians);
           assignedMatrixMultiplication(a, b, data);
           return this;
         },
 
-        rotateZ: function (radians) {
+        rotateZ: function rotateZ(radians) {
           copyArray(data, a);
           assignRotateZ(b, radians);
           assignedMatrixMultiplication(a, b, data);
           return this;
         },
 
-        scale: function (x, y) {
+        scale: function scale(x, y) {
           copyArray(data, a);
           assignScale(b, x, y);
           assignedMatrixMultiplication(a, b, data);
           return this;
         },
 
-        skew: function (ax, ay) {
+        skew: function skew(ax, ay) {
           copyArray(data, a);
           assignSkew(b, ax, ay);
           assignedMatrixMultiplication(a, b, data);
@@ -1722,7 +1725,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       };
     };
 
-    var assignedMatrixMultiplication = function (a, b, res) {
+    var assignedMatrixMultiplication = function assignedMatrixMultiplication(a, b, res) {
       // Unrolled loop
       res[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
       res[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
@@ -1747,7 +1750,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       return res;
     };
 
-    var createState = function (config) {
+    var createState = function createState(config) {
       // Caching of matrix and properties so we don't have to create new ones everytime they are needed
       var matrix = createMatrix();
       var properties = {
@@ -1768,7 +1771,7 @@ exports.default = typeof window !== 'undefined' ? function () {
         width: config.width,
         height: config.height,
 
-        clone: function () {
+        clone: function clone() {
           return createState({
             position: this.position ? this.position.slice(0) : undefined,
             rotation: this.rotation ? this.rotation.slice(0) : undefined,
@@ -1782,7 +1785,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           });
         },
 
-        asMatrix: function () {
+        asMatrix: function asMatrix() {
           var m = matrix;
           m.clear();
 
@@ -1820,7 +1823,7 @@ exports.default = typeof window !== 'undefined' ? function () {
           return m;
         },
 
-        getProperties: function () {
+        getProperties: function getProperties() {
           properties.opacity = this.opacity;
           properties.width = this.width + 'px';
           properties.height = this.height + 'px';
@@ -1832,7 +1835,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     // -- StateTweener --
     // -------------------
 
-    var createStateTweener = function (startState, endState, resultState) {
+    var createStateTweener = function createStateTweener(startState, endState, resultState) {
       var start = startState;
       var end = endState;
       var result = resultState;
@@ -1849,7 +1852,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       // Public API
       return {
 
-        tween: function (tweenValue) {
+        tween: function tween(tweenValue) {
 
           if (tweenPosition) {
             var dX = end.position[0] - start.position[0];
@@ -1910,15 +1913,15 @@ exports.default = typeof window !== 'undefined' ? function () {
           }
         },
 
-        asMatrix: function () {
+        asMatrix: function asMatrix() {
           return result.asMatrix();
         },
 
-        getProperties: function () {
+        getProperties: function getProperties() {
           return result.getProperties();
         },
 
-        setReverse: function () {
+        setReverse: function setReverse() {
           var oldStart = start;
           start = end;
           end = oldStart;
@@ -1930,7 +1933,7 @@ exports.default = typeof window !== 'undefined' ? function () {
     // -- ValueFeederTweener --
     // ------------------------
 
-    var createValueFeederTweener = function (valueFeeder, startState, endState, resultState) {
+    var createValueFeederTweener = function createValueFeederTweener(valueFeeder, startState, endState, resultState) {
       var currentMatrix = valueFeeder(0, createMatrix());
       var start = startState;
       var end = endState;
@@ -1940,7 +1943,7 @@ exports.default = typeof window !== 'undefined' ? function () {
       // Public API
       return {
 
-        tween: function (tweenValue) {
+        tween: function tween(tweenValue) {
           if (reverse) tweenValue = 1 - tweenValue;
           currentMatrix.clear();
           currentMatrix = valueFeeder(tweenValue, currentMatrix);
@@ -1954,29 +1957,29 @@ exports.default = typeof window !== 'undefined' ? function () {
           if (end.opacity !== undefined) result.opacity = start.opacity + tweenValue * dOpacity;
         },
 
-        asMatrix: function () {
+        asMatrix: function asMatrix() {
           return currentMatrix;
         },
 
-        getProperties: function () {
+        getProperties: function getProperties() {
           return result.getProperties();
         },
 
-        setReverse: function () {
+        setReverse: function setReverse() {
           reverse = true;
         }
 
       };
     };
 
-    var optionOrDefault = function (option, def) {
+    var optionOrDefault = function optionOrDefault(option, def) {
       if (typeof option == 'undefined') {
         return def;
       }
       return option;
     };
 
-    var updateElementTransform = function (element, matrix, perspective) {
+    var updateElementTransform = function updateElementTransform(element, matrix, perspective) {
       var cssPerspective = '';
       if (perspective) {
         cssPerspective = 'perspective(' + perspective + 'px) ';
@@ -1985,17 +1988,17 @@ exports.default = typeof window !== 'undefined' ? function () {
       element.style[transformProperty] = cssPerspective + cssMatrix;
     };
 
-    var updateElementProperties = function (element, properties) {
+    var updateElementProperties = function updateElementProperties(element, properties) {
       for (var key in properties) {
         element.style[key] = properties[key];
       }
     };
 
-    var isFunction = function (object) {
+    var isFunction = function isFunction(object) {
       return typeof object === "function";
     };
 
-    var cloneObject = function (object) {
+    var cloneObject = function cloneObject(object) {
       if (!object) return object;
       var clone = {};
       for (var key in object) {
@@ -2276,7 +2279,7 @@ exports.default = typeof window !== 'undefined' ? function () {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
   if (!HTMLCanvasElement.prototype.toBlob) {
     Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-      value: function (callback, type, quality) {
+      value: function value(callback, type, quality) {
 
         var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
             len = binStr.length,
@@ -2309,10 +2312,10 @@ exports.default = typeof window !== 'undefined' ? function () {
     };
   }();
 
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
+  var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+    return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
   } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
   };
 
   function _classCallCheck(instance, Constructor) {

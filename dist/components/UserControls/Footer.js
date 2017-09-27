@@ -24,7 +24,7 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Footer = (0, _createReactClass2.default)({
+var Footer = (0, _createReactClass2.default)({
 
   displayName: 'Footer',
 
@@ -38,19 +38,20 @@ const Footer = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
+  getStatesFromStores: function getStatesFromStores() {
     return {
       kenny: this.getStore(_stores.UserStore).getKennyUser()
     };
   },
-  onChange: function () {
+  onChange: function onChange() {
     this.setState(this.getStatesFromStores());
   },
-  render: function () {
-    const { kenny: kenny } = this.state;
+  render: function render() {
+    var kenny = this.state.kenny;
+
     return _react2.default.createElement(
       'div',
       { className: 'footer-wrapper' },

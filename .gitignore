@@ -1,6 +1,8 @@
+.tmp
+dist
 node_modules
+
 npm-debug.log
-dev
-dev/*
-.idea
+
 .DS_Store
+.tmp

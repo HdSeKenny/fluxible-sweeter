@@ -18,69 +18,75 @@ var _configs2 = _interopRequireDefault(_configs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign, no-shadow */
+var ObjectID = _mongodb2.default.ObjectID; /* eslint-disable all, no-param-reassign, no-shadow */
 
-const MongoUrl = _configs2.default.mongo.sweeter.url;
+var MongoUrl = _configs2.default.mongo.sweeter.url;
 
-const getFansPromise = (user, fanId, faIdx) => new Promise((resolve, reject) => {
-  _mongodb2.default.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(fanId) }, (err, fan) => {
-      if (err) {
-        return reject(err);
-      } else {
-        user.fans[faIdx] = fan;
-      }
-      // db.close();
-      resolve();
+var getFansPromise = function getFansPromise(user, fanId, faIdx) {
+  return new Promise(function (resolve, reject) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(fanId) }, function (err, fan) {
+        if (err) {
+          return reject(err);
+        } else {
+          user.fans[faIdx] = fan;
+        }
+        // db.close();
+        resolve();
+      });
     });
   });
-});
+};
 
-const getFocusesPromise = (user, focusId, fsIdx) => new Promise((resolve, reject) => {
-  _mongodb2.default.connect(MongoUrl, (err, db) => {
-    const User = db.collection('users');
-    User.findOne({ _id: ObjectID(focusId) }, (err, focus) => {
-      if (err) {
-        return reject(err);
-      } else {
-        user.focuses[fsIdx] = focus;
-      }
-      // db.close();
-      resolve();
+var getFocusesPromise = function getFocusesPromise(user, focusId, fsIdx) {
+  return new Promise(function (resolve, reject) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(focusId) }, function (err, focus) {
+        if (err) {
+          return reject(err);
+        } else {
+          user.focuses[fsIdx] = focus;
+        }
+        // db.close();
+        resolve();
+      });
     });
   });
-});
+};
 
-const getBlogsPromise = (user, blogId, bgIdx) => new Promise((resolve, reject) => {
-  _mongodb2.default.connect(MongoUrl, (err, db) => {
-    const Blog = db.collection('blogs');
-    Blog.findOne({ _id: ObjectID(blogId) }, (err, blog) => {
-      if (err) {
-        return reject(err);
-      } else {
-        user.blogs[bgIdx] = blog;
-      }
-      // db.close();
-      resolve();
+var getBlogsPromise = function getBlogsPromise(user, blogId, bgIdx) {
+  return new Promise(function (resolve, reject) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var Blog = db.collection('blogs');
+      Blog.findOne({ _id: ObjectID(blogId) }, function (err, blog) {
+        if (err) {
+          return reject(err);
+        } else {
+          user.blogs[bgIdx] = blog;
+        }
+        // db.close();
+        resolve();
+      });
     });
   });
-});
+};
 
-const getFansPromiseWrapper = (user, fanId, faIdx) => {
-  return () => {
+var getFansPromiseWrapper = function getFansPromiseWrapper(user, fanId, faIdx) {
+  return function () {
     return getFansPromise(user, fanId, faIdx);
   };
 };
 
-const getFocusesPromiseWrapper = (user, focusId, fsIdx) => {
-  return () => {
+var getFocusesPromiseWrapper = function getFocusesPromiseWrapper(user, focusId, fsIdx) {
+  return function () {
     return getFocusesPromise(user, focusId, fsIdx);
   };
 };
 
-const getBlogsPromiseWrapper = (user, blogId, bgIdx) => {
-  return () => {
+var getBlogsPromiseWrapper = function getBlogsPromiseWrapper(user, blogId, bgIdx) {
+  return function () {
     return getBlogsPromise(user, blogId, bgIdx);
   };
 };
@@ -89,49 +95,51 @@ exports.default = {
 
   name: 'users',
 
-  loadUsers: function (req, resource, params, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (connectErr, db) => {
-      const User = db.collection('users');
-      User.find().toArray((loadUsersErr, users) => {
-        const allPromises = [];
-        users.forEach(user => {
+  loadUsers: function loadUsers(req, resource, params, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (connectErr, db) {
+      var User = db.collection('users');
+      User.find().toArray(function (loadUsersErr, users) {
+        var allPromises = [];
+        users.forEach(function (user) {
           if (user.fans.length) {
-            user.fans.forEach((fanId, faIdx) => {
+            user.fans.forEach(function (fanId, faIdx) {
               allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
             });
           }
           if (user.focuses.length) {
-            user.focuses.forEach((focusId, fsIdx) => {
+            user.focuses.forEach(function (focusId, fsIdx) {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
             });
           }
           if (user.blogs.length) {
-            user.blogs.forEach((blogId, bgIdx) => {
+            user.blogs.forEach(function (blogId, bgIdx) {
               allPromises.push(getBlogsPromiseWrapper(user, blogId, bgIdx));
             });
           }
         });
 
-        Promise.all(allPromises.map(ap => ap())).then(() => {
+        Promise.all(allPromises.map(function (ap) {
+          return ap();
+        })).then(function () {
           callback(null, users);
-        }).catch(loadUsersPromiseErr => {
+        }).catch(function (loadUsersPromiseErr) {
           callback(loadUsersPromiseErr, null);
         });
       });
     });
   },
-  loadKennyUser: function (req, resource, params, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID('583ff3d6a193d70f6946948e') }, (err, kenny) => {
+  loadKennyUser: function loadKennyUser(req, resource, params, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID('583ff3d6a193d70f6946948e') }, function (err, kenny) {
         callback(err, kenny);
       });
     });
   },
-  register: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ email: body.email }, (err, user) => {
+  register: function register(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ email: body.email }, function (err, user) {
         if (user) {
           callback(err, {
             user: null,
@@ -147,8 +155,8 @@ exports.default = {
           body.focuses = [];
           body.blogs = [];
 
-          User.insert(body, (err, res) => {
-            const insertedUser = res.ops[0];
+          User.insert(body, function (err, res) {
+            var insertedUser = res.ops[0];
             insertedUser.id_str = insertedUser._id.toString();
             User.save(insertedUser);
             // db.close();
@@ -165,12 +173,12 @@ exports.default = {
       });
     });
   },
-  login: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      const ecryptedPassword = (0, _md2.default)(body.password);
-      User.findOne({ email: body.email }, (err, user) => {
-        const auth = { msg: '', stat: false };
+  login: function login(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      var ecryptedPassword = (0, _md2.default)(body.password);
+      User.findOne({ email: body.email }, function (err, user) {
+        var auth = { msg: '', stat: false };
         if (err) {
           auth.msg = err;
         }
@@ -193,25 +201,25 @@ exports.default = {
       });
     });
   },
-  read: function (req, resource, params, config, callback) {
-    const endPoint = resource.replace(`${this.name}.`, '');
+  read: function read(req, resource, params, config, callback) {
+    var endPoint = resource.replace(this.name + '.', '');
     this[endPoint](req, resource, params, config, callback);
   },
-  create: function (req, resource, params, body, config, callback) {
-    const endPoint = resource.replace(`${this.name}.`, '');
+  create: function create(req, resource, params, body, config, callback) {
+    var endPoint = resource.replace(this.name + '.', '');
     this[endPoint](req, resource, params, body, config, callback);
   },
-  delete: function (req, resource, params, config, callback) {
-    req.session.regenerate(err => {
+  delete: function _delete(req, resource, params, config, callback) {
+    req.session.regenerate(function (err) {
       callback(err, {
         msg: 'LOGOUT_SUCCCESS'
       });
     });
   },
-  getLoginUserImage: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ email: body.email }, (err, user) => {
+  getLoginUserImage: function getLoginUserImage(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ email: body.email }, function (err, user) {
         if (err) {
           callback(err, null);
           return;
@@ -224,12 +232,12 @@ exports.default = {
       });
     });
   },
-  readCurrentUser: function (req, resource, params, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      const auth = { stat: false, msg: '' };
-      User.findOne({ _id: ObjectID(req.session.userId) }).then(user => {
-        const allPromises = [];
+  readCurrentUser: function readCurrentUser(req, resource, params, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      var auth = { stat: false, msg: '' };
+      User.findOne({ _id: ObjectID(req.session.userId) }).then(function (user) {
+        var allPromises = [];
         if (!user) {
           req.session.userId = null;
           req.session.authenticated = false;
@@ -239,54 +247,60 @@ exports.default = {
           auth.stat = true;
           auth.msg = 'Authenticated success !';
           if (user.fans.length) {
-            user.fans.forEach((fanId, faIdx) => {
+            user.fans.forEach(function (fanId, faIdx) {
               allPromises.push(getFansPromiseWrapper(user, fanId, faIdx));
             });
           }
           if (user.focuses.length) {
-            user.focuses.forEach((focusId, fsIdx) => {
+            user.focuses.forEach(function (focusId, fsIdx) {
               allPromises.push(getFocusesPromiseWrapper(user, focusId, fsIdx));
             });
           }
           if (user.blogs.length) {
-            user.blogs.forEach((blogId, bgIdx) => {
+            user.blogs.forEach(function (blogId, bgIdx) {
               allPromises.push(getBlogsPromiseWrapper(user, blogId, bgIdx));
             });
           }
         }
-        Promise.all(allPromises.map(ap => ap())).then(() => {
+        Promise.all(allPromises.map(function (ap) {
+          return ap();
+        })).then(function () {
           callback(null, { user: user, auth: auth });
-        }).catch(err => {
+        }).catch(function (err) {
           callback(err, { user: null, auth: auth });
         });
-      }).catch(err => callback(err, { user: null, auth: auth }));
+      }).catch(function (err) {
+        return callback(err, { user: null, auth: auth });
+      });
     });
   },
-  updateUserInfo: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body._id) }, (err, user) => {
-        const keys = Object.keys(body);
-        keys.forEach(key => {
+  updateUserInfo: function updateUserInfo(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body._id) }, function (err, user) {
+        var keys = Object.keys(body);
+        keys.forEach(function (key) {
           user[key] = body[key];
         });
-        User.save(user, (err, result) => {
-          User.findOne({ '_id': ObjectID(body._id) }, (err, newUser) => {
-            const allPromises = [];
+        User.save(user, function (err, result) {
+          User.findOne({ '_id': ObjectID(body._id) }, function (err, newUser) {
+            var allPromises = [];
             if (newUser) {
               if (newUser.fans.length) {
-                newUser.fans.forEach((fanId, faIdx) => {
+                newUser.fans.forEach(function (fanId, faIdx) {
                   allPromises.push(getFansPromiseWrapper(newUser, fanId, faIdx));
                 });
               }
               if (newUser.focuses.length) {
-                newUser.focuses.forEach((focusId, fsIdx) => {
+                newUser.focuses.forEach(function (focusId, fsIdx) {
                   allPromises.push(getFocusesPromiseWrapper(newUser, focusId, fsIdx));
                 });
               }
-              Promise.all(allPromises.map(ap => ap())).then(() => {
+              Promise.all(allPromises.map(function (ap) {
+                return ap();
+              })).then(function () {
                 callback(null, newUser);
-              }).catch(err => {
+              }).catch(function (err) {
                 callback(err, null);
               });
             }
@@ -295,17 +309,17 @@ exports.default = {
       });
     });
   },
-  changeUserPassword: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.userId) }, (err, user) => {
+  changeUserPassword: function changeUserPassword(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.userId) }, function (err, user) {
         if (user) {
           if ((0, _md2.default)(body.oldPassword) !== user.password) {
             callback(err, { stat: false, msg: 'Incorrect password !' });
           } else {
             user.password = (0, _md2.default)(body.newPassword);
-            User.save(user, (err, result) => {
-              req.session.regenerate(err => {
+            User.save(user, function (err, result) {
+              req.session.regenerate(function (err) {
                 callback(err, {
                   stat: true,
                   msg: 'Change password successfully please login again!'
@@ -317,14 +331,14 @@ exports.default = {
       });
     });
   },
-  followThisUser: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
+  followThisUser: function followThisUser(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.thisUserId) }, function (err, thisUser) {
         if (thisUser) {
           thisUser.fans.push(body.currentUserId);
-          User.save(thisUser, err => {
-            User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
+          User.save(thisUser, function (err) {
+            User.findOne({ _id: ObjectID(body.currentUserId) }, function (err, currentUser) {
               if (currentUser) {
                 currentUser.focuses.push(body.thisUserId);
                 if (!currentUser.focuses_list) {
@@ -335,7 +349,7 @@ exports.default = {
                   };
                 }
                 currentUser.focuses_list.no_groups.push(body.thisUserId);
-                User.save(currentUser, err => {
+                User.save(currentUser, function (err) {
                   callback(err, { thisUser: thisUser, currentUser: currentUser });
                 });
               } else {
@@ -349,28 +363,38 @@ exports.default = {
       });
     });
   },
-  cancelFollowThisUser: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.thisUserId) }, (err, thisUser) => {
+  cancelFollowThisUser: function cancelFollowThisUser(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.thisUserId) }, function (err, thisUser) {
         if (thisUser) {
-          thisUser.fans.forEach((fan, index) => {
+          thisUser.fans.forEach(function (fan, index) {
             if (fan === body.currentUserId) {
               thisUser.fans.splice(index, 1);
             }
           });
-          User.save(thisUser, err => {
-            User.findOne({ _id: ObjectID(body.currentUserId) }, (err, currentUser) => {
+          User.save(thisUser, function (err) {
+            User.findOne({ _id: ObjectID(body.currentUserId) }, function (err, currentUser) {
               if (currentUser) {
-                currentUser.focuses.forEach((focus, index) => {
+                currentUser.focuses.forEach(function (focus, index) {
                   if (focus === body.thisUserId) {
                     currentUser.focuses.splice(index, 1);
                   }
                 });
-                const { no_groups: no_groups, friends: friends, special_focuses: special_focuses } = currentUser.focuses_list;
-                const new_no_groups = no_groups.filter(id_str => id_str !== body.thisUserId);
-                const new_friends = friends.filter(id_str => id_str !== body.thisUserId);
-                const new_special_focuses = special_focuses.filter(id_str => id_str !== body.thisUserId);
+                var _currentUser$focuses_ = currentUser.focuses_list,
+                    no_groups = _currentUser$focuses_.no_groups,
+                    friends = _currentUser$focuses_.friends,
+                    special_focuses = _currentUser$focuses_.special_focuses;
+
+                var new_no_groups = no_groups.filter(function (id_str) {
+                  return id_str !== body.thisUserId;
+                });
+                var new_friends = friends.filter(function (id_str) {
+                  return id_str !== body.thisUserId;
+                });
+                var new_special_focuses = special_focuses.filter(function (id_str) {
+                  return id_str !== body.thisUserId;
+                });
 
                 currentUser.focuses_list = {
                   no_groups: new_no_groups,
@@ -378,7 +402,7 @@ exports.default = {
                   special_focuses: new_special_focuses
                 };
 
-                User.save(currentUser, err => {
+                User.save(currentUser, function (err) {
                   callback(err, { thisUser: thisUser, currentUser: currentUser });
                 });
               } else {
@@ -392,18 +416,20 @@ exports.default = {
       });
     });
   },
-  addMessageConnection: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.myId) }).then(currentUser => {
+  addMessageConnection: function addMessageConnection(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.myId) }).then(function (currentUser) {
         if (!currentUser.recent_chat_connections) {
           currentUser.recent_chat_connections = [];
         }
 
-        const recentConnections = currentUser.recent_chat_connections;
-        const connectionIndex = recentConnections.findIndex(c => c.this_user_id === body.thisUserId);
+        var recentConnections = currentUser.recent_chat_connections;
+        var connectionIndex = recentConnections.findIndex(function (c) {
+          return c.this_user_id === body.thisUserId;
+        });
 
-        let connection;
+        var connection = void 0;
         if (connectionIndex < 0) {
           connection = {
             this_user_id: body.thisUserId,
@@ -415,22 +441,22 @@ exports.default = {
           connection = currentUser.recent_chat_connections[connectionIndex];
         }
 
-        User.save(currentUser).then(() => {
+        User.save(currentUser).then(function () {
           callback(err, connection);
         });
       });
     });
   },
-  deleteMessageConnection: function (req, resource, params, body, config, callback) {
-    _mongodb2.default.connect(MongoUrl, (err, db) => {
-      const User = db.collection('users');
-      User.findOne({ _id: ObjectID(body.myId) }).then(currentUser => {
-        const connecttions = currentUser.recent_chat_connections.filter(c => {
+  deleteMessageConnection: function deleteMessageConnection(req, resource, params, body, config, callback) {
+    _mongodb2.default.connect(MongoUrl, function (err, db) {
+      var User = db.collection('users');
+      User.findOne({ _id: ObjectID(body.myId) }).then(function (currentUser) {
+        var connecttions = currentUser.recent_chat_connections.filter(function (c) {
           return c.this_user_id !== body.thisUserId;
         });
 
         currentUser.recent_chat_connections = connecttions;
-        User.save(currentUser).then(() => {
+        User.save(currentUser).then(function () {
           callback(err, connecttions);
         });
       });

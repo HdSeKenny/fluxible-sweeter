@@ -29,9 +29,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * language service API
  */
-const language = {
+var language = {
     name: 'language',
-    read: function (req, resource, params, config, callback) {
+    read: function read(req, resource, params, config, callback) {
         var helper = new _language2.default({ req: req });
         var langName = params.lang || helper.getLang();
         var langPath = '../locales/' + langName + '.json';

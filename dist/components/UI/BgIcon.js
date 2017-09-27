@@ -20,14 +20,14 @@ var _createReactClass2 = _interopRequireDefault(_createReactClass);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const BgIcon = (0, _createReactClass2.default)({
-  getClassName: function () {
+var BgIcon = (0, _createReactClass2.default)({
+  getClassName: function getClassName() {
     return (0, _classnames2.default)({
       'bg-icon': true
     }, this.props.iconClassName, this.props.className);
   },
-  render: function () {
-    const className = this.getClassName();
+  render: function render() {
+    var className = this.getClassName();
     return _react2.default.createElement(
       'span',
       _extends({}, this.props, { className: className }),

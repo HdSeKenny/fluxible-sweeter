@@ -1,9 +1,9 @@
 'use strict';
 
 /* eslint-disable all, no-param-reassign */
-const env = require('./env');
-const _ = require('lodash');
-const supportLocales = ['en-US'];
+var env = require('./env');
+var _ = require('lodash');
+var supportLocales = ['en-US'];
 
 function Language(options) {
   options = options || {};
@@ -14,7 +14,7 @@ function Language(options) {
 }
 
 Language.prototype.getLang = function () {
-  let lang;
+  var lang = void 0;
   if (env.SERVER) {
     lang = this._req.headers['accept-language'];
     if (lang && lang.indexOf(',') > -1) {

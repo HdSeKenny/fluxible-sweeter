@@ -15,37 +15,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * 1) initial loading and update
  * s) rehydrate and dehydrate
  */
-const LanguageStore = (0, _createStore2.default)({
+var LanguageStore = (0, _createStore2.default)({
     storeName: 'LanguageStore',
     handlers: {
         'LOAD_LANGUAGE': 'loadLanguage',
         'CHANGE_LANGUAGE': 'changeLanguage'
     },
 
-    initialize: function () {
+    initialize: function initialize() {
         this.language = null;
         this.save = null;
     },
-    loadLanguage: function (res) {
+    loadLanguage: function loadLanguage(res) {
         this.save = res.save;
         this.language = res.data;
         this.emitChange();
     },
-    changeLanguage: function (res) {
+    changeLanguage: function changeLanguage(res) {
         this.save = res.save;
         this.language = res.data;
         this.emitChange();
     },
-    getLanguage: function () {
+    getLanguage: function getLanguage() {
         return this.language;
     },
-    dehydrate: function () {
+    dehydrate: function dehydrate() {
         return {
             language: this.language,
             save: this.save
         };
     },
-    rehydrate: function (state) {
+    rehydrate: function rehydrate(state) {
         this.language = state.language;
         this.save = state.save;
         if (this.save) {

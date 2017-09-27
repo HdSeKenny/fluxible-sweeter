@@ -26,11 +26,12 @@ var _components = require('./components');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const path = _configs2.default.path_prefix === '' ? '/' : _configs2.default.path_prefix;
-const { isPublic: isPublic } = _mode2.default;
+var path = _configs2.default.path_prefix === '' ? '/' : _configs2.default.path_prefix;
+var isPublic = _mode2.default.isPublic;
 
-const createRoutes = context => {
-  const requireLogin = (nextState, replace, cb) => {
+
+var createRoutes = function createRoutes(context) {
+  var requireLogin = function requireLogin(nextState, replace, cb) {
     // do nothing for public visists
     if (isPublic) {
       cb();
@@ -39,11 +40,11 @@ const createRoutes = context => {
 
     // only load session to store on server side for isNotPublic visits
     if (_env2.default.is_server) {
-      context.executeAction(_actions.UserActions.LoadKennyUser).then(() => {
+      context.executeAction(_actions.UserActions.LoadKennyUser).then(function () {
         cb();
       });
 
-      context.executeAction(_actions.UserActions.LoadSessionUser).then(() => {
+      context.executeAction(_actions.UserActions.LoadSessionUser).then(function () {
         cb();
       });
     } else {

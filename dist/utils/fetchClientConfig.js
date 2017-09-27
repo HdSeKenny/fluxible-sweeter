@@ -13,7 +13,7 @@ var fetchClientConfig = {
   //if you want to see the api result as  get method,set the value to false.
   post_for_read: true,
 
-  constructGetUri: function (baseUri, resource, params, config, context) {
+  constructGetUri: function constructGetUri(baseUri, resource, params, config, context) {
     var query = [];
     var matrix = [];
     var id_param = config.id_param;

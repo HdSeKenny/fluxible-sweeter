@@ -22,32 +22,32 @@ var _datetime2 = _interopRequireDefault(_datetime);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const DatePicker = (0, _createReactClass2.default)({
+var DatePicker = (0, _createReactClass2.default)({
 
     propTypes: {
         datetype: _propTypes2.default.array,
         maxage: _propTypes2.default.number
     },
 
-    getDefaultProps: function () {
+    getDefaultProps: function getDefaultProps() {
         return {
             datetype: ['month', 'day', 'year'],
             maxage: 100
         };
     },
-    getInitialState: function () {
+    getInitialState: function getInitialState() {
         return {
             month: this.props.month,
             year: this.props.year,
             day: this.props.day
         };
     },
-    getClassName: function () {
+    getClassName: function getClassName() {
         return (0, _classnames2.default)({
             'datepicker': true
         });
     },
-    render: function () {
+    render: function render() {
         var className = this.getClassName();
         return _react2.default.createElement(
             'div',
@@ -55,13 +55,15 @@ const DatePicker = (0, _createReactClass2.default)({
             this.renderSelect()
         );
     },
-    renderSelect: function () {
-        var selectors = this.props.datetype.map((type, index) => {
-            return this['render' + type]();
+    renderSelect: function renderSelect() {
+        var _this = this;
+
+        var selectors = this.props.datetype.map(function (type, index) {
+            return _this['render' + type]();
         });
         return selectors;
     },
-    getValue: function () {
+    getValue: function getValue() {
         if (isNaN(this.state.year) || isNaN(this.state.month) || isNaN(this.state.day)) {
             return "";
         } else {
@@ -69,25 +71,25 @@ const DatePicker = (0, _createReactClass2.default)({
             return date.format('mmddyyyy');
         }
     },
-    onMonthChange: function (e) {
+    onMonthChange: function onMonthChange(e) {
         var month = e.target.value;
         this.props.onChangeMonth({
             month: month
         });
     },
-    onDayChange: function (e) {
+    onDayChange: function onDayChange(e) {
         var day = e.target.value;
         this.props.onChangeDay({
             day: day
         });
     },
-    onYearChange: function (e) {
+    onYearChange: function onYearChange(e) {
         var year = e.target.value;
         this.props.onChangeYear({
             year: year
         });
     },
-    rendermonth: function () {
+    rendermonth: function rendermonth() {
         var options = [];
         options.push(_react2.default.createElement(
             'option',
@@ -108,7 +110,7 @@ const DatePicker = (0, _createReactClass2.default)({
             options
         );
     },
-    renderday: function () {
+    renderday: function renderday() {
         var options = [];
         options.push(_react2.default.createElement(
             'option',
@@ -129,7 +131,7 @@ const DatePicker = (0, _createReactClass2.default)({
             options
         );
     },
-    renderyear: function () {
+    renderyear: function renderyear() {
         var maxYear = new Date().getFullYear();
         var options = [];
         options.push(_react2.default.createElement(

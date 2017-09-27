@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -28,388 +30,452 @@ var _schema2 = _interopRequireDefault(_schema);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class RightTabs extends _react2.default.Component {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  constructor(props, context) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    super(props);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    this.focus = () => {
-      this.editor.focus();
+var RightTabs = function (_React$Component) {
+  _inherits(RightTabs, _React$Component);
+
+  function RightTabs(props, context) {
+    _classCallCheck(this, RightTabs);
+
+    var _this = _possibleConstructorReturn(this, (RightTabs.__proto__ || Object.getPrototypeOf(RightTabs)).call(this, props));
+
+    _this.focus = function () {
+      _this.editor.focus();
     };
 
-    this._onStoreChange = this._onStoreChange.bind(this);
-    this.state = {
+    _this._onStoreChange = _this._onStoreChange.bind(_this);
+    _this.state = {
       currentUser: context.getStore(_stores.UserStore).getCurrentUser()
     };
+    return _this;
   }
 
-  componentDidMount() {
-    this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
-  }
-
-  componentWillUnmount() {
-    this.context.getStore(_stores.UserStore).removeChangeListener(this._onStoreChange);
-  }
-
-  _onStoreChange(res) {
-    if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
-      // this.setState({});
+  _createClass(RightTabs, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
     }
-  }
-
-  convertTabTitle(group, query) {
-    let title = group.display_title;
-    if (query.tab) {
-      const tabName = group.tabs.find(tab => tab.tag === query.tab).value;
-      if (tabName) {
-        title += ` / ${tabName}`;
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.context.getStore(_stores.UserStore).removeChangeListener(this._onStoreChange);
+    }
+  }, {
+    key: '_onStoreChange',
+    value: function _onStoreChange(res) {
+      if (res.msg === 'CANCEL_FOLLOW_USER_SUCCESS') {
+        // this.setState({});
       }
     }
+  }, {
+    key: 'convertTabTitle',
+    value: function convertTabTitle(group, query) {
+      var title = group.display_title;
+      if (query.tab) {
+        var tabName = group.tabs.find(function (tab) {
+          return tab.tag === query.tab;
+        }).value;
+        if (tabName) {
+          title += ' / ' + tabName;
+        }
+      }
 
-    return title;
-  }
-
-  isFollowedThisUser(currentUser, user) {
-    let isFollowed = false;
-    if (currentUser && user) {
-      const fIdx = currentUser.focuses.findIndex(f => f.id_str === user.id_str);
-      isFollowed = fIdx >= 0;
+      return title;
     }
+  }, {
+    key: 'isFollowedThisUser',
+    value: function isFollowedThisUser(currentUser, user) {
+      var isFollowed = false;
+      if (currentUser && user) {
+        var fIdx = currentUser.focuses.findIndex(function (f) {
+          return f.id_str === user.id_str;
+        });
+        isFollowed = fIdx >= 0;
+      }
 
-    return isFollowed;
-  }
-
-  followThisUser(currentUser, user) {
-    if (!currentUser) {
-      return _plugins.swal.warning('Login first please!');
+      return isFollowed;
     }
+  }, {
+    key: 'followThisUser',
+    value: function followThisUser(currentUser, user) {
+      if (!currentUser) {
+        return _plugins.swal.warning('Login first please!');
+      }
 
-    const followObj = {
-      thisUserId: user.id_str,
-      currentUserId: currentUser.id_str
-    };
-
-    this.context.executeAction(_actions.UserActions.FollowThisUser, followObj);
-  }
-
-  unfollowThisUser(currentUser, user) {
-    if (!currentUser) {
-      return _plugins.swal.warning('Login first please!');
-    }
-
-    _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
-      this.context.executeAction(_actions.UserActions.CancelFollowThisUser, {
+      var followObj = {
         thisUserId: user.id_str,
         currentUserId: currentUser.id_str
-      });
-    });
-  }
+      };
 
-  convertTabRows(user, group, query) {
-    let personArr = user[group.default_source] || [];
-    if (query.tab) {
-      personArr = user[query.title] ? user[query.title][query.tab] : [];
+      this.context.executeAction(_actions.UserActions.FollowThisUser, followObj);
     }
+  }, {
+    key: 'unfollowThisUser',
+    value: function unfollowThisUser(currentUser, user) {
+      var _this2 = this;
 
-    if (personArr.length) {
-      personArr.forEach((p, index) => {
-        if (typeof p === 'string') {
-          personArr[index] = this.context.getStore(_stores.UserStore).getUserById(p);
+      if (!currentUser) {
+        return _plugins.swal.warning('Login first please!');
+      }
+
+      _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
+        _this2.context.executeAction(_actions.UserActions.CancelFollowThisUser, {
+          thisUserId: user.id_str,
+          currentUserId: currentUser.id_str
+        });
+      });
+    }
+  }, {
+    key: 'convertTabRows',
+    value: function convertTabRows(user, group, query) {
+      var _this3 = this;
+
+      var personArr = user[group.default_source] || [];
+      if (query.tab) {
+        personArr = user[query.title] ? user[query.title][query.tab] : [];
+      }
+
+      if (personArr.length) {
+        personArr.forEach(function (p, index) {
+          if (typeof p === 'string') {
+            personArr[index] = _this3.context.getStore(_stores.UserStore).getUserById(p);
+          }
+        });
+      }
+      return personArr;
+    }
+  }, {
+    key: 'getGroupSourceNumber',
+    value: function getGroupSourceNumber(user, group) {
+      var query = this.props.query;
+
+      var num = 0;
+      if (query.tab) {
+        num = user[query.title] ? user[query.title][query.tab].length : 0;
+      } else {
+        num = user[group.default_source] ? user[group.default_source].length : 0;
+      }
+
+      return num;
+    }
+  }, {
+    key: 'isActive',
+    value: function isActive(title) {
+      var query = this.props.query;
+      // eslint-disable-next-line
+
+      return query.title ? query.title === title ? 'active' : '' : '';
+    }
+  }, {
+    key: 'onClickTabTitle',
+    value: function onClickTabTitle(pathname, title) {
+      _reactRouter.browserHistory.push({
+        pathname: pathname,
+        query: {
+          title: title
         }
       });
     }
-    return personArr;
-  }
-
-  getGroupSourceNumber(user, group) {
-    const { query: query } = this.props;
-    let num = 0;
-    if (query.tab) {
-      num = user[query.title] ? user[query.title][query.tab].length : 0;
-    } else {
-      num = user[group.default_source] ? user[group.default_source].length : 0;
-    }
-
-    return num;
-  }
-
-  isActive(title) {
-    const { query: query } = this.props;
-    // eslint-disable-next-line
-    return query.title ? query.title === title ? 'active' : '' : '';
-  }
-
-  onClickTabTitle(pathname, title) {
-    _reactRouter.browserHistory.push({
-      pathname: pathname,
-      query: {
-        title: title
-      }
-    });
-  }
-
-  moveToOtherGroup() {}
-
-  _renderUserFollowsInfo(p) {
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        _reactRouter.Link,
-        { to: `/${p.username}` },
+  }, {
+    key: 'moveToOtherGroup',
+    value: function moveToOtherGroup() {}
+  }, {
+    key: '_renderUserFollowsInfo',
+    value: function _renderUserFollowsInfo(p) {
+      return _react2.default.createElement(
+        'div',
+        null,
         _react2.default.createElement(
-          'h4',
-          { className: 'm-0 mb-5' },
+          _reactRouter.Link,
+          { to: '/' + p.username },
+          _react2.default.createElement(
+            'h4',
+            { className: 'm-0 mb-5' },
+            _react2.default.createElement(
+              'strong',
+              null,
+              p.username
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Row,
+          null,
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4 p-0' },
+            _react2.default.createElement(
+              'p',
+              null,
+              _react2.default.createElement(
+                'strong',
+                null,
+                'Focuses'
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'f-value' },
+                p.focuses.length
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4 p-0' },
+            _react2.default.createElement(
+              'p',
+              null,
+              _react2.default.createElement(
+                'strong',
+                null,
+                'Fans'
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'f-value' },
+                p.fans.length
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4 p-0' },
+            _react2.default.createElement(
+              'p',
+              null,
+              _react2.default.createElement(
+                'strong',
+                null,
+                'Blogs'
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'f-value' },
+                p.blogs.length
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Row,
+          null,
           _react2.default.createElement(
             'strong',
             null,
-            p.username
-          )
-        )
-      ),
-      _react2.default.createElement(
-        _Layout.Row,
-        null,
+            'Signature:'
+          ),
+          ' ',
+          p.signature
+        ),
         _react2.default.createElement(
-          _Layout.Col,
-          { size: '4 p-0' },
+          _Layout.Row,
+          null,
           _react2.default.createElement(
-            'p',
+            'strong',
             null,
-            _react2.default.createElement(
-              'strong',
-              null,
-              'Focuses'
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'f-value' },
-              p.focuses.length
-            )
-          )
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4 p-0' },
-          _react2.default.createElement(
-            'p',
-            null,
-            _react2.default.createElement(
-              'strong',
-              null,
-              'Fans'
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'f-value' },
-              p.fans.length
-            )
-          )
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4 p-0' },
-          _react2.default.createElement(
-            'p',
-            null,
-            _react2.default.createElement(
-              'strong',
-              null,
-              'Blogs'
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'f-value' },
-              p.blogs.length
-            )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        _Layout.Row,
-        null,
-        _react2.default.createElement(
-          'strong',
-          null,
-          'Signature:'
-        ),
-        ' ',
-        p.signature
-      ),
-      _react2.default.createElement(
-        _Layout.Row,
-        null,
-        _react2.default.createElement(
-          'strong',
-          null,
-          'Profession:'
-        ),
-        ' ',
-        p.profession
-      )
-    );
-  }
-
-  _renderUserRowBtns(displayUser, p) {
-    const isFollowed = this.isFollowedThisUser(displayUser, p);
-    const { query: query, isCurrentUser: isCurrentUser } = this.props;
-    return _react2.default.createElement(
-      'div',
-      { className: 'row-btns' },
-      isFollowed ? _react2.default.createElement(
-        'button',
-        {
-          className: 'btn btn-success',
-          'data-balloon': 'Click to unfollow user!',
-          'data-balloon-pos': 'top',
-          onClick: () => this.unfollowThisUser(displayUser, p) },
-        _react2.default.createElement('i', { className: 'fa fa-check mr-5', 'aria-hidden': 'true' }),
-        'Followed'
-      ) : _react2.default.createElement(
-        'button',
-        {
-          className: 'btn btn-info',
-          'data-balloon': 'Follow this user!',
-          'data-balloon-pos': 'top',
-          onClick: () => this.followThisUser(displayUser, p) },
-        _react2.default.createElement('i', { className: 'fa fa-plus mr-5', 'aria-hidden': 'true' }),
-        'Follow'
-      ),
-      _react2.default.createElement(
-        'button',
-        {
-          className: 'btn btn-warning ml-5 options',
-          'data-toggle': 'dropdown',
-          'data-balloon': 'Options',
-          'data-balloon-pos': 'top' },
-        _react2.default.createElement('i', { className: 'fa fa-cog mr-5', 'aria-hidden': 'true' }),
-        'Options'
-      ),
-      _react2.default.createElement(
-        'ul',
-        { className: 'dropdown-menu', role: 'menu', 'aria-labelledby': 'dLabel' },
-        query.title !== 'fans_list' && isCurrentUser && _react2.default.createElement(
-          'li',
-          null,
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:void(0)', onClick: this.moveToOtherGroup },
-            'Move to'
-          )
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:void(0)' },
-            'Message'
-          )
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:void(0)' },
-            'Report'
-          )
-        )
-      )
-    );
-  }
-
-  _renderUserRows(user, currentUser, rows) {
-    if (rows.length) {
-      return rows.map((p, index) => _react2.default.createElement(
-        _Layout.Row,
-        { key: index, className: 'tab-row mb-15' },
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '1 u-img pl-0 mb-10 mt-5' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: `/${p.username}` },
-            _react2.default.createElement('img', { alt: 'user', src: p.image_url })
-          )
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '7' },
-          this._renderUserFollowsInfo(p)
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4 tar pr-0' },
-          currentUser.id_str !== p.id_str && this._renderUserRowBtns(user, p)
-        )
-      ));
-    } else {
-      return _react2.default.createElement(
-        'div',
-        { className: 'tac pt-30' },
-        _react2.default.createElement(
-          'h3',
-          null,
-          'Not data here ...'
+            'Profession:'
+          ),
+          ' ',
+          p.profession
         )
       );
     }
-  }
+  }, {
+    key: '_renderUserRowBtns',
+    value: function _renderUserRowBtns(displayUser, p) {
+      var _this4 = this;
 
-  render() {
-    const { currentUser: currentUser, query: query, isCurrentUser: isCurrentUser, user: user, pathname: pathname } = this.props;
+      var isFollowed = this.isFollowedThisUser(displayUser, p);
+      var _props = this.props,
+          query = _props.query,
+          isCurrentUser = _props.isCurrentUser;
 
-    const navGroups = _schema2.default.navGroups;
-    const group = navGroups[query.title];
-    const displayUser = isCurrentUser ? currentUser : user;
-    const rows = this.convertTabRows(displayUser, group, query);
-    const tabValue = this.getGroupSourceNumber(displayUser, group);
-    return _react2.default.createElement(
-      'div',
-      { className: 'right-tabs' },
-      isCurrentUser ? _react2.default.createElement(
-        'h5',
-        { className: 'tab-value pb-10' },
+      return _react2.default.createElement(
+        'div',
+        { className: 'row-btns' },
+        isFollowed ? _react2.default.createElement(
+          'button',
+          {
+            className: 'btn btn-success',
+            'data-balloon': 'Click to unfollow user!',
+            'data-balloon-pos': 'top',
+            onClick: function onClick() {
+              return _this4.unfollowThisUser(displayUser, p);
+            } },
+          _react2.default.createElement('i', { className: 'fa fa-check mr-5', 'aria-hidden': 'true' }),
+          'Followed'
+        ) : _react2.default.createElement(
+          'button',
+          {
+            className: 'btn btn-info',
+            'data-balloon': 'Follow this user!',
+            'data-balloon-pos': 'top',
+            onClick: function onClick() {
+              return _this4.followThisUser(displayUser, p);
+            } },
+          _react2.default.createElement('i', { className: 'fa fa-plus mr-5', 'aria-hidden': 'true' }),
+          'Follow'
+        ),
         _react2.default.createElement(
-          'strong',
-          null,
-          this.convertTabTitle(group, query),
-          ' ',
-          tabValue
-        )
-      ) : _react2.default.createElement(
-        _Layout.Row,
-        { className: 'tab-choose mb-20' },
+          'button',
+          {
+            className: 'btn btn-warning ml-5 options',
+            'data-toggle': 'dropdown',
+            'data-balloon': 'Options',
+            'data-balloon-pos': 'top' },
+          _react2.default.createElement('i', { className: 'fa fa-cog mr-5', 'aria-hidden': 'true' }),
+          'Options'
+        ),
         _react2.default.createElement(
-          'div',
-          { className: `col-xs-2 tac mr-10 ${this.isActive('focuses_list')}`, onClick: () => this.onClickTabTitle(pathname, 'focuses_list') },
-          _react2.default.createElement(
-            'h5',
+          'ul',
+          { className: 'dropdown-menu', role: 'menu', 'aria-labelledby': 'dLabel' },
+          query.title !== 'fans_list' && isCurrentUser && _react2.default.createElement(
+            'li',
             null,
-            'His Focuses'
+            _react2.default.createElement(
+              'a',
+              { href: 'javascript:void(0)', onClick: this.moveToOtherGroup },
+              'Move to'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              'a',
+              { href: 'javascript:void(0)' },
+              'Message'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              'a',
+              { href: 'javascript:void(0)' },
+              'Report'
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: '_renderUserRows',
+    value: function _renderUserRows(user, currentUser, rows) {
+      var _this5 = this;
+
+      if (rows.length) {
+        return rows.map(function (p, index) {
+          return _react2.default.createElement(
+            _Layout.Row,
+            { key: index, className: 'tab-row mb-15' },
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '1 u-img pl-0 mb-10 mt-5' },
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/' + p.username },
+                _react2.default.createElement('img', { alt: 'user', src: p.image_url })
+              )
+            ),
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '7' },
+              _this5._renderUserFollowsInfo(p)
+            ),
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '4 tar pr-0' },
+              currentUser.id_str !== p.id_str && _this5._renderUserRowBtns(user, p)
+            )
+          );
+        });
+      } else {
+        return _react2.default.createElement(
+          'div',
+          { className: 'tac pt-30' },
+          _react2.default.createElement(
+            'h3',
+            null,
+            'Not data here ...'
+          )
+        );
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this6 = this;
+
+      var _props2 = this.props,
+          currentUser = _props2.currentUser,
+          query = _props2.query,
+          isCurrentUser = _props2.isCurrentUser,
+          user = _props2.user,
+          pathname = _props2.pathname;
+
+
+      var navGroups = _schema2.default.navGroups;
+      var group = navGroups[query.title];
+      var displayUser = isCurrentUser ? currentUser : user;
+      var rows = this.convertTabRows(displayUser, group, query);
+      var tabValue = this.getGroupSourceNumber(displayUser, group);
+      return _react2.default.createElement(
+        'div',
+        { className: 'right-tabs' },
+        isCurrentUser ? _react2.default.createElement(
+          'h5',
+          { className: 'tab-value pb-10' },
+          _react2.default.createElement(
+            'strong',
+            null,
+            this.convertTabTitle(group, query),
+            ' ',
+            tabValue
+          )
+        ) : _react2.default.createElement(
+          _Layout.Row,
+          { className: 'tab-choose mb-20' },
+          _react2.default.createElement(
+            'div',
+            { className: 'col-xs-2 tac mr-10 ' + this.isActive('focuses_list'), onClick: function onClick() {
+                return _this6.onClickTabTitle(pathname, 'focuses_list');
+              } },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'His Focuses'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'col-xs-2 tac ' + this.isActive('fans_list'), onClick: function onClick() {
+                return _this6.onClickTabTitle(pathname, 'fans_list');
+              } },
+            _react2.default.createElement(
+              'h5',
+              null,
+              'His Fans'
+            )
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: `col-xs-2 tac ${this.isActive('fans_list')}`, onClick: () => this.onClickTabTitle(pathname, 'fans_list') },
-          _react2.default.createElement(
-            'h5',
-            null,
-            'His Fans'
-          )
+          { className: 'tab-rows' },
+          this._renderUserRows(displayUser, currentUser, rows)
         )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'tab-rows' },
-        this._renderUserRows(displayUser, currentUser, rows)
-      )
-    );
-  }
-}
-exports.default = RightTabs;
+      );
+    }
+  }]);
+
+  return RightTabs;
+}(_react2.default.Component);
+
 RightTabs.displayName = 'RightTabs';
 RightTabs.contextTypes = {
   getStore: _propTypes2.default.func,
@@ -421,4 +487,5 @@ RightTabs.propTypes = {
   query: _propTypes2.default.object,
   isCurrentUser: _propTypes2.default.bool
 };
+exports.default = RightTabs;
 module.exports = exports['default'];

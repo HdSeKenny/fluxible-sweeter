@@ -4,30 +4,30 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-const convertMsg = msg => {
-  const strMsg = msg.split('_').join(' ').toLowerCase();
-  const firstLetter = strMsg.charAt(0).toUpperCase();
-  return `${firstLetter}${strMsg.substr(1)}`;
+var convertMsg = function convertMsg(msg) {
+  var strMsg = msg.split('_').join(' ').toLowerCase();
+  var firstLetter = strMsg.charAt(0).toUpperCase();
+  return '' + firstLetter + strMsg.substr(1);
 };
 
-const confirmButtonColor = '#00a9da';
-const closeTimer = 2000;
+var confirmButtonColor = '#00a9da';
+var closeTimer = 2000;
 
 exports.default = {
-  success: (msg, cb) => {
+  success: function success(msg, cb) {
     swal({
       title: convertMsg(msg),
       type: 'success',
       confirmButtonColor: confirmButtonColor,
       timer: closeTimer
-    }, () => {
+    }, function () {
       if (cb) {
         cb();
       }
     });
   },
 
-  Info: msg => {
+  Info: function Info(msg) {
     swal({
       title: 'Info',
       text: convertMsg(msg),
@@ -36,7 +36,7 @@ exports.default = {
     });
   },
 
-  error: msg => {
+  error: function error(msg) {
     swal({
       title: convertMsg(msg),
       type: 'error',
@@ -45,29 +45,29 @@ exports.default = {
     });
   },
 
-  warning: (msg, cb) => {
+  warning: function warning(msg, cb) {
     swal({
       title: convertMsg(msg),
       type: 'warning',
       confirmButtonColor: '#F8BB86'
-    }, () => {
+    }, function () {
       if (cb) {
         cb();
       }
     });
   },
 
-  confirm: (msg, confirmText, callback) => {
+  confirm: function confirm(msg, confirmText, callback) {
     swal({
-      title: `${convertMsg(msg)}?`,
+      title: convertMsg(msg) + '?',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#DD6B55',
       confirmButtonText: confirmText,
       closeOnConfirm: false,
       showLoaderOnConfirm: true
-    }, () => {
-      setTimeout(() => {
+    }, function () {
+      setTimeout(function () {
         callback();
       }, 500);
     });

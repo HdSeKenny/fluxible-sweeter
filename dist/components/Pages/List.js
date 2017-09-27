@@ -49,10 +49,10 @@ exports.default = (0, _createReactClass2.default)({
     storeListeners: [_stores.BlogStore, _stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStateFromStores();
   },
-  getStateFromStores: function () {
+  getStateFromStores: function getStateFromStores() {
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       kenny: this.getStore(_stores.UserStore).getKennyUser(),
@@ -61,10 +61,12 @@ exports.default = (0, _createReactClass2.default)({
       showPinModal: false
     };
   },
-  onChange: function (res) {
-    const thumbsAndCommentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS'];
+  onChange: function onChange(res) {
+    var _this = this;
 
-    const blogsMsgs = ['DELETE_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS'];
+    var thumbsAndCommentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS'];
+
+    var blogsMsgs = ['DELETE_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS'];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
       _plugins.swal.success(res.msg);
@@ -75,41 +77,50 @@ exports.default = (0, _createReactClass2.default)({
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      _plugins.swal.success(res.msg, () => {
-        this.setState({
-          blogs: this.context.getStore(_stores.BlogStore).getAllBlogs()
+      _plugins.swal.success(res.msg, function () {
+        _this.setState({
+          blogs: _this.context.getStore(_stores.BlogStore).getAllBlogs()
         });
       });
     }
 
     if (['USER_LOGIN_SUCCESS', 'USER_REGISTER_SUCCESS'].includes(res.msg)) {
-      const currentUser = this.context.getStore(_stores.UserStore).getCurrentUser();
+      var currentUser = this.context.getStore(_stores.UserStore).getCurrentUser();
       this.setState({
         currentUser: currentUser
       });
     }
   },
-  onViewPinItem: function (id) {
-    const { blogs: blogs } = this.state;
-    const selectedPin = blogs.find(p => p.id_str === id);
+  onViewPinItem: function onViewPinItem(id) {
+    var _this2 = this;
+
+    var blogs = this.state.blogs;
+
+    var selectedPin = blogs.find(function (p) {
+      return p.id_str === id;
+    });
     this.setState({ selectedPin: selectedPin, showPinModal: true });
 
-    $('#pinModal').on('hidden.bs.modal', () => {
-      if (this.hidePinModal) {
-        this.hidePinModal();
+    $('#pinModal').on('hidden.bs.modal', function () {
+      if (_this2.hidePinModal) {
+        _this2.hidePinModal();
       }
     });
     _UI.ModalsFactory.show('pinModal');
   },
-  componentDidMount: function () {},
-  hidePinModal: function () {
-    const listDom = $('.list-page');
+  componentDidMount: function componentDidMount() {},
+  hidePinModal: function hidePinModal() {
+    var listDom = $('.list-page');
     if (listDom && listDom.length) {
       this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
-  _renderUserCardInfo: function (displayUser) {
-    const { image_url: image_url, username: username, profession: profession, description: description } = displayUser;
+  _renderUserCardInfo: function _renderUserCardInfo(displayUser) {
+    var image_url = displayUser.image_url,
+        username = displayUser.username,
+        profession = displayUser.profession,
+        description = displayUser.description;
+
     return _react2.default.createElement(
       'div',
       { className: '' },
@@ -121,7 +132,7 @@ exports.default = (0, _createReactClass2.default)({
           { size: '3' },
           _react2.default.createElement(
             _reactRouter.Link,
-            { to: `/${username}` },
+            { to: '/' + username },
             _react2.default.createElement('img', { alt: 'user', src: image_url })
           )
         ),
@@ -133,7 +144,7 @@ exports.default = (0, _createReactClass2.default)({
             { className: 'm-0' },
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: `/${username}` },
+              { to: '/' + username },
               username
             )
           ),
@@ -155,10 +166,10 @@ exports.default = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderUserCardFooter: function (displayUser) {
-    const focusNumber = displayUser.focuses.length;
-    const fansNumber = displayUser.fans.length;
-    const blogsNumber = displayUser.blogs.length;
+  _renderUserCardFooter: function _renderUserCardFooter(displayUser) {
+    var focusNumber = displayUser.focuses.length;
+    var fansNumber = displayUser.fans.length;
+    var blogsNumber = displayUser.blogs.length;
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'card-footer' },
@@ -206,17 +217,29 @@ exports.default = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderAllPinItems: function (pins, currentUser) {
-    const sortedPins = _utils.jsUtils.sortByDate(pins);
+  _renderAllPinItems: function _renderAllPinItems(pins, currentUser) {
+    var _this3 = this;
+
+    var sortedPins = _utils.jsUtils.sortByDate(pins);
     return _react2.default.createElement(
       'div',
       { className: '' },
-      sortedPins.map(pin => _react2.default.createElement(_UI.PinItem, { key: pin.id_str, onSelect: id => this.onViewPinItem(id), pin: pin, currentUser: currentUser, readMore: false }))
+      sortedPins.map(function (pin) {
+        return _react2.default.createElement(_UI.PinItem, { key: pin.id_str, onSelect: function onSelect(id) {
+            return _this3.onViewPinItem(id);
+          }, pin: pin, currentUser: currentUser, readMore: false });
+      })
     );
   },
-  render: function () {
-    const { currentUser: currentUser, kenny: kenny, blogs: blogs, selectedPin: selectedPin, showPinModal: showPinModal } = this.state;
-    const displayUser = currentUser || kenny;
+  render: function render() {
+    var _state = this.state,
+        currentUser = _state.currentUser,
+        kenny = _state.kenny,
+        blogs = _state.blogs,
+        selectedPin = _state.selectedPin,
+        showPinModal = _state.showPinModal;
+
+    var displayUser = currentUser || kenny;
     return _react2.default.createElement(
       'article',
       { className: 'list-page' },

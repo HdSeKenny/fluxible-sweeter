@@ -8,9 +8,9 @@ var Cookie = require('../utils/cookie');
 module.exports = {
     name: 'CookiePlugin',
 
-    plugContext: function (options) {
+    plugContext: function plugContext(options) {
         return {
-            plugActionContext: function (actionContext) {
+            plugActionContext: function plugActionContext(actionContext) {
                 actionContext.cookie = new Cookie({
                     req: options.req,
                     res: options.res

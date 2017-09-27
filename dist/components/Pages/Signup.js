@@ -32,7 +32,7 @@ var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Signup = (0, _createReactClass2.default)({
+var Signup = (0, _createReactClass2.default)({
 
   displayName: 'Signup',
 
@@ -51,7 +51,7 @@ const Signup = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return {
       firstNameValidate: '',
       lastNameValidate: '',
@@ -60,7 +60,7 @@ const Signup = (0, _createReactClass2.default)({
       passwordValidate: ''
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
     if (res.msg === 'USER_REGISTER_SUCCESS') {
       _plugins.swal.success(res.stat);
       _UI.ModalsFactory.hide('signupModal');
@@ -68,24 +68,24 @@ const Signup = (0, _createReactClass2.default)({
     }
 
     if (res.msg === 'USER_REGISTER_FAIL') {
-      this.setState({ emailMsg: `* ${res.stat}`, emailValidate: 'has-error' });
+      this.setState({ emailMsg: '* ' + res.stat, emailValidate: 'has-error' });
     }
   },
-  handleRegister: function (e) {
+  handleRegister: function handleRegister(e) {
     e.preventDefault();
-    const newUser = {
+    var newUser = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       username: this.state.username,
       email: this.state.email,
       password: this.state.password
     };
-    const firstName = this.validateFirstName(newUser.firstName);
-    const lastName = this.validateLastName(newUser.lastName);
-    const username = this.validateUsername(newUser.username);
-    const email = this.validateEmail(newUser.email);
-    const password = this.validatePassword(newUser.password);
-    const confirmPassword = this.validateConfirmPassword(this.state.confirmPassword);
+    var firstName = this.validateFirstName(newUser.firstName);
+    var lastName = this.validateLastName(newUser.lastName);
+    var username = this.validateUsername(newUser.username);
+    var email = this.validateEmail(newUser.email);
+    var password = this.validatePassword(newUser.password);
+    var confirmPassword = this.validateConfirmPassword(this.state.confirmPassword);
 
     if (firstName && lastName && username && email && password && confirmPassword) {
       this.context.executeAction(_actions.UserActions.UserRegister, newUser);
@@ -93,9 +93,9 @@ const Signup = (0, _createReactClass2.default)({
       _plugins.swal.error('Register failed !');
     }
   },
-  validateFirstName: function (firstName) {
-    const regex = /^[a-zA-Z']*$/;
-    let flag = false;
+  validateFirstName: function validateFirstName(firstName) {
+    var regex = /^[a-zA-Z']*$/;
+    var flag = false;
     if (!firstName) {
       this.setState({
         firstNameMsg: '* First name is required !',
@@ -115,9 +115,9 @@ const Signup = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateLastName: function (lastName) {
-    const regex = /^[a-zA-Z']*$/;
-    let flag = false;
+  validateLastName: function validateLastName(lastName) {
+    var regex = /^[a-zA-Z']*$/;
+    var flag = false;
     if (!lastName) {
       this.setState({
         lastNameMsg: '* Last name is required !',
@@ -137,9 +137,9 @@ const Signup = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateUsername: function (username) {
-    const regex = /^[a-zA-Z0-9_]+$/;
-    let flag = false;
+  validateUsername: function validateUsername(username) {
+    var regex = /^[a-zA-Z0-9_]+$/;
+    var flag = false;
     if (!username) {
       this.setState({
         usernameMsg: '* Username is required !',
@@ -164,8 +164,8 @@ const Signup = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validateEmail: function (email) {
-    let flag = false;
+  validateEmail: function validateEmail(email) {
+    var flag = false;
     if (!email) {
       this.setState({
         emailMsg: '* Email address is required !',
@@ -179,8 +179,8 @@ const Signup = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  validatePassword: function (password) {
-    let flag = false;
+  validatePassword: function validatePassword(password) {
+    var flag = false;
     if (!password) {
       this.setState({
         passwordMsg: '* Password is required !',
@@ -201,8 +201,8 @@ const Signup = (0, _createReactClass2.default)({
 
     return flag;
   },
-  validateConfirmPassword: function (confirmPassword) {
-    let flag = false;
+  validateConfirmPassword: function validateConfirmPassword(confirmPassword) {
+    var flag = false;
     if (!confirmPassword) {
       this.setState({
         confirmPasswordMsg: '* Please enter password again !',
@@ -222,51 +222,51 @@ const Signup = (0, _createReactClass2.default)({
     }
     return flag;
   },
-  openLoginModal: function () {
+  openLoginModal: function openLoginModal() {
     this.props.switchOpenModal('loginModal');
     _UI.ModalsFactory.hide('signupModal');
   },
-  handleFirstName: function (e) {
+  handleFirstName: function handleFirstName(e) {
     this.validateFirstName(e.target.value);
     this.setState({ firstName: e.target.value });
   },
-  handleLastName: function (e) {
+  handleLastName: function handleLastName(e) {
     this.validateLastName(e.target.value);
     this.setState({ lastName: e.target.value });
   },
-  handleUsername: function (e) {
+  handleUsername: function handleUsername(e) {
     this.validateUsername(e.target.value);
     this.setState({ username: e.target.value });
   },
-  handleEmail: function (e) {
+  handleEmail: function handleEmail(e) {
     this.validateEmail(e.target.value);
     this.setState({ email: e.target.value });
   },
-  handlePassword: function (e) {
+  handlePassword: function handlePassword(e) {
     this.validatePassword(e.target.value);
     this.setState({ password: e.target.value });
   },
-  handleConfirmPassword: function (e) {
+  handleConfirmPassword: function handleConfirmPassword(e) {
     this.validateConfirmPassword(e.target.value);
     this.setState({ confirmPassword: e.target.value });
   },
-  render: function () {
-    const {
-      firstNameValidate: firstNameValidate,
-      firstNameMsg: firstNameMsg,
-      lastNameValidate: lastNameValidate,
-      lastNameMsg: lastNameMsg,
-      usernameValidate: usernameValidate,
-      usernameMsg: usernameMsg,
-      emailValidate: emailValidate,
-      emailMsg: emailMsg,
-      passwordValidate: passwordValidate,
-      passwordMsg: passwordMsg,
-      confirmPasswordValidate: confirmPasswordValidate,
-      confirmPasswordMsg: confirmPasswordMsg
-    } = this.state;
+  render: function render() {
+    var _state = this.state,
+        firstNameValidate = _state.firstNameValidate,
+        firstNameMsg = _state.firstNameMsg,
+        lastNameValidate = _state.lastNameValidate,
+        lastNameMsg = _state.lastNameMsg,
+        usernameValidate = _state.usernameValidate,
+        usernameMsg = _state.usernameMsg,
+        emailValidate = _state.emailValidate,
+        emailMsg = _state.emailMsg,
+        passwordValidate = _state.passwordValidate,
+        passwordMsg = _state.passwordMsg,
+        confirmPasswordValidate = _state.confirmPasswordValidate,
+        confirmPasswordMsg = _state.confirmPasswordMsg;
 
-    const formGroups = {
+
+    var formGroups = {
       username: {
         valid: usernameValidate,
         msg: usernameMsg,
@@ -309,7 +309,7 @@ const Signup = (0, _createReactClass2.default)({
               { size: '6' },
               _react2.default.createElement(
                 'div',
-                { className: `form-group ${firstNameValidate}` },
+                { className: 'form-group ' + firstNameValidate },
                 _react2.default.createElement('input', { type: 'text', onChange: this.handleFirstName, className: 'form-control', placeholder: 'First Name' }),
                 _react2.default.createElement(
                   'p',
@@ -324,7 +324,7 @@ const Signup = (0, _createReactClass2.default)({
               { size: '6' },
               _react2.default.createElement(
                 'div',
-                { className: `form-group ${lastNameValidate}` },
+                { className: 'form-group ' + lastNameValidate },
                 _react2.default.createElement('input', { type: 'text', onChange: this.handleLastName, className: 'form-control', placeholder: 'Last Name' }),
                 _react2.default.createElement(
                   'p',
@@ -335,10 +335,14 @@ const Signup = (0, _createReactClass2.default)({
               )
             )
           ),
-          Object.keys(formGroups).map((key, index) => {
-            const formGroup = formGroups[key];
-            const { valid: valid, holder: holder, handleEvent: handleEvent, msg: msg } = formGroup;
-            let inputType = 'text';
+          Object.keys(formGroups).map(function (key, index) {
+            var formGroup = formGroups[key];
+            var valid = formGroup.valid,
+                holder = formGroup.holder,
+                handleEvent = formGroup.handleEvent,
+                msg = formGroup.msg;
+
+            var inputType = 'text';
             if (['password', 'confirmPassword'].includes(key)) {
               inputType = 'password';
             }
@@ -355,7 +359,7 @@ const Signup = (0, _createReactClass2.default)({
                 { size: '12' },
                 _react2.default.createElement(
                   'div',
-                  { className: `form-group ${valid}` },
+                  { className: 'form-group ' + valid },
                   _react2.default.createElement('input', { type: inputType, onChange: handleEvent, className: 'form-control', placeholder: holder }),
                   _react2.default.createElement(
                     'p',

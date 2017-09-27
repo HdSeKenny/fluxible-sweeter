@@ -67,25 +67,32 @@ exports.default = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.getStatesFromStores();
   },
-  getStatesFromStores: function () {
-    const { username: username } = this.props.params;
+  getStatesFromStores: function getStatesFromStores() {
+    var username = this.props.params.username;
+
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       user: this.getStore(_stores.UserStore).getUserByUsername(username),
       isCurrentUser: this.getStore(_stores.UserStore).isCurrentUser(username)
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
     if (res.msg && res.msg !== 'LOGOUT_SUCCESS' || !res.msg) {
       this.setState(this.getStatesFromStores());
     }
   },
-  render: function () {
-    const { pathname: pathname, query: query } = this.props.location;
-    const { currentUser: currentUser, user: user, isCurrentUser: isCurrentUser } = this.state;
+  render: function render() {
+    var _props$location = this.props.location,
+        pathname = _props$location.pathname,
+        query = _props$location.query;
+    var _state = this.state,
+        currentUser = _state.currentUser,
+        user = _state.user,
+        isCurrentUser = _state.isCurrentUser;
+
 
     if (!currentUser) {
       return _react2.default.createElement(

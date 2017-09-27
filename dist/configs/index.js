@@ -1,8 +1,8 @@
 'use strict';
 
 // Project configs
-const params = require('./params');
-const instance = require('./instance');
+var params = require('./params');
+var instance = require('./instance');
 
 module.exports = {
   project: 'Sweeter',
@@ -36,5 +36,5 @@ module.exports = {
     expired: 180 * 60 * 1000 // 3 hours
   },
   params: params,
-  path_prefix: instance.name ? `/${instance.name}` : ''
+  path_prefix: instance.name ? '/' + instance.name : ''
 };

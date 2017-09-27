@@ -30,7 +30,7 @@ var _Layout = require('../UI/Layout');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Comments = (0, _createReactClass2.default)({
+var Comments = (0, _createReactClass2.default)({
 
   displayName: 'Comments',
 
@@ -51,29 +51,30 @@ const Comments = (0, _createReactClass2.default)({
     storeListeners: [_stores.UserStore, _stores.BlogStore]
   },
 
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return {
       commentText: '',
       replyText: ''
     };
   },
-  onChange: function (res) {
+  onChange: function onChange(res) {
     if (['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'].includes(res.msg)) {
       this.setState({ commentText: '' });
     }
   },
-  handleCommentText: function (e) {
+  handleCommentText: function handleCommentText(e) {
     this.setState({ commentText: e.target.value });
   },
-  handleReplyText: function (e) {
+  handleReplyText: function handleReplyText(e) {
     this.setState({ replyText: e.target.value });
   },
-  getCommenter: function (userId) {
+  getCommenter: function getCommenter(userId) {
     return this.getStore(_stores.UserStore).getCommenter(userId);
   },
-  onCommentBlog: function (blog) {
-    const { commentText: commentText } = this.state;
-    const { currentUser: currentUser } = this.props;
+  onCommentBlog: function onCommentBlog(blog) {
+    var commentText = this.state.commentText;
+    var currentUser = this.props.currentUser;
+
     if (!currentUser) {
       this.setState({ commentText: '' });
       return _plugins.swal.warning('Login first !');
@@ -83,7 +84,7 @@ const Comments = (0, _createReactClass2.default)({
       return _plugins.swal.error('Invalid text!');
     }
 
-    const comment = {
+    var comment = {
       blogId: blog._id,
       commentText: this.state.commentText,
       created_at: new Date(),
@@ -92,37 +93,47 @@ const Comments = (0, _createReactClass2.default)({
 
     this.context.executeAction(_actions.BlogActions.AddBlogComment, comment);
   },
-  showReplyTextarea: function (comment) {
-    const blogComments = this.props.blog.comments;
+  showReplyTextarea: function showReplyTextarea(comment) {
+    var blogComments = this.props.blog.comments;
     if (comment.show_replies) {
       comment.show_replies = false;
     } else {
       comment.show_replies = true;
     }
 
-    const idx = blogComments.findIndex(bc => bc._id === comment._id);
+    var idx = blogComments.findIndex(function (bc) {
+      return bc._id === comment._id;
+    });
     blogComments[idx] = comment;
     this.setState({ blogComments: blogComments });
   },
-  onReplyComment: function () {
+  onReplyComment: function onReplyComment() {
     _plugins.swal.info('This is not finished !');
     this.setState({ replyText: '' });
   },
-  onDeleteComment: function (comment) {
-    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', () => {
-      this.executeAction(_actions.BlogActions.DeleteBlogComment, comment);
+  onDeleteComment: function onDeleteComment(comment) {
+    var _this = this;
+
+    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', function () {
+      _this.executeAction(_actions.BlogActions.DeleteBlogComment, comment);
     });
   },
-  goToUserCenter: function (username) {
+  goToUserCenter: function goToUserCenter(username) {
     $('#pinModal').modal('hide');
-    this.context.router.push(`/${username}`);
+    this.context.router.push('/' + username);
   },
-  getCommentOptions: function (currentUser, comment) {
-    const { id_str: id_str, commenter: commenter, created_at: created_at, show_replies: show_replies } = comment;
-    const fromNow = _utils.format.fromNow(created_at);
-    const user = this.getCommenter(commenter);
-    const displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
-    const { username: username, image_url: image_url } = user;
+  getCommentOptions: function getCommentOptions(currentUser, comment) {
+    var id_str = comment.id_str,
+        commenter = comment.commenter,
+        created_at = comment.created_at,
+        show_replies = comment.show_replies;
+
+    var fromNow = _utils.format.fromNow(created_at);
+    var user = this.getCommenter(commenter);
+    var displayIcon = currentUser ? user.id_str === currentUser.id_str : false;
+    var username = user.username,
+        image_url = user.image_url;
+
 
     return {
       id_str: id_str,
@@ -133,7 +144,7 @@ const Comments = (0, _createReactClass2.default)({
       image_url: image_url
     };
   },
-  _renderBlogTextarea: function (blog, isCommentText, currentUser, commentText) {
+  _renderBlogTextarea: function _renderBlogTextarea(blog, isCommentText, currentUser, commentText) {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'comment-textarea' },
@@ -153,7 +164,7 @@ const Comments = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderArticleTextarea: function (blog, isCommentText, currentUser, commentText) {
+  _renderArticleTextarea: function _renderArticleTextarea(blog, isCommentText, currentUser, commentText) {
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'comment-textarea' },
@@ -173,8 +184,10 @@ const Comments = (0, _createReactClass2.default)({
       )
     );
   },
-  _renderReplyTextarea: function (replyText, comment) {
-    const isDisabled = replyText.length === 0;
+  _renderReplyTextarea: function _renderReplyTextarea(replyText, comment) {
+    var _this2 = this;
+
+    var isDisabled = replyText.length === 0;
     return _react2.default.createElement(
       _Layout.Row,
       { className: 'reply-row mt-10' },
@@ -189,25 +202,43 @@ const Comments = (0, _createReactClass2.default)({
         { size: '2' },
         _react2.default.createElement(
           'button',
-          { className: 'btn btn-info reply-btn', onClick: () => this.onReplyComment(this, comment), disabled: isDisabled },
+          { className: 'btn btn-info reply-btn', onClick: function onClick() {
+              return _this2.onReplyComment(_this2, comment);
+            }, disabled: isDisabled },
           ' Reply'
         )
       )
     );
   },
-  render: function () {
-    const { replyText: replyText, commentText: commentText } = this.state;
-    const { isSweet: isSweet, blog: blog, currentUser: currentUser } = this.props;
-    const { comments: comments } = blog;
-    const isCommentText = commentText.length === 0;
+  render: function render() {
+    var _this3 = this;
+
+    var _state = this.state,
+        replyText = _state.replyText,
+        commentText = _state.commentText;
+    var _props = this.props,
+        isSweet = _props.isSweet,
+        blog = _props.blog,
+        currentUser = _props.currentUser;
+    var comments = blog.comments;
+
+    var isCommentText = commentText.length === 0;
     return _react2.default.createElement(
       'div',
       { className: 'comments-page' },
       isSweet && this._renderBlogTextarea(blog, isCommentText, currentUser, commentText),
       !isSweet && this._renderArticleTextarea(blog, isCommentText, currentUser, commentText),
-      comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(comment => {
-        const result = this.getCommentOptions(currentUser, comment);
-        const { id_str: id_str, image_url: image_url, username: username, fromNow: fromNow, displayIcon: displayIcon, show_replies: show_replies } = result;
+      comments.sort(function (a, b) {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }).map(function (comment) {
+        var result = _this3.getCommentOptions(currentUser, comment);
+        var id_str = result.id_str,
+            image_url = result.image_url,
+            username = result.username,
+            fromNow = result.fromNow,
+            displayIcon = result.displayIcon,
+            show_replies = result.show_replies;
+
         return _react2.default.createElement(
           'div',
           { key: id_str },
@@ -227,7 +258,9 @@ const Comments = (0, _createReactClass2.default)({
                 { className: 'comment-text' },
                 _react2.default.createElement(
                   'span',
-                  { className: 'username', onClick: () => this.goToUserCenter(username) },
+                  { className: 'username', onClick: function onClick() {
+                      return _this3.goToUserCenter(username);
+                    } },
                   username
                 ),
                 ' : ',
@@ -243,7 +276,9 @@ const Comments = (0, _createReactClass2.default)({
                 ),
                 _react2.default.createElement(
                   'button',
-                  { className: 'reply-icon', onClick: () => this.showReplyTextarea(comment) },
+                  { className: 'reply-icon', onClick: function onClick() {
+                      return _this3.showReplyTextarea(comment);
+                    } },
                   _react2.default.createElement('i', { className: 'fa fa-reply' })
                 )
               )
@@ -251,10 +286,12 @@ const Comments = (0, _createReactClass2.default)({
             _react2.default.createElement(
               _Layout.Col,
               { size: '1 comment-thumbs' },
-              displayIcon && _react2.default.createElement('i', { className: 'fa fa-trash', onClick: () => this.onDeleteComment(comment) })
+              displayIcon && _react2.default.createElement('i', { className: 'fa fa-trash', onClick: function onClick() {
+                  return _this3.onDeleteComment(comment);
+                } })
             )
           ),
-          show_replies && this._renderReplyTextarea(replyText, comment)
+          show_replies && _this3._renderReplyTextarea(replyText, comment)
         );
       })
     );

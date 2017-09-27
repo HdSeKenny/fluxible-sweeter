@@ -1,8 +1,8 @@
 {
   "assets": {
-    "main": "/build/main.ed69ffb0ff649985c8f6.js",
-    "style": "/build/main.238ac0ef75b55df34667.css",
-    "common": "/build/common.238ac0ef75b55df34667.js"
+    "main": "/build/main.5fc47bc9818ec271ffd5.js",
+    "style": "/build/main.a7f1f2c56c1262894450.css",
+    "common": "/build/common.a7f1f2c56c1262894450.js"
   },
-  "cdnPath": "/"
+  "cdnPath": "/Users/Kuan/Desktop/sweeter/dist/build"
 }
