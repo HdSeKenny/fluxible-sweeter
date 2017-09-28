@@ -17,10 +17,10 @@ export default class MainSliders extends React.Component {
       dataImgCuromin: 'x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;',
       dataTextCustomin: 'x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;',
       sliders: [
-        '/styles/images/sliders/font-end.png',
-        '/styles/images/sliders/reactjs.png',
-        '/styles/images/sliders/great-frontend.png',
-        '/styles/images/sliders/life.png',
+        '/images/sliders/font-end.png',
+        '/images/sliders/reactjs.png',
+        '/images/sliders/great-frontend.png',
+        '/images/sliders/life.png',
       ]
     };
   }
@@ -75,7 +75,7 @@ export default class MainSliders extends React.Component {
                   data-easing="Power4.easeOut"
                   data-endspeed="800"
                   data-endeasing="Power4.easeIn">
-                  <img src="/assets/revolution/images/woman.png" alt="woman" data-ww="230px" data-hh="280px" data-no-retina />
+                  <img src="/revolution/images/woman.png" alt="woman" data-ww="230px" data-hh="280px" data-no-retina />
                 </div>
                 <div
                   className="tp-caption large_bold_white customin customout start"
@@ -104,7 +104,7 @@ export default class MainSliders extends React.Component {
                 </div>
               </li>
               <li data-transition="zoomout" data-slotamount="7" data-masterspeed="1500" className="main-sliders-li">
-                <img src="/assets/revolution/images/darkblurbg.jpg" alt="" />
+                <img src="/revolution/images/darkblurbg.jpg" alt="" />
                 <div
                   className="tp-caption customin"
                   data-x="495"
@@ -114,7 +114,7 @@ export default class MainSliders extends React.Component {
                   data-start="500"
                   data-easing="Power3.easeInOut"
                   data-endspeed="300">
-                  <img src="/assets/revolution/images/nodejs_logo.png" alt="" data-ww="150px" data-hh="150px" />
+                  <img src="/revolution/images/nodejs_logo.png" alt="" data-ww="150px" data-hh="150px" />
                 </div>
                 <div
                   className="tp-caption customin"
@@ -125,7 +125,7 @@ export default class MainSliders extends React.Component {
                   data-start="1300"
                   data-easing="Power3.easeInOut"
                   data-endspeed="300">
-                  <img src="/assets/revolution/images/mongodb.png" alt="" data-ww="150px" data-hh="150px" />
+                  <img src="/revolution/images/mongodb.png" alt="" data-ww="150px" data-hh="150px" />
                 </div>
                 <div
                   className="tp-caption customin"
@@ -133,7 +133,7 @@ export default class MainSliders extends React.Component {
                   data-y="130"
                   data-customin={dataImgCuromin}
                   data-speed="500" data-start="1400" data-easing="Power3.easeInOut" data-endspeed="300">
-                  <img src="/assets/revolution/images/react.png" alt="" data-ww="250px" data-hh="180px" />
+                  <img src="/revolution/images/react.png" alt="" data-ww="250px" data-hh="180px" />
                 </div>
                 <div
                   className="tp-caption large_bold_white customin customout"

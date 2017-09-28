@@ -55,8 +55,6 @@ export default class App extends React.Component {
     if (res.msg === 'ADD_MESSAGE_CONNECTION_SUCCESS') {
       this.setState({ showMessages: true });
     }
-
-
   }
 
   hideMessages() {

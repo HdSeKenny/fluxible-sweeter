@@ -34,7 +34,7 @@ var _indexedDB = require('./utils/indexedDB');
 
 var _indexedDB2 = _interopRequireDefault(_indexedDB);
 
-require('./public/styles/main.less');
+require('./styles/main.less');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

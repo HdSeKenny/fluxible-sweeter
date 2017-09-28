@@ -1,7 +1,6 @@
 const gulp = require('gulp');
 const http = require('http');
 const fs = require('fs');
-const nodemon = require('gulp-nodemon');
 const del = require('del');
 const babel = require('gulp-babel');
 const gutil = require('gulp-util');
@@ -16,9 +15,32 @@ const config = require('./src/configs');
 const makeWebpackConfig = require('./webpack.config');
 
 const plugins = gulpLoadPlugins();
-const serverPath = `${__dirname}/src/**/*.js`;
-const serverIgnore = `!${__dirname}/src/public/**/*`;
-const devAssets = `${__dirname}/.tmp/configs/assets.json`;
+const serverPath = 'src/**/*.js';
+const devAssets = '.tmp/configs/assets.json';
+const babelExpressSrc = [
+  serverPath,
+  '!node_modules/**/*.js',
+  '!src/actions/*.js',
+  '!src/components/**/*.js',
+  '!src/plugins/**/*.js',
+  '!src/polyfills/**/*.js',
+  '!src/stores/**/*.js',
+  '!src/styles/**/*.js',
+  '!src/utils/**/*.js',
+  '!src/client.js',
+];
+
+const nodemonJgnores = [
+  'node_modules/**/*.js',
+  'src/actions/*.js',
+  'src/components/**/*.js',
+  'src/plugins/**/*.js',
+  'src/polyfills/**/*.js',
+  'src/stores/**/*.js',
+  'src/styles/**/*.js',
+  'src/utils/**/*.js',
+  'src/client.js',
+];
 
 function checkAppReady(cb) {
   const options = {
@@ -28,13 +50,6 @@ function checkAppReady(cb) {
   http
     .get(options, () => cb(true))
     .on('error', () => cb(false));
-}
-
-function onServerLog(log) {
-  console.log(plugins.util.colors.white('[') +
-    plugins.util.colors.yellow('nodemon') +
-    plugins.util.colors.white('] ') +
-    log.message);
 }
 
 // Call page until first success
@@ -52,63 +67,40 @@ function whenServerReady(cb) {
     100);
 }
 
-gulp.task('start:client', cb => {
+gulp.task('client', cb => {
   whenServerReady(() => {
     open(`http://${config.server.host}:${config.server.port}`);
     cb();
   });
 });
 
-// Compile all Babel Javascript into ES5 and put it into the dist dir
-gulp.task('babel:prod', () => {
-  return gulp.src([serverPath, serverIgnore])
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(gulp.dest('dist'));
-});
-
 gulp.task('babel:dev', () => {
-  return gulp.src([serverPath, serverIgnore])
+  return gulp.src([serverPath])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(gulp.dest('.tmp'));
 });
 
 // Start server with restart on file change events
-gulp.task('nodemon', ['babel'], () =>
+gulp.task('express:dev', () => {
   plugins.nodemon({
-    script: serverPath,
+    script: '.tmp/bin/server.js',
     ext: 'js',
-    ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
-    tasks: ['babel']
-  })
-);
-
-gulp.task('start:server', (cb) => {
-  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-  // nodemon(`-w ${serverPath} ${serverPath}`)
-  //   .on('log', onServerLog);
-  nodemon({
-    // the script to run the app
-    script: serverPath,
-    ext: 'js'
-  }).on('log', () => {
-    // cb()
+    ignore: nodemonJgnores,
+    tasks: ['babel:express']
   });
 });
 
-gulp.task('dev', cb => {
-  runSequence(
-    'clean:dev',
-    'webpack-dev-server',
-    ['start:server', 'start:client'],
-    cb
-  );
+gulp.task('babel:express', () => {
+  return gulp.src(babelExpressSrc)
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('assets:dev', (cb) => {
   const { hot_server_host, hot_server_port } = config.development;
-  fs.writeFile('.tmp/configs/assets.json', JSON.stringify({
+  fs.writeFile(devAssets, JSON.stringify({
     assets: {
       'style': `http://${hot_server_host}:${hot_server_port}/main.css`,
       'main': `http://${hot_server_host}:${hot_server_port}/main.js`,
@@ -119,23 +111,6 @@ gulp.task('assets:dev', (cb) => {
 
 // Clean task before build - development mode
 gulp.task('clean:dev', cb => del(['.tmp'], cb));
-
-// Clean task before build - production mode
-gulp.task('clean:prod', cb => del(['dist'], cb));
-
-gulp.task('webpack', [], () => {
-  // Make prod webpack configs
-  const configs = makeWebpackConfig('prod');
-
-  // gulp looks for all source files under specified path
-  return gulp.src(configs.entry)
-    // creates a source map for debugging by maintaining the actual source code
-    .pipe(sourcemaps.init())
-    // blend in the webpack config into the source files
-    .pipe(stream(configs))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(configs.output.path));
-});
 
 gulp.task('webpack-dev-server', () => {
   // Make dev webpack configs
@@ -161,12 +136,69 @@ gulp.task('webpack-dev-server', () => {
   });
 });
 
-// Gulp development mode
-gulp.task('dev', (cb) => {
-  runSequence('clean:dev', 'babel:dev', ['webpack-dev-server'], cb);
+gulp.task('env:dev', (cb) => {
+  process.env.NODE_ENV = 'development';
+  cb();
 });
 
-// Gulp production mode
-gulp.task('prod', (cb) => {
+// Gulp development mode
+gulp.task('dev', (cb) => {
+  runSequence(
+    'clean:dev',
+    'babel:dev',
+    'assets:dev',
+    'env:dev',
+    ['webpack-dev-server', 'express:dev'],
+    'client',
+    cb
+  );
+});
+
+/* Production settings begin ========================= */
+
+gulp.task('build', (cb) => {
+  // Gulp build mode, run this then run 'npm start'
   runSequence('clean:prod', 'babel:prod', 'webpack', cb);
 });
+
+gulp.task('prod', (cb) => {
+  // Gulp production mode
+  runSequence('clean:prod', 'babel:prod', 'webpack', 'env:prod', ['express:prod', 'client'], cb);
+});
+
+gulp.task('express:prod', () => {
+  // Node express server production mode
+  require('./dist/bin/server');
+});
+
+gulp.task('env:prod', (cb) => {
+  // Set  express server environment to production
+  process.env.NODE_ENV = 'production';
+  cb();
+});
+
+// Clean task before build - production mode
+gulp.task('clean:prod', cb => del(['dist'], cb));
+
+gulp.task('webpack', [], () => {
+  // Make prod webpack configs
+  const configs = makeWebpackConfig('prod');
+
+  // gulp looks for all source files under specified path
+  return gulp.src(configs.entry)
+    // creates a source map for debugging by maintaining the actual source code
+    .pipe(sourcemaps.init())
+    // blend in the webpack config into the source files
+    .pipe(stream(configs))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest(configs.output.path));
+});
+
+// Compile all Babel Javascript into ES5 and put it into the dist dir
+gulp.task('babel:prod', () => {
+  return gulp.src([serverPath])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(gulp.dest('dist'));
+});
+/* ========================= Production settings end */

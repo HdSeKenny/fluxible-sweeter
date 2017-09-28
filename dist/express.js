@@ -106,7 +106,7 @@ exports.default = function (server) {
   }
 
   if (env === 'development') {
-    server.use(_express2.default.static(_path2.default.join('..', 'dev')));
+    server.use(_express2.default.static(_path2.default.join(__dirname, '..', '.tmp')));
   }
 
   server.use(_bodyParser2.default.json({ limit: '20mb' }));
@@ -114,8 +114,8 @@ exports.default = function (server) {
   server.use((0, _cookieParser2.default)());
   server.use((0, _cors2.default)());
 
-  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, 'public')));
-  server.use((0, _serveFavicon2.default)(__dirname + '/public/styles/images/favicon.ico'));
+  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, '..', 'lib')));
+  server.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '..', 'lib') + '/images/favicon.ico'));
   server.use(_expressUseragent2.default.express());
 
   var MongoStore = (0, _connectMongo2.default)(_expressSession2.default);

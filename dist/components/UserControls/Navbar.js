@@ -65,7 +65,7 @@ var Navbar = (0, _createReactClass2.default)({
     return {
       currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
       authenticated: this.getStore(_stores.UserStore).isAuthenticated(),
-      brandImage: '/styles/images/sweeter.png',
+      brandImage: '/images/sweeter.png',
       showLoginModal: false,
       showSignupModal: false,
       switchModal: {

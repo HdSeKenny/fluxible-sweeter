@@ -9,7 +9,7 @@ import createRoutes from './routes';
 import app from './app';
 import fetchData from './utils/fetchData';
 import indexedDB from './utils/indexedDB';
-import './public/styles/main.less';
+import './styles/main.less';
 
 const socket = openSocket.connect();
 

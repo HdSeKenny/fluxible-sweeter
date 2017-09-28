@@ -35,7 +35,7 @@ export default (server) => {
   }
 
   if (env === 'development') {
-    server.use(express.static(path.join('..', 'dev')));
+    server.use(express.static(path.join(__dirname, '..', '.tmp')));
   }
 
   server.use(bodyParser.json({ limit: '20mb' }));
@@ -43,8 +43,8 @@ export default (server) => {
   server.use(cookieParser());
   server.use(cors());
 
-  server.use(`${configs.path_prefix}/`, express.static(path.join(__dirname, 'public')));
-  server.use(favicon(`${__dirname}/public/styles/images/favicon.ico`));
+  server.use(`${configs.path_prefix}/`, express.static(path.join(__dirname, '..', 'lib')));
+  server.use(favicon(`${path.join(__dirname, '..', 'lib')}/images/favicon.ico`));
   server.use(useragent.express());
 
   const MongoStore = connectMongo(session);
