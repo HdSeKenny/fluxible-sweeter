@@ -1,11 +1,9 @@
-# Sweeter
+# Introduction
 This project is a blog web application which is developed with [fluxible](http://fluxible.io/) framework.
 
 ## Requirements
 
 - node v6.8.1 (or newer)
-- grunt
-- nodemon
 - mongodb
 
 ## Installation
@@ -13,6 +11,10 @@ This project is a blog web application which is developed with [fluxible](http:/
 Download Zip file or run the command below:
 ```shell
 $ git clone git@github.com:HdSeKenny/fluxible-sweeter.git
+```
+If you use https, run:
+```shell
+$ git clone https://github.com/HdSeKenny/fluxible-sweeter.git
 ```
 
 Then get into the folder directory `fluxible-sweeter`, run command:
@@ -25,25 +27,29 @@ If you use yarn, run command:
 $ yarn install
 ```
 
+## Usage
 It will take some minutes. When finished, run command:
 ```shell
 $ npm run build
 $ npm start
 ```
-
+Or you can run production mode (It's the same as above two commands):
+```shell
+$ npm run prod
+```
 For development mode, run command:
 ```shell
-$ grunt serve
+$ npm run dev
 ```
 
-Finally, open browser, enter: [http://localhost:3000/](http://localhost:3000/)
+Finally, application will open browser [http://localhost:3000/](http://localhost:3000/)
 
 ## Built with
 
 - [`React (fluxible)`](http://fluxible.io/)
 - [`Nodejs`](https://nodejs.org)
 - [`Mongodb`](https://www.mongodb.com/)
-- [`Grunt`](http://gruntjs.com/)
+- [`gulp`](https://gulpjs.com/)
 - [`Webpack`](https://webpack.github.io/docs/)
 
 ## Developer
