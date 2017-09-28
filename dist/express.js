@@ -105,6 +105,10 @@ exports.default = function (server) {
     server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
   }
 
+  if (env === 'production') {
+    server.use(_express2.default.static(_path2.default.join(__dirname, 'build')));
+  }
+
   if (env === 'development') {
     server.use(_express2.default.static(_path2.default.join(__dirname, '..', '.tmp')));
   }

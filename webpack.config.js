@@ -139,22 +139,21 @@ module.exports = function makeWebpackConfig(mode) {
             assets: {},
             cdnPath: this.options.output.publicPath
           };
-          const hostAddress = '/build/';
           Object.keys(assets).forEach((key) => {
             const value = assets[key];
             const isArrayValue = _.isArray(value);
             if (isArrayValue) {
               value.forEach(str => {
                 if (str.includes('css') && !str.includes('map')) {
-                  output.assets.style = `${hostAddress}${str}`;
+                  output.assets.style = `/${str}`;
                 }
 
                 if (str.includes('js')) {
-                  output.assets.main = `${hostAddress}${str}`;
+                  output.assets.main = `/${str}`;
                 }
               });
             } else {
-              output.assets[key] = `${hostAddress}${value}`;
+              output.assets[key] = `/${value}`;
             }
           });
 

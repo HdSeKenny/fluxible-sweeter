@@ -34,6 +34,10 @@ export default (server) => {
     server.use(morgan(':method :url :status :response-time ms'));
   }
 
+  if (env === 'production') {
+    server.use(express.static(path.join(__dirname, 'build')));
+  }
+
   if (env === 'development') {
     server.use(express.static(path.join(__dirname, '..', '.tmp')));
   }
