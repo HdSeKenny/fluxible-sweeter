@@ -4,10 +4,13 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const wbsap = require('webpack-bundle-size-analyzer');
+// const wbsap = require('webpack-bundle-size-analyzer');
 const env = require('./src/configs');
 
-const { hot_server_host, hot_server_port } = env.development;
+const {
+  hot_server_host,
+  hot_server_port
+} = env.development;
 
 module.exports = function makeWebpackConfig(mode) {
 
@@ -104,7 +107,7 @@ module.exports = function makeWebpackConfig(mode) {
       filename: isProd ? 'common.[hash].js' : 'common.js'
     }),
 
-    new wbsap.WebpackBundleSizeAnalyzerPlugin('../webpack.json')
+    // new wbsap.WebpackBundleSizeAnalyzerPlugin('../webpack.json')
   ];
 
   // Add build specific plugins
@@ -132,7 +135,7 @@ module.exports = function makeWebpackConfig(mode) {
       }),
 
       function webpackStatsPlugin() {
-        this.plugin('done', function(stats) {
+        this.plugin('done', function (stats) {
           const data = stats.toJson();
           const assets = data.assetsByChunkName;
           const output = {
@@ -169,7 +172,7 @@ module.exports = function makeWebpackConfig(mode) {
   // Add dev specific plugins
   if (isDev) {
     config.devtool = 'eval-source-map';
-        // This is for development mode to reload page
+    // This is for development mode to reload page
     // Work with 'HotModuleReplacementPlugin'
     config.entry.unshift(
       `webpack-dev-server/client?${paths.DEV_PUBLIC_PATH}`,

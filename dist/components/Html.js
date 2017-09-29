@@ -70,7 +70,7 @@ var Html = function (_React$Component) {
           _react2.default.createElement('link', { href: '/css/font-awesome.min.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/sweetalert.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/slim.min.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/css/blog.css', rel: 'stylesheet' }),
+          _react2.default.createElement('link', { href: '/css/emoji.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/revolution/css/settings.css', rel: 'stylesheet', media: 'screen' }),
           _react2.default.createElement('link', { href: '/revolution/css/layers.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/revolution/css/navigation.css', rel: 'stylesheet' }),

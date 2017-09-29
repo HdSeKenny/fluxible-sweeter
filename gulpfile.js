@@ -11,18 +11,35 @@ const WebpackDevServer = require('webpack-dev-server');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const sourcemaps = require('gulp-sourcemaps');
 const runSequence = require('run-sequence');
-const livereload = require('gulp-livereload');
 const browserSync = require('browser-sync').create();
-
 const config = require('./src/configs');
 const makeWebpackConfig = require('./webpack.config');
 
 const plugins = gulpLoadPlugins();
+const {
+  hot_server_host,
+  hot_server_port
+} = config.development;
+const {
+  host,
+  port,
+  browserSyncPort
+} = config.server;
+const paths = {
+  src_server_path: 'src/**/*.js',
+  dev_server_path: '.tmp/bin/server.js',
+  dev_aasets: '.tmp/configs/assets.json',
+  server_address: `${host}:${port}`,
+  browser_sync_url: `http://${host}:${browserSyncPort}`,
+  prod_url: `http://${host}:${port}`,
+  prod_server_path: './dist/bin/server',
+  assets_style: `http://${hot_server_host}:${hot_server_port}/main.css`,
+  assets_main: `http://${hot_server_host}:${hot_server_port}/main.js`,
+  assets_common: `http://${hot_server_host}:${hot_server_port}/common.js`
+};
 
-const serverPath = 'src/**/*.js';
-const devAssets = '.tmp/configs/assets.json';
 const babelExpressSrc = [
-  serverPath,
+  paths.src_server_path,
   '!node_modules/**/*.js',
   '!src/actions/*.js',
   '!src/components/**/*.js',
@@ -46,10 +63,10 @@ const nodemonJgnores = [
   'src/client.js',
 ];
 
-function checkAppReady(cb) {
+function checkAppReady(p, cb) {
   const options = {
-    host: 'localhost',
-    port: config.server.browserSyncPort
+    host,
+    port: p
   };
   http
     .get(options, () => cb(true))
@@ -57,10 +74,10 @@ function checkAppReady(cb) {
 }
 
 // Call page until first success
-function whenServerReady(cb) {
+function whenServerReady(p, cb) {
   let serverReady = false;
   const appReadyInterval = setInterval(() =>
-    checkAppReady((ready) => {
+    checkAppReady(p, (ready) => {
       if (!ready || serverReady) {
         return;
       }
@@ -71,15 +88,22 @@ function whenServerReady(cb) {
     100);
 }
 
-gulp.task('client', cb => {
-  whenServerReady(() => {
-    open(`http://${config.server.host}:${config.server.browserSyncPort}`);
+gulp.task('client:dev', cb => {
+  whenServerReady(browserSyncPort, () => {
+    open(paths.browser_sync_url);
+    cb();
+  });
+});
+
+gulp.task('client:prod', cb => {
+  whenServerReady(port, () => {
+    open(paths.prod_url);
     cb();
   });
 });
 
 gulp.task('babel:dev', () => {
-  return gulp.src([serverPath])
+  return gulp.src([paths.src_server_path])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(gulp.dest('.tmp'));
@@ -89,24 +113,24 @@ gulp.task('browser-sync', (cb) => {
   browserSync.init({
     open: false,
     logFileChanges: false,
-    proxy: `localhost:${config.server.port}`,
+    proxy: paths.server_address,
     ws: true,
     middleware: [],
-    port: config.server.browserSyncPort,
+    port: browserSyncPort,
     plugins: []
-  })
+  });
   cb();
 });
 
 gulp.task('express:dev', () => {
   // Start server with restart on file change events
   plugins.nodemon({
-    script: '.tmp/bin/server.js',
+    script: paths.dev_server_path,
     ext: 'js',
     ignore: nodemonJgnores,
     tasks: ['babel:express']
   }).on('start', () => {
-    whenServerReady(() => {
+    whenServerReady(browserSyncPort, () => {
       browserSync.reload();
     });
   });
@@ -116,16 +140,15 @@ gulp.task('babel:express', () => {
   return gulp.src(babelExpressSrc)
     .pipe(sourcemaps.init())
     .pipe(babel())
-    .pipe(gulp.dest('.tmp'))
+    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('assets:dev', (cb) => {
-  const { hot_server_host, hot_server_port } = config.development;
-  fs.writeFile(devAssets, JSON.stringify({
+  fs.writeFile(paths.dev_aasets, JSON.stringify({
     assets: {
-      'style': `http://${hot_server_host}:${hot_server_port}/main.css`,
-      'main': `http://${hot_server_host}:${hot_server_port}/main.js`,
-      'common': `http://${hot_server_host}:${hot_server_port}/common.js`
+      'style': paths.assets_style,
+      'main': paths.assets_main,
+      'common': paths.assets_common
     }
   }, null, 2), cb);
 });
@@ -135,11 +158,7 @@ gulp.task('clean:dev', cb => del(['.tmp'], cb));
 
 gulp.task('webpack-dev-server', () => {
   const configs = makeWebpackConfig('dev');
-  const { hot_server_host, hot_server_port } = config.development;
   const compiler = webpack(configs);
-  compiler.plugin('done', () => {
-    // open(`http://${config.server.host}:${config.server.browserSyncPort}`);
-  });
 
   // Start a webpack-dev-server
   new WebpackDevServer(compiler, {
@@ -171,10 +190,9 @@ gulp.task('dev', (cb) => {
     'clean:dev',
     'babel:dev',
     'assets:dev',
-    'env:dev',
-    ['webpack-dev-server', 'express:dev'],
+    'env:dev', ['webpack-dev-server', 'express:dev'],
     'browser-sync',
-    'client',
+    'client:dev',
     cb
   );
 });
@@ -188,12 +206,12 @@ gulp.task('build', (cb) => {
 
 gulp.task('prod', (cb) => {
   // Gulp production mode
-  runSequence('clean:prod', 'babel:prod', 'webpack', 'env:prod', ['express:prod', 'client'], cb);
+  runSequence('clean:prod', 'babel:prod', 'webpack', 'env:prod', ['express:prod', 'client:prod'], cb);
 });
 
 gulp.task('express:prod', () => {
   // Node express server production mode
-  require('./dist/bin/server');
+  require(paths.prod_server_path);
 });
 
 gulp.task('env:prod', (cb) => {
@@ -220,7 +238,7 @@ gulp.task('webpack', [], () => {
 
 // Compile all Babel Javascript into ES5 and put it into the dist dir
 gulp.task('babel:prod', () => {
-  return gulp.src([serverPath])
+  return gulp.src([paths.src_server_path])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(gulp.dest('dist'));

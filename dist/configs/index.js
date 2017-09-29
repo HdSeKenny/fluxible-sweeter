@@ -17,10 +17,13 @@ module.exports = {
     connectErrorMsg: 'Please check configuration is right or datebase is running properly.'
   },
   server: {
-    port: 3000,
     host: 'localhost',
     logUserActivity: true, // user activity logger
-    logEnable: true // enable logger middleware
+    logEnable: true, // enable logger middleware
+    // Browser-sync port
+    browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
+    // Server port
+    port: process.env.PORT || 9000
   },
   development: {
     hot_server_host: 'localhost',

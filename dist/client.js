@@ -38,7 +38,6 @@ require('./styles/main.less');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import './polyfills';
 var socket = _socket2.default.connect();
 
 window.React = _react2.default;

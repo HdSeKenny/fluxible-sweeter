@@ -64,7 +64,7 @@ var seed = {
     "likers": [],
     "comments": [],
     "tags": [],
-    "images": ["/styles/images/sliders/great-frontend.png"]
+    "images": ["/images/sliders/great-frontend.png"]
   }, {
     "_id": mongdb.ObjectID("59af645ecb50fd0a3c118ae9"),
     "id_str": "59af645ecb50fd0a3c118ae9",
@@ -129,7 +129,7 @@ var seed = {
     "show_comments": false,
     "likers": [],
     "comments": [],
-    "images": ["/styles/images/sliders/great-frontend.png"]
+    "images": ["/images/sliders/great-frontend.png"]
   }],
   user: [{
     "_id": mongdb.ObjectID("583ff3d6a193d70f6946948e"),
@@ -143,9 +143,9 @@ var seed = {
     "phone": "13918544928",
     "profession": "Web Developer",
     "password": "d61e28884bdc7678e6d3474eaf7f7e46", // kuankuan
-    "image_url": "/styles/images/kuan.jpg",
-    "background_image_url": "/styles/images/users/user-center-bg.jpg",
-    "lq_background_url": "/styles/images/lqip/users/user-center-bg.jpg",
+    "image_url": "/images/kuan.jpg",
+    "background_image_url": "/images/users/user-center-bg.jpg",
+    "lq_background_url": "/images/lqip/users/user-center-bg.jpg",
     "signature": "This guy has no signature...",
     "role": "admin",
     'blogs': ['59af686ea22f3d43182fe3a8', '59af645ecb50fd0a3c118ae9'],
@@ -177,9 +177,9 @@ var seed = {
     "phone": "",
     "profession": "Web Developer",
     "password": "fe116f6bdcc982e37172fff18a912079", // jiyao
-    "image_url": "/styles/images/users/default-user.svg",
-    "background_image_url": "/styles/images/users/user-center-bg.jpg",
-    "lq_background_url": "/styles/images/lqip/users/user-center-bg.jpg",
+    "image_url": "/images/users/default-user.svg",
+    "background_image_url": "/images/users/user-center-bg.jpg",
+    "lq_background_url": "/images/lqip/users/user-center-bg.jpg",
     "signature": "This guy has no signature...",
     "role": "user",
     'blogs': [],
