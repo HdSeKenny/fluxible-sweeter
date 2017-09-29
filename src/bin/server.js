@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
 import socketIo from 'socket.io';
-import 'colors';
+import chalk from 'chalk';
 import config from '../configs';
 import mongodbConnection from '../configs/mongodb';
 
@@ -19,7 +19,7 @@ Promise.all(mongodbPromises).then(() => {
   setImmediate(() => {
     app.sweeter = server.listen(config.server.port, (err) => {
       if (err) { throw err; }
-      console.log(`${'==>'.green} Express server listening on %d, in %s mode`, config.server.port, app.get('env'));
+      console.log(`[${chalk.hex('#337ab7')('express')}] ${chalk.green.bold('==>')} Express server listening on %d, in %s mode`, config.server.port, app.get('env'));
     });
   });
 })

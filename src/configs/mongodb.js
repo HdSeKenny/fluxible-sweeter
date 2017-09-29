@@ -1,6 +1,6 @@
 import MongoClient from 'mongodb';
 import assert from 'assert';
-import 'colors';
+import chalk from 'chalk';
 import config from '../configs';
 import seed from './seed';
 
@@ -25,23 +25,23 @@ const insertDefaultData = (url, db) => {
     });
   }
 
-  console.log(`${'==>'.green} Finish insert default data... `);
+  console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.green.bold('==>')} Finish insert default data... `);
 };
 
 
 const connectMongodbPromise = (url) => new Promise((resolve, reject) => {
   MongoClient.connect(url, (connectErr, db) => {
     if (connectErr) {
-      return reject('Database connectErr, please check your database');
+      return reject(`[${chalk.keyword('orange')('mongodb')}] ${chalk.red('==> Database connectErr, please check your database')}`);
     }
 
     db.listCollections().toArray((err, items) => {
       if (items.length == 0) {
-        console.log(`${'==>'.gray} Database unavaliable: ${url}`);
+        console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.gray('==>')} Database unavaliable: ${url}`);
         insertDefaultData(url, db);
       }
       else {
-        console.log(`${'==>'.green} Database avaliable: ${url.cyan}`);
+        console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.green.bold('==>')} Database avaliable: ${url.cyan}`);
       }
 
       db.close();
@@ -58,7 +58,7 @@ export default () => {
     connectMongodbPromise(mongo.session.url)
   );
 
-  console.log(`${'==>'.green} Start to check database......`);
+  console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.green.bold('==>')} Start to check database......`);
 
   return mongodbPromises;
 };
