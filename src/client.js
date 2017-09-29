@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import 'babel-polyfill';
 import openSocket from 'socket.io-client';
-// import './polyfills';
 import { Custom } from './components';
 import createRoutes from './routes';
 import app from './app';

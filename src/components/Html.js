@@ -34,7 +34,7 @@ export default class Html extends React.Component {
           <link href="/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/css/sweetalert.css" rel="stylesheet" />
           <link href="/css/slim.min.css" rel="stylesheet" />
-          <link href="/css/blog.css" rel="stylesheet" />
+          <link href="/css/emoji.css" rel="stylesheet" />
 
           <link href="/revolution/css/settings.css" rel="stylesheet" media="screen" />
           <link href="/revolution/css/layers.css" rel="stylesheet" />
