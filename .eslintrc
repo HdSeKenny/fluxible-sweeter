@@ -1,0 +1,29 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": ["react"],
+  "plugins": ["react", "import"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "globals": {
+    "window": true,
+    "LoadingBar": true,
+    "document": true,
+    "Blob": true
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "space-before-function-paren": ["error", "never"],
+    "indent": ["error", 2],
+    "curly": "off",
+    "comma-dangle": ["error", "never"],
+    "consistent-return": "off",
+    "semi": [2, "always"],
+    "new-cap": 0,
+    "max-params": "off",
+    "quote-props": "off"
+  }
+}

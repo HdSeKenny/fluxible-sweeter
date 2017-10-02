@@ -35,12 +35,14 @@ export default {
           allPromises.push(getUserPromiseWrapper(blog));
         });
         Promise.all(allPromises.map(ap => ap()))
-        .then(() => {
-          callback(null, blogs);
-        })
-        .catch(err => {
-          callback(err, null);
-        });
+          .then(() => {
+            db.close();
+            callback(null, blogs);
+          })
+          .catch(err => {
+            db.close();
+            callback(err, null);
+          });
       });
 
       const getCommentPromise = (blog, commentId, cIndex) => new Promise((resolve, reject) => {
@@ -89,14 +91,14 @@ export default {
       body.show_comments = false;
       body.likers = [];
       body.comments = [];
-      body.images = ['/styles/images/sliders/great-frontend.png'];
+      body.images = ['/images/sliders/great-frontend.png'];
       body.tag = body.tag || body.type;
       Blog.insert(body, (err, result) => {
         if (result) {
           const blog = result.ops[0];
           blog.id_str = blog._id.toString();
           Blog.save(blog);
-          User.findOne({ '_id': blog.author }, (err, user) => {
+          User.findOne({ _id: blog.author }, (err, user) => {
             if (user) {
               blog.author = user;
               user.blogs.push(blog.id_str);

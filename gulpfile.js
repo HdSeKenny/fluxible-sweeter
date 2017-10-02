@@ -1,3 +1,4 @@
+/* eslint-disable all, camelcase */
 const gulp = require('gulp');
 const http = require('http');
 const fs = require('fs');
@@ -48,7 +49,7 @@ const babelExpressSrc = [
   '!src/stores/**/*.js',
   '!src/styles',
   '!src/utils/**/*.js',
-  '!src/client.js',
+  '!src/client.js'
 ];
 
 const nodemonJgnores = [
@@ -60,7 +61,7 @@ const nodemonJgnores = [
   'src/stores/**/*.js',
   'src/styles',
   'src/utils/**/*.js',
-  'src/client.js',
+  'src/client.js'
 ];
 
 function checkAppReady(p, cb) {
