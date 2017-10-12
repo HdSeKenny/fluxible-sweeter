@@ -41,7 +41,7 @@ const connectMongodbPromise = (url) => new Promise((resolve, reject) => {
         insertDefaultData(url, db);
       }
       else {
-        console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.green.bold('==>')} Database avaliable: ${url.cyan}`);
+        console.log(`[${chalk.keyword('orange')('mongodb')}] ${chalk.green.bold('==>')} Database avaliable: ${chalk.blue(url)}`);
       }
 
       db.close();

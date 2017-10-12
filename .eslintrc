@@ -24,6 +24,9 @@
     "semi": [2, "always"],
     "new-cap": 0,
     "max-params": "off",
-    "quote-props": "off"
+    "max-depth": "off",
+    "quote-props": "off",
+    "max-nested-callbacks": ["error", 4],
+    "react/jsx-boolean-value": 0
   }
 }

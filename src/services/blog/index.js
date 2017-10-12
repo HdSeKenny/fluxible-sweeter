@@ -27,7 +27,7 @@ export default {
         const UserCollection = db.collection('users');
         const CommentCollection = db.collection('comments');
 
-        Promise.all([
+        return Promise.all([
           BlogCollection.find().toArray(),
           UserCollection.find().toArray(),
           CommentCollection.find().toArray()
@@ -51,10 +51,6 @@ export default {
           }
           db.close();
           callback(null, blogs);
-        })
-        .catch(err => {
-          db.close();
-          callback(err, null);
         });
       })
       .catch(err => {
@@ -62,120 +58,107 @@ export default {
       });
   },
 
-  addBlog(req, resource, params, body, config, callback) {
-    MongoClient.connect(MongoUrl)
-      .then(db => {
-        const BlogCollection = db.collection('blogs');
-        const UserCollection = db.collection('users');
-        const blog = controller.setDefaultBlog(body);
+  addBlog: async (req, resource, params, body, config, callback) => {
+    let db;
+    try {
+      db = await MongoClient.connect(MongoUrl);
+      const BlogCollection = db.collection('blogs');
+      const UserCollection = db.collection('users');
 
-        BlogCollection.insert(blog)
-          .then(result => {
-            const newBlog = result.ops[0];
-            newBlog.id_str = newBlog._id.toString();
+      const blog = controller.setDefaultBlog(body);
+      const insertResult = await BlogCollection.insert(blog);
+      const newBlog = insertResult.ops[0];
+      newBlog.id_str = newBlog._id.toString();
 
-            Promise.all([
-              BlogCollection.save(newBlog),
-              UserCollection.findOne({ _id: newBlog.author })
-            ]).then(async (res) => {
-              const user = res[1];
-              if (user) {
-                newBlog.author = user;
-                user.blogs.push(newBlog.id_str);
-                await UserCollection.save(user);
-              }
-              db.close();
-              callback(null, newBlog);
-            })
-            .catch(err => {
-              db.close();
-              callback(err, null);
-            });
-          })
-          .catch(err => {
-            db.close();
-            callback(err, null);
-          });
-      })
-      .catch(err => {
-        callback(err, null);
+      return Promise.all([
+        BlogCollection.save(newBlog),
+        UserCollection.findOne({ _id: newBlog.author })
+      ]).then(async (res) => {
+        const user = res[1];
+        newBlog.author = user;
+        user.blogs.push(newBlog.id_str);
+        await UserCollection.save(user);
+
+        db.close();
+        callback(null, newBlog);
       });
+    } catch (error) {
+      if (db) db.close();
+      callback(error, null);
+    }
   },
 
-  thumbsUpBlog(req, resource, params, body, config, callback) {
-    MongoClient.connect(MongoUrl, (err, db) => {
-      const Blog = db.collection('blogs');
-      Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
-        if (err) { console.log(`***** Find blog err: ${err}`); }
-        if (blog) {
-          blog.likers.push(body.currentUserId);
-          Blog.save(blog, (err, result) => {
-            Blog.findOne({ _id: blog._id }, (err, newBlog) => {
-              db.close();
-              callback(err, newBlog);
-            });
-          });
-        }
-      });
-    });
+  thumbsUpBlog: async (req, resource, params, body, config, callback) => {
+    let db;
+    try {
+      db = await MongoClient.connect(MongoUrl);
+      const BlogCollection = db.collection('blogs');
+      const thisBlog = await BlogCollection.findOne({ _id: ObjectID(body.blogId) });
+      thisBlog.likers.push(body.currentUserId);
+      await BlogCollection.save(thisBlog);
+
+      db.close();
+      callback(null, thisBlog);
+    } catch (error) {
+      if (db) db.close();
+      callback(error, null);
+    }
   },
 
-  cancelThumbsUpBlog(req, resource, params, body, config, callback) {
-    MongoClient.connect(MongoUrl, (err, db) => {
-      const Blog = db.collection('blogs');
-      Blog.findOne({ _id: ObjectID(body.blogId) }, (err, blog) => {
-        if (err) { console.log(`***** Find blog err: ${err}`); }
-        if (blog) {
-          blog.likers = blog.likers.filter(liker => liker !== body.currentUserId);
-          Blog.save(blog, (err, result) => {
-            Blog.findOne({ _id: blog._id }, (err, newBlog) => {
-              callback(err, newBlog);
-            });
-          });
-        }
-      });
-    });
+  cancelThumbsUpBlog: async (req, resource, params, body, config, callback) => {
+    let db;
+    try {
+      db = await MongoClient.connect(MongoUrl);
+      const BlogCollection = db.collection('blogs');
+      const thisBlog = await BlogCollection.findOne({ _id: ObjectID(body.blogId) });
+      thisBlog.likers = thisBlog.likers.filter(liker => liker !== body.currentUserId);
+      await BlogCollection.save(thisBlog);
+
+      db.close();
+      callback(null, thisBlog);
+    } catch (error) {
+      if (db) db.close();
+      callback(error, null);
+    }
   },
 
-  delete(req, resource, params, config, callback) {
-    MongoClient.connect(MongoUrl, (err, db) => {
-      const Blog = db.collection('blogs');
-      const User = db.collection('users');
-      Blog.remove({ _id: ObjectID(params._id) }, (err, result) => {
-        User.findOne({ _id: ObjectID(params.author._id) }, (err, user) => {
-          if (user) {
-            user.blogs = user.blogs.filter(blog => blog !== params._id);
-            User.save(user, (err, result) => {
-              db.close();
-              callback(err, { deletedBlogId: params._id, result });
-            });
-          } else {
-            db.close();
-            callback(err, { deletedBlogId: params._id, result });
-          }
-        });
-      });
-    });
+  delete: async (req, resource, params, config, callback) => {
+    let db;
+    try {
+      db = await MongoClient.connect(MongoUrl);
+      const BlogCollection = db.collection('blogs');
+      await BlogCollection.remove({ _id: ObjectID(params._id) });
+
+      const UserCollection = db.collection('users');
+      const blogAuthor = await UserCollection.findOne({ _id: ObjectID(params.author._id) });
+      blogAuthor.blogs = blogAuthor.blogs.filter(bId => bId !== params._id);
+      const saveResult = await UserCollection.save(blogAuthor);
+
+      db.close();
+      callback(null, { deletedBlogId: params._id, result: saveResult });
+    } catch (error) {
+      if (db) db.close();
+      callback(error, null);
+    }
   },
 
-  update(req, resource, params, body, config, callback) {
-    MongoClient.connect(MongoUrl, (err, db) => {
-      const Blog = db.collection('blogs');
-      const User = db.collection('users');
-      if (body._id) {
-        body._id = ObjectID(body._id);
-        Blog.updateOne({ '_id': body._id }, { $set: body }, (err, result) => {
-          Blog.findOne({ '_id': body._id }, (err, newBlog) => {
-            User.findOne({ '_id': ObjectID(newBlog.author) }, (err, author) => {
-              if (author) {
-                newBlog.author = author;
-              }
-              db.close();
-              callback(err, newBlog);
-            });
-          });
-        });
-      }
-    });
-  },
+  update: async (req, resource, params, body, config, callback) => {
+    let db;
+    try {
+      db = await MongoClient.connect(MongoUrl);
+      const BlogCollection = db.collection('blogs');
+      const UserCollection = db.collection('users');
+      await BlogCollection.updateOne({ _id: body._id }, { $set: body });
+
+      const newBlog = await BlogCollection.findOne({ _id: body._id });
+      const author = await UserCollection.findOne({ _id: ObjectID(newBlog.author) });
+      newBlog.author = author;
+
+      db.close();
+      callback(null, newBlog);
+    } catch (error) {
+      if (db) db.close();
+      callback(error, null);
+    }
+  }
 };

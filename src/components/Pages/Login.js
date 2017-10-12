@@ -213,9 +213,9 @@ const Login = CreateReactClass({
   },
 
   _renderOtherAuths() {
-    const twitterImg = '/styles/images/svg/twitter.svg';
-    const googleImg = '/styles/images/google+.png';
-    const githubImg = '/styles/images/github.png';
+    const twitterImg = '/images/svg/twitter.svg';
+    const googleImg = '/images/google+.png';
+    const githubImg = '/images/github.png';
     return (
       <div className="">
         <Row>

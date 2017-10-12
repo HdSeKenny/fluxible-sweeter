@@ -44,7 +44,7 @@ export default CreateReactClass({
       'COMMENT_SUCCESS',
       'DELETE_COMMENT_SUCCESS',
       'THUMBS_UP_BLOG_SUCCESS',
-      'CANCEL_THUMBS_UP_BLOG_SUCCESS',
+      'CANCEL_THUMBS_UP_BLOG_SUCCESS'
     ];
 
     const blogsMsgs = [
