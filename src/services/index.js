@@ -1,4 +1,3 @@
-export language from './language';
 export blogs from './blog';
 export users from './user';
-export comments from './comments';
+export comments from './comment';
