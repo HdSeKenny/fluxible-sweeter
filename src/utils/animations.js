@@ -69,11 +69,11 @@ const animations = {
       const revol = jQuery('.tp-banner').show().revolution({
         // dottedOverlay: 'none',
         delay: 8000,
-        startwidth: 1170,
+        startwidth: 1180,
         startheight: 430,
         hideThumbs: 10,
         fullWidth: 'on',
-        forceFullWidth: 'on',
+        forceFullWidth: 'off',
         spinner: 'off',
         navigation: {
           keyboardNavigation: 'on',
@@ -104,14 +104,14 @@ const animations = {
               v_align: 'center',
               h_offset: 20,
               v_offset: 0,
-              container: 'slider',
+              container: 'slider'
             },
             right: {
               h_align: 'right',
               v_align: 'center',
               h_offset: 20,
               v_offset: 0,
-              container: 'slider',
+              container: 'slider'
             }
           }
         }

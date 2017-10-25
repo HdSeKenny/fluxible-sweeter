@@ -86,7 +86,6 @@ export default class App extends React.Component {
     return (
       <FullScreen id="app" onClick={(e) => this.onAppClick(e)}>
         <Navbar route={route} />
-        {showMainSliders && <MainSliders show={showMainSliders} />}
         <div className="content-pages">{child}</div>
         <Messages showMessages={this.state.showMessages} hideMessages={() => this.hideMessages()} />
         <Footer />

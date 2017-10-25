@@ -7,7 +7,7 @@ import { mediaSize } from '../../utils';
 import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
-import { PinItem, ModalsFactory } from '../UI';
+import { PinItem, ModalsFactory, MainSliders } from '../UI';
 import { Page } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 
@@ -187,11 +187,14 @@ const Home = CreateReactClass({
     return (
       <div className="home-page">
         <div className="left">
-
+          <h2>Left nav</h2>
         </div>
-        <div className="main">{this._renderPinItems(blogs)}</div>
+        <div className="main">
+          <MainSliders show={true} />
+          {this._renderPinItems(blogs)}
+        </div>
         <div className="right">
-
+          <h2>Right nav</h2>
         </div>
         <Page>
           <ModalsFactory

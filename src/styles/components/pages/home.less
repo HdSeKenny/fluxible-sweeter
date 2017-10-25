@@ -1,4 +1,5 @@
 .home-page {
+  width: 100%;
   @media (min-width: 769px) {
     .main {
       margin: @content-pages-margin;
@@ -7,7 +8,20 @@
       }
     }
   }
+  .left {
+    width: 14%;
+    min-height: 500px;
+    margin-right: 2%;
+    float: left;
+  }
+  .right {
+    width: 28%;
+    min-height: 500px;
+    float: right;
+  }
   .main {
+    width: 54%;
+    float: left;
     .classification {
       .pins-section {
         clear: both;

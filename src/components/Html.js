@@ -36,10 +36,6 @@ export default class Html extends React.Component {
           <link href="/css/slim.min.css" rel="stylesheet" />
           <link href="/css/emoji.css" rel="stylesheet" />
 
-          <link href="/revolution/css/settings.css" rel="stylesheet" media="screen" />
-          <link href="/revolution/css/layers.css" rel="stylesheet" />
-          <link href="/revolution/css/navigation.css" rel="stylesheet" />
-
           <link href={style} rel="stylesheet" />
 
           <script src="/js/jquery.min.js"></script>
@@ -52,19 +48,7 @@ export default class Html extends React.Component {
 
           <script src={common}></script>
           <script src={main}></script>
-
           <script src="/js/sweetalert.min.js"></script>
-          <script src="/revolution/js/jquery.themepunch.tools.min.js"></script>
-          <script src="/revolution/js/jquery.themepunch.revolution.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.actions.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.migration.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
-          <script src="/revolution/js/extensions/revolution.extension.video.min.js"></script>
           {essentials && <script src={essentials}></script>}
         </body>
       </html>

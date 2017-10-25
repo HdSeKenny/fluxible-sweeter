@@ -12,7 +12,8 @@
     "window": true,
     "LoadingBar": true,
     "document": true,
-    "Blob": true
+    "Blob": true,
+    "$": true
   },
   "rules": {
     "linebreak-style": "off",
@@ -27,6 +28,7 @@
     "max-depth": "off",
     "quote-props": "off",
     "max-nested-callbacks": ["error", 4],
-    "react/jsx-boolean-value": 0
+    "react/jsx-boolean-value": 0,
+    "react/self-closing-comp": 0
   }
 }
