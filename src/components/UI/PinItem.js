@@ -234,7 +234,7 @@ export default class PinItem extends React.Component {
     const { pin, showImage, specialClass, readMore } = this.props;
     const pinStyle = specialClass ? `pin ${specialClass} ${pin.type}` : `pin ${pin.type}`;
     return (
-      <div className={`${pinStyle}${readMore ? ' mb-20' : ' mb-10'}`}>
+      <div className={`${pinStyle} mb-10`}>
         <div className="pin-body p-0">{this._renderPinitemContent(pin, showImage, readMore)}</div>
       </div>
     );

@@ -117,14 +117,12 @@ const Login = CreateReactClass({
 
   onEmailChange(e) {
     const email = e.target.value;
-    const result = this.validateEmail(email);
-    this.setState(result);
+    this.setState({ email, errorMessage: '' });
   },
 
   onPasswordChange(e) {
     const password = e.target.value;
-    const result = this.validatePassword(password);
-    this.setState(result);
+    this.setState({ password, errorMessage: '' });
   },
 
   openSignupModal() {
@@ -184,69 +182,90 @@ const Login = CreateReactClass({
     );
   },
 
-  _renderForgotPassword() {
+  _renderLoginOptions() {
     return (
-      <Row>
+      <Row className="login-options">
         <Col size="6" className="pl-0">
           <Switch after="Remember me" rememberMe={this.rememberMe} />
         </Col>
         <Col size="6" className="pr-0 tar">
-          <span className="forgot-pw">
-            Forgot your password ?
-          </span>
+          <span className="forgot-pw">Forgot password</span>
         </Col>
       </Row>
     );
   },
 
-  _renderLoginBtns() {
-    return (
-      <Row>
-        <Col size="6" className="pl-0">
+  _renderLoginBtns(isModalLogin) {
+    if (isModalLogin) {
+      return (
+        <Row>
+          <Col size="6" className="pl-0">
+            <button type="submit" className="btn btn-info btn-login">Login</button>
+          </Col>
+          <Col size="6" className="pr-0 tar">
+            <span onClick={this.openSignupModal} className="btn btn-primary btn-signup">signup</span>
+          </Col>
+        </Row>
+      );
+    } else {
+      return (
+        <Row className="p-0">
           <button type="submit" className="btn btn-info btn-login">Login</button>
-        </Col>
-        <Col size="6" className="pr-0 tar">
-          <span onClick={this.openSignupModal} className="btn btn-primary btn-signup">signup</span>
-        </Col>
-      </Row>
-    );
+        </Row>
+      );
+    }
   },
 
-  _renderOtherAuths() {
+  _renderOtherAuths(isModalLogin) {
     const twitterImg = '/images/svg/twitter.svg';
     const googleImg = '/images/google+.png';
     const githubImg = '/images/github.png';
     return (
       <div className="">
-        <Row>
-          <Col size="4" className="p-0"><hr /></Col>
-          <Col size="4"><h5 className="tac">or login with</h5></Col>
-          <Col size="4" className="p-0 tar"><hr /></Col>
-        </Row>
-        <Row className="other-auths">
-          <Col size="4" className="tac"><img alt="twitter" src={twitterImg} /></Col>
-          <Col size="4" className="tac"><img alt="google+" src={googleImg} /></Col>
-          <Col size="4" className="tac"><img alt="github" src={githubImg} /></Col>
-        </Row>
+        {isModalLogin &&
+          <div>
+            <Row>
+              <Col size="4" className="p-0"><hr /></Col>
+              <Col size="4"><h5 className="tac">or login with</h5></Col>
+              <Col size="4" className="p-0 tar"><hr /></Col>
+            </Row>
+            <Row className="other-auths">
+              <Col size="4" className="tac"><img alt="twitter" src={twitterImg} /></Col>
+              <Col size="4" className="tac"><img alt="google+" src={googleImg} /></Col>
+              <Col size="4" className="tac"><img alt="github" src={githubImg} /></Col>
+            </Row>
+          </div>
+        }
+
+        {!isModalLogin &&
+          <Row className="mb-10">
+            <hr className="mt-5 mb-10" />
+            <Col size="4 login-with p-0"><h5>Other Logins:</h5></Col>
+            <Col size="8 other-auths p-0">
+              <Col size="2" className="tac p-0"><img alt="twitter" src={twitterImg} /></Col>
+              <Col size="2" className="tac p-0"><img alt="google+" src={googleImg} /></Col>
+              <Col size="2" className="tac p-0"><img alt="github" src={githubImg} /></Col>
+            </Col>
+          </Row>
+        }
       </div>
     );
   },
 
   render() {
     const { errorMessage, password, email, remember } = this.state;
+    const { isModalLogin } = this.props;
     return (
       <section className="login-section mt-15 mr-15 ml-15">
         <div className="wrapper-md animated fadeInUp">
           <form role="form" onSubmit={this.onLoginSubmit}>
-            <div className="form-group">
-              <p className="help-block text-left">{errorMessage}</p>
-            </div>
             <div className="form-group">{this._renderEmailInput(email, remember)}</div>
-            <div className="form-group">{this._renderPasswordInput(password, remember)}</div>
-            <div className="form-group">{this._renderForgotPassword()}</div>
-            <div className="form-group pt-10">{this._renderLoginBtns()}</div>
+            <div className={`form-group ${errorMessage ? 'mb-5' : ''}`}>{this._renderPasswordInput(password, remember)}</div>
+            <div className="form-group m-0"><p className="help-block text-left">{errorMessage}</p></div>
+            <div className="form-group">{this._renderLoginOptions()}</div>
+            <div className="form-group">{this._renderLoginBtns(isModalLogin)}</div>
           </form>
-          <div className="">{this._renderOtherAuths()}</div>
+          <div className="">{this._renderOtherAuths(isModalLogin)}</div>
         </div>
       </section>
     );

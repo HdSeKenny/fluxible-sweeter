@@ -13,60 +13,146 @@
     min-height: 500px;
     margin-right: 2%;
     float: left;
+    .blog-tags {
+      padding: 0;
+      list-style: none;
+      li {
+        margin-bottom: 5px;
+        &.active, &:hover {
+          a {
+            background: @brand-info;
+            color: #fff;
+          }
+        }
+        &:hover {
+          a {
+            cursor: pointer;
+          }
+        }
+        a {
+          padding: 0 8px;
+          font-size: 18px;
+          color: #000;
+          height: 40px;
+          line-height: 42px;
+          border-radius: 3px;
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: center;
+          white-space: nowrap;
+        }
+      }
+    }
   }
   .right {
     width: 28%;
-    min-height: 500px;
+    background-color: #fff;
     float: right;
-  }
-  .main {
-    width: 54%;
-    float: left;
-    .classification {
-      .pins-section {
-        clear: both;
-        &:first-child {
-          .home-tag {
-            padding: 0 0 10px 0;
+    .right-login {
+      .title {
+        margin: 20px 15px;
+        color: @brand-info;
+        font-weight: 600;
+        .no-account {
+          margin-top: 3px;
+          color: #717171;
+          font-size: 12px;
+          font-weight: normal;
+          float: right;
+          &:hover {
+            cursor: pointer;
+            color: @brand-info;
           }
         }
-        .home-tag {
-          font-size: 18px;
-          color: #333;
-          padding: 20px 0 10px 0;
-          .view-all {
-            font-size: 18px;
-            font-style: italic;
-            &:hover {
-              color: @brand-primary;
-            }
-          }
+      }
+    }
+    .login-section {
+      .form-group {
+        .help-block.text-left {
+          margin: 0;
+          font-size: 12px;
         }
-        .pins-block {
-          width: 100%;
-          .pin {
-            margin-right: 2.75%;
-            display: inline-block;
-            float: left;
-          }
+      }
+      .login-options {
+        font-size: 12px;
+      }
+      .switchery-small {
+        margin-top: -1px;
+        height: 10px;
+        width: 23px;
+        small {
+          height: 10px;
+          width: 10px;
         }
+      }
 
-        @media (max-width: 1024px) {
-          .pins-block {
-            .pin {
-              width: 48.625%;
-            }
-          }
+      .login-with {
+        h5 {
+          margin: 5.5px 0;
         }
-
-        @media (min-width: 1025px) {
-          .pins-block {
-            .pin {
-              width: 31.5%;
-            }
+      }
+      .other-auths {
+        img {
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          &:hover {
+            cursor: pointer;
           }
         }
       }
     }
   }
+  .main {
+    width: 54%;
+    float: left;
+  }
 }
+
+// .classification {
+//   .pins-section {
+//     clear: both;
+//     &:first-child {
+//       .home-tag {
+//         padding: 0 0 10px 0;
+//       }
+//     }
+//     .home-tag {
+//       font-size: 18px;
+//       color: #333;
+//       padding: 20px 0 10px 0;
+//       .view-all {
+//         font-size: 18px;
+//         font-style: italic;
+//         &:hover {
+//           color: @brand-primary;
+//         }
+//       }
+//     }
+//     .pins-block {
+//       width: 100%;
+//       .pin {
+//         margin-right: 2.75%;
+//         display: inline-block;
+//         float: left;
+//       }
+//     }
+
+//     @media (max-width: 1024px) {
+//       .pins-block {
+//         .pin {
+//           width: 48.625%;
+//         }
+//       }
+//     }
+
+//     @media (min-width: 1025px) {
+//       .pins-block {
+//         .pin {
+//           width: 31.5%;
+//         }
+//       }
+//     }
+//   }
+// }

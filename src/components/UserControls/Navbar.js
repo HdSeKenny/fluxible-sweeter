@@ -191,6 +191,7 @@ const Navbar = CreateReactClass({
             size="modal-md"
             showHeaderAndFooter={true}
             showModal={showLoginModal}
+            isModalLogin={true}
             openNavbarModals={this.openNavbarModals}
             hideNavbarModals={this.hideNavbarModals}
             switchOpenModal={this.switchOpenModal} />

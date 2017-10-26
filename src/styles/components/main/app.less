@@ -80,9 +80,8 @@ body {
 }
 
 .main-sliders {
-  // flex: 1 100%;
-  height: 430px;
-  background-color: @brand-info;
+  flex: 1 100%;
+  height: 300px;
   .tp-banner-container {
     &.hidden {
       .tp-banner {
@@ -104,6 +103,24 @@ body {
     height: auto;
     max-height: 430px;
   }
+
+  .slick-slide {
+    img {
+      display: block;
+      width: 100%;
+      height: 300px;
+    }
+  }
+
+  .slick-dots {
+    bottom: 0px;
+    text-align: right;
+    li {
+      button:before {
+        font-size: 8px;
+      }
+    }
+  }
 }
 
 .sweet-alert {
@@ -114,4 +131,8 @@ body {
   button {
     padding: 8px 32px !important;
   }
+}
+
+.vbox {
+  height: 0;
 }

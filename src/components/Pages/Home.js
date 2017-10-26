@@ -8,8 +8,9 @@ import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { PinItem, ModalsFactory, MainSliders } from '../UI';
-import { Page } from '../UI/Layout';
+import { Page, Row, Col } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
+import { Login, Signup } from '../Pages';
 
 const Home = CreateReactClass({
 
@@ -41,7 +42,23 @@ const Home = CreateReactClass({
       selectedPin: {},
       showPinModal: false,
       isMedium,
-      isSmall
+      isSmall,
+      blogTags: [
+        'News',
+        'Hots',
+        'Stars',
+        'Funny',
+        'social',
+        'Fashion',
+        'Funny',
+        'Funny',
+        'Funny',
+        'Funny',
+        'Funny',
+        'Funny',
+        'Funny'
+      ],
+      showSignupModal: false
     };
   },
 
@@ -137,33 +154,37 @@ const Home = CreateReactClass({
     }
   },
 
+  getTagClassName(query, tag) {
+    return query.tag === tag ? 'active' : '';
+  },
+
+  openSignupModal() {
+    this.setState({ showSignupModal: true });
+    ModalsFactory.show('signupModal');
+  },
+
   _renderPinSection(sectionTitle, typedPins) {
     const { currentUser, isMedium, isSmall } = this.state;
     const marginRightIndex = isMedium || isSmall ? 2 : 3;
 
     return (
-      <section className="pins-section">
-        <p className="home-tag">
-          {sectionTitle} > <Link to="/list" className="view-all">.view more</Link>
-        </p>
-        <div className="pins-block">
-          {typedPins.map((pin, index) => {
-            const specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
-            return (
-              <PinItem
-                key={index}
-                onSelect={(id) => this.onViewPinItem(id)}
-                pin={pin}
-                type={pin.type}
-                currentUser={currentUser}
-                specialClass={specialClass}
-                showImage={true}
-                readMore={true}
-              />
-            );
-          })}
-        </div>
-      </section>
+      <div className="">
+        {typedPins.map((pin, index) => {
+          const specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
+          return (
+            <PinItem
+              key={index}
+              onSelect={(id) => this.onViewPinItem(id)}
+              pin={pin}
+              type={pin.type}
+              currentUser={currentUser}
+              specialClass={specialClass}
+              showImage={true}
+              readMore={true}
+            />
+          );
+        })}
+      </div>
     );
   },
 
@@ -182,19 +203,53 @@ const Home = CreateReactClass({
     );
   },
 
+  _renderHomeLeftTags(tags, pathname, query) {
+    return (
+      <ul className="blog-tags">
+        {tags.map((tag, index) => {
+          const lowcaseTag = tag.toLocaleLowerCase();
+          const url = { pathname, query: { tag: lowcaseTag } };
+          let classname = this.getTagClassName(query, lowcaseTag);
+          if (!query.tag && index === 0) {
+            classname = 'active';
+          }
+          return <li className={classname} key={index}><Link to={url}>{tag}</Link></li>;
+        })}
+      </ul>
+    );
+  },
+
+  _renderHomeRightContent() {
+    return (
+      <div className="">
+        <div className="right-login">
+          <h4 className="title">
+            Login to account
+            <span className="no-account" onClick={() => this.openSignupModal()}>Sign up</span>
+          </h4>
+          <Login />
+        </div>
+        <div className="right-dsad">
+        </div>
+      </div>
+    );
+  },
+
   render() {
-    const { blogs, selectedPin, currentUser, showPinModal } = this.state;
+    const { blogs, selectedPin, currentUser, showPinModal, blogTags, showSignupModal } = this.state;
+    const { pathname, query } = this.props.location;
+    const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
       <div className="home-page">
         <div className="left">
-          <h2>Left nav</h2>
+          {this._renderHomeLeftTags(blogTags, pathname, query)}
         </div>
         <div className="main">
-          <MainSliders show={true} />
+          <MainSliders show={showSliders} />
           {this._renderPinItems(blogs)}
         </div>
         <div className="right">
-          <h2>Right nav</h2>
+          {this._renderHomeRightContent()}
         </div>
         <Page>
           <ModalsFactory
@@ -204,6 +259,16 @@ const Home = CreateReactClass({
             currentUser={currentUser}
             ModalComponent={PinItemModal}
             showHeaderAndFooter={false} />
+            <ModalsFactory
+              modalref="signupModal"
+              title="Create an account"
+              ModalComponent={Signup}
+              size="modal-md"
+              showHeaderAndFooter={true}
+              showModal={showSignupModal}
+              openNavbarModals={this.openNavbarModals}
+              hideNavbarModals={this.hideNavbarModals}
+              switchOpenModal={this.switchOpenModal} />
         </Page>
       </div>
     );
