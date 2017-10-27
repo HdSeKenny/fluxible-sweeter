@@ -82,13 +82,14 @@ export default class App extends React.Component {
   render() {
     const route = this.props.location.pathname;
     const child = React.cloneElement(this.props.children, { location: this.props.location });
-    const showMainSliders = child.type.displayName === 'Home';
+    const routerName = child.type.displayName;
+    const hideNavbarAndFooter = routerName === 'Signup' || routerName === 'Login';
     return (
       <FullScreen id="app" onClick={(e) => this.onAppClick(e)}>
-        <Navbar route={route} />
+        {!hideNavbarAndFooter && <Navbar route={route} />}
         <div className="content-pages">{child}</div>
         <Messages showMessages={this.state.showMessages} hideMessages={() => this.hideMessages()} />
-        <Footer />
+        {!hideNavbarAndFooter && <Footer />}
       </FullScreen>
     );
   }

@@ -222,13 +222,7 @@ const Home = CreateReactClass({
   _renderHomeRightContent() {
     return (
       <div className="">
-        <div className="right-login">
-          <h4 className="title">
-            Login to account
-            <span className="no-account" onClick={() => this.openSignupModal()}>Sign up</span>
-          </h4>
-          <Login />
-        </div>
+        <Login isModalLogin={false} />
         <div className="right-dsad">
         </div>
       </div>

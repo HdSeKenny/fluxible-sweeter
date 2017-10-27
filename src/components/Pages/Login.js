@@ -2,7 +2,7 @@ import React from 'react';
 import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { routerShape } from 'react-router';
+import { routerShape, Link } from 'react-router';
 import { validations, jsUtils } from '../../utils';
 import { swal } from '../../plugins';
 import { UserActions } from '../../actions';
@@ -238,8 +238,7 @@ const Login = CreateReactClass({
         }
 
         {!isModalLogin &&
-          <Row className="mb-10">
-            <hr className="mt-5 mb-10" />
+          <Row className="mt-15 mb-15">
             <Col size="4 login-with p-0"><h5>Other Logins:</h5></Col>
             <Col size="8 other-auths p-0">
               <Col size="2" className="tac p-0"><img alt="twitter" src={twitterImg} /></Col>
@@ -256,14 +255,18 @@ const Login = CreateReactClass({
     const { errorMessage, password, email, remember } = this.state;
     const { isModalLogin } = this.props;
     return (
-      <section className="login-section mt-15 mr-15 ml-15">
+      <section className="login-section">
         <div className="wrapper-md animated fadeInUp">
+          {!isModalLogin && <h4 className="title">
+            Login to account
+            <Link to="/signup" className="no-account">Sign up</Link>
+          </h4>}
           <form role="form" onSubmit={this.onLoginSubmit}>
             <div className="form-group">{this._renderEmailInput(email, remember)}</div>
-            <div className={`form-group ${errorMessage ? 'mb-5' : ''}`}>{this._renderPasswordInput(password, remember)}</div>
-            <div className="form-group m-0"><p className="help-block text-left">{errorMessage}</p></div>
+            <div className={`form-group ${errorMessage && 'mb-5'}`}>{this._renderPasswordInput(password, remember)}</div>
+            <div className="form-group mb-5 mt-0"><p className="help-block text-left">{errorMessage}</p></div>
             <div className="form-group">{this._renderLoginOptions()}</div>
-            <div className="form-group">{this._renderLoginBtns(isModalLogin)}</div>
+            <div className="form-group mt-15">{this._renderLoginBtns(isModalLogin)}</div>
           </form>
           <div className="">{this._renderOtherAuths(isModalLogin)}</div>
         </div>

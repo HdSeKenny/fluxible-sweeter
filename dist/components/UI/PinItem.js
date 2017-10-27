@@ -205,17 +205,12 @@ var PinItem = function (_React$Component) {
               firstName,
               ' ',
               lastName
-            ),
-            _react2.default.createElement(
-              'small',
-              { className: 'from-now fr' },
-              fromNow
             )
           ),
           _react2.default.createElement(
             'p',
-            { className: 'text-muted text-xs mt-5' },
-            username
+            { className: 'text-muted text-xs' },
+            fromNow
           )
         )
       );
@@ -246,21 +241,32 @@ var PinItem = function (_React$Component) {
       var display70Text = _utils.jsUtils.shorten(pin.text, 70);
 
       if (isArticle) {
-        // if (readMore) {
-        //   return <p className="article">{pin.text}</p>;
-        // }
-        // else {
-        //   return <p className="moment">{pin.tex}</p>;
-        // }
-      } else if (readMore) {} else if (pin.content) {
+        if (readMore) {
+          return _react2.default.createElement(
+            'p',
+            { className: 'article' },
+            pin.text
+          );
+        } else {
+          return _react2.default.createElement(
+            'p',
+            { className: 'moment' },
+            pin.tex
+          );
+        }
+      } else if (pin.content) {
         return _react2.default.createElement(_Draft.SweetEditor, { contentText: pin.text });
       } else {
-        // return <p className="moment">{pin.text}</p>;
+        return _react2.default.createElement(
+          'p',
+          { className: 'moment' },
+          pin.text
+        );
       }
     }
   }, {
-    key: '_renderPinFooterIcons',
-    value: function _renderPinFooterIcons(pin) {
+    key: '_renderPinFooter',
+    value: function _renderPinFooter(pin) {
       var _this5 = this;
 
       var currentUser = this.props.currentUser;
@@ -273,10 +279,10 @@ var PinItem = function (_React$Component) {
       return _react2.default.createElement(
         _Layout.Row,
         { className: 'pin-footer-icons' },
-        _react2.default.createElement(_Layout.Col, { size: '3 p-0' }),
+        _react2.default.createElement(_Layout.Col, { size: '5 p-0' }),
         _react2.default.createElement(
           _Layout.Col,
-          { size: '9 p-0 tar' },
+          { size: '7 p-0 tar' },
           _react2.default.createElement(
             'div',
             {
@@ -328,28 +334,33 @@ var PinItem = function (_React$Component) {
   }, {
     key: '_renderPinitemContent',
     value: function _renderPinitemContent(pin, showImage, readMore) {
+      var rightSize = (showImage ? '8' : '12') + ' p-0';
       return _react2.default.createElement(
-        'div',
-        { className: '' },
+        _Layout.Row,
+        { className: 'p-0' },
         showImage && _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mb-15' },
+          _Layout.Col,
+          { size: '4 p-0 pr-15' },
           this._renderPinitemImage(pin)
         ),
         _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mb-10' },
-          this._renderPinUserInfo(pin)
-        ),
-        _react2.default.createElement(
-          _Layout.Row,
-          { className: 'mb-10' },
-          this._renderPinContent(pin, readMore)
-        ),
-        _react2.default.createElement(
-          _Layout.Row,
-          { className: '' },
-          this._renderPinFooterIcons(pin)
+          _Layout.Col,
+          { size: rightSize },
+          _react2.default.createElement(
+            _Layout.Row,
+            { className: 'mb-5' },
+            this._renderPinUserInfo(pin)
+          ),
+          _react2.default.createElement(
+            _Layout.Row,
+            { className: 'mb-10' },
+            this._renderPinContent(pin, readMore)
+          ),
+          _react2.default.createElement(
+            _Layout.Row,
+            null,
+            this._renderPinFooter(pin)
+          )
         )
       );
     }
@@ -365,7 +376,7 @@ var PinItem = function (_React$Component) {
       var pinStyle = specialClass ? 'pin ' + specialClass + ' ' + pin.type : 'pin ' + pin.type;
       return _react2.default.createElement(
         'div',
-        { className: '' + pinStyle + (readMore ? ' mb-20' : ' mb-10') },
+        { className: pinStyle + ' mb-10' },
         _react2.default.createElement(
           'div',
           { className: 'pin-body p-0' },

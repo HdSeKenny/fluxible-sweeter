@@ -2,12 +2,13 @@ import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { routerShape } from 'react-router';
+import { routerShape, Link } from 'react-router';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { swal } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
 import { ModalsFactory } from '../UI';
+import { params } from '../../configs';
 
 const Signup = CreateReactClass({
 
@@ -258,7 +259,7 @@ const Signup = CreateReactClass({
       confirmPasswordValidate,
       confirmPasswordMsg
     } = this.state;
-
+    const { isModal } = this.props;
     const formGroups = {
       username: {
         valid: usernameValidate,
@@ -286,57 +287,60 @@ const Signup = CreateReactClass({
       }
     };
     return (
-      <article className="register-page">
-        <section className="register-section">
-          <form role="form" onSubmit={this.handleRegister} className="mt-20">
-            <Row>
-              <Col size="6">
-                <div className={`form-group ${firstNameValidate}`} >
-                  <input type="text" onChange={this.handleFirstName} className="form-control" placeholder="First Name" />
-                  <p className="help-block"> {firstNameMsg}</p>
-                </div>
-              </Col>
-              <Col size="6">
-                <div className={`form-group ${lastNameValidate}`} >
-                  <input type="text" onChange={this.handleLastName} className="form-control" placeholder="Last Name" />
-                  <p className="help-block"> {lastNameMsg}</p>
-                </div>
-              </Col>
-            </Row>
-            {Object.keys(formGroups).map((key, index) => {
-              const formGroup = formGroups[key];
-              const { valid, holder, handleEvent, msg } = formGroup;
-              let inputType = 'text';
-              if (['password', 'confirmPassword'].includes(key)) {
-                inputType = 'password';
-              }
+      <article className={`register ${isModal ? 'is-modal' : 'not-modal'}`}>
+        <form role="form" onSubmit={this.handleRegister} className="r-form">
+          {!isModal &&
+            <h3 className="title tac">
+              <Link to="/"><img src={params.brandImage} alt="brand" height="35" /></Link>
+            </h3>
+          }
+          <Row>
+            <Col size="6">
+              <div className={`form-group ${firstNameValidate}`} >
+                <input type="text" onChange={this.handleFirstName} className="form-control" placeholder="First Name" />
+                <p className="help-block"> {firstNameMsg}</p>
+              </div>
+            </Col>
+            <Col size="6">
+              <div className={`form-group ${lastNameValidate}`} >
+                <input type="text" onChange={this.handleLastName} className="form-control" placeholder="Last Name" />
+                <p className="help-block"> {lastNameMsg}</p>
+              </div>
+            </Col>
+          </Row>
+          {Object.keys(formGroups).map((key, index) => {
+            const formGroup = formGroups[key];
+            const { valid, holder, handleEvent, msg } = formGroup;
+            let inputType = 'text';
+            if (['password', 'confirmPassword'].includes(key)) {
+              inputType = 'password';
+            }
 
-              if (key === 'email') {
-                inputType = 'email';
-              }
+            if (key === 'email') {
+              inputType = 'email';
+            }
 
-              return (
-                <Row key={index}>
-                  <Col size="12">
-                    <div className={`form-group ${valid}`} >
-                      <input type={inputType} onChange={handleEvent} className="form-control" placeholder={holder} />
-                      <p className="help-block"> {msg}</p>
-                    </div>
-                  </Col>
-                </Row>
-              );
-            })}
-            <Row>
-              <Col size="6" />
-              <Col size="3 tar pr-5">
-                <button type="submit" className="btn btn-info btn-block">Create</button>
-              </Col>
-              <Col size="3 tar pl-5">
-                <span onClick={this.openLoginModal} className="btn btn-info btn-block">Login</span>
-              </Col>
-            </Row>
-          </form>
-        </section>
+            return (
+              <Row key={index}>
+                <Col size="12">
+                  <div className={`form-group ${valid}`} >
+                    <input type={inputType} onChange={handleEvent} className="form-control" placeholder={holder} />
+                    <p className="help-block"> {msg}</p>
+                  </div>
+                </Col>
+              </Row>
+            );
+          })}
+          <Row className="mb-10">
+            <Col size="12">
+              <button type="submit" className="btn btn-info btn-block r-button">Create Account</button>
+            </Col>
+          </Row>
+          <p className="have-account">
+            Alread have an account?
+            {isModal ? <span className="" onClick={() => this.openLoginModal()}> Login</span> : <Link to="/"> Login</Link>}
+          </p>
+        </form>
       </article>
     );
   }

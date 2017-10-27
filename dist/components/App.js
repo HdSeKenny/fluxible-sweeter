@@ -118,14 +118,14 @@ var App = function (_React$Component) {
 
       var route = this.props.location.pathname;
       var child = _react2.default.cloneElement(this.props.children, { location: this.props.location });
-      var showMainSliders = child.type.displayName === 'Home';
+      var routerName = child.type.displayName;
+      var hideNavbarAndFooter = routerName === 'Signup' || routerName === 'Login';
       return _react2.default.createElement(
         _UI.FullScreen,
         { id: 'app', onClick: function onClick(e) {
             return _this2.onAppClick(e);
           } },
-        _react2.default.createElement(_UserControls.Navbar, { route: route }),
-        showMainSliders && _react2.default.createElement(_UI.MainSliders, { show: showMainSliders }),
+        !hideNavbarAndFooter && _react2.default.createElement(_UserControls.Navbar, { route: route }),
         _react2.default.createElement(
           'div',
           { className: 'content-pages' },
@@ -134,7 +134,7 @@ var App = function (_React$Component) {
         _react2.default.createElement(_Users.Messages, { showMessages: this.state.showMessages, hideMessages: function hideMessages() {
             return _this2.hideMessages();
           } }),
-        _react2.default.createElement(_UserControls.Footer, null)
+        !hideNavbarAndFooter && _react2.default.createElement(_UserControls.Footer, null)
       );
     }
   }]);

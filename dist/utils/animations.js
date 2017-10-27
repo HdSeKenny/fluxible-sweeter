@@ -82,11 +82,11 @@ var animations = {
       var revol = jQuery('.tp-banner').show().revolution({
         // dottedOverlay: 'none',
         delay: 8000,
-        startwidth: 1170,
+        startwidth: 1180,
         startheight: 430,
         hideThumbs: 10,
         fullWidth: 'on',
-        forceFullWidth: 'on',
+        forceFullWidth: 'off',
         spinner: 'off',
         navigation: {
           keyboardNavigation: 'on',

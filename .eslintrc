@@ -25,6 +25,7 @@
     "semi": [2, "always"],
     "new-cap": 0,
     "max-params": "off",
+    "max-len": 0,
     "max-depth": "off",
     "quote-props": "off",
     "max-nested-callbacks": ["error", 4],

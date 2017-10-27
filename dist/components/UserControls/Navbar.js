@@ -313,6 +313,7 @@ var Navbar = (0, _createReactClass2.default)({
           size: 'modal-md',
           showHeaderAndFooter: true,
           showModal: showLoginModal,
+          isModalLogin: true,
           openNavbarModals: this.openNavbarModals,
           hideNavbarModals: this.hideNavbarModals,
           switchOpenModal: this.switchOpenModal }),
@@ -323,6 +324,7 @@ var Navbar = (0, _createReactClass2.default)({
           size: 'modal-md',
           showHeaderAndFooter: true,
           showModal: showSignupModal,
+          isModal: true,
           openNavbarModals: this.openNavbarModals,
           hideNavbarModals: this.hideNavbarModals,
           switchOpenModal: this.switchOpenModal })

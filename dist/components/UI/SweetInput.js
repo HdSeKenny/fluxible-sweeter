@@ -60,7 +60,8 @@ var SweetInput = function (_React$Component) {
       var _props = this.props,
           icon = _props.icon,
           format = _props.format,
-          errorMessage = _props.errorMessage;
+          errorMessage = _props.errorMessage,
+          placeholder = _props.placeholder;
 
       return _react2.default.createElement(
         'div',
@@ -68,7 +69,7 @@ var SweetInput = function (_React$Component) {
         icon ? _react2.default.createElement('i', { className: icon }) : null,
         _react2.default.createElement('input', { type: format, autoComplete: 'off', className: 'form-control', onChange: function onChange(e) {
             return _this2.handleChange(e);
-          } }),
+          }, placeholder: placeholder }),
         !errorMessage ? null : _react2.default.createElement(
           'p',
           { className: 'help-block text-left' },
@@ -86,7 +87,8 @@ SweetInput.propTypes = {
   errorMessage: _propTypes2.default.string,
   onChange: _propTypes2.default.func,
   required: _propTypes2.default.bool,
-  valid: _propTypes2.default.bool
+  valid: _propTypes2.default.bool,
+  placeholder: _propTypes2.default.string
 };
 exports.default = SweetInput;
 module.exports = exports['default'];

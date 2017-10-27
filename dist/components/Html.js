@@ -82,9 +82,8 @@ var Html = function (_React$Component) {
           _react2.default.createElement('link', { href: '/css/sweetalert.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/slim.min.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/emoji.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/revolution/css/settings.css', rel: 'stylesheet', media: 'screen' }),
-          _react2.default.createElement('link', { href: '/revolution/css/layers.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/revolution/css/navigation.css', rel: 'stylesheet' }),
+          _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css' }),
+          _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css' }),
           _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
           _react2.default.createElement('script', { src: '/js/jquery.min.js' }),
           _react2.default.createElement('script', { src: '/js/bootstrap.min.js' })
@@ -102,17 +101,6 @@ var Html = function (_React$Component) {
           _react2.default.createElement('script', { src: common }),
           _react2.default.createElement('script', { src: main }),
           _react2.default.createElement('script', { src: '/js/sweetalert.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/jquery.themepunch.tools.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/jquery.themepunch.revolution.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.actions.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.carousel.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.kenburn.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.layeranimation.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.migration.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.navigation.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.parallax.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.slideanims.min.js' }),
-          _react2.default.createElement('script', { src: '/revolution/js/extensions/revolution.extension.video.min.js' }),
           essentials && _react2.default.createElement('script', { src: essentials })
         )
       );

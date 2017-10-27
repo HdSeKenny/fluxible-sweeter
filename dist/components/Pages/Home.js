@@ -36,6 +36,8 @@ var _Layout = require('../UI/Layout');
 
 var _UserControls = require('../UserControls');
 
+var _Pages = require('../Pages');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = (0, _createReactClass2.default)({
@@ -67,7 +69,9 @@ var Home = (0, _createReactClass2.default)({
       selectedPin: {},
       showPinModal: false,
       isMedium: isMedium,
-      isSmall: isSmall
+      isSmall: isSmall,
+      blogTags: ['News', 'Hots', 'Stars', 'Funny', 'social', 'Fashion', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny'],
+      showSignupModal: false
     };
   },
   onChange: function onChange(res) {
@@ -151,6 +155,13 @@ var Home = (0, _createReactClass2.default)({
       this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
+  getTagClassName: function getTagClassName(query, tag) {
+    return query.tag === tag ? 'active' : '';
+  },
+  openSignupModal: function openSignupModal() {
+    this.setState({ showSignupModal: true });
+    _UI.ModalsFactory.show('signupModal');
+  },
   _renderPinSection: function _renderPinSection(sectionTitle, typedPins) {
     var _this3 = this;
 
@@ -162,38 +173,23 @@ var Home = (0, _createReactClass2.default)({
     var marginRightIndex = isMedium || isSmall ? 2 : 3;
 
     return _react2.default.createElement(
-      'section',
-      { className: 'pins-section' },
-      _react2.default.createElement(
-        'p',
-        { className: 'home-tag' },
-        sectionTitle,
-        ' > ',
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/list', className: 'view-all' },
-          '.view more'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'pins-block' },
-        typedPins.map(function (pin, index) {
-          var specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
-          return _react2.default.createElement(_UI.PinItem, {
-            key: index,
-            onSelect: function onSelect(id) {
-              return _this3.onViewPinItem(id);
-            },
-            pin: pin,
-            type: pin.type,
-            currentUser: currentUser,
-            specialClass: specialClass,
-            showImage: true,
-            readMore: true
-          });
-        })
-      )
+      'div',
+      { className: '' },
+      typedPins.map(function (pin, index) {
+        var specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
+        return _react2.default.createElement(_UI.PinItem, {
+          key: index,
+          onSelect: function onSelect(id) {
+            return _this3.onViewPinItem(id);
+          },
+          pin: pin,
+          type: pin.type,
+          currentUser: currentUser,
+          specialClass: specialClass,
+          showImage: true,
+          readMore: true
+        });
+      })
     );
   },
   _renderPinItems: function _renderPinItems(pins) {
@@ -220,23 +216,71 @@ var Home = (0, _createReactClass2.default)({
       this._renderPinSection('Good sweets', thumbedSortedMoments)
     );
   },
+  _renderHomeLeftTags: function _renderHomeLeftTags(tags, pathname, query) {
+    var _this4 = this;
+
+    return _react2.default.createElement(
+      'ul',
+      { className: 'blog-tags' },
+      tags.map(function (tag, index) {
+        var lowcaseTag = tag.toLocaleLowerCase();
+        var url = { pathname: pathname, query: { tag: lowcaseTag } };
+        var classname = _this4.getTagClassName(query, lowcaseTag);
+        if (!query.tag && index === 0) {
+          classname = 'active';
+        }
+        return _react2.default.createElement(
+          'li',
+          { className: classname, key: index },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: url },
+            tag
+          )
+        );
+      })
+    );
+  },
+  _renderHomeRightContent: function _renderHomeRightContent() {
+    return _react2.default.createElement(
+      'div',
+      { className: '' },
+      _react2.default.createElement(_Pages.Login, { isModalLogin: false }),
+      _react2.default.createElement('div', { className: 'right-dsad' })
+    );
+  },
   render: function render() {
     var _state2 = this.state,
         blogs = _state2.blogs,
         selectedPin = _state2.selectedPin,
         currentUser = _state2.currentUser,
-        showPinModal = _state2.showPinModal;
+        showPinModal = _state2.showPinModal,
+        blogTags = _state2.blogTags,
+        showSignupModal = _state2.showSignupModal;
+    var _props$location = this.props.location,
+        pathname = _props$location.pathname,
+        query = _props$location.query;
 
+    var showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return _react2.default.createElement(
       'div',
       { className: 'home-page' },
-      _react2.default.createElement('div', { className: 'left' }),
+      _react2.default.createElement(
+        'div',
+        { className: 'left' },
+        this._renderHomeLeftTags(blogTags, pathname, query)
+      ),
       _react2.default.createElement(
         'div',
         { className: 'main' },
+        _react2.default.createElement(_UI.MainSliders, { show: showSliders }),
         this._renderPinItems(blogs)
       ),
-      _react2.default.createElement('div', { className: 'right' }),
+      _react2.default.createElement(
+        'div',
+        { className: 'right' },
+        this._renderHomeRightContent()
+      ),
       _react2.default.createElement(
         _Layout.Page,
         null,
@@ -246,7 +290,17 @@ var Home = (0, _createReactClass2.default)({
           showModal: showPinModal,
           currentUser: currentUser,
           ModalComponent: _UserControls.PinItemModal,
-          showHeaderAndFooter: false })
+          showHeaderAndFooter: false }),
+        _react2.default.createElement(_UI.ModalsFactory, {
+          modalref: 'signupModal',
+          title: 'Create an account',
+          ModalComponent: _Pages.Signup,
+          size: 'modal-md',
+          showHeaderAndFooter: true,
+          showModal: showSignupModal,
+          openNavbarModals: this.openNavbarModals,
+          hideNavbarModals: this.hideNavbarModals,
+          switchOpenModal: this.switchOpenModal })
       )
     );
   }

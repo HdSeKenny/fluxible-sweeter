@@ -1,6 +1,7 @@
 const React = require('react');
 
 module.exports = {
+  brandImage: '/images/sweeter.png',
   navbar: {
     sticky_header_height: 250,
     fade_speed: 300
@@ -48,15 +49,15 @@ module.exports = {
     selectGroups: [{
       title: 'People',
       icon: React.createElement('i', { className: 'fa fa-smile-o' }),
-      categories: ['people'],
+      categories: ['people']
     }, {
       title: 'Food & Drink',
       icon: React.createElement('i', { className: 'fa fa-cutlery' }),
-      categories: ['food'],
+      categories: ['food']
     }, {
       title: 'Symbols',
       icon: React.createElement('i', { className: 'fa fa-heart' }),
-      categories: ['symbols'],
+      categories: ['symbols']
     }]
   }
 };

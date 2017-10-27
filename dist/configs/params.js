@@ -3,6 +3,7 @@
 var React = require('react');
 
 module.exports = {
+  brandImage: '/images/sweeter.png',
   navbar: {
     sticky_header_height: 250,
     fade_speed: 300
@@ -13,7 +14,7 @@ module.exports = {
     fade_speed: 300
   },
   showUserCard: false,
-  showEmoji: true,
+  showEmoji: false,
   emojiConfig: {
     theme: {
       emoji: 'emoji',

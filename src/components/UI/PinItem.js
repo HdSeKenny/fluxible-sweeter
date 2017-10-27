@@ -139,9 +139,8 @@ export default class PinItem extends React.Component {
           </a>
           <div className="author">
             <span className="name" onClick={() => this.goToUserCenter(author)}>{firstName} {lastName}</span>
-            <small className="from-now fr">{fromNow}</small>
           </div>
-          <p className="text-muted text-xs mt-5">{username}</p>
+          <p className="text-muted text-xs">{fromNow}</p>
         </div>
       </div>
     );
@@ -162,26 +161,23 @@ export default class PinItem extends React.Component {
     const display70Text = jsUtils.shorten(pin.text, 70);
 
     if (isArticle) {
-      // if (readMore) {
-      //   return <p className="article">{pin.text}</p>;
-      // }
-      // else {
-      //   return <p className="moment">{pin.tex}</p>;
-      // }
-    }
-    else if (readMore) {
-
+      if (readMore) {
+        return <p className="article">{pin.text}</p>;
+      }
+      else {
+        return <p className="moment">{pin.tex}</p>;
+      }
     }
     else if (pin.content) {
       return (
         <SweetEditor contentText={pin.text} />
       );
     } else {
-      // return <p className="moment">{pin.text}</p>;
+      return <p className="moment">{pin.text}</p>;
     }
   }
 
-  _renderPinFooterIcons(pin) {
+  _renderPinFooter(pin) {
     const { currentUser } = this.props;
     const { likers, comments } = pin;
     const isThumbedUp = currentUser ? likers.includes(currentUser.id_str) : false;
@@ -189,8 +185,8 @@ export default class PinItem extends React.Component {
     const thumbsUpBallon = isThumbedUp ? 'cancel this?' : 'thumbs up!';
     return (
       <Row className="pin-footer-icons">
-        <Col size="3 p-0"></Col>
-        <Col size="9 p-0 tar">
+        <Col size="5 p-0"></Col>
+        <Col size="7 p-0 tar">
           <div
             className="icon-span"
             data-balloon="share!"
@@ -220,13 +216,16 @@ export default class PinItem extends React.Component {
   }
 
   _renderPinitemContent(pin, showImage, readMore) {
+    const rightSize = `${showImage ? '8' : '12'} p-0`;
     return (
-      <div className="">
-        {showImage && <Row className="mb-15">{this._renderPinitemImage(pin)}</Row>}
-        <Row className="mb-10">{this._renderPinUserInfo(pin)}</Row>
-        <Row className="mb-10">{this._renderPinContent(pin, readMore)}</Row>
-        <Row className="">{this._renderPinFooterIcons(pin)}</Row>
-      </div>
+      <Row className="p-0">
+        {showImage && <Col size="4 p-0 pr-15">{this._renderPinitemImage(pin)}</Col>}
+        <Col size={rightSize}>
+          <Row className="mb-5">{this._renderPinUserInfo(pin)}</Row>
+          <Row className="mb-10">{this._renderPinContent(pin, readMore)}</Row>
+          <Row>{this._renderPinFooter(pin)}</Row>
+        </Col>
+      </Row>
     );
   }
 

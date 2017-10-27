@@ -34,6 +34,8 @@ var _Layout = require('../UI/Layout');
 
 var _UI = require('../UI');
 
+var _configs = require('../../configs');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Signup = (0, _createReactClass2.default)({
@@ -255,6 +257,8 @@ var Signup = (0, _createReactClass2.default)({
     this.setState({ confirmPassword: e.target.value });
   },
   render: function render() {
+    var _this = this;
+
     var _state = this.state,
         firstNameValidate = _state.firstNameValidate,
         firstNameMsg = _state.firstNameMsg,
@@ -268,7 +272,7 @@ var Signup = (0, _createReactClass2.default)({
         passwordMsg = _state.passwordMsg,
         confirmPasswordValidate = _state.confirmPasswordValidate,
         confirmPasswordMsg = _state.confirmPasswordMsg;
-
+    var isModal = this.props.isModal;
 
     var formGroups = {
       username: {
@@ -298,105 +302,116 @@ var Signup = (0, _createReactClass2.default)({
     };
     return _react2.default.createElement(
       'article',
-      { className: 'register-page' },
+      { className: 'register ' + (isModal ? 'is-modal' : 'not-modal') },
       _react2.default.createElement(
-        'section',
-        { className: 'register-section' },
-        _react2.default.createElement(
-          'form',
-          { role: 'form', onSubmit: this.handleRegister, className: 'mt-20' },
+        'form',
+        { role: 'form', onSubmit: this.handleRegister, className: 'r-form' },
+        !isModal && _react2.default.createElement(
+          'h3',
+          { className: 'title tac' },
           _react2.default.createElement(
-            _Layout.Row,
-            null,
+            _reactRouter.Link,
+            { to: '/' },
+            _react2.default.createElement('img', { src: _configs.params.brandImage, alt: 'brand', height: '35' })
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Row,
+          null,
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '6' },
             _react2.default.createElement(
-              _Layout.Col,
-              { size: '6' },
+              'div',
+              { className: 'form-group ' + firstNameValidate },
+              _react2.default.createElement('input', { type: 'text', onChange: this.handleFirstName, className: 'form-control', placeholder: 'First Name' }),
               _react2.default.createElement(
-                'div',
-                { className: 'form-group ' + firstNameValidate },
-                _react2.default.createElement('input', { type: 'text', onChange: this.handleFirstName, className: 'form-control', placeholder: 'First Name' }),
-                _react2.default.createElement(
-                  'p',
-                  { className: 'help-block' },
-                  ' ',
-                  firstNameMsg
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '6' },
-              _react2.default.createElement(
-                'div',
-                { className: 'form-group ' + lastNameValidate },
-                _react2.default.createElement('input', { type: 'text', onChange: this.handleLastName, className: 'form-control', placeholder: 'Last Name' }),
-                _react2.default.createElement(
-                  'p',
-                  { className: 'help-block' },
-                  ' ',
-                  lastNameMsg
-                )
+                'p',
+                { className: 'help-block' },
+                ' ',
+                firstNameMsg
               )
             )
           ),
-          (0, _keys2.default)(formGroups).map(function (key, index) {
-            var formGroup = formGroups[key];
-            var valid = formGroup.valid,
-                holder = formGroup.holder,
-                handleEvent = formGroup.handleEvent,
-                msg = formGroup.msg;
-
-            var inputType = 'text';
-            if (['password', 'confirmPassword'].includes(key)) {
-              inputType = 'password';
-            }
-
-            if (key === 'email') {
-              inputType = 'email';
-            }
-
-            return _react2.default.createElement(
-              _Layout.Row,
-              { key: index },
-              _react2.default.createElement(
-                _Layout.Col,
-                { size: '12' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'form-group ' + valid },
-                  _react2.default.createElement('input', { type: inputType, onChange: handleEvent, className: 'form-control', placeholder: holder }),
-                  _react2.default.createElement(
-                    'p',
-                    { className: 'help-block' },
-                    ' ',
-                    msg
-                  )
-                )
-              )
-            );
-          }),
           _react2.default.createElement(
-            _Layout.Row,
-            null,
-            _react2.default.createElement(_Layout.Col, { size: '6' }),
+            _Layout.Col,
+            { size: '6' },
             _react2.default.createElement(
-              _Layout.Col,
-              { size: '3 tar pr-5' },
+              'div',
+              { className: 'form-group ' + lastNameValidate },
+              _react2.default.createElement('input', { type: 'text', onChange: this.handleLastName, className: 'form-control', placeholder: 'Last Name' }),
               _react2.default.createElement(
-                'button',
-                { type: 'submit', className: 'btn btn-info btn-block' },
-                'Create'
-              )
-            ),
-            _react2.default.createElement(
-              _Layout.Col,
-              { size: '3 tar pl-5' },
-              _react2.default.createElement(
-                'span',
-                { onClick: this.openLoginModal, className: 'btn btn-info btn-block' },
-                'Login'
+                'p',
+                { className: 'help-block' },
+                ' ',
+                lastNameMsg
               )
             )
+          )
+        ),
+        (0, _keys2.default)(formGroups).map(function (key, index) {
+          var formGroup = formGroups[key];
+          var valid = formGroup.valid,
+              holder = formGroup.holder,
+              handleEvent = formGroup.handleEvent,
+              msg = formGroup.msg;
+
+          var inputType = 'text';
+          if (['password', 'confirmPassword'].includes(key)) {
+            inputType = 'password';
+          }
+
+          if (key === 'email') {
+            inputType = 'email';
+          }
+
+          return _react2.default.createElement(
+            _Layout.Row,
+            { key: index },
+            _react2.default.createElement(
+              _Layout.Col,
+              { size: '12' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group ' + valid },
+                _react2.default.createElement('input', { type: inputType, onChange: handleEvent, className: 'form-control', placeholder: holder }),
+                _react2.default.createElement(
+                  'p',
+                  { className: 'help-block' },
+                  ' ',
+                  msg
+                )
+              )
+            )
+          );
+        }),
+        _react2.default.createElement(
+          _Layout.Row,
+          { className: 'mb-10' },
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '12' },
+            _react2.default.createElement(
+              'button',
+              { type: 'submit', className: 'btn btn-info btn-block r-button' },
+              'Create Account'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'p',
+          { className: 'have-account' },
+          'Alread have an account?',
+          isModal ? _react2.default.createElement(
+            'span',
+            { className: '', onClick: function onClick() {
+                return _this.openLoginModal();
+              } },
+            ' Login'
+          ) : _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            ' Login'
           )
         )
       )

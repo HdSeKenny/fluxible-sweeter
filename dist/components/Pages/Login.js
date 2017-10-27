@@ -138,13 +138,11 @@ var Login = (0, _createReactClass2.default)({
   },
   onEmailChange: function onEmailChange(e) {
     var email = e.target.value;
-    var result = this.validateEmail(email);
-    this.setState(result);
+    this.setState({ email: email, errorMessage: '' });
   },
   onPasswordChange: function onPasswordChange(e) {
     var password = e.target.value;
-    var result = this.validatePassword(password);
-    this.setState(result);
+    this.setState({ password: password, errorMessage: '' });
   },
   openSignupModal: function openSignupModal() {
     this.props.switchOpenModal('signupModal');
@@ -194,10 +192,10 @@ var Login = (0, _createReactClass2.default)({
       onChange: this.onPasswordChange
     });
   },
-  _renderForgotPassword: function _renderForgotPassword() {
+  _renderLoginOptions: function _renderLoginOptions() {
     return _react2.default.createElement(
       _Layout.Row,
-      null,
+      { className: 'login-options' },
       _react2.default.createElement(
         _Layout.Col,
         { size: '6', className: 'pl-0' },
@@ -209,82 +207,130 @@ var Login = (0, _createReactClass2.default)({
         _react2.default.createElement(
           'span',
           { className: 'forgot-pw' },
-          'Forgot your password ?'
+          'Forgot password'
         )
       )
     );
   },
-  _renderLoginBtns: function _renderLoginBtns() {
-    return _react2.default.createElement(
-      _Layout.Row,
-      null,
-      _react2.default.createElement(
-        _Layout.Col,
-        { size: '6', className: 'pl-0' },
+  _renderLoginBtns: function _renderLoginBtns(isModalLogin) {
+    if (isModalLogin) {
+      return _react2.default.createElement(
+        _Layout.Row,
+        null,
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '6', className: 'pl-0' },
+          _react2.default.createElement(
+            'button',
+            { type: 'submit', className: 'btn btn-info btn-login' },
+            'Login'
+          )
+        ),
+        _react2.default.createElement(
+          _Layout.Col,
+          { size: '6', className: 'pr-0 tar' },
+          _react2.default.createElement(
+            'span',
+            { onClick: this.openSignupModal, className: 'btn btn-primary btn-signup' },
+            'signup'
+          )
+        )
+      );
+    } else {
+      return _react2.default.createElement(
+        _Layout.Row,
+        { className: 'p-0' },
         _react2.default.createElement(
           'button',
           { type: 'submit', className: 'btn btn-info btn-login' },
           'Login'
         )
-      ),
-      _react2.default.createElement(
-        _Layout.Col,
-        { size: '6', className: 'pr-0 tar' },
-        _react2.default.createElement(
-          'span',
-          { onClick: this.openSignupModal, className: 'btn btn-primary btn-signup' },
-          'signup'
-        )
-      )
-    );
+      );
+    }
   },
-  _renderOtherAuths: function _renderOtherAuths() {
+  _renderOtherAuths: function _renderOtherAuths(isModalLogin) {
     var twitterImg = '/images/svg/twitter.svg';
     var googleImg = '/images/google+.png';
     var githubImg = '/images/github.png';
     return _react2.default.createElement(
       'div',
       { className: '' },
-      _react2.default.createElement(
-        _Layout.Row,
+      isModalLogin && _react2.default.createElement(
+        'div',
         null,
         _react2.default.createElement(
-          _Layout.Col,
-          { size: '4', className: 'p-0' },
-          _react2.default.createElement('hr', null)
+          _Layout.Row,
+          null,
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4', className: 'p-0' },
+            _react2.default.createElement('hr', null)
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4' },
+            _react2.default.createElement(
+              'h5',
+              { className: 'tac' },
+              'or login with'
+            )
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4', className: 'p-0 tar' },
+            _react2.default.createElement('hr', null)
+          )
         ),
         _react2.default.createElement(
+          _Layout.Row,
+          { className: 'other-auths' },
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4', className: 'tac' },
+            _react2.default.createElement('img', { alt: 'twitter', src: twitterImg })
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4', className: 'tac' },
+            _react2.default.createElement('img', { alt: 'google+', src: googleImg })
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '4', className: 'tac' },
+            _react2.default.createElement('img', { alt: 'github', src: githubImg })
+          )
+        )
+      ),
+      !isModalLogin && _react2.default.createElement(
+        _Layout.Row,
+        { className: 'mt-15 mb-15' },
+        _react2.default.createElement(
           _Layout.Col,
-          { size: '4' },
+          { size: '4 login-with p-0' },
           _react2.default.createElement(
             'h5',
-            { className: 'tac' },
-            'or login with'
+            null,
+            'Other Logins:'
           )
         ),
         _react2.default.createElement(
           _Layout.Col,
-          { size: '4', className: 'p-0 tar' },
-          _react2.default.createElement('hr', null)
-        )
-      ),
-      _react2.default.createElement(
-        _Layout.Row,
-        { className: 'other-auths' },
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'twitter', src: twitterImg })
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'google+', src: googleImg })
-        ),
-        _react2.default.createElement(
-          _Layout.Col,
-          { size: '4', className: 'tac' },
-          _react2.default.createElement('img', { alt: 'github', src: githubImg })
+          { size: '8 other-auths p-0' },
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '2', className: 'tac p-0' },
+            _react2.default.createElement('img', { alt: 'twitter', src: twitterImg })
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '2', className: 'tac p-0' },
+            _react2.default.createElement('img', { alt: 'google+', src: googleImg })
+          ),
+          _react2.default.createElement(
+            _Layout.Col,
+            { size: '2', className: 'tac p-0' },
+            _react2.default.createElement('img', { alt: 'github', src: githubImg })
+          )
         )
       )
     );
@@ -295,19 +341,40 @@ var Login = (0, _createReactClass2.default)({
         password = _state2.password,
         email = _state2.email,
         remember = _state2.remember;
+    var isModalLogin = this.props.isModalLogin;
 
     return _react2.default.createElement(
       'section',
-      { className: 'login-section mt-15 mr-15 ml-15' },
+      { className: 'login-section' },
       _react2.default.createElement(
         'div',
         { className: 'wrapper-md animated fadeInUp' },
+        !isModalLogin && _react2.default.createElement(
+          'h4',
+          { className: 'title' },
+          'Login to account',
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/signup', className: 'no-account' },
+            'Sign up'
+          )
+        ),
         _react2.default.createElement(
           'form',
           { role: 'form', onSubmit: this.onLoginSubmit },
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
+            this._renderEmailInput(email, remember)
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group ' + (errorMessage && 'mb-5') },
+            this._renderPasswordInput(password, remember)
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group mb-5 mt-0' },
             _react2.default.createElement(
               'p',
               { className: 'help-block text-left' },
@@ -317,28 +384,18 @@ var Login = (0, _createReactClass2.default)({
           _react2.default.createElement(
             'div',
             { className: 'form-group' },
-            this._renderEmailInput(email, remember)
+            this._renderLoginOptions()
           ),
           _react2.default.createElement(
             'div',
-            { className: 'form-group' },
-            this._renderPasswordInput(password, remember)
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            this._renderForgotPassword()
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group pt-10' },
-            this._renderLoginBtns()
+            { className: 'form-group mt-15' },
+            this._renderLoginBtns(isModalLogin)
           )
         ),
         _react2.default.createElement(
           'div',
           { className: '' },
-          this._renderOtherAuths()
+          this._renderOtherAuths(isModalLogin)
         )
       )
     );
