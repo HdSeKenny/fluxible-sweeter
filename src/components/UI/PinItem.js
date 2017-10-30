@@ -34,6 +34,17 @@ export default class PinItem extends React.Component {
     storeListeners: [UserStore, BlogStore]
   };
 
+  componentDidMount() {
+    setTimeout(() => {
+      // Make blog image height adjust the parent content
+      // const pinBodyRight = document.querySelectorAll('.pin-right');
+      // const pinBodyLeft = document.querySelectorAll('.pin-left .pin-image img');
+      // for (let i = 0; i < pinBodyRight.length; i++) {
+      //   pinBodyLeft[i].style.height = `${pinBodyRight[i].scrollHeight}px`;
+      // }
+    }, 0);
+  }
+
   goToUserCenter(author) {
     $('#pinModal').modal('hide');
     this.context.router.push(`/${author.username}`);
@@ -216,10 +227,10 @@ export default class PinItem extends React.Component {
   }
 
   _renderPinitemContent(pin, showImage, readMore) {
-    const rightSize = `${showImage ? '8' : '12'} p-0`;
+    const rightSize = `${showImage ? '8' : '12'} p-0 pin-right`;
     return (
       <Row className="p-0">
-        {showImage && <Col size="4 p-0 pr-15">{this._renderPinitemImage(pin)}</Col>}
+        {showImage && <Col size="4 p-0 pr-15 pin-left">{this._renderPinitemImage(pin)}</Col>}
         <Col size={rightSize}>
           <Row className="mb-5">{this._renderPinUserInfo(pin)}</Row>
           <Row className="mb-10">{this._renderPinContent(pin, readMore)}</Row>

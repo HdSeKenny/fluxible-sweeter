@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
+ * <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" />
+ * <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700" rel="stylesheet" />
+ * link href="http://fonts.googleapis.com/css?family=Roboto%3A700%2C300" rel="stylesheet" property="stylesheet" media="all" />
  */
 export default class Html extends React.Component {
 
@@ -28,15 +31,13 @@ export default class Html extends React.Component {
           <title>Sweeter</title>
           <meta name="author" content="Kenny" />
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
-          <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700" rel="stylesheet" />
-          <link href="http://fonts.googleapis.com/css?family=Roboto%3A700%2C300" rel="stylesheet" property="stylesheet" media="all" />
+
           <link href="/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/css/sweetalert.css" rel="stylesheet" />
           <link href="/css/slim.min.css" rel="stylesheet" />
           <link href="/css/emoji.css" rel="stylesheet" />
-          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+          <link href="/slick/slick.min.css" rel="stylesheet" />
+          <link href="/slick/slick-theme.min.css" rel="stylesheet" />
 
           <link href={style} rel="stylesheet" />
 

@@ -11,6 +11,7 @@ import { PinItem, ModalsFactory, MainSliders } from '../UI';
 import { Page, Row, Col } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 import { Login, Signup } from '../Pages';
+import { UserBar } from '../Users';
 
 const Home = CreateReactClass({
 
@@ -33,10 +34,14 @@ const Home = CreateReactClass({
   getStateFromStores() {
     const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
     const isSmall = mediaSize.getBrowserMediaInfo(true).media === 'small';
+    const { username } = this.props.params;
+    const userStore = this.getStore(UserStore);
+    const blogStore = this.getStore(BlogStore);
     return {
-      currentUser: this.getStore(UserStore).getCurrentUser(),
-      kenny: this.getStore(UserStore).getKennyUser(),
-      blogs: this.getStore(BlogStore).getAllBlogs(),
+      currentUser: userStore.getCurrentUser(),
+      user: userStore.getUserByUsername(username),
+      kenny: userStore.getKennyUser(),
+      blogs: blogStore.getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
@@ -219,10 +224,11 @@ const Home = CreateReactClass({
     );
   },
 
-  _renderHomeRightContent() {
+  _renderHomeRightContent(currentUser, user, pathname) {
     return (
       <div className="">
-        <Login isModalLogin={false} />
+        {!currentUser && <Login isModalLogin={false} />}
+        {currentUser && <UserBar path={pathname} user={currentUser} currentUser={currentUser} />}
         <div className="right-dsad">
         </div>
       </div>
@@ -230,7 +236,7 @@ const Home = CreateReactClass({
   },
 
   render() {
-    const { blogs, selectedPin, currentUser, showPinModal, blogTags, showSignupModal } = this.state;
+    const { blogs, selectedPin, currentUser, showPinModal, blogTags, showSignupModal, user } = this.state;
     const { pathname, query } = this.props.location;
     const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
@@ -243,7 +249,7 @@ const Home = CreateReactClass({
           {this._renderPinItems(blogs)}
         </div>
         <div className="right">
-          {this._renderHomeRightContent()}
+          {this._renderHomeRightContent(currentUser, user, pathname)}
         </div>
         <Page>
           <ModalsFactory

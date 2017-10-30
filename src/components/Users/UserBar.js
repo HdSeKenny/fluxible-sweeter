@@ -40,7 +40,7 @@ const UserBar = CreateReactClass({
     return {
       currentUser: store.getCurrentUser(),
       showImageModal: false,
-      defaultUserImageUrl: '/styles/images/users/default-user.svg',
+      defaultUserImageUrl: '/images/users/default-user.svg',
     };
   },
 

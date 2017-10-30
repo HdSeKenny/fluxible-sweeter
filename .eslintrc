@@ -30,6 +30,8 @@
     "quote-props": "off",
     "max-nested-callbacks": ["error", 4],
     "react/jsx-boolean-value": 0,
-    "react/self-closing-comp": 0
+    "react/self-closing-comp": 0,
+    "react/sort-comp": 0,
+    "brace-style": 0
   }
 }
