@@ -213,15 +213,6 @@ var Navbar = (0, _createReactClass2.default)({
             ),
             _react2.default.createElement(
               'li',
-              { className: this.isActive(['list']) },
-              _react2.default.createElement(
-                'a',
-                { href: '/list' },
-                'List'
-              )
-            ),
-            _react2.default.createElement(
-              'li',
               { className: this.isActive(['about']) },
               _react2.default.createElement(
                 _reactRouter.Link,

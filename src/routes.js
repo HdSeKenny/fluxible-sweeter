@@ -17,7 +17,6 @@ import {
   ChangePassword,
   UserMore,
   UserMessages,
-  List,
   UserMoments,
   About,
   Signup
@@ -52,7 +51,6 @@ const createRoutes = (context) => {
     <Route history={History} component={App} path={path} onEnter={requireLogin}>
       <IndexRoute component={Home} />
       <Route path="/" component={Home} />
-      <Route path="list" component={List} />
       <Route path="signup" component={Signup} />
       <Route path="about" component={About} />
 

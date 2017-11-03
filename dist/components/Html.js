@@ -37,6 +37,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * build general structure of whole app
  * <link href="http://localhost:3000/favicon.ico?v=2" rel="icon" />
+ * <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" />
+ * <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700" rel="stylesheet" />
+ * link href="http://fonts.googleapis.com/css?family=Roboto%3A700%2C300" rel="stylesheet" property="stylesheet" media="all" />
  */
 var Html = function (_React$Component) {
   (0, _inherits3.default)(Html, _React$Component);
@@ -75,15 +78,12 @@ var Html = function (_React$Component) {
           ),
           _react2.default.createElement('meta', { name: 'author', content: 'Kenny' }),
           _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
-          _react2.default.createElement('link', { href: 'http://fonts.googleapis.com/css?family=Raleway:400,300,600', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,400italic,500,600,700', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: 'http://fonts.googleapis.com/css?family=Roboto%3A700%2C300', rel: 'stylesheet', property: 'stylesheet', media: 'all' }),
           _react2.default.createElement('link', { href: '/css/font-awesome.min.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/sweetalert.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/slim.min.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: '/css/emoji.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css' }),
-          _react2.default.createElement('link', { rel: 'stylesheet', type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css' }),
+          _react2.default.createElement('link', { href: '/slick/slick.min.css', rel: 'stylesheet' }),
+          _react2.default.createElement('link', { href: '/slick/slick-theme.min.css', rel: 'stylesheet' }),
           _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
           _react2.default.createElement('script', { src: '/js/jquery.min.js' }),
           _react2.default.createElement('script', { src: '/js/bootstrap.min.js' })

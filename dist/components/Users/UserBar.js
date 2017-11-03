@@ -71,7 +71,7 @@ var UserBar = (0, _createReactClass2.default)({
     return {
       currentUser: store.getCurrentUser(),
       showImageModal: false,
-      defaultUserImageUrl: '/styles/images/users/default-user.svg'
+      defaultUserImageUrl: '/images/users/default-user.svg'
     };
   },
   onChange: function onChange(res) {
@@ -321,7 +321,7 @@ var UserBar = (0, _createReactClass2.default)({
     var isFollowed = this.isFollowedThisUser(currentUser, user);
     var displayUser = isCurrentUser ? currentUser : user;
     var background = user ? user.background_image_url : '';
-    var background_lq = user ? user.lq_background_url : '';
+    var backgroundLQ = user ? user.lq_background_url : '';
 
     return _react2.default.createElement(
       'div',
@@ -329,7 +329,7 @@ var UserBar = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'div',
         { className: 'user-background' },
-        _react2.default.createElement('img', { alt: 'user-bg', src: background_lq, 'data-src': background, className: 'background' }),
+        _react2.default.createElement('img', { alt: 'user-bg', src: backgroundLQ, 'data-src': background, className: 'background' }),
         this._renderUserImage(isCurrentUser, user, currentUser),
         this._renderUserInfo(isCurrentUser, user, isFollowed)
       ),

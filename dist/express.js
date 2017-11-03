@@ -105,8 +105,20 @@ exports.default = function (server) {
     server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
   }
 
+  var options = {
+    dotfiles: 'ignore',
+    etag: false,
+    extensions: ['htm', 'html'],
+    index: false,
+    maxAge: '31536000',
+    redirect: false,
+    setHeaders: function setHeaders(res, path, stat) {
+      res.set('x-timestamp', Date.now());
+    }
+  };
+
   if (env === 'production') {
-    server.use(_express2.default.static(_path2.default.join(__dirname, 'build')));
+    server.use(_express2.default.static(_path2.default.join(__dirname, 'build'), options));
   }
 
   if (env === 'development') {
@@ -118,7 +130,7 @@ exports.default = function (server) {
   server.use((0, _cookieParser2.default)());
   server.use((0, _cors2.default)());
 
-  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, '..', 'lib')));
+  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, '..', 'lib'), options));
   server.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '..', 'lib') + '/images/favicon.ico'));
   server.use(_expressUseragent2.default.express());
 

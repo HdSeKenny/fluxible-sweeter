@@ -11,7 +11,8 @@ import { PinItem, ModalsFactory, MainSliders } from '../UI';
 import { Page, Row, Col } from '../UI/Layout';
 import { PinItemModal } from '../UserControls';
 import { Login, Signup } from '../Pages';
-import { UserBar } from '../Users';
+import { UserCard } from '../Snippets';
+import { BlogModal } from '../UserControls';
 
 const Home = CreateReactClass({
 
@@ -62,8 +63,7 @@ const Home = CreateReactClass({
         'Funny',
         'Funny',
         'Funny'
-      ],
-      showSignupModal: false
+      ]
     };
   },
 
@@ -77,10 +77,27 @@ const Home = CreateReactClass({
       'DELETE_COMMENT_SUCCESS'
     ];
 
-    if (blogMessages.includes(res.msg)) {
+    const authMessages = [
+      'USER_LOGIN_SUCCESS',
+      'LOGOUT_SUCCESS'
+    ];
+
+    const result = {};
+    const isBlogMsg = blogMessages.includes(res.msg);
+    const isAuthMsg = authMessages.includes(res.msg);
+
+    if (isBlogMsg) {
       swal.success(res.msg, () => {
-        this.setState({ blogs: this.getStore(BlogStore).getAllBlogs() });
+        result.blogs = this.getStore(BlogStore).getAllBlogs();
       });
+    }
+
+    if (isAuthMsg) {
+      result.currentUser = this.getStore(UserStore).getCurrentUser();
+    }
+
+    if (Object.keys(result).length) {
+      this.setState(result);
     }
   },
 
@@ -96,6 +113,13 @@ const Home = CreateReactClass({
 
   componentDidMount() {
     window.addEventListener('resize', this.getBrowserScreenInfo);
+
+    // Make blog image height adjust the parent content
+    const pinBodyRight = document.querySelectorAll('.pin-right');
+    const pinBodyLeft = document.querySelectorAll('.pin-left .pin-image img');
+    for (let i = 0; i < pinBodyRight.length; i++) {
+      pinBodyLeft[i].style.height = `${pinBodyRight[i].scrollHeight}px`;
+    }
   },
 
   componentWillUnmount() {
@@ -164,7 +188,6 @@ const Home = CreateReactClass({
   },
 
   openSignupModal() {
-    this.setState({ showSignupModal: true });
     ModalsFactory.show('signupModal');
   },
 
@@ -227,8 +250,10 @@ const Home = CreateReactClass({
   _renderHomeRightContent(currentUser, user, pathname) {
     return (
       <div className="">
-        {!currentUser && <Login isModalLogin={false} />}
-        {currentUser && <UserBar path={pathname} user={currentUser} currentUser={currentUser} />}
+        <div className={`right-login ${currentUser ? 'current-user' : ''}`}>
+          {!currentUser && <Login isModalLogin={false} openSignupModal={() => this.openSignupModal()} />}
+          {currentUser && <UserCard user={currentUser} />}
+        </div>
         <div className="right-dsad">
         </div>
       </div>
@@ -236,7 +261,7 @@ const Home = CreateReactClass({
   },
 
   render() {
-    const { blogs, selectedPin, currentUser, showPinModal, blogTags, showSignupModal, user } = this.state;
+    const { blogs, selectedPin, currentUser, showPinModal, blogTags, user } = this.state;
     const { pathname, query } = this.props.location;
     const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
@@ -245,7 +270,8 @@ const Home = CreateReactClass({
           {this._renderHomeLeftTags(blogTags, pathname, query)}
         </div>
         <div className="main">
-          <MainSliders show={showSliders} />
+          {!currentUser && <MainSliders show={showSliders} />}
+          {currentUser && <BlogModal currentUser={currentUser} isUserHome={true} />}
           {this._renderPinItems(blogs)}
         </div>
         <div className="right">
@@ -259,16 +285,12 @@ const Home = CreateReactClass({
             currentUser={currentUser}
             ModalComponent={PinItemModal}
             showHeaderAndFooter={false} />
-            <ModalsFactory
-              modalref="signupModal"
-              title="Create an account"
-              ModalComponent={Signup}
-              size="modal-md"
-              showHeaderAndFooter={true}
-              showModal={showSignupModal}
-              openNavbarModals={this.openNavbarModals}
-              hideNavbarModals={this.hideNavbarModals}
-              switchOpenModal={this.switchOpenModal} />
+          <ModalsFactory
+            modalref="signupModal"
+            title="Create an account"
+            ModalComponent={Signup}
+            size="modal-md"
+            showHeaderAndFooter={true} />
         </Page>
       </div>
     );

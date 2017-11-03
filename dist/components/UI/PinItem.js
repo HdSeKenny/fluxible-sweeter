@@ -334,13 +334,13 @@ var PinItem = function (_React$Component) {
   }, {
     key: '_renderPinitemContent',
     value: function _renderPinitemContent(pin, showImage, readMore) {
-      var rightSize = (showImage ? '8' : '12') + ' p-0';
+      var rightSize = (showImage ? '8' : '12') + ' p-0 pin-right';
       return _react2.default.createElement(
         _Layout.Row,
         { className: 'p-0' },
         showImage && _react2.default.createElement(
           _Layout.Col,
-          { size: '4 p-0 pr-15' },
+          { size: '4 p-0 pr-15 pin-left' },
           this._renderPinitemImage(pin)
         ),
         _react2.default.createElement(

@@ -93,8 +93,7 @@ var ModalsFactory = function (_React$Component) {
           modalref = _props.modalref,
           title = _props.title,
           ModalComponent = _props.ModalComponent,
-          showHeaderAndFooter = _props.showHeaderAndFooter,
-          showModal = _props.showModal;
+          showHeaderAndFooter = _props.showHeaderAndFooter;
 
       return _react2.default.createElement(
         'div',
@@ -102,7 +101,7 @@ var ModalsFactory = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'modal-dialog mt-80 ' + size },
-          showModal && _react2.default.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'modal-content' },
             showHeaderAndFooter && this._renderModalHeader(title),
@@ -124,8 +123,7 @@ ModalsFactory.propTypes = {
   title: _propTypes2.default.string,
   showHeaderAndFooter: _propTypes2.default.bool,
   ModalComponent: _propTypes2.default.func,
-  hidePinModal: _propTypes2.default.func,
-  showModal: _propTypes2.default.bool
+  hidePinModal: _propTypes2.default.func
 };
 
 ModalsFactory.show = function (modalRef) {

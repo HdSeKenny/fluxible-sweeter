@@ -20,7 +20,7 @@ export default class FullScreen extends React.Component {
     }, this.props.className);
   }
 
-  render () {
+  render() {
     const className = this.getClassName();
     return (
       <div {...this.props} className={className}>

@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -38,6 +42,8 @@ var _UserControls = require('../UserControls');
 
 var _Pages = require('../Pages');
 
+var _Snippets = require('../Snippets');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = (0, _createReactClass2.default)({
@@ -60,18 +66,22 @@ var Home = (0, _createReactClass2.default)({
   getStateFromStores: function getStateFromStores() {
     var isMedium = _utils.mediaSize.getBrowserMediaInfo(true).media === 'medium';
     var isSmall = _utils.mediaSize.getBrowserMediaInfo(true).media === 'small';
+    var username = this.props.params.username;
+
+    var userStore = this.getStore(_stores.UserStore);
+    var blogStore = this.getStore(_stores.BlogStore);
     return {
-      currentUser: this.getStore(_stores.UserStore).getCurrentUser(),
-      kenny: this.getStore(_stores.UserStore).getKennyUser(),
-      blogs: this.getStore(_stores.BlogStore).getAllBlogs(),
+      currentUser: userStore.getCurrentUser(),
+      user: userStore.getUserByUsername(username),
+      kenny: userStore.getKennyUser(),
+      blogs: blogStore.getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
       selectedPin: {},
       showPinModal: false,
       isMedium: isMedium,
       isSmall: isSmall,
-      blogTags: ['News', 'Hots', 'Stars', 'Funny', 'social', 'Fashion', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny'],
-      showSignupModal: false
+      blogTags: ['News', 'Hots', 'Stars', 'Funny', 'social', 'Fashion', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny']
     };
   },
   onChange: function onChange(res) {
@@ -79,10 +89,24 @@ var Home = (0, _createReactClass2.default)({
 
     var blogMessages = ['CREATE_BLOG_SUCCESS', 'DELETE_BLOG_SUCCESS', 'THUMBS_UP_BLOG_SUCCESS', 'CANCEL_THUMBS_UP_BLOG_SUCCESS', 'COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
 
-    if (blogMessages.includes(res.msg)) {
+    var authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
+
+    var result = {};
+    var isBlogMsg = blogMessages.includes(res.msg);
+    var isAuthMsg = authMessages.includes(res.msg);
+
+    if (isBlogMsg) {
       _plugins.swal.success(res.msg, function () {
-        _this.setState({ blogs: _this.getStore(_stores.BlogStore).getAllBlogs() });
+        result.blogs = _this.getStore(_stores.BlogStore).getAllBlogs();
       });
+    }
+
+    if (isAuthMsg) {
+      result.currentUser = this.getStore(_stores.UserStore).getCurrentUser();
+    }
+
+    if ((0, _keys2.default)(result).length) {
+      this.setState(result);
     }
   },
   getBrowserScreenInfo: function getBrowserScreenInfo() {
@@ -95,6 +119,13 @@ var Home = (0, _createReactClass2.default)({
   },
   componentDidMount: function componentDidMount() {
     window.addEventListener('resize', this.getBrowserScreenInfo);
+
+    // Make blog image height adjust the parent content
+    var pinBodyRight = document.querySelectorAll('.pin-right');
+    var pinBodyLeft = document.querySelectorAll('.pin-left .pin-image img');
+    for (var i = 0; i < pinBodyRight.length; i++) {
+      pinBodyLeft[i].style.height = pinBodyRight[i].scrollHeight + 'px';
+    }
   },
   componentWillUnmount: function componentWillUnmount() {
     window.removeEventListener('resize', this.getBrowserScreenInfo);
@@ -159,7 +190,6 @@ var Home = (0, _createReactClass2.default)({
     return query.tag === tag ? 'active' : '';
   },
   openSignupModal: function openSignupModal() {
-    this.setState({ showSignupModal: true });
     _UI.ModalsFactory.show('signupModal');
   },
   _renderPinSection: function _renderPinSection(sectionTitle, typedPins) {
@@ -241,11 +271,20 @@ var Home = (0, _createReactClass2.default)({
       })
     );
   },
-  _renderHomeRightContent: function _renderHomeRightContent() {
+  _renderHomeRightContent: function _renderHomeRightContent(currentUser, user, pathname) {
+    var _this5 = this;
+
     return _react2.default.createElement(
       'div',
       { className: '' },
-      _react2.default.createElement(_Pages.Login, { isModalLogin: false }),
+      _react2.default.createElement(
+        'div',
+        { className: 'right-login ' + (currentUser ? 'current-user' : '') },
+        !currentUser && _react2.default.createElement(_Pages.Login, { isModalLogin: false, openSignupModal: function openSignupModal() {
+            return _this5.openSignupModal();
+          } }),
+        currentUser && _react2.default.createElement(_Snippets.UserCard, { user: currentUser })
+      ),
       _react2.default.createElement('div', { className: 'right-dsad' })
     );
   },
@@ -256,7 +295,7 @@ var Home = (0, _createReactClass2.default)({
         currentUser = _state2.currentUser,
         showPinModal = _state2.showPinModal,
         blogTags = _state2.blogTags,
-        showSignupModal = _state2.showSignupModal;
+        user = _state2.user;
     var _props$location = this.props.location,
         pathname = _props$location.pathname,
         query = _props$location.query;
@@ -273,13 +312,14 @@ var Home = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'div',
         { className: 'main' },
-        _react2.default.createElement(_UI.MainSliders, { show: showSliders }),
+        !currentUser && _react2.default.createElement(_UI.MainSliders, { show: showSliders }),
+        currentUser && _react2.default.createElement(_UserControls.BlogModal, { currentUser: currentUser, isUserHome: true }),
         this._renderPinItems(blogs)
       ),
       _react2.default.createElement(
         'div',
         { className: 'right' },
-        this._renderHomeRightContent()
+        this._renderHomeRightContent(currentUser, user, pathname)
       ),
       _react2.default.createElement(
         _Layout.Page,
@@ -296,11 +336,7 @@ var Home = (0, _createReactClass2.default)({
           title: 'Create an account',
           ModalComponent: _Pages.Signup,
           size: 'modal-md',
-          showHeaderAndFooter: true,
-          showModal: showSignupModal,
-          openNavbarModals: this.openNavbarModals,
-          hideNavbarModals: this.hideNavbarModals,
-          switchOpenModal: this.switchOpenModal })
+          showHeaderAndFooter: true })
       )
     );
   }

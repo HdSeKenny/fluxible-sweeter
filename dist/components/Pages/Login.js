@@ -74,7 +74,7 @@ var Login = (0, _createReactClass2.default)({
     if (res.msg === 'USER_LOGIN_SUCCESS') {
       _plugins.swal.success(res.msg);
       _UI.ModalsFactory.hide('loginModal');
-      this.context.router.push('/list');
+      // this.context.router.push('/list');
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
@@ -158,7 +158,6 @@ var Login = (0, _createReactClass2.default)({
     //   $('body').addClass('modal-open');
     // }, 500);
   },
-  componentDidMount: function componentDidMount() {},
   rememberMe: function rememberMe() {
     this.setState({ remember: !this.state.remember });
   },
@@ -336,6 +335,8 @@ var Login = (0, _createReactClass2.default)({
     );
   },
   render: function render() {
+    var _this = this;
+
     var _state2 = this.state,
         errorMessage = _state2.errorMessage,
         password = _state2.password,
@@ -354,8 +355,10 @@ var Login = (0, _createReactClass2.default)({
           { className: 'title' },
           'Login to account',
           _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/signup', className: 'no-account' },
+            'span',
+            { className: 'no-account', onClick: function onClick() {
+                return _this.props.openSignupModal();
+              } },
             'Sign up'
           )
         ),

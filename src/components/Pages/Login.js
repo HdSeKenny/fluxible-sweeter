@@ -50,7 +50,7 @@ const Login = CreateReactClass({
     if (res.msg === 'USER_LOGIN_SUCCESS') {
       swal.success(res.msg);
       ModalsFactory.hide('loginModal');
-      this.context.router.push('/list');
+      // this.context.router.push('/list');
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
@@ -139,9 +139,6 @@ const Login = CreateReactClass({
     // setTimeout(() => {
     //   $('body').addClass('modal-open');
     // }, 500);
-  },
-
-  componentDidMount() {
   },
 
   rememberMe() {
@@ -259,7 +256,7 @@ const Login = CreateReactClass({
         <div className="wrapper-md animated fadeInUp">
           {!isModalLogin && <h4 className="title">
             Login to account
-            <Link to="/signup" className="no-account">Sign up</Link>
+            <span className="no-account" onClick={() => this.props.openSignupModal()}>Sign up</span>
           </h4>}
           <form role="form" onSubmit={this.onLoginSubmit}>
             <div className="form-group">{this._renderEmailInput(email, remember)}</div>

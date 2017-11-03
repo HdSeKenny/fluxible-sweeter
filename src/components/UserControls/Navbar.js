@@ -162,7 +162,6 @@ const Navbar = CreateReactClass({
             </ul>
             <ul className="sweet-nav-menu sweet-nav-right">
               <li className={this.isActive([''])}><Link to="/">Home</Link></li>
-              <li className={this.isActive(['list'])}><a href="/list">List</a></li>
               <li className={this.isActive(['about'])}><Link to="/about">About</Link></li>
               {authenticated && <li><Link to="/about"><i className="fa fa-2x fa-bell-o m-r-lg m-b-lg" /></Link></li>}
               {!authenticated && <li><span onClick={() => this.openNavbarModals('loginModal')}>Log in</span></li>}

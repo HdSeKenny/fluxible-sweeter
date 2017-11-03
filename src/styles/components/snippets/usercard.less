@@ -1,0 +1,57 @@
+@user-image-size: 50px;
+@user-card-padding: 0 15px;
+@user-card-margin: 10px 0;
+
+.user-card {
+  background: #fff;
+  height: 100%;
+}
+
+.uc-bg {
+  color: #fff;
+  img {
+    margin-left: 15px;
+    padding: 1px;
+    width: @user-image-size;
+    height: @user-image-size;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.uc-signature {
+  padding: @user-card-padding;
+  margin: 10px 0 5px 0;
+  min-height: 40px;
+  color: #333;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.uc-detail {
+  padding: @user-card-padding;
+  .u-info {
+    text-align: center;
+    &:hover {
+      color: @brand-info;
+      cursor: pointer;
+      .number {
+        color: @brand-info;
+      }
+    }
+    .title {
+      margin: 0 0 5px 0;
+    }
+    .number {
+      margin: 0;
+      text-align: center;
+      color: gray;
+      font-weight: 600;
+    }
+  }
+}

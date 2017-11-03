@@ -40,7 +40,7 @@ const UserBar = CreateReactClass({
     return {
       currentUser: store.getCurrentUser(),
       showImageModal: false,
-      defaultUserImageUrl: '/images/users/default-user.svg',
+      defaultUserImageUrl: '/images/users/default-user.svg'
     };
   },
 
@@ -272,12 +272,12 @@ const UserBar = CreateReactClass({
     const isFollowed = this.isFollowedThisUser(currentUser, user);
     const displayUser = isCurrentUser ? currentUser : user;
     const background = user ? user.background_image_url : '';
-    const background_lq = user ? user.lq_background_url : '';
+    const backgroundLQ = user ? user.lq_background_url : '';
 
     return (
       <div className="user-bar mb-20">
         <div className="user-background">
-          <img alt="user-bg" src={background_lq} data-src={background} className="background" />
+          <img alt="user-bg" src={backgroundLQ} data-src={background} className="background" />
           {this._renderUserImage(isCurrentUser, user, currentUser)}
           {this._renderUserInfo(isCurrentUser, user, isFollowed)}
         </div>

@@ -12,7 +12,7 @@ module.exports = {
     fade_speed: 300
   },
   showUserCard: false,
-  showEmoji: false,
+  showEmoji: true,
   emojiConfig: {
     theme: {
       emoji: 'emoji',
