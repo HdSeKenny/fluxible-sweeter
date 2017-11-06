@@ -1,18 +1,16 @@
 import React from 'react';
-import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
-import { mediaSize } from '../../utils';
 import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
-import { BlogActions } from '../../actions';
-import { PinItem, ModalsFactory, MainSliders } from '../UI';
-import { Page, Row, Col } from '../UI/Layout';
-import { PinItemModal } from '../UserControls';
+import { ModalsFactory, MainSliders } from '../UI';
+import { Page } from '../UI/Layout';
 import { Login, Signup } from '../Pages';
 import { UserCard } from '../Snippets';
 import { BlogModal } from '../UserControls';
+import BlogSection from '../Blogs/BlogSection';
 
 const Home = CreateReactClass({
 
@@ -33,8 +31,6 @@ const Home = CreateReactClass({
   },
 
   getStateFromStores() {
-    const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
-    const isSmall = mediaSize.getBrowserMediaInfo(true).media === 'small';
     const { username } = this.props.params;
     const userStore = this.getStore(UserStore);
     const blogStore = this.getStore(BlogStore);
@@ -45,10 +41,6 @@ const Home = CreateReactClass({
       blogs: blogStore.getAllBlogs(),
       welcomeText: 'What happened today, Write a blog here !',
       blogText: '',
-      selectedPin: {},
-      showPinModal: false,
-      isMedium,
-      isSmall,
       blogTags: [
         'News',
         'Hots',
@@ -87,9 +79,8 @@ const Home = CreateReactClass({
     const isAuthMsg = authMessages.includes(res.msg);
 
     if (isBlogMsg) {
-      swal.success(res.msg, () => {
-        result.blogs = this.getStore(BlogStore).getAllBlogs();
-      });
+      swal.success(res.msg);
+      result.blogs = this.getStore(BlogStore).getAllBlogs();
     }
 
     if (isAuthMsg) {
@@ -101,85 +92,12 @@ const Home = CreateReactClass({
     }
   },
 
-  getBrowserScreenInfo() {
-    const isMedium = mediaSize.getBrowserMediaInfo(true).media === 'medium';
-    const isSmall = mediaSize.getBrowserMediaInfo(true).media === 'small';
-    this.setState({ isMedium, isSmall });
-  },
-
-  componentWillMount() {
-    this.getBrowserScreenInfo();
-  },
-
   componentDidMount() {
-    window.addEventListener('resize', this.getBrowserScreenInfo);
-
     // Make blog image height adjust the parent content
     const pinBodyRight = document.querySelectorAll('.pin-right');
     const pinBodyLeft = document.querySelectorAll('.pin-left .pin-image img');
     for (let i = 0; i < pinBodyRight.length; i++) {
       pinBodyLeft[i].style.height = `${pinBodyRight[i].scrollHeight}px`;
-    }
-  },
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.getBrowserScreenInfo);
-  },
-
-  handleBlogText(e) {
-    this.setState({ blogText: e.target.value });
-  },
-
-  handleMicroBlog() {
-    const { currentUser } = this.state;
-    if (currentUser) {
-      const newBlog = {
-        content: this.state.blogText,
-        created_at: new Date(),
-        type: 'microblog',
-        author: currentUser._id
-      };
-      this.executeAction(BlogActions.AddBlog, newBlog);
-    } else {
-      this.checkCurrentUser();
-    }
-  },
-
-  onSearchBlog(e) {
-    const searchText = e.target.value.toLocaleLowerCase();
-    const searchedBlogs = this.getStore(BlogStore).getSearchedBlogs(searchText);
-    this.setState({ blogs: searchedBlogs });
-  },
-
-  sortByType(e) {
-    const sortText = e.target.value.toLocaleLowerCase();
-    const sortedBlogs = this.getStore(BlogStore).getSortedBlogs(sortText);
-    this.setState({ blogs: sortedBlogs });
-  },
-
-  checkCurrentUser() {
-    swal.warning('Login first !');
-    this.setState({ blogText: '' });
-  },
-
-  onViewPinItem(id) {
-    const { blogs } = this.state;
-    const selectedPin = blogs.find(p => p.id_str === id);
-    this.setState({ selectedPin, showPinModal: true });
-
-    $('#pinModal').on('hidden.bs.modal', () => {
-      if (this.hidePinModal) {
-        this.hidePinModal();
-      }
-    });
-
-    ModalsFactory.show('pinModal');
-  },
-
-  hidePinModal() {
-    const homePage = $('.home-page');
-    if (homePage && homePage.length) {
-      this.setState({ selectedPin: {}, showPinModal: false });
     }
   },
 
@@ -191,56 +109,25 @@ const Home = CreateReactClass({
     ModalsFactory.show('signupModal');
   },
 
-  _renderPinSection(sectionTitle, typedPins) {
-    const { currentUser, isMedium, isSmall } = this.state;
-    const marginRightIndex = isMedium || isSmall ? 2 : 3;
+  getLinkParams(tag, index, pathname, query) {
+    const lowcaseTag = tag.toLocaleLowerCase();
+    const url = { pathname, query: { tag: lowcaseTag } };
+    let classname = this.getTagClassName(query, lowcaseTag);
+    if (!query.tag && index === 0) {
+      classname = 'active';
+    }
 
-    return (
-      <div className="">
-        {typedPins.map((pin, index) => {
-          const specialClass = (index + 1) % marginRightIndex === 0 ? 'mr-0' : '';
-          return (
-            <PinItem
-              key={index}
-              onSelect={(id) => this.onViewPinItem(id)}
-              pin={pin}
-              type={pin.type}
-              currentUser={currentUser}
-              specialClass={specialClass}
-              showImage={true}
-              readMore={true}
-            />
-          );
-        })}
-      </div>
-    );
-  },
-
-  _renderPinItems(pins) {
-    const articles = pins.filter(pin => pin.type === 'article');
-    const thumbedSortedArticles = articles.sort((a, b) => b.likers.length - a.likers.length);
-    const moments = pins.filter(pin => pin.type === 'moment');
-    const thumbedSortedMoments = moments.sort((a, b) => b.likers.length - a.likers.length);
-    const dateSortedPins = pins.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)));
-    return (
-      <article className="classification">
-        {this._renderPinSection('It\'s new', dateSortedPins)}
-        {this._renderPinSection('Hot articles', thumbedSortedArticles)}
-        {this._renderPinSection('Good sweets', thumbedSortedMoments)}
-      </article>
-    );
+    return {
+      classname,
+      url
+    };
   },
 
   _renderHomeLeftTags(tags, pathname, query) {
     return (
       <ul className="blog-tags">
         {tags.map((tag, index) => {
-          const lowcaseTag = tag.toLocaleLowerCase();
-          const url = { pathname, query: { tag: lowcaseTag } };
-          let classname = this.getTagClassName(query, lowcaseTag);
-          if (!query.tag && index === 0) {
-            classname = 'active';
-          }
+          const { classname, url } = this.getLinkParams(tag, index, pathname, query);
           return <li className={classname} key={index}><Link to={url}>{tag}</Link></li>;
         })}
       </ul>
@@ -261,7 +148,7 @@ const Home = CreateReactClass({
   },
 
   render() {
-    const { blogs, selectedPin, currentUser, showPinModal, blogTags, user } = this.state;
+    const { blogs, currentUser, blogTags, user } = this.state;
     const { pathname, query } = this.props.location;
     const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
@@ -272,25 +159,19 @@ const Home = CreateReactClass({
         <div className="main">
           {!currentUser && <MainSliders show={showSliders} />}
           {currentUser && <BlogModal currentUser={currentUser} isUserHome={true} />}
-          {this._renderPinItems(blogs)}
+          <BlogSection blogs={blogs} currentUser={currentUser} />
         </div>
         <div className="right">
           {this._renderHomeRightContent(currentUser, user, pathname)}
         </div>
         <Page>
           <ModalsFactory
-            modalref="pinModal"
-            pin={selectedPin}
-            showModal={showPinModal}
-            currentUser={currentUser}
-            ModalComponent={PinItemModal}
-            showHeaderAndFooter={false} />
-          <ModalsFactory
             modalref="signupModal"
             title="Create an account"
             ModalComponent={Signup}
             size="modal-md"
-            showHeaderAndFooter={true} />
+            showHeaderAndFooter={true}
+          />
         </Page>
       </div>
     );

@@ -29,26 +29,26 @@ const createRoutes = (context) => {
   const requireLogin = (nextState, replace, cb) => {
     // do nothing for public visists
     if (isPublic) {
-      cb();
-      return;
+      return cb();
     }
-
     // only load session to store on server side for isNotPublic visits
     if (env.is_server) {
-      context.executeAction(UserActions.LoadKennyUser).then(() => {
-        cb();
-      });
-
-      context.executeAction(UserActions.LoadSessionUser).then(() => {
-        cb();
-      });
+      context.executeAction(UserActions.LoadKennyUser)
+        .then(() => cb());
+      context.executeAction(UserActions.LoadSessionUser)
+        .then(() => cb());
     } else {
       cb();
     }
   };
 
+  const onRouterChange = (routes, state, nextState, callback) => {
+    $('.loading').removeClass('hide');
+    callback();
+  };
+
   return (
-    <Route history={History} component={App} path={path} onEnter={requireLogin}>
+    <Route history={History} component={App} path={path} onEnter={requireLogin} onChange={onRouterChange}>
       <IndexRoute component={Home} />
       <Route path="/" component={Home} />
       <Route path="signup" component={Signup} />

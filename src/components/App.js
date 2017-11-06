@@ -39,12 +39,13 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      $('.loading').addClass('hide');
-    });
-
-    this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+    $('.loading').addClass('hide');
     socket.emit('users', this.state.usernames);
+    this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+  }
+
+  componentDidUpdate() {
+    $('.loading').addClass('hide');
   }
 
   componentWillUnmount() {

@@ -129,7 +129,7 @@ export default class BlogModal extends React.Component {
 
           {params.showEmoji && <EmojiSuggestions />}
         </div>
-        {params.showEmoji && <Col size="8 p-0"><EmojiSelect /></Col>}
+        <Col size="8 p-0">{params.showEmoji && <EmojiSelect />}</Col>
         <Col size="4 btn-row p-0">{this._renderCreateBtns(isDisabled)}</Col>
       </Row>
     );
@@ -147,14 +147,15 @@ export default class BlogModal extends React.Component {
           <Col size="12" className="p-0">
             <p className="welcomeText">{welcomeText}</p>
             <div className="create-tip mt-5">
-              {isLimmitWords ? <p>You can still write <span className="len-span">{140 - blogTextLength}</span> words</p>
-                : <p>Words can't be more than <span className="len-span-red">140</span> words</p>
+              {isLimmitWords ?
+                <p>You can still write <span className="len-span">{140 - blogTextLength}</span> words</p> :
+                <p>Words can't be more than <span className="len-span-red">140</span> words</p>
               }
             </div>
           </Col>
         </Row>
 
-        {loadEmoji && this._renderSweetEditor(isDisabled)}
+        {this._renderSweetEditor(isDisabled)}
       </div>
     );
   }

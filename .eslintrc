@@ -13,12 +13,13 @@
     "LoadingBar": true,
     "document": true,
     "Blob": true,
-    "$": true
+    "$": true,
+    "socket": true
   },
   "rules": {
     "linebreak-style": "off",
     "space-before-function-paren": ["error", "never"],
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "curly": "off",
     "comma-dangle": ["error", "never"],
     "consistent-return": "off",

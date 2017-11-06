@@ -48,9 +48,9 @@ const Login = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      swal.success(res.msg);
-      ModalsFactory.hide('loginModal');
-      // this.context.router.push('/list');
+      swal.success(res.msg, () => {
+        ModalsFactory.hide('loginModal');
+      });
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
@@ -58,8 +58,9 @@ const Login = CreateReactClass({
     }
 
     if (res.msg === 'LOGOUT_SUCCESS') {
-      swal.success(res.msg);
-      this.context.router.push('/');
+      swal.success(res.msg, () => {
+        this.context.router.push('/');
+      });
     }
   },
 
@@ -150,7 +151,7 @@ const Login = CreateReactClass({
     return (
       <SweetInput
         ref="emailRef"
-        autoComplete={remember ? 'on' : 'off'}
+        autoComplete="on"
         format="email"
         icon="fa fa-user"
         required={true}
@@ -166,8 +167,8 @@ const Login = CreateReactClass({
     const { passwordErrorMessage } = this.state;
     return (
       <SweetInput
-        ref="loginRef"
-        autoComplete={remember ? 'on' : 'off'}
+        ref="passwordRef"
+        autoComplete="on"
         format="password"
         icon="fa fa-lock"
         required={true}
