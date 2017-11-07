@@ -1,6 +1,6 @@
 'use strict';
 
-// Project configs
+var path = require('path');
 var params = require('./params');
 var instance = require('./instance');
 
@@ -18,12 +18,30 @@ module.exports = {
   },
   server: {
     host: 'localhost',
-    logUserActivity: true, // user activity logger
-    logEnable: true, // enable logger middleware
+
+    // user activity logger
+    logUserActivity: true,
+
+    // enable logger middleware
+    logEnable: true,
+
     // Browser-sync port
     browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
+
     // Server port
-    port: process.env.PORT || 9000
+    port: process.env.PORT || 9000,
+
+    // Production source path
+    prodSource: path.join(__dirname, '..', 'build'),
+
+    // Development source path
+    devSource: path.join(__dirname, '..', '..', '.tmp'),
+
+    // Public source path
+    lib: path.join(__dirname, '..', '..', 'lib'),
+
+    // Favicon icon path
+    faviconPath: path.join(__dirname, '..', '..', 'lib', 'images', 'favicon.ico')
   },
   development: {
     hot_server_host: 'localhost',

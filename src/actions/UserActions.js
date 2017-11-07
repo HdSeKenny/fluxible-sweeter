@@ -37,6 +37,7 @@ export default {
   },
 
   Login(context, payload, done) {
+    context.dispatch('USER_BEFORE_LOGGED_IN');
     context.service.create('users.login', {}, payload, fetchClientConfig, (err, res) => {
       if (res.user) {
         context.dispatch('USER_LOGIN_SUCCESS', res);
@@ -143,5 +144,10 @@ export default {
       });
       done();
     });
+  },
+
+  LoggedIn(context, payload, done) {
+    context.dispatch('USER_AFTER_LOGGED_IN');
+    done();
   }
 };

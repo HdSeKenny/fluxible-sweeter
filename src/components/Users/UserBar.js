@@ -9,15 +9,14 @@ import { UserActions, BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserImageEditor } from '../UserControls';
 import { Row, Col, Page } from '../UI/Layout';
-import { ModalsFactory } from '../UI';
-import { swal } from '../../plugins';
+import { ModalsFactory, Swal } from '../UI';
 
 const UserBar = CreateReactClass({
 
   displayName: 'UserBar',
 
   contextTypes: {
-    executeAction: PropTypes.func,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
@@ -55,7 +54,7 @@ const UserBar = CreateReactClass({
     const newState = {};
 
     if (barMessages.includes(res.msg)) {
-      swal.success(res.msg);
+      Swal.success(res.msg);
       if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
         ModalsFactory.hide('uploadModal');
         newState.showImageModal = false;
@@ -132,7 +131,7 @@ const UserBar = CreateReactClass({
   onFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      return swal.warning('Login first please!');
+      return Swal.warning('Login first please!');
     }
 
     const followObj = {
@@ -157,7 +156,7 @@ const UserBar = CreateReactClass({
 
   openChatConnection(user) {
     if (!this.state.currentUser) {
-      return swal.warning('Login first!');
+      return Swal.warning('Login first!');
     }
     const connection = {
       myId: this.state.currentUser.id_str,
@@ -171,7 +170,7 @@ const UserBar = CreateReactClass({
   onCancelFollowThisUser(user) {
     const { currentUser } = this.state;
     if (!currentUser) {
-      return swal.warning('Login first please!');
+      return Swal.warning('Login first please!');
     }
 
     const cancelFollowObj = {
@@ -179,7 +178,7 @@ const UserBar = CreateReactClass({
       currentUserId: currentUser.id_str
     };
 
-    swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
+    Swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
       this.executeAction(UserActions.CancelFollowThisUser, cancelFollowObj);
     });
   },

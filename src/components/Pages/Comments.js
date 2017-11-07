@@ -6,7 +6,7 @@ import { FluxibleMixin } from 'fluxible-addons-react';
 import { UserStore, BlogStore } from '../../stores';
 import { BlogActions } from '../../actions';
 import { format } from '../../utils';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 import { Row, Col } from '../UI/Layout';
 
 const Comments = CreateReactClass({
@@ -60,11 +60,11 @@ const Comments = CreateReactClass({
     const { currentUser } = this.props;
     if (!currentUser) {
       this.setState({ commentText: '' });
-      return swal.warning('Login first !');
+      return Swal.warning('Login first !');
     }
 
     if (!commentText.trim()) {
-      return swal.error('Invalid text!');
+      return Swal.error('Invalid text!');
     }
 
     const comment = {
@@ -91,12 +91,12 @@ const Comments = CreateReactClass({
   },
 
   onReplyComment() {
-    swal.info('This is not finished !');
+    Swal.info('This is not finished !');
     this.setState({ replyText: '' });
   },
 
   onDeleteComment(comment) {
-    swal.confirm('Are you sure?', 'Yes, delete it!', () => {
+    Swal.confirm('Are you sure?', 'Yes, delete it!', () => {
       this.executeAction(BlogActions.DeleteBlogComment, comment);
     });
   },

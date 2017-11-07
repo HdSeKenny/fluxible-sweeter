@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 var convertMsg = function convertMsg(msg) {
   var strMsg = msg.split('_').join(' ').toLowerCase();
   var firstLetter = strMsg.charAt(0).toUpperCase();
@@ -11,20 +10,36 @@ var convertMsg = function convertMsg(msg) {
 };
 
 var confirmButtonColor = '#00a9da';
-var closeTimer = 2000;
+var closeTimer = 1500;
 
 exports.default = {
-  success: function success(msg, cb) {
+  text: function text(title, _text, showLoading, cb) {
     swal({
-      title: convertMsg(msg),
+      title: convertMsg(title),
+      text: _text,
+      timer: closeTimer,
+      showConfirmButton: false,
+      onOpen: function onOpen() {
+        if (showLoading) swal.showLoading();
+      }
+    }).then(cb,
+    // handling the promise rejection
+    function (dismiss) {});
+  },
+
+  success: function success(title, text, showLoading, cb) {
+    swal({
+      title: convertMsg(title),
+      text: text,
       type: 'success',
       confirmButtonColor: confirmButtonColor,
-      timer: closeTimer
-    }, function () {
-      if (cb) {
-        cb();
+      timer: closeTimer,
+      showConfirmButton: false,
+      onOpen: function onOpen() {
+        if (showLoading) swal.showLoading();
       }
-    });
+    }).then(cb, function (dismiss) {});
+    // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
   },
 
   Info: function Info(msg) {

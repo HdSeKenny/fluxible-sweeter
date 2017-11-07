@@ -40,8 +40,6 @@ var _UI = require('../UI');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
-
 var _actions = require('../../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -87,7 +85,7 @@ var UserImageEditor = function (_React$Component) {
           currentUser = _state.currentUser;
 
       if (!imageData) {
-        return _plugins.swal.warning('Browser an image first !');
+        return _UI.Swal.warning('Browser an image first !');
       }
 
       var _imageData$output = imageData.output,

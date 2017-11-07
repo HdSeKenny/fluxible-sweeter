@@ -47,7 +47,9 @@ var UserStore = (0, _createStore2.default)({
     'UPLOAD_IMAGE_SUCCESS': 'uploadImageSuccess',
     'GET_LOGIN_USER_IMAGE_SUCCESS': 'getLoginUserImageSuccess',
     'ADD_MESSAGE_CONNECTION_SUCCESS': 'addMessageConnectionSuccess',
-    'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess'
+    'DELETE_MESSAGE_CONNECTION_SUCCESS': 'deleteMessageConnectionSuccess',
+    'USER_AFTER_LOGGED_IN': 'afterLoggedIn',
+    'USER_BEFORE_LOGGED_IN': 'beforeLoggedIn'
   },
 
   initialize: function initialize() {
@@ -57,6 +59,7 @@ var UserStore = (0, _createStore2.default)({
     this.currentUploadedImage = null;
     this.authenticated = false;
     this.loginUserImage = null;
+    this.loggedIn = false;
   },
   loadKennySuccess: function loadKennySuccess(res) {
     this.kenny = res.data;
@@ -102,6 +105,17 @@ var UserStore = (0, _createStore2.default)({
     this.setCurrentUserConnection();
     this.emitChange({
       msg: 'USER_LOGIN_SUCCESS'
+    });
+  },
+  afterLoggedIn: function afterLoggedIn() {
+    this.loggedIn = true;
+    this.emitChange({
+      msg: 'AFTER_LOGGED_IN'
+    });
+  },
+  beforeLoggedIn: function beforeLoggedIn() {
+    this.emitChange({
+      msg: 'BEFORE_LOGGED_IN'
     });
   },
   loginFail: function loginFail(res) {

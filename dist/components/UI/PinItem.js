@@ -36,7 +36,7 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 var _Layout = require('./Layout');
 
@@ -104,7 +104,7 @@ var PinItem = function (_React$Component) {
     key: 'onAddAndCancelThumbs',
     value: function onAddAndCancelThumbs(currentUser, blog, isThumbedUp) {
       if (!currentUser) {
-        return _plugins.swal.warning('Login first !');
+        return _UI.Swal.warning('Login first !');
       }
       if (isThumbedUp) {
         this.cancelThumbsUpBlog(currentUser.id_str, blog.id_str);

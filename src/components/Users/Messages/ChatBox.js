@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
 import { Row, Col } from '../../UI/Layout';
-import { swal } from '../../../plugins';
+import { Swal } from '../../UI';
 import { format } from '../../../utils';
 
 /**
@@ -94,7 +94,7 @@ export default class ChatBox extends React.Component {
     const now = new Date();
     const { activeUser, localChat, currentUser } = this.props;
     if (!msg) {
-      return swal.warning('Invalid message!');
+      return Swal.warning('Invalid message!');
     }
     const newMessage = {
       content: msg,

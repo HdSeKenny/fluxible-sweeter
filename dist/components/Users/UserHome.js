@@ -44,7 +44,7 @@ var _UserNavs = require('../UserNavs');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -101,7 +101,7 @@ var UserHome = (0, _createReactClass2.default)({
     var result = {};
 
     if (responseMessages.includes(res.msg)) {
-      _plugins.swal.success(res.msg, function () {
+      _UI.Swal.success(res.msg, function () {
         result.displayBlogs = displayBlogs;
       });
     }

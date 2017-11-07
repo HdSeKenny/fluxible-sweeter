@@ -23,6 +23,21 @@ export default class Html extends React.Component {
     const { style, main, common, essentials } = assets;
     const markupHtml = { __html: markup };
     const exposedHtml = { __html: exposed };
+    const stylesheets = [
+      '/css/font-awesome.min.css',
+      '/css/sweetalert2.min.css',
+      '/css/slim.min.css',
+      '/css/emoji.css',
+      '/slick/slick.min.css',
+      '/slick/slick-theme.min.css',
+      style
+    ];
+
+    const scripts = [
+      '/js/jquery.min.js',
+      '/js/bootstrap.min.js'
+    ];
+
     return (
       <html lang="en" className="no-js">
         <head>
@@ -31,27 +46,17 @@ export default class Html extends React.Component {
           <title>Sweeter</title>
           <meta name="author" content="Kenny" />
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
-
-          <link href="/css/font-awesome.min.css" rel="stylesheet" />
-          <link href="/css/sweetalert.css" rel="stylesheet" />
-          <link href="/css/slim.min.css" rel="stylesheet" />
-          <link href="/css/emoji.css" rel="stylesheet" />
-          <link href="/slick/slick.min.css" rel="stylesheet" />
-          <link href="/slick/slick-theme.min.css" rel="stylesheet" />
-
-          <link href={style} rel="stylesheet" />
-
-          <script src="/js/jquery.min.js"></script>
-          <script src="/js/bootstrap.min.js"></script>
+          {stylesheets.map(styleUrl => <link href={styleUrl} rel="stylesheet" />)}
+          {scripts.map(scriptUrl => <script src={scriptUrl} />)}
         </head>
         <body>
           <div className="loading"><div className="loader"></div></div>
           <div id="main" dangerouslySetInnerHTML={markupHtml}></div>
-          <script dangerouslySetInnerHTML={exposedHtml}></script>
 
+          <script dangerouslySetInnerHTML={exposedHtml}></script>
           <script src={common}></script>
           <script src={main}></script>
-          <script src="/js/sweetalert.min.js"></script>
+          <script src="/js/sweetalert2.min.js"></script>
           {essentials && <script src={essentials}></script>}
         </body>
       </html>

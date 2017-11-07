@@ -24,16 +24,8 @@ import htmlToPdf from './plugins/htmlToPdf';
 import sharp from './plugins/sharp';
 
 export default (server) => {
+  const { prodSource, devSource, lib, faviconPath } = configs.server;
   const env = server.get('env');
-
-  server.set('views', path.join(__dirname, 'views')); // view engine setup
-  server.set('view engine', 'pug');
-
-  if (configs.server.logEnable && env !== 'production') {
-    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
-    server.use(morgan(':method :url :status :response-time ms'));
-  }
-
   const options = {
     dotfiles: 'ignore',
     etag: false,
@@ -46,21 +38,29 @@ export default (server) => {
     }
   };
 
+  if (configs.server.logEnable && env !== 'production') {
+    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+    server.use(morgan(':method :url :status :response-time ms'));
+  }
+
   if (env === 'production') {
-    server.use(express.static(path.join(__dirname, 'build')));
+    server.use(express.static(prodSource));
   }
 
   if (env === 'development') {
-    server.use(express.static(path.join(__dirname, '..', '.tmp')));
+    server.use(express.static(devSource, options));
   }
+
+  // view engine setup
+  server.set('views', path.join(__dirname, 'views'));
+  server.set('view engine', 'pug');
 
   server.use(bodyParser.json({ limit: '20mb' }));
   server.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   server.use(cookieParser());
   server.use(cors());
-
-  server.use(`${configs.path_prefix}/`, express.static(path.join(__dirname, '..', 'lib')));
-  server.use(favicon(`${path.join(__dirname, '..', 'lib')}/images/favicon.ico`));
+  server.use(express.static(lib));
+  server.use(favicon(faviconPath));
   server.use(useragent.express());
 
   const MongoStore = connectMongo(session);
@@ -76,6 +76,7 @@ export default (server) => {
   fetchrPlugin.registerService(users);
   fetchrPlugin.registerService(comments);
 
+  // custom server plugins
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', htmlToPdf);
   server.use('/api/resize', sharp);

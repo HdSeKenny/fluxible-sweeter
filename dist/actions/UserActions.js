@@ -50,6 +50,7 @@ exports.default = {
     });
   },
   Login: function Login(context, payload, done) {
+    context.dispatch('USER_BEFORE_LOGGED_IN');
     context.service.create('users.login', {}, payload, _fetchClientConfig2.default, function (err, res) {
       if (res.user) {
         context.dispatch('USER_LOGIN_SUCCESS', res);
@@ -143,6 +144,10 @@ exports.default = {
       });
       done();
     });
+  },
+  LoggedIn: function LoggedIn(context, payload, done) {
+    context.dispatch('USER_AFTER_LOGGED_IN');
+    done();
   }
 };
 module.exports = exports['default'];

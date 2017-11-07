@@ -24,8 +24,6 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
-
 var _actions = require('../../actions');
 
 var _stores = require('../../stores');
@@ -71,19 +69,24 @@ var Login = (0, _createReactClass2.default)({
     };
   },
   onChange: function onChange(res) {
+    var _this = this;
+
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      _plugins.swal.success(res.msg);
-      _UI.ModalsFactory.hide('loginModal');
-      // this.context.router.push('/list');
+      _UI.Swal.success(res.msg, '', false, function () {
+        if ($('#loginModal').hasClass('in')) {
+          _UI.ModalsFactory.hide('loginModal');
+        }
+      });
+    }
+
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      _UI.Swal.success(res.msg, '', false, function () {
+        _this.context.router.push('/');
+      });
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
-    }
-
-    if (res.msg === 'LOGOUT_SUCCESS') {
-      _plugins.swal.success(res.msg);
-      this.context.router.push('/');
     }
   },
   onLoginSubmit: function onLoginSubmit(e) {
@@ -166,7 +169,7 @@ var Login = (0, _createReactClass2.default)({
 
     return _react2.default.createElement(_UI.SweetInput, {
       ref: 'emailRef',
-      autoComplete: remember ? 'on' : 'off',
+      autoComplete: 'on',
       format: 'email',
       icon: 'fa fa-user',
       required: true,
@@ -180,8 +183,8 @@ var Login = (0, _createReactClass2.default)({
     var passwordErrorMessage = this.state.passwordErrorMessage;
 
     return _react2.default.createElement(_UI.SweetInput, {
-      ref: 'loginRef',
-      autoComplete: remember ? 'on' : 'off',
+      ref: 'passwordRef',
+      autoComplete: 'on',
       format: 'password',
       icon: 'fa fa-lock',
       required: true,
@@ -335,7 +338,7 @@ var Login = (0, _createReactClass2.default)({
     );
   },
   render: function render() {
-    var _this = this;
+    var _this2 = this;
 
     var _state2 = this.state,
         errorMessage = _state2.errorMessage,
@@ -357,7 +360,7 @@ var Login = (0, _createReactClass2.default)({
           _react2.default.createElement(
             'span',
             { className: 'no-account', onClick: function onClick() {
-                return _this.props.openSignupModal();
+                return _this2.props.openSignupModal();
               } },
             'Sign up'
           )

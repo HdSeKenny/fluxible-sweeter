@@ -22,7 +22,7 @@ var _fluxibleAddonsReact = require('fluxible-addons-react');
 
 var _utils = require('../../../utils');
 
-var _plugins = require('../../../plugins');
+var _UI = require('../../UI');
 
 var _actions = require('../../../actions');
 

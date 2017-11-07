@@ -193,7 +193,7 @@ var UserHomeNav = function (_React$Component) {
           focuses = displayUser.focuses;
 
 
-      if (!displayUser) return swal.info('You need login');
+      if (!displayUser) return Swal.info('You need login');
 
       return _react2.default.createElement(
         'div',

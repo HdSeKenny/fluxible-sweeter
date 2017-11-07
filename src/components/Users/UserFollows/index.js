@@ -7,7 +7,7 @@ import NotFound from '../../NotFound';
 import RightTabs from './RightTabs';
 import LeftNav from './LeftNav';
 import Suggestions from './Suggestions';
-import { swal } from '../../../plugins';
+import { Swal } from '../../UI';
 import { UserActions } from '../../../actions';
 import { UserStore } from '../../../stores';
 
@@ -16,7 +16,7 @@ export default CreateReactClass({
   displayName: 'UserFollows',
 
   contextTypes: {
-    executeAction: PropTypes.func,
+    executeAction: PropTypes.func
   },
 
   propTypes: {

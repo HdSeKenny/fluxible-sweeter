@@ -4,7 +4,7 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { router } from 'react-router';
 import UserBar from './UserBar';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { UserSettingsNav } from '../UserNavs';
@@ -15,7 +15,7 @@ const ChangePassword = CreateReactClass({
 
   contextTypes: {
     // router: routerShape.isRequired,
-    executeAction: PropTypes.func,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
@@ -45,7 +45,7 @@ const ChangePassword = CreateReactClass({
 
   onChange(res) {
     if (res.stat) {
-      swal.success(res.msg, () => {
+      Swal.success(res.msg, () => {
         this.context.router.push('/login');
       });
     } else {
@@ -145,7 +145,7 @@ const ChangePassword = CreateReactClass({
       };
       this.executeAction(UserActions.ChangeUserPassword, newPasswordObj);
     } else {
-      swal.error('Update password failed !');
+      Swal.error('Update password failed !');
     }
   },
 

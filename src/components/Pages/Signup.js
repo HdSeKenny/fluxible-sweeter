@@ -5,9 +5,8 @@ import { FluxibleMixin } from 'fluxible-addons-react';
 import { routerShape, Link } from 'react-router';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { swal } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
-import { ModalsFactory } from '../UI';
+import { ModalsFactory, Swal } from '../UI';
 import { params } from '../../configs';
 
 const Signup = CreateReactClass({
@@ -41,7 +40,7 @@ const Signup = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'USER_REGISTER_SUCCESS') {
-      swal.success(res.stat);
+      Swal.success(res.stat);
       ModalsFactory.hide('signupModal');
       this.context.router.push('/list');
     }
@@ -70,7 +69,7 @@ const Signup = CreateReactClass({
     if (firstName && lastName && username && email && password && confirmPassword) {
       this.context.executeAction(UserActions.UserRegister, newUser);
     } else {
-      swal.error('Register failed !');
+      Swal.error('Register failed !');
     }
   },
 

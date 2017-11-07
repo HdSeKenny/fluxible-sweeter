@@ -26,7 +26,7 @@ var _UserBar = require('./UserBar');
 
 var _UserBar2 = _interopRequireDefault(_UserBar);
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 var _actions = require('../../actions');
 
@@ -72,7 +72,7 @@ var ChangePassword = (0, _createReactClass2.default)({
     var _this = this;
 
     if (res.stat) {
-      _plugins.swal.success(res.msg, function () {
+      _UI.Swal.success(res.msg, function () {
         _this.context.router.push('/login');
       });
     } else {
@@ -165,7 +165,7 @@ var ChangePassword = (0, _createReactClass2.default)({
       };
       this.executeAction(_actions.UserActions.ChangeUserPassword, newPasswordObj);
     } else {
-      _plugins.swal.error('Update password failed !');
+      _UI.Swal.error('Update password failed !');
     }
   },
   render: function render() {

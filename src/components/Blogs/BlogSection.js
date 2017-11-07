@@ -91,7 +91,8 @@ export default class BlogSection extends React.Component {
             showModal={showPinModal}
             currentUser={currentUser}
             ModalComponent={PinItemModal}
-            showHeaderAndFooter={false} />
+            showHeaderAndFooter={false}
+          />
         </Page>
       </section>
     );

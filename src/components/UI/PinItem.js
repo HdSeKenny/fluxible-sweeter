@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { routerShape } from 'react-router';
 import { format, jsUtils, env } from '../../utils';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 import { Row, Col } from './Layout';
 import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
@@ -71,7 +71,7 @@ export default class PinItem extends React.Component {
 
   onAddAndCancelThumbs(currentUser, blog, isThumbedUp) {
     if (!currentUser) {
-      return swal.warning('Login first !');
+      return Swal.warning('Login first !');
     }
     if (isThumbedUp) {
       this.cancelThumbsUpBlog(currentUser.id_str, blog.id_str);

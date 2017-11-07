@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { format, jsUtils } from '../../../utils';
-import { swal } from '../../../plugins';
+import { Swal } from '../../UI';
 import { BlogActions } from '../../../actions';
 import { UserStore } from '../../../stores';
 import { Row, Col } from '../../UI/Layout';

@@ -1,4 +1,4 @@
-// Project configs
+const path = require('path');
 const params = require('./params');
 const instance = require('./instance');
 
@@ -10,18 +10,36 @@ module.exports = {
       ttl: 60 * 40  // 20 min
     },
     sweeter: {
-      url: 'mongodb://localhost/sweeter',
+      url: 'mongodb://localhost/sweeter'
     },
     connectErrorMsg: 'Please check configuration is right or datebase is running properly.'
   },
   server: {
     host: 'localhost',
-    logUserActivity: true,   // user activity logger
-    logEnable: true,  // enable logger middleware
+
+    // user activity logger
+    logUserActivity: true,
+
+    // enable logger middleware
+    logEnable: true,
+
     // Browser-sync port
     browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
+
     // Server port
-    port: process.env.PORT || 9000
+    port: process.env.PORT || 9000,
+
+    // Production source path
+    prodSource: path.join(__dirname, '..', 'build'),
+
+    // Development source path
+    devSource: path.join(__dirname, '..', '..', '.tmp'),
+
+    // Public source path
+    lib: path.join(__dirname, '..', '..', 'lib'),
+
+    // Favicon icon path
+    faviconPath: path.join(__dirname, '..', '..', 'lib', 'images', 'favicon.ico')
   },
   development: {
     hot_server_host: 'localhost',

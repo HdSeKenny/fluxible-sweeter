@@ -3,17 +3,17 @@ import FluxibleMixin from 'fluxible-addons-react/FluxibleMixin';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { UserStore, BlogStore } from '../../stores';
-import { PinItem, ModalsFactory, Layout } from '../UI';
+import { UserActions, BlogActions } from '../../actions';
+import { PinItem, ModalsFactory, Layout, Swal } from '../UI';
 import { PinItemModal, BlogModal } from '../UserControls';
 import { jsUtils } from '../../utils';
-import { swal } from '../../plugins';
 
 const UserHome = CreateReactClass({
 
   displayName: 'UserHome',
 
   contextTypes: {
-    executeAction: PropTypes.func,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
@@ -24,7 +24,15 @@ const UserHome = CreateReactClass({
   mixins: [FluxibleMixin],
 
   statics: {
-    storeListeners: [UserStore, BlogStore]
+    storeListeners: [UserStore, BlogStore],
+    fetchData: (context, params, query, done) => {
+      Promise.all([
+        context.executeAction(UserActions.LoadUsers, params),
+        context.executeAction(BlogActions.LoadBlogs, params)
+      ]).then(() => {
+        done();
+      });
+    }
   },
 
   getInitialState() {
@@ -66,7 +74,7 @@ const UserHome = CreateReactClass({
     if (successMessages.includes(res.msg)) {
       result.displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        swal.success(res.msg);
+        Swal.success(res.msg);
       }
     }
 

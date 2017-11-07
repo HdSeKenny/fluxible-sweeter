@@ -3,14 +3,14 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
-import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
-import { ModalsFactory, MainSliders } from '../UI';
+import { UserActions, BlogActions } from '../../actions';
+import { ModalsFactory, MainSliders, Swal } from '../UI';
 import { Page } from '../UI/Layout';
 import { Login, Signup } from '../Pages';
 import { UserCard } from '../Snippets';
 import { BlogModal } from '../UserControls';
-import BlogSection from '../Blogs/BlogSection';
+import { BlogSection, BlogNews } from '../Blogs';
 
 const Home = CreateReactClass({
 
@@ -23,7 +23,15 @@ const Home = CreateReactClass({
   mixins: [FluxibleMixin],
 
   statics: {
-    storeListeners: [BlogStore, UserStore]
+    storeListeners: [BlogStore, UserStore],
+    fetchData: (context, params, query, done) => {
+      Promise.all([
+        context.executeAction(UserActions.LoadUsers, params),
+        context.executeAction(BlogActions.LoadBlogs, params)
+      ]).then(() => {
+        done();
+      });
+    }
   },
 
   getInitialState() {
@@ -74,21 +82,26 @@ const Home = CreateReactClass({
       'LOGOUT_SUCCESS'
     ];
 
-    const result = {};
-    const isBlogMsg = blogMessages.includes(res.msg);
-    const isAuthMsg = authMessages.includes(res.msg);
-
-    if (isBlogMsg) {
-      swal.success(res.msg);
-      result.blogs = this.getStore(BlogStore).getAllBlogs();
+    if (res.msg === 'BEFORE_LOGGED_IN') {
+      this.showLoading();
     }
 
-    if (isAuthMsg) {
-      result.currentUser = this.getStore(UserStore).getCurrentUser();
+    if (res.msg === 'AFTER_LOGGED_IN') {
+      this.showLoading();
     }
 
-    if (Object.keys(result).length) {
-      this.setState(result);
+    if (blogMessages.includes(res.msg)) {
+      Swal.success(res.msg, '', false, () => {
+        this.setState({
+          blogs: this.getStore(BlogStore).getAllBlogs()
+        });
+      });
+    }
+
+    if (authMessages.includes(res.msg)) {
+      this.setState({
+        currentUser: this.getStore(UserStore).getCurrentUser()
+      });
     }
   },
 
@@ -99,6 +112,20 @@ const Home = CreateReactClass({
     for (let i = 0; i < pinBodyRight.length; i++) {
       pinBodyLeft[i].style.height = `${pinBodyRight[i].scrollHeight}px`;
     }
+  },
+
+  componentDidUpdate() {
+    setImmediate(() => {
+      this.hideLoading();
+    });
+  },
+
+  showLoading() {
+    $('.loading').removeClass('hide');
+  },
+
+  hideLoading() {
+    $('.loading').addClass('hide');
   },
 
   getTagClassName(query, tag) {
@@ -134,15 +161,16 @@ const Home = CreateReactClass({
     );
   },
 
-  _renderHomeRightContent(currentUser, user, pathname) {
+  _renderHomeRightContent(blogs, currentUser, user, pathname) {
+    const articles = blogs.filter(b => b.type === 'article');
     return (
       <div className="">
-        <div className={`right-login ${currentUser ? 'current-user' : ''}`}>
+        <div className={`right-login mb-10 ${currentUser ? 'current-user' : ''}`}>
           {!currentUser && <Login isModalLogin={false} openSignupModal={() => this.openSignupModal()} />}
           {currentUser && <UserCard user={currentUser} />}
         </div>
-        <div className="right-dsad">
-        </div>
+
+        <BlogNews blogs={blogs} currentUser={currentUser} />
       </div>
     );
   },
@@ -158,11 +186,11 @@ const Home = CreateReactClass({
         </div>
         <div className="main">
           {!currentUser && <MainSliders show={showSliders} />}
-          {currentUser && <BlogModal currentUser={currentUser} isUserHome={true} />}
+          <BlogModal currentUser={currentUser} isUserHome={true} />
           <BlogSection blogs={blogs} currentUser={currentUser} />
         </div>
         <div className="right">
-          {this._renderHomeRightContent(currentUser, user, pathname)}
+          {this._renderHomeRightContent(blogs, currentUser, user, pathname)}
         </div>
         <Page>
           <ModalsFactory

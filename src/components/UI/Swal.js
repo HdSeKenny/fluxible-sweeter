@@ -1,4 +1,3 @@
-
 const convertMsg = (msg) => {
   const strMsg = msg.split('_').join(' ').toLowerCase();
   const firstLetter = strMsg.charAt(0).toUpperCase();
@@ -6,20 +5,38 @@ const convertMsg = (msg) => {
 };
 
 const confirmButtonColor = '#00a9da';
-const closeTimer = 2000;
+const closeTimer = 1500;
 
 export default {
-  success: (msg, cb) => {
+  text: (title, text, showLoading, cb) => {
     swal({
-      title: convertMsg(msg),
+      title: convertMsg(title),
+      text: text,
+      timer: closeTimer,
+      showConfirmButton: false,
+      onOpen: () => {
+        if (showLoading) swal.showLoading();
+      }
+    }).then(
+      cb,
+      // handling the promise rejection
+      (dismiss) => {}
+    );
+  },
+
+  success: (title, text, showLoading, cb) => {
+    swal({
+      title: convertMsg(title),
+      text: text,
       type: 'success',
       confirmButtonColor,
-      timer: closeTimer
-    }, () => {
-      if (cb) {
-        cb();
+      timer: closeTimer,
+      showConfirmButton: false,
+      onOpen: () => {
+        if (showLoading) swal.showLoading();
       }
-    });
+    }).then(cb, (dismiss) => {});
+    // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
   },
 
   Info: (msg) => {

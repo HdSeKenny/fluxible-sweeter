@@ -38,7 +38,7 @@ var _actions = require('../../../actions');
 
 var _Layout = require('../../UI/Layout');
 
-var _plugins = require('../../../plugins');
+var _UI = require('../../UI');
 
 var _utils = require('../../../utils');
 
@@ -145,7 +145,7 @@ var ChatBox = function (_React$Component) {
           currentUser = _props.currentUser;
 
       if (!msg) {
-        return _plugins.swal.warning('Invalid message!');
+        return _UI.Swal.warning('Invalid message!');
       }
       var newMessage = {
         content: msg,

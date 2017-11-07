@@ -22,8 +22,6 @@ var _reactRouter = require('react-router');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
-
 var _stores = require('../../stores');
 
 var _UI = require('../UI');
@@ -69,7 +67,7 @@ exports.default = (0, _createReactClass2.default)({
     var blogsMsgs = ['DELETE_BLOG_SUCCESS', 'CREATE_BLOG_SUCCESS'];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      _plugins.swal.success(res.msg);
+      _UI.Swal.success(res.msg);
       this.setState({
         selectedPin: res.newBlog,
         blogs: this.context.getStore(_stores.BlogStore).getAllBlogs()
@@ -77,7 +75,7 @@ exports.default = (0, _createReactClass2.default)({
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      _plugins.swal.success(res.msg, function () {
+      _UI.Swal.success(res.msg, function () {
         _this.setState({
           blogs: _this.context.getStore(_stores.BlogStore).getAllBlogs()
         });

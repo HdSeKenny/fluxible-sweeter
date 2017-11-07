@@ -8,7 +8,7 @@ import { BlogStore, UserStore } from '../../stores';
 import { Comments } from '../Pages';
 import { format } from '../../utils';
 import { Row, Col } from '../UI/Layout';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 
 const Details = CreateReactClass({
 
@@ -57,7 +57,7 @@ const Details = CreateReactClass({
     ];
 
     if (commentMsgs.includes(res.msg)) {
-      swal.success(res.msg);
+      Swal.success(res.msg);
       this.setState({
         blog: res.newBlog
       });

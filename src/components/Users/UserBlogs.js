@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { format, jsUtils } from '../../utils';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 import { BlogActions } from '../../actions';
 import { UserStore } from '../../stores';
 import { Row, Col } from '../UI/Layout';
@@ -52,18 +52,18 @@ const UserBlogs = CreateReactClass({
 
   onUpdateBlog(blog) {
     if (!blog.title) {
-      return swal.error('Please enter title !');
+      return Swal.error('Please enter title !');
     }
 
     if (!blog.content) {
-      return swal.error('Please enter content');
+      return Swal.error('Please enter content');
     }
 
     this.executeAction(BlogActions.UpdateBlog, blog);
   },
 
   onDeleteBlog(blog) {
-    swal.confirm('Are you sure?', 'Yes, delete it!', () => {
+    Swal.confirm('Are you sure?', 'Yes, delete it!', () => {
       this.executeAction(BlogActions.DeleteBlog, blog);
     });
   },

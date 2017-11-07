@@ -48,7 +48,7 @@ var _actions = require('../../actions');
 
 var _Layout = require('../UI/Layout');
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 var _stores = require('../../stores');
 
@@ -104,7 +104,7 @@ var BlogModal = function (_React$Component) {
       var currentUser = this.props.currentUser;
 
       if (!currentUser) {
-        return _plugins.swal.warning('Login first !');
+        return _UI.Swal.warning('Login first !');
       }
 
       var newBlog = {
@@ -146,7 +146,7 @@ var BlogModal = function (_React$Component) {
       var currentUser = this.props.currentUser;
 
       if (!currentUser) {
-        return _plugins.swal.warning('Login first!');
+        return _UI.Swal.warning('Login first!');
       }
 
       this.context.router.push('/' + currentUser.username + '/create');
@@ -205,10 +205,10 @@ var BlogModal = function (_React$Component) {
           }),
           _configs.params.showEmoji && _react2.default.createElement(EmojiSuggestions, null)
         ),
-        _configs.params.showEmoji && _react2.default.createElement(
+        _react2.default.createElement(
           _Layout.Col,
           { size: '8 p-0' },
-          _react2.default.createElement(EmojiSelect, null)
+          _configs.params.showEmoji && _react2.default.createElement(EmojiSelect, null)
         ),
         _react2.default.createElement(
           _Layout.Col,
@@ -220,10 +220,10 @@ var BlogModal = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var currentUser = this.props.currentUser;
       var _state2 = this.state,
           welcomeText = _state2.welcomeText,
-          blogText = _state2.blogText,
-          loadEmoji = _state2.loadEmoji;
+          blogText = _state2.blogText;
 
       var blogTextLength = blogText.length;
       var isDisabled = blogTextLength > 140 || blogTextLength === 0;
@@ -231,7 +231,7 @@ var BlogModal = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'create-well mb-10' },
+        { className: 'create-well mb-10 ' + (currentUser ? 'show' : 'hide') },
         _react2.default.createElement(
           _Layout.Row,
           { className: 'text-row' },
@@ -270,7 +270,7 @@ var BlogModal = function (_React$Component) {
             )
           )
         ),
-        loadEmoji && this._renderSweetEditor(isDisabled)
+        this._renderSweetEditor(isDisabled)
       );
     }
   }]);

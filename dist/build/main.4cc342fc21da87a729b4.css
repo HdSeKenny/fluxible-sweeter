@@ -12682,7 +12682,6 @@ License: http://codecanyon.net/licenses
 }
 .home-page .right {
   width: 28%;
-  background-color: #fff;
   float: right;
 }
 .home-page .right .right-login.current-user {
@@ -12740,6 +12739,12 @@ License: http://codecanyon.net/licenses
 .home-page .main {
   width: 54%;
   float: left;
+}
+.home-page .main .create-well.hide {
+  display: none;
+}
+.home-page .main .create-well.show {
+  display: block;
 }
 .help-block {
   color: #ea5a5a;
@@ -14565,5 +14570,18 @@ License: http://codecanyon.net/licenses
   color: gray;
   font-weight: 600;
 }
+.right .blog-news {
+  background-color: #fff;
+  padding: 10px 20px;
+}
+.right .blog-news .title {
+  margin: 10px 0;
+}
+.right .blog-news .blog {
+  margin: 10px 0;
+}
+.right .blog-news .blog img {
+  width: 100%;
+}
 
-/*# sourceMappingURL=main.c5360a1cef6f2e660f5b.css.map*/
+/*# sourceMappingURL=main.4cc342fc21da87a729b4.css.map*/

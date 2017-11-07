@@ -34,7 +34,7 @@ var _utils = require('../../utils');
 
 var _Layout = require('../UI/Layout');
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81,7 +81,7 @@ var Details = (0, _createReactClass2.default)({
     var commentMsgs = ['COMMENT_SUCCESS', 'DELETE_COMMENT_SUCCESS'];
 
     if (commentMsgs.includes(res.msg)) {
-      _plugins.swal.success(res.msg);
+      _UI.Swal.success(res.msg);
       this.setState({
         blog: res.newBlog
       });

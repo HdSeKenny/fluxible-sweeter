@@ -63,6 +63,10 @@ var Html = function (_React$Component) {
 
       var markupHtml = { __html: markup };
       var exposedHtml = { __html: exposed };
+      var stylesheets = ['/css/font-awesome.min.css', '/css/sweetalert2.min.css', '/css/slim.min.css', '/css/emoji.css', '/slick/slick.min.css', '/slick/slick-theme.min.css', style];
+
+      var scripts = ['/js/jquery.min.js', '/js/bootstrap.min.js'];
+
       return _react2.default.createElement(
         'html',
         { lang: 'en', className: 'no-js' },
@@ -78,15 +82,12 @@ var Html = function (_React$Component) {
           ),
           _react2.default.createElement('meta', { name: 'author', content: 'Kenny' }),
           _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
-          _react2.default.createElement('link', { href: '/css/font-awesome.min.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/css/sweetalert.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/css/slim.min.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/css/emoji.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/slick/slick.min.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: '/slick/slick-theme.min.css', rel: 'stylesheet' }),
-          _react2.default.createElement('link', { href: style, rel: 'stylesheet' }),
-          _react2.default.createElement('script', { src: '/js/jquery.min.js' }),
-          _react2.default.createElement('script', { src: '/js/bootstrap.min.js' })
+          stylesheets.map(function (styleUrl) {
+            return _react2.default.createElement('link', { href: styleUrl, rel: 'stylesheet' });
+          }),
+          scripts.map(function (scriptUrl) {
+            return _react2.default.createElement('script', { src: scriptUrl });
+          })
         ),
         _react2.default.createElement(
           'body',
@@ -100,7 +101,7 @@ var Html = function (_React$Component) {
           _react2.default.createElement('script', { dangerouslySetInnerHTML: exposedHtml }),
           _react2.default.createElement('script', { src: common }),
           _react2.default.createElement('script', { src: main }),
-          _react2.default.createElement('script', { src: '/js/sweetalert.min.js' }),
+          _react2.default.createElement('script', { src: '/js/sweetalert2.min.js' }),
           essentials && _react2.default.createElement('script', { src: essentials })
         )
       );

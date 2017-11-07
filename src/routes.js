@@ -23,14 +23,14 @@ import {
 } from './components';
 
 const path = config.path_prefix === '' ? '/' : config.path_prefix;
-const { isPublic } = Mode;
 
 const createRoutes = (context) => {
   const requireLogin = (nextState, replace, cb) => {
     // do nothing for public visists
-    if (isPublic) {
+    if (Mode.isPublic) {
       return cb();
     }
+
     // only load session to store on server side for isNotPublic visits
     if (env.is_server) {
       context.executeAction(UserActions.LoadKennyUser)
@@ -44,7 +44,9 @@ const createRoutes = (context) => {
 
   const onRouterChange = (routes, state, nextState, callback) => {
     $('.loading').removeClass('hide');
-    callback();
+    setImmediate(() => {
+      callback();
+    });
   };
 
   return (

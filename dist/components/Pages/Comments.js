@@ -24,7 +24,7 @@ var _actions = require('../../actions');
 
 var _utils = require('../../utils');
 
-var _plugins = require('../../plugins');
+var _UI = require('../UI');
 
 var _Layout = require('../UI/Layout');
 
@@ -77,11 +77,11 @@ var Comments = (0, _createReactClass2.default)({
 
     if (!currentUser) {
       this.setState({ commentText: '' });
-      return _plugins.swal.warning('Login first !');
+      return _UI.Swal.warning('Login first !');
     }
 
     if (!commentText.trim()) {
-      return _plugins.swal.error('Invalid text!');
+      return _UI.Swal.error('Invalid text!');
     }
 
     var comment = {
@@ -108,13 +108,13 @@ var Comments = (0, _createReactClass2.default)({
     this.setState({ blogComments: blogComments });
   },
   onReplyComment: function onReplyComment() {
-    _plugins.swal.info('This is not finished !');
+    _UI.Swal.info('This is not finished !');
     this.setState({ replyText: '' });
   },
   onDeleteComment: function onDeleteComment(comment) {
     var _this = this;
 
-    _plugins.swal.confirm('Are you sure?', 'Yes, delete it!', function () {
+    _UI.Swal.confirm('Are you sure?', 'Yes, delete it!', function () {
       _this.executeAction(_actions.BlogActions.DeleteBlogComment, comment);
     });
   },

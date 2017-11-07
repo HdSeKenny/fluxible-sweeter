@@ -4,10 +4,9 @@ import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { routerShape, Link } from 'react-router';
 import { validations, jsUtils } from '../../utils';
-import { swal } from '../../plugins';
 import { UserActions } from '../../actions';
 import { UserStore } from '../../stores';
-import { SweetInput, Switch, ModalsFactory } from '../UI';
+import { SweetInput, Switch, ModalsFactory, Swal } from '../UI';
 import { Row, Col } from '../UI/Layout';
 
 const Login = CreateReactClass({
@@ -48,19 +47,21 @@ const Login = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'USER_LOGIN_SUCCESS') {
-      swal.success(res.msg, () => {
-        ModalsFactory.hide('loginModal');
+      Swal.success(res.msg, '', false, () => {
+        if ($('#loginModal').hasClass('in')) {
+          ModalsFactory.hide('loginModal');
+        }
+      });
+    }
+
+    if (res.msg === 'LOGOUT_SUCCESS') {
+      Swal.success(res.msg, '', false, () => {
+        this.context.router.push('/');
       });
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
       this.setState({ errorMessage: res.errorMsg });
-    }
-
-    if (res.msg === 'LOGOUT_SUCCESS') {
-      swal.success(res.msg, () => {
-        this.context.router.push('/');
-      });
     }
   },
 

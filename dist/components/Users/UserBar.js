@@ -40,8 +40,6 @@ var _Layout = require('../UI/Layout');
 
 var _UI = require('../UI');
 
-var _plugins = require('../../plugins');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UserBar = (0, _createReactClass2.default)({
@@ -81,7 +79,7 @@ var UserBar = (0, _createReactClass2.default)({
     var newState = {};
 
     if (barMessages.includes(res.msg)) {
-      _plugins.swal.success(res.msg);
+      _UI.Swal.success(res.msg);
       if (res.msg === 'UPLOAD_IMAGE_SUCCESS') {
         _UI.ModalsFactory.hide('uploadModal');
         newState.showImageModal = false;
@@ -155,7 +153,7 @@ var UserBar = (0, _createReactClass2.default)({
     var currentUser = this.state.currentUser;
 
     if (!currentUser) {
-      return _plugins.swal.warning('Login first please!');
+      return _UI.Swal.warning('Login first please!');
     }
 
     var followObj = {
@@ -178,7 +176,7 @@ var UserBar = (0, _createReactClass2.default)({
   },
   openChatConnection: function openChatConnection(user) {
     if (!this.state.currentUser) {
-      return _plugins.swal.warning('Login first!');
+      return _UI.Swal.warning('Login first!');
     }
     var connection = {
       myId: this.state.currentUser.id_str,
@@ -194,7 +192,7 @@ var UserBar = (0, _createReactClass2.default)({
     var currentUser = this.state.currentUser;
 
     if (!currentUser) {
-      return _plugins.swal.warning('Login first please!');
+      return _UI.Swal.warning('Login first please!');
     }
 
     var cancelFollowObj = {
@@ -202,7 +200,7 @@ var UserBar = (0, _createReactClass2.default)({
       currentUserId: currentUser.id_str
     };
 
-    _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
+    _UI.Swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
       _this3.executeAction(_actions.UserActions.CancelFollowThisUser, cancelFollowObj);
     });
   },

@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
 import { jsUtils } from '../../utils';
-import { swal } from '../../plugins';
 import { BlogStore, UserStore } from '../../stores';
-import { PinItem, ModalsFactory, Layout } from '../UI';
+import { PinItem, ModalsFactory, Layout, Swal } from '../UI';
 import { Row, Col } from '../UI/Layout';
 import { PinItemModal, BlogModal } from '../UserControls';
 
@@ -53,7 +52,7 @@ export default CreateReactClass({
     ];
 
     if (thumbsAndCommentMsgs.includes(res.msg)) {
-      swal.success(res.msg);
+      Swal.success(res.msg);
       this.setState({
         selectedPin: res.newBlog,
         blogs: this.context.getStore(BlogStore).getAllBlogs()
@@ -61,7 +60,7 @@ export default CreateReactClass({
     }
 
     if (blogsMsgs.includes(res.msg)) {
-      swal.success(res.msg, () => {
+      Swal.success(res.msg, () => {
         this.setState({
           blogs: this.context.getStore(BlogStore).getAllBlogs()
         });

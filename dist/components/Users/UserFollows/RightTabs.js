@@ -40,7 +40,7 @@ var _stores = require('../../../stores');
 
 var _actions = require('../../../actions');
 
-var _plugins = require('../../../plugins');
+var _UI = require('../../UI');
 
 var _schema = require('./schema');
 
@@ -116,7 +116,7 @@ var RightTabs = function (_React$Component) {
     key: 'followThisUser',
     value: function followThisUser(currentUser, user) {
       if (!currentUser) {
-        return _plugins.swal.warning('Login first please!');
+        return _UI.Swal.warning('Login first please!');
       }
 
       var followObj = {
@@ -132,10 +132,10 @@ var RightTabs = function (_React$Component) {
       var _this2 = this;
 
       if (!currentUser) {
-        return _plugins.swal.warning('Login first please!');
+        return _UI.Swal.warning('Login first please!');
       }
 
-      _plugins.swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
+      _UI.Swal.confirm('Are you sure', 'Yes, cancel follow!', function () {
         _this2.context.executeAction(_actions.UserActions.CancelFollowThisUser, {
           thisUserId: user.id_str,
           currentUserId: currentUser.id_str

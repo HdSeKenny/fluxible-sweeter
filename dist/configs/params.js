@@ -48,6 +48,7 @@ module.exports = {
       emojiSelectPopoverScrollbarThumb: 'emojiSelectPopoverScrollbarThumb'
     },
     imagePath: '/emojione/svg/',
+    allowImageCache: true,
     selectGroups: [{
       title: 'People',
       icon: React.createElement('i', { className: 'fa fa-smile-o' }),

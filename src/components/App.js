@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FullScreen, MainSliders } from './UI';
+import { FullScreen } from './UI';
 import { BlogActions, UserActions } from '../actions';
 import { UserStore } from '../stores';
 import { Navbar, Footer } from './UserControls';
@@ -17,15 +17,6 @@ export default class App extends React.Component {
   static propTypes = {
     location: PropTypes.object,
     children: PropTypes.object
-  };
-
-  static fetchData = (context, params, query, done) => {
-    Promise.all([
-      context.executeAction(UserActions.LoadUsers, params),
-      context.executeAction(BlogActions.LoadBlogs, params)
-    ]).then(() => {
-      done();
-    });
   };
 
   constructor(props, context) {

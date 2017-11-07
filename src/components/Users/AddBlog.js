@@ -6,7 +6,7 @@ import { FluxibleMixin } from 'fluxible-addons-react';
 import { routerShape } from 'react-router';
 import { BlogActions } from '../../actions';
 import { BlogStore, UserStore } from '../../stores';
-import { DraftEditor, swal } from '../../plugins';
+import { DraftEditor, Swal } from '../../plugins';
 import { Row, Col } from '../UI/Layout';
 import { NotFound } from '..';
 
@@ -49,7 +49,7 @@ const AddBlog = CreateReactClass({
 
   onChange(res) {
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      swal.success(res.msg, () => {
+      Swal.success(res.msg, () => {
         const newBlogId = res.newBlog.id_str;
         this.context.router.push(`${newBlogId}/details`);
       });
@@ -69,15 +69,15 @@ const AddBlog = CreateReactClass({
     const { title, tags, currentUser } = this.state;
     const now = new Date();
     if (!title.trim()) {
-      return swal.error('Please enter title !');
+      return Swal.error('Please enter title !');
     }
 
     if (!plainText.trim()) {
-      return swal.error('Please enter content !');
+      return Swal.error('Please enter content !');
     }
 
     if (!tags.length) {
-      return swal.error('Please choose a tag !');
+      return Swal.error('Please choose a tag !');
     }
 
     const newBlog = {

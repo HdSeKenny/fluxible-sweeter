@@ -1,5 +1,9 @@
 'use strict';
 
+var _setImmediate2 = require('babel-runtime/core-js/set-immediate');
+
+var _setImmediate3 = _interopRequireDefault(_setImmediate2);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -27,34 +31,37 @@ var _components = require('./components');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var path = _configs2.default.path_prefix === '' ? '/' : _configs2.default.path_prefix;
-var isPublic = _mode2.default.isPublic;
-
 
 var createRoutes = function createRoutes(context) {
   var requireLogin = function requireLogin(nextState, replace, cb) {
     // do nothing for public visists
-    if (isPublic) {
-      cb();
-      return;
+    if (_mode2.default.isPublic) {
+      return cb();
     }
 
     // only load session to store on server side for isNotPublic visits
     if (_env2.default.is_server) {
       context.executeAction(_actions.UserActions.LoadKennyUser).then(function () {
-        cb();
+        return cb();
       });
-
       context.executeAction(_actions.UserActions.LoadSessionUser).then(function () {
-        cb();
+        return cb();
       });
     } else {
       cb();
     }
   };
 
+  var onRouterChange = function onRouterChange(routes, state, nextState, callback) {
+    $('.loading').removeClass('hide');
+    (0, _setImmediate3.default)(function () {
+      callback();
+    });
+  };
+
   return _react2.default.createElement(
     _reactRouter.Route,
-    { history: _reactRouter.History, component: _components.App, path: path, onEnter: requireLogin },
+    { history: _reactRouter.History, component: _components.App, path: path, onEnter: requireLogin, onChange: onRouterChange },
     _react2.default.createElement(_reactRouter.IndexRoute, { component: _components.Home }),
     _react2.default.createElement(_reactRouter.Route, { path: '/', component: _components.Home }),
     _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _components.Signup }),

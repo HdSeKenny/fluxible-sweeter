@@ -11,7 +11,7 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { routerShape } from 'react-router';
 import { BlogActions } from '../../actions';
 import { Row, Col } from '../UI/Layout';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 import { BlogStore } from '../../stores';
 import { params } from '../../configs';
 
@@ -52,7 +52,7 @@ export default class BlogModal extends React.Component {
     const { editorContent, blogText } = this.state;
     const { currentUser } = this.props;
     if (!currentUser) {
-      return swal.warning('Login first !');
+      return Swal.warning('Login first !');
     }
 
     const newBlog = {
@@ -89,7 +89,7 @@ export default class BlogModal extends React.Component {
   goToArticleCreatePage() {
     const { currentUser } = this.props;
     if (!currentUser) {
-      return swal.warning('Login first!');
+      return Swal.warning('Login first!');
     }
 
     this.context.router.push(`/${currentUser.username}/create`);
@@ -136,13 +136,14 @@ export default class BlogModal extends React.Component {
   }
 
   render() {
-    const { welcomeText, blogText, loadEmoji } = this.state;
+    const { currentUser } = this.props;
+    const { welcomeText, blogText } = this.state;
     const blogTextLength = blogText.length;
     const isDisabled = blogTextLength > 140 || blogTextLength === 0;
     const isLimmitWords = blogTextLength < 141;
 
     return (
-      <div className="create-well mb-10">
+      <div className={`create-well mb-10 ${currentUser ? 'show' : 'hide' }`}>
         <Row className="text-row">
           <Col size="12" className="p-0">
             <p className="welcomeText">{welcomeText}</p>

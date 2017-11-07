@@ -8,14 +8,14 @@ import { UserBar } from '../Users';
 import { UserStore, BlogStore } from '../../stores';
 import { UserHomeNav, HomeRightNav } from '../UserNavs';
 import { jsUtils } from '../../utils';
-import { swal } from '../../plugins';
+import { Swal } from '../UI';
 
 const UserHome = CreateReactClass({
 
   displayName: 'UserHome',
 
   contextTypes: {
-    executeAction: PropTypes.func,
+    executeAction: PropTypes.func
   },
 
   propTypes: {
@@ -63,7 +63,7 @@ const UserHome = CreateReactClass({
     const result = {};
 
     if (responseMessages.includes(res.msg)) {
-      swal.success(res.msg, () => {
+      Swal.success(res.msg, () => {
         result.displayBlogs = displayBlogs;
       });
     }

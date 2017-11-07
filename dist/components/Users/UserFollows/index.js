@@ -40,7 +40,7 @@ var _Suggestions = require('./Suggestions');
 
 var _Suggestions2 = _interopRequireDefault(_Suggestions);
 
-var _plugins = require('../../../plugins');
+var _UI = require('../../UI');
 
 var _actions = require('../../../actions');
 

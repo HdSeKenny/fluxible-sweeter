@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
-
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -68,12 +64,14 @@ var App = function (_React$Component) {
   (0, _createClass3.default)(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      $(document).ready(function () {
-        $('.loading').addClass('hide');
-      });
-
-      this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
+      $('.loading').addClass('hide');
       socket.emit('users', this.state.usernames);
+      this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      $('.loading').addClass('hide');
     }
   }, {
     key: 'componentWillUnmount',
@@ -149,12 +147,5 @@ App.propTypes = {
   location: _propTypes2.default.object,
   children: _propTypes2.default.object
 };
-
-App.fetchData = function (context, params, query, done) {
-  _promise2.default.all([context.executeAction(_actions.UserActions.LoadUsers, params), context.executeAction(_actions.BlogActions.LoadBlogs, params)]).then(function () {
-    done();
-  });
-};
-
 exports.default = App;
 module.exports = exports['default'];

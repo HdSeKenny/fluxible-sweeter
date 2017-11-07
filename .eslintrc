@@ -14,7 +14,8 @@
     "document": true,
     "Blob": true,
     "$": true,
-    "socket": true
+    "socket": true,
+    "swal": true
   },
   "rules": {
     "linebreak-style": "off",

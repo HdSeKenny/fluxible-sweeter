@@ -95,16 +95,13 @@ var _sharp2 = _interopRequireDefault(_sharp);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (server) {
+  var _configs$server = _configs2.default.server,
+      prodSource = _configs$server.prodSource,
+      devSource = _configs$server.devSource,
+      lib = _configs$server.lib,
+      faviconPath = _configs$server.faviconPath;
+
   var env = server.get('env');
-
-  server.set('views', _path2.default.join(__dirname, 'views')); // view engine setup
-  server.set('view engine', 'pug');
-
-  if (_configs2.default.server.logEnable && env !== 'production') {
-    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
-    server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
-  }
-
   var options = {
     dotfiles: 'ignore',
     etag: false,
@@ -117,21 +114,29 @@ exports.default = function (server) {
     }
   };
 
+  if (_configs2.default.server.logEnable && env !== 'production') {
+    // server.use(morgan(':date[iso] :method :url :status :response-time ms'));
+    server.use((0, _morgan2.default)(':method :url :status :response-time ms'));
+  }
+
   if (env === 'production') {
-    server.use(_express2.default.static(_path2.default.join(__dirname, 'build'), options));
+    server.use(_express2.default.static(prodSource));
   }
 
   if (env === 'development') {
-    server.use(_express2.default.static(_path2.default.join(__dirname, '..', '.tmp')));
+    server.use(_express2.default.static(devSource, options));
   }
+
+  // view engine setup
+  server.set('views', _path2.default.join(__dirname, 'views'));
+  server.set('view engine', 'pug');
 
   server.use(_bodyParser2.default.json({ limit: '20mb' }));
   server.use(_bodyParser2.default.urlencoded({ limit: '20mb', extended: false }));
   server.use((0, _cookieParser2.default)());
   server.use((0, _cors2.default)());
-
-  server.use(_configs2.default.path_prefix + '/', _express2.default.static(_path2.default.join(__dirname, '..', 'lib'), options));
-  server.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '..', 'lib') + '/images/favicon.ico'));
+  server.use(_express2.default.static(lib));
+  server.use((0, _serveFavicon2.default)(faviconPath));
   server.use(_expressUseragent2.default.express());
 
   var MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
@@ -147,6 +152,7 @@ exports.default = function (server) {
   fetchrPlugin.registerService(_services.users);
   fetchrPlugin.registerService(_services.comments);
 
+  // custom server plugins
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', _htmlToPdf2.default);
   server.use('/api/resize', _sharp2.default);

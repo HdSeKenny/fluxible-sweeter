@@ -76,7 +76,7 @@ var AddBlog = (0, _createReactClass2.default)({
     var _this = this;
 
     if (res.msg === 'CREATE_BLOG_SUCCESS') {
-      _plugins.swal.success(res.msg, function () {
+      _plugins.Swal.success(res.msg, function () {
         var newBlogId = res.newBlog.id_str;
         _this.context.router.push(newBlogId + '/details');
       });
@@ -98,15 +98,15 @@ var AddBlog = (0, _createReactClass2.default)({
 
     var now = new Date();
     if (!title.trim()) {
-      return _plugins.swal.error('Please enter title !');
+      return _plugins.Swal.error('Please enter title !');
     }
 
     if (!plainText.trim()) {
-      return _plugins.swal.error('Please enter content !');
+      return _plugins.Swal.error('Please enter content !');
     }
 
     if (!tags.length) {
-      return _plugins.swal.error('Please choose a tag !');
+      return _plugins.Swal.error('Please choose a tag !');
     }
 
     var newBlog = {

@@ -4,7 +4,7 @@ import { Link, browserHistory } from 'react-router';
 import { Row, Col } from '../../UI/Layout';
 import { UserStore } from '../../../stores';
 import { UserActions } from '../../../actions';
-import { swal } from '../../../plugins';
+import { Swal } from '../../UI';
 import schema from './schema';
 
 
@@ -75,7 +75,7 @@ export default class RightTabs extends React.Component {
 
   followThisUser(currentUser, user) {
     if (!currentUser) {
-      return swal.warning('Login first please!');
+      return Swal.warning('Login first please!');
     }
 
     const followObj = {
@@ -88,10 +88,10 @@ export default class RightTabs extends React.Component {
 
   unfollowThisUser(currentUser, user) {
     if (!currentUser) {
-      return swal.warning('Login first please!');
+      return Swal.warning('Login first please!');
     }
 
-    swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
+    Swal.confirm('Are you sure', 'Yes, cancel follow!', () => {
       this.context.executeAction(UserActions.CancelFollowThisUser, {
         thisUserId: user.id_str,
         currentUserId: currentUser.id_str

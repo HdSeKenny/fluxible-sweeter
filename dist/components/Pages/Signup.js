@@ -28,8 +28,6 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _plugins = require('../../plugins');
-
 var _Layout = require('../UI/Layout');
 
 var _UI = require('../UI');
@@ -68,7 +66,7 @@ var Signup = (0, _createReactClass2.default)({
   },
   onChange: function onChange(res) {
     if (res.msg === 'USER_REGISTER_SUCCESS') {
-      _plugins.swal.success(res.stat);
+      _UI.Swal.success(res.stat);
       _UI.ModalsFactory.hide('signupModal');
       this.context.router.push('/list');
     }
@@ -96,7 +94,7 @@ var Signup = (0, _createReactClass2.default)({
     if (firstName && lastName && username && email && password && confirmPassword) {
       this.context.executeAction(_actions.UserActions.UserRegister, newUser);
     } else {
-      _plugins.swal.error('Register failed !');
+      _UI.Swal.error('Register failed !');
     }
   },
   validateFirstName: function validateFirstName(firstName) {

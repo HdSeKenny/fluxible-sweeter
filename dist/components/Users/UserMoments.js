@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -22,13 +26,13 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _stores = require('../../stores');
 
+var _actions = require('../../actions');
+
 var _UI = require('../UI');
 
 var _UserControls = require('../UserControls');
 
 var _utils = require('../../utils');
-
-var _plugins = require('../../plugins');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48,7 +52,12 @@ var UserHome = (0, _createReactClass2.default)({
   mixins: [_FluxibleMixin2.default],
 
   statics: {
-    storeListeners: [_stores.UserStore, _stores.BlogStore]
+    storeListeners: [_stores.UserStore, _stores.BlogStore],
+    fetchData: function fetchData(context, params, query, done) {
+      _promise2.default.all([context.executeAction(_actions.UserActions.LoadUsers, params), context.executeAction(_actions.BlogActions.LoadBlogs, params)]).then(function () {
+        done();
+      });
+    }
   },
 
   getInitialState: function getInitialState() {
@@ -83,7 +92,7 @@ var UserHome = (0, _createReactClass2.default)({
     if (successMessages.includes(res.msg)) {
       result.displayBlogs = blogStore.getBlogsWithUsername(currentUser, username);
       if (res.msg !== 'BLOG_CHANGE_IMAGE_SUCCESS') {
-        _plugins.swal.success(res.msg);
+        _UI.Swal.success(res.msg);
       }
     }
 

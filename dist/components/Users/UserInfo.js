@@ -30,8 +30,6 @@ var _actions = require('../../actions');
 
 var _stores = require('../../stores');
 
-var _plugins = require('../../plugins');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UserInfo = (0, _createReactClass2.default)({
@@ -313,7 +311,7 @@ var UserInfo = (0, _createReactClass2.default)({
     if (isFirstName && isLastName && isUsername && isEmail && isPhone && isProfession && isBirthday) {
       this.executeAction(_actions.UserActions.UpdateUserInfo, newUser);
     } else {
-      _plugins.swal.error('Update failed !');
+      _UI.Swal.error('Update failed !');
     }
   },
   _renderNameGroup: function _renderNameGroup(currentUser, editable) {
