@@ -46,8 +46,8 @@ export default class Html extends React.Component {
           <title>Sweeter</title>
           <meta name="author" content="Kenny" />
           <meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1" />
-          {stylesheets.map(styleUrl => <link href={styleUrl} rel="stylesheet" />)}
-          {scripts.map(scriptUrl => <script src={scriptUrl} />)}
+          {stylesheets.map(styleUrl => <link key={styleUrl} href={styleUrl} rel="stylesheet" />)}
+          {scripts.map(scriptUrl => <script key={scriptUrl} src={scriptUrl} />)}
         </head>
         <body>
           <div className="loading"><div className="loader"></div></div>

@@ -220,7 +220,7 @@ const Login = CreateReactClass({
     const googleImg = '/images/google+.png';
     const githubImg = '/images/github.png';
     return (
-      <div className="">
+      <div className={`${isModalLogin ? '' : 'mb-15'}`}>
         {isModalLogin &&
           <div>
             <Row>
@@ -237,7 +237,7 @@ const Login = CreateReactClass({
         }
 
         {!isModalLogin &&
-          <Row className="mt-15 mb-15">
+          <Row>
             <Col size="4 login-with p-0"><h5>Other Logins:</h5></Col>
             <Col size="8 other-auths p-0">
               <Col size="2" className="tac p-0"><img alt="twitter" src={twitterImg} /></Col>
@@ -255,11 +255,13 @@ const Login = CreateReactClass({
     const { isModalLogin } = this.props;
     return (
       <section className="login-section">
-        <div className="wrapper-md animated fadeInUp">
-          {!isModalLogin && <h4 className="title">
-            Login to account
-            <span className="no-account" onClick={() => this.props.openSignupModal()}>Sign up</span>
-          </h4>}
+        <div className="dasds">
+          {!isModalLogin &&
+            <Row>
+              <Col size="8"><h4 className="title">Login to account</h4></Col>
+              <Col size="4"><span className="no-account" onClick={() => this.props.openSignupModal()}>Sign up</span></Col>
+            </Row>
+            }
           <form role="form" onSubmit={this.onLoginSubmit}>
             <div className="form-group">{this._renderEmailInput(email, remember)}</div>
             <div className={`form-group ${errorMessage && 'mb-5'}`}>{this._renderPasswordInput(password, remember)}</div>
@@ -267,7 +269,7 @@ const Login = CreateReactClass({
             <div className="form-group">{this._renderLoginOptions()}</div>
             <div className="form-group mt-15">{this._renderLoginBtns(isModalLogin)}</div>
           </form>
-          <div className="">{this._renderOtherAuths(isModalLogin)}</div>
+          <div className={`${isModalLogin ? '' : 'mb-15'}`}>{this._renderOtherAuths(isModalLogin)}</div>
         </div>
       </section>
     );

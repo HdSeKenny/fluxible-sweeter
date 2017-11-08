@@ -176,7 +176,7 @@ const Home = CreateReactClass({
   },
 
   render() {
-    const { blogs, currentUser, blogTags, user } = this.state;
+    const { blogs, currentUser, blogTags } = this.state;
     const { pathname, query } = this.props.location;
     const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
@@ -190,7 +190,12 @@ const Home = CreateReactClass({
           <BlogSection blogs={blogs} currentUser={currentUser} />
         </div>
         <div className="right">
-          {this._renderHomeRightContent(blogs, currentUser, user, pathname)}
+          <div className={`right-login mb-10 ${currentUser ? 'current-user' : ''}`}>
+            {!currentUser && <Login isModalLogin={false} openSignupModal={() => this.openSignupModal()} />}
+            {currentUser && <UserCard user={currentUser} />}
+          </div>
+
+          <BlogNews blogs={blogs} currentUser={currentUser} />
         </div>
         <Page>
           <ModalsFactory

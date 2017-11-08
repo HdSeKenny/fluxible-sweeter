@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const wbsap = require('webpack-bundle-size-analyzer');
+const wbsap = require('webpack-bundle-size-analyzer');
 const env = require('./src/configs');
 
 const {
@@ -107,7 +107,7 @@ module.exports = function makeWebpackConfig(mode) {
       filename: isProd ? 'common.[hash].js' : 'common.js'
     }),
 
-    // new wbsap.WebpackBundleSizeAnalyzerPlugin('../webpack.json')
+    new wbsap.WebpackBundleSizeAnalyzerPlugin('../webpack.json')
   ];
 
   // Add build specific plugins
