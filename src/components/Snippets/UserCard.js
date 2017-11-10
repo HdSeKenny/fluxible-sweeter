@@ -9,7 +9,9 @@ export default class UserCard extends React.Component {
   static displayName = 'UserCard';
 
   static propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    showSignature: PropTypes.bool,
+    showFollow: PropTypes.bool
   };
 
   static contextTypes = {
@@ -32,12 +34,13 @@ export default class UserCard extends React.Component {
       signature
       // gender
     } = this.props.user;
+    const { showSignature, showFollow } = this.props;
     const focusNum = focuses.length;
     const fansNum = fans.length;
     const blogsNum = blogs.length;
     const cardBgImageStyle = {
       height: '50%',
-      paddingTop: '40px',
+      paddingTop: '13%',
       backgroundImage: `url(${background_image_url})`,
       backgroundSize: 'cover'
     };
@@ -52,11 +55,12 @@ export default class UserCard extends React.Component {
                 <img src={image_url} alt="user" />
               </Link>
             </Col>
-            <Col size="9 pl-0"><h4>{username}</h4></Col>
+            <Col size="5 pl-0"><h4 className="uc-name">{username}</h4></Col>
+            {showFollow && <Col size="4 tar"><button className="follow-btn sm">Follow</button></Col>}
           </Row>
         </div>
-        <div className="uc-signature tac"><p>{signature}</p></div>
-        <Row className="uc-detail">
+        {showSignature && <div className="uc-signature tac"><p>{signature}</p></div>}
+        <Row className={`uc-detail ${!showSignature && 'mt-20'}`}>
           <Col size="4 u-info" onClick={() => this.goToUserPage(username, defaultFocusUrl)}>
             <h5 className="title">Focuses</h5>
             <h5 className="number">{focusNum}</h5>

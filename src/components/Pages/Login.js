@@ -61,7 +61,11 @@ const Login = CreateReactClass({
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
-      this.setState({ errorMessage: res.errorMsg });
+      setTimeout(() => {
+        // Hard code this to make page look like a loading
+        $('.loading').addClass('hide');
+        this.setState({ errorMessage: res.errorMsg });
+      }, 1000);
     }
   },
 
@@ -219,58 +223,52 @@ const Login = CreateReactClass({
     const twitterImg = '/images/svg/twitter.svg';
     const googleImg = '/images/google+.png';
     const githubImg = '/images/github.png';
-    return (
-      <div className={`${isModalLogin ? '' : 'mb-15'}`}>
-        {isModalLogin &&
-          <div>
-            <Row>
-              <Col size="4" className="p-0"><hr /></Col>
-              <Col size="4"><h5 className="tac">or login with</h5></Col>
-              <Col size="4" className="p-0 tar"><hr /></Col>
-            </Row>
-            <Row className="other-auths">
-              <Col size="4" className="tac"><img alt="twitter" src={twitterImg} /></Col>
-              <Col size="4" className="tac"><img alt="google+" src={googleImg} /></Col>
-              <Col size="4" className="tac"><img alt="github" src={githubImg} /></Col>
-            </Row>
-          </div>
-        }
-
-        {!isModalLogin &&
+    if (isModalLogin) {
+      return (
+        <div>
           <Row>
-            <Col size="4 login-with p-0"><h5>Other Logins:</h5></Col>
-            <Col size="8 other-auths p-0">
-              <Col size="2" className="tac p-0"><img alt="twitter" src={twitterImg} /></Col>
-              <Col size="2" className="tac p-0"><img alt="google+" src={googleImg} /></Col>
-              <Col size="2" className="tac p-0"><img alt="github" src={githubImg} /></Col>
-            </Col>
+            <Col size="4" className="p-0"><hr /></Col>
+            <Col size="4"><h5 className="tac">or login with</h5></Col>
+            <Col size="4" className="p-0 tar"><hr /></Col>
           </Row>
-        }
-      </div>
-    );
+          <Row className="other-auths">
+            <Col size="4" className="tac"><img alt="twitter" src={twitterImg} /></Col>
+            <Col size="4" className="tac"><img alt="google+" src={googleImg} /></Col>
+            <Col size="4" className="tac"><img alt="github" src={githubImg} /></Col>
+          </Row>
+        </div>
+      );
+    } else {
+      return (
+        <Row>
+          <Col size="4 login-with p-0"><h5>Other Logins:</h5></Col>
+          <Col size="8 other-auths p-0">
+            <Col size="2" className="tac p-0"><img alt="twitter" src={twitterImg} /></Col>
+            <Col size="2" className="tac p-0"><img alt="google+" src={googleImg} /></Col>
+            <Col size="2" className="tac p-0"><img alt="github" src={githubImg} /></Col>
+          </Col>
+        </Row>
+      );
+    }
   },
 
   render() {
     const { errorMessage, password, email, remember } = this.state;
-    const { isModalLogin } = this.props;
+    const { isModalLogin, openSignupModal } = this.props;
     return (
       <section className="login-section">
-        <div className="dasds">
-          {!isModalLogin &&
-            <Row>
-              <Col size="8"><h4 className="title">Login to account</h4></Col>
-              <Col size="4"><span className="no-account" onClick={() => this.props.openSignupModal()}>Sign up</span></Col>
-            </Row>
-            }
-          <form role="form" onSubmit={this.onLoginSubmit}>
-            <div className="form-group">{this._renderEmailInput(email, remember)}</div>
-            <div className={`form-group ${errorMessage && 'mb-5'}`}>{this._renderPasswordInput(password, remember)}</div>
-            <div className="form-group mb-5 mt-0"><p className="help-block text-left">{errorMessage}</p></div>
-            <div className="form-group">{this._renderLoginOptions()}</div>
-            <div className="form-group mt-15">{this._renderLoginBtns(isModalLogin)}</div>
-          </form>
-          <div className={`${isModalLogin ? '' : 'mb-15'}`}>{this._renderOtherAuths(isModalLogin)}</div>
-        </div>
+        {!isModalLogin && <p className={`title ${errorMessage ? 'mb-0' : 'mb-15'}`}>
+          Login to account <span className="no-account" onClick={() => openSignupModal()}>Sign up</span></p>}
+
+        <form role="form" onSubmit={this.onLoginSubmit}>
+          <div className="form-group help-block"><p>{errorMessage}</p></div>
+          <div className="form-group">{this._renderEmailInput(email, remember)}</div>
+          <div className="form-group">{this._renderPasswordInput(password, remember)}</div>
+          <div className="form-group">{this._renderLoginOptions()}</div>
+          <div className="form-group">{this._renderLoginBtns(isModalLogin)}</div>
+        </form>
+
+        {this._renderOtherAuths(isModalLogin)}
       </section>
     );
   }

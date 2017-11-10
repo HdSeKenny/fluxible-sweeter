@@ -42,11 +42,15 @@ const createRoutes = (context) => {
     }
   };
 
-  const onRouterChange = (routes, state, nextState, callback) => {
+  const onRouterChange = (state, nextState, replace, callback) => {
     $('.loading').removeClass('hide');
-    setImmediate(() => {
+    if (state.location.pathname !== nextState.location.pathname) {
+      setTimeout(() => {
+        callback();
+      }, 300);
+    } else {
       callback();
-    });
+    }
   };
 
   return (

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen } from './UI';
-import { BlogActions, UserActions } from '../actions';
 import { UserStore } from '../stores';
 import { Navbar, Footer } from './UserControls';
 import { Messages } from './Users';
+import { AppTools } from './UserControls';
+import { animations } from "../utils";
 
 export default class App extends React.Component {
 
@@ -33,6 +34,8 @@ export default class App extends React.Component {
     $('.loading').addClass('hide');
     socket.emit('users', this.state.usernames);
     this.context.getStore(UserStore).addChangeListener(this._onStoreChange);
+
+    animations.backToTop('#return-to-top');
   }
 
   componentDidUpdate() {
@@ -80,6 +83,7 @@ export default class App extends React.Component {
       <FullScreen id="app" onClick={(e) => this.onAppClick(e)}>
         {!hideNavbarAndFooter && <Navbar route={route} />}
         <div className="content-pages">{child}</div>
+        <AppTools />
         <Messages showMessages={this.state.showMessages} hideMessages={() => this.hideMessages()} />
         {!hideNavbarAndFooter && <Footer />}
       </FullScreen>

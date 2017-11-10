@@ -9,6 +9,7 @@ import { BlogActions } from '../../actions';
 import { UserStore, BlogStore } from '../../stores';
 import { params } from '../../configs';
 import { SweetEditor } from '../../plugins/Draft';
+import { UserCard } from '../Snippets';
 
 export default class PinItem extends React.Component {
 
@@ -125,8 +126,9 @@ export default class PinItem extends React.Component {
             className="pin-user-card"
             id={pin.id_str}
             onMouseEnter={() => this.onHoverPinUserImg(pin, true)}
-            onMouseLeave={() => this.onLeavePinUserImg(pin)}>
-
+            onMouseLeave={() => this.onLeavePinUserImg(pin)}
+          >
+            <UserCard user={author} showSignature={false} showFollow={true} />
           </div>
           <a className="user-img pull-left mr-10" href={`/${username}`} target="_blank">
             <img

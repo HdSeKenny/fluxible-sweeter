@@ -29,7 +29,7 @@
         }
       }
     }
-    .pin-body-text p {
+    .pin-body-text {
       word-break: break-all;
       font-size: 14px;
       &.article {
@@ -37,6 +37,9 @@
       }
       &.moment {
         min-height: 46px;
+      }
+      &:hover {
+        cursor: pointer;
       }
     }
     .body-icons {
@@ -110,6 +113,7 @@
     width: 235px;
     background: #fff;
     position: absolute;
+    z-index: 1;
     display: none;
     margin-top: -155px;
     margin-left: -65px;

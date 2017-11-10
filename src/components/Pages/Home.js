@@ -8,7 +8,7 @@ import { UserActions, BlogActions } from '../../actions';
 import { ModalsFactory, MainSliders, Swal } from '../UI';
 import { Page } from '../UI/Layout';
 import { Login, Signup } from '../Pages';
-import { UserCard } from '../Snippets';
+import { UserCard, UserList } from '../Snippets';
 import { BlogModal } from '../UserControls';
 import { BlogSection, BlogNews } from '../Blogs';
 
@@ -45,10 +45,8 @@ const Home = CreateReactClass({
     return {
       currentUser: userStore.getCurrentUser(),
       user: userStore.getUserByUsername(username),
-      kenny: userStore.getKennyUser(),
       blogs: blogStore.getAllBlogs(),
-      welcomeText: 'What happened today, Write a blog here !',
-      blogText: '',
+      recommendUsers: userStore.getRecommendUsers(),
       blogTags: [
         'News',
         'Hots',
@@ -82,11 +80,8 @@ const Home = CreateReactClass({
       'LOGOUT_SUCCESS'
     ];
 
-    if (res.msg === 'BEFORE_LOGGED_IN') {
-      this.showLoading();
-    }
-
-    if (res.msg === 'AFTER_LOGGED_IN') {
+    if (res.msg === 'BEFORE_LOGGED_IN' ||
+      res.msg === 'AFTER_LOGGED_IN') {
       this.showLoading();
     }
 
@@ -115,9 +110,7 @@ const Home = CreateReactClass({
   },
 
   componentDidUpdate() {
-    setImmediate(() => {
-      this.hideLoading();
-    });
+    this.hideLoading();
   },
 
   showLoading() {
@@ -161,22 +154,8 @@ const Home = CreateReactClass({
     );
   },
 
-  _renderHomeRightContent(blogs, currentUser, user, pathname) {
-    const articles = blogs.filter(b => b.type === 'article');
-    return (
-      <div className="">
-        <div className={`right-login mb-10 ${currentUser ? 'current-user' : ''}`}>
-          {!currentUser && <Login isModalLogin={false} openSignupModal={() => this.openSignupModal()} />}
-          {currentUser && <UserCard user={currentUser} />}
-        </div>
-
-        <BlogNews blogs={blogs} currentUser={currentUser} />
-      </div>
-    );
-  },
-
   render() {
-    const { blogs, currentUser, blogTags } = this.state;
+    const { blogs, currentUser, blogTags, recommendUsers } = this.state;
     const { pathname, query } = this.props.location;
     const showSliders = query.tag === 'news' || typeof query.tag === 'undefined';
     return (
@@ -192,10 +171,11 @@ const Home = CreateReactClass({
         <div className="right">
           <div className={`right-login mb-10 ${currentUser ? 'current-user' : ''}`}>
             {!currentUser && <Login isModalLogin={false} openSignupModal={() => this.openSignupModal()} />}
-            {currentUser && <UserCard user={currentUser} />}
+            {currentUser && <UserCard user={currentUser} showSignature={true} />}
           </div>
 
           <BlogNews blogs={blogs} currentUser={currentUser} />
+          <UserList users={recommendUsers} />
         </div>
         <Page>
           <ModalsFactory

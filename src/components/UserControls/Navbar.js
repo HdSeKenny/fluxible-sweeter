@@ -172,8 +172,8 @@ const Navbar = CreateReactClass({
                     <img alt="currentUser" src={currentUser.image_url} />
                   </a>
                   <ul className="dropdown">
-                    <li><a href={`/${currentUser.username}`}>User center</a></li>
-                    <li><a href={`/${currentUser.username}/personal`}>Settings</a></li>
+                    <li><Link to={`/${currentUser.username}`}>User center</Link></li>
+                    <li><Link to={`/${currentUser.username}/personal`}>Settings</Link></li>
                     <li><span onClick={this.handleLogout}>Logout</span></li>
                   </ul>
                 </li>

@@ -3,12 +3,31 @@
     background-color: #fff;
     padding: 10px 20px;
     .title {
-      margin: 10px 0;
+      margin: 10px 0 20px 0;
     }
     .blog {
       margin: 10px 0;
       img {
         width: 100%;
+      }
+      .b-title {
+        color: #333;
+        margin: 6px 0;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .date {
+        color: gray;
+        font-size: 12px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        .b-title {
+          color: @brand-info;
+        }
       }
     }
   }

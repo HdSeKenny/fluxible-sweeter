@@ -4,7 +4,7 @@
     .main {
       margin: @content-pages-margin;
       .vbox {
-        min-height: 60em;
+        min-height: 30em;
       }
     }
   }
@@ -24,10 +24,8 @@
             color: #fff;
           }
         }
-        &:hover {
-          a {
-            cursor: pointer;
-          }
+        &:hover a{
+          cursor: pointer;
         }
         a {
           padding: 0 8px;
@@ -50,65 +48,10 @@
     float: right;
     .right-login {
       background-color: #fff;
+      padding: 15px 20px;
       &.current-user {
+        padding: 0;
         height: 200px;
-      }
-    }
-    .login-section {
-      margin-top: 0;
-      .title {
-        margin: 20px 0;
-        color: @brand-info;
-        font-weight: 600;
-        display: inline-block;
-        .no-account {
-          margin-top: 3px;
-          color: #717171;
-          font-size: 12px;
-          font-weight: normal;
-          float: right;
-          &:hover {
-            cursor: pointer;
-            color: @brand-info;
-          }
-        }
-      }
-      .form-group {
-        .help-block.text-left {
-          margin: 0;
-          font-size: 12px;
-        }
-        .iconic-input i {
-          margin-top: 10px;
-        }
-      }
-      .login-options {
-        font-size: 12px;
-      }
-      .switchery-small {
-        margin-top: -1px;
-        height: 10px;
-        width: 23px;
-        small {
-          height: 10px;
-          width: 10px;
-        }
-      }
-
-      .login-with {
-        h5 {
-          margin: 5.5px 0;
-        }
-      }
-      .other-auths {
-        img {
-          width: 25px;
-          height: 25px;
-          border-radius: 50%;
-          &:hover {
-            cursor: pointer;
-          }
-        }
       }
     }
   }
@@ -123,50 +66,3 @@
     }
   }
 }
-
-// .classification {
-//   .pins-section {
-//     clear: both;
-//     &:first-child {
-//       .home-tag {
-//         padding: 0 0 10px 0;
-//       }
-//     }
-//     .home-tag {
-//       font-size: 18px;
-//       color: #333;
-//       padding: 20px 0 10px 0;
-//       .view-all {
-//         font-size: 18px;
-//         font-style: italic;
-//         &:hover {
-//           color: @brand-primary;
-//         }
-//       }
-//     }
-//     .pins-block {
-//       width: 100%;
-//       .pin {
-//         margin-right: 2.75%;
-//         display: inline-block;
-//         float: left;
-//       }
-//     }
-
-//     @media (max-width: 1024px) {
-//       .pins-block {
-//         .pin {
-//           width: 48.625%;
-//         }
-//       }
-//     }
-
-//     @media (min-width: 1025px) {
-//       .pins-block {
-//         .pin {
-//           width: 31.5%;
-//         }
-//       }
-//     }
-//   }
-// }

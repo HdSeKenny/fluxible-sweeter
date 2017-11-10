@@ -26,9 +26,73 @@
 }
 
 .login-section {
-  margin: 15px 15px 0 15px;
-  .btn-login, .btn-signup {
+  .btn-login,
+  .btn-signup {
     display: block;
     width: 100%;
+  }
+  .title {
+    color: @brand-info;
+    font-weight: 600;
+    font-size: 18px;
+    .no-account {
+      margin-top: 3px;
+      color: #717171;
+      font-size: 12px;
+      font-weight: normal;
+      float: right;
+      &:hover {
+        cursor: pointer;
+        color: @brand-info;
+      }
+    }
+  }
+  .form-group {
+    &.help-block {
+      margin: 5px 0;
+    }
+    .help-block {
+      margin: 0;
+      font-size: 12px;
+    }
+    .iconic-input i {
+      margin-top: 10px;
+    }
+  }
+  .login-options {
+    font-size: 12px;
+  }
+  .switchery-small {
+    margin-top: -1px;
+    height: 10px;
+    width: 23px;
+    small {
+      height: 10px;
+      width: 10px;
+    }
+  }
+  .login-with {
+    h5 {
+      margin: 5.5px 0;
+    }
+  }
+}
+
+.right-login {
+  .other-auths {
+    img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.modal-body {
+  .login-section {
+    margin: 15px 15px 0 15px;
   }
 }

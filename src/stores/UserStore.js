@@ -50,6 +50,10 @@ const UserStore = createStore({
     return this.kenny;
   },
 
+  getRecommendUsers() {
+    return this.users;
+  },
+
   loadUsersSuccess(res) {
     this.users = res.data;
     this.emitChange();

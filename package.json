@@ -43,6 +43,7 @@
     "morgan": "~1.5.3",
     "multer": "^1.2.0",
     "object-assign": "^3.0.0",
+    "octonode": "^0.9.1",
     "prop-types": "^15.5.10",
     "pug": "^2.0.0-rc.1",
     "querystring": "^0.2.0",

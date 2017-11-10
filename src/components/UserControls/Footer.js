@@ -38,8 +38,8 @@ const Footer = CreateReactClass({
     return (
       <div className="footer-wrapper">
         <Row className="footer-content">
-          <Col size="8 p-0"></Col>
-          <Col size="4 tar p-0"><h5>© 2016 <span>{kenny.firstName} {kenny.lastName}</span></h5></Col>
+          <Col size="8 p-0 tal"><h5>Copyright © 2017 <span>{kenny.firstName} {kenny.lastName}</span></h5></Col>
+          <Col size="4 tar p-0"></Col>
         </Row>
       </div>
     );

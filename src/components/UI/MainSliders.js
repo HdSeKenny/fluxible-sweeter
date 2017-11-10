@@ -43,7 +43,7 @@ export default class MainSliders extends React.Component {
 
     if (!show || env.is_server) return <div />;
     return (
-      <div className="main-sliders mb-15">
+      <div className="main-sliders mb-10">
         {this.state.showSlider &&
           <Slider {...sliderSettings}>
             {images.map((image, index) => <div key={index}><img alt={`slider-${index}`} src={image} /></div>)}

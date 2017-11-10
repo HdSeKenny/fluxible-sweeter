@@ -35,7 +35,7 @@ export default {
       onOpen: () => {
         if (showLoading) swal.showLoading();
       }
-    }).then(cb, (dismiss) => {});
+    }).then(cb(), (dismiss) => {});
     // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
   },
 
