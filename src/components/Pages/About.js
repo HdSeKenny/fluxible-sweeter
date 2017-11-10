@@ -1,27 +1,31 @@
 import React from 'react';
-// import github from 'octonode';
-
-// const cOMMIT_API = '/repos/HdSeKenny/fluxible-sweeter/commits';
-// const client = github.client({
-//   username: 'cnkuan@qq.com',
-//   password: 'kuan2016..'
-// });
 
 export default class About extends React.Component {
+
   static displayName = 'About'
 
+  constructor() {
+    super();
+    this.state = {
+      commits: []
+    }
+  }
+
   componentDidMount() {
-    // client.get(cOMMIT_API, {}, (err, status, body, headers) => {
-    //   console.log(body[0]); //json object
-    // });
+    $.get('/api/github/commits', (data) => {
+      this.setState({ commits: data });
+    });
   }
 
   render() {
+    const { commits } = this.state;
     return (
       <div className="about">
         <div className="block">
           <h3 className="title">About sweeter</h3>
-          <p></p>
+          {commits.map((commit) => {
+            return <p>{commit.sha}</p>;
+          })}
         </div>
 
         <div className="block">

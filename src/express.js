@@ -22,6 +22,7 @@ import assets from './utils/assets';
 import configs from './configs';
 import htmlToPdf from './plugins/htmlToPdf';
 import sharp from './plugins/sharp';
+import github from './plugins/github';
 
 export default (server) => {
   const { prodSource, devSource, lib, faviconPath } = configs.server;
@@ -80,6 +81,7 @@ export default (server) => {
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', htmlToPdf);
   server.use('/api/resize', sharp);
+  server.use('/api/github/commits', github);
 
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
