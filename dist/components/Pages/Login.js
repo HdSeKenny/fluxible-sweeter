@@ -86,7 +86,11 @@ var Login = (0, _createReactClass2.default)({
     }
 
     if (res.msg === 'USER_LOGIN_FAIL') {
-      this.setState({ errorMessage: res.errorMsg });
+      setTimeout(function () {
+        // Hard code this to make page look like a loading
+        $('.loading').addClass('hide');
+        _this.setState({ errorMessage: res.errorMsg });
+      }, 1000);
     }
   },
   onLoginSubmit: function onLoginSubmit(e) {
@@ -254,10 +258,8 @@ var Login = (0, _createReactClass2.default)({
     var twitterImg = '/images/svg/twitter.svg';
     var googleImg = '/images/google+.png';
     var githubImg = '/images/github.png';
-    return _react2.default.createElement(
-      'div',
-      { className: '' },
-      isModalLogin && _react2.default.createElement(
+    if (isModalLogin) {
+      return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
@@ -302,10 +304,11 @@ var Login = (0, _createReactClass2.default)({
             _react2.default.createElement('img', { alt: 'github', src: githubImg })
           )
         )
-      ),
-      !isModalLogin && _react2.default.createElement(
+      );
+    } else {
+      return _react2.default.createElement(
         _Layout.Row,
-        { className: 'mt-15 mb-15' },
+        null,
         _react2.default.createElement(
           _Layout.Col,
           { size: '4 login-with p-0' },
@@ -334,76 +337,68 @@ var Login = (0, _createReactClass2.default)({
             _react2.default.createElement('img', { alt: 'github', src: githubImg })
           )
         )
-      )
-    );
+      );
+    }
   },
   render: function render() {
-    var _this2 = this;
-
     var _state2 = this.state,
         errorMessage = _state2.errorMessage,
         password = _state2.password,
         email = _state2.email,
         remember = _state2.remember;
-    var isModalLogin = this.props.isModalLogin;
+    var _props = this.props,
+        isModalLogin = _props.isModalLogin,
+        openSignupModal = _props.openSignupModal;
 
     return _react2.default.createElement(
       'section',
       { className: 'login-section' },
-      _react2.default.createElement(
-        'div',
-        { className: 'wrapper-md animated fadeInUp' },
-        !isModalLogin && _react2.default.createElement(
-          'h4',
-          { className: 'title' },
-          'Login to account',
-          _react2.default.createElement(
-            'span',
-            { className: 'no-account', onClick: function onClick() {
-                return _this2.props.openSignupModal();
-              } },
-            'Sign up'
-          )
-        ),
+      !isModalLogin && _react2.default.createElement(
+        'p',
+        { className: 'title ' + (errorMessage ? 'mb-0' : 'mb-15') },
+        'Login to account ',
         _react2.default.createElement(
-          'form',
-          { role: 'form', onSubmit: this.onLoginSubmit },
+          'span',
+          { className: 'no-account', onClick: function onClick() {
+              return openSignupModal();
+            } },
+          'Sign up'
+        )
+      ),
+      _react2.default.createElement(
+        'form',
+        { role: 'form', onSubmit: this.onLoginSubmit },
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group help-block' },
           _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            this._renderEmailInput(email, remember)
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group ' + (errorMessage && 'mb-5') },
-            this._renderPasswordInput(password, remember)
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group mb-5 mt-0' },
-            _react2.default.createElement(
-              'p',
-              { className: 'help-block text-left' },
-              errorMessage
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            this._renderLoginOptions()
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group mt-15' },
-            this._renderLoginBtns(isModalLogin)
+            'p',
+            null,
+            errorMessage
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: '' },
-          this._renderOtherAuths(isModalLogin)
+          { className: 'form-group' },
+          this._renderEmailInput(email, remember)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          this._renderPasswordInput(password, remember)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          this._renderLoginOptions()
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'form-group' },
+          this._renderLoginBtns(isModalLogin)
         )
-      )
+      ),
+      this._renderOtherAuths(isModalLogin)
     );
   }
 });

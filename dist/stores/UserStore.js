@@ -68,6 +68,9 @@ var UserStore = (0, _createStore2.default)({
   getKennyUser: function getKennyUser() {
     return this.kenny;
   },
+  getRecommendUsers: function getRecommendUsers() {
+    return this.users;
+  },
   loadUsersSuccess: function loadUsersSuccess(res) {
     this.users = res.data;
     this.emitChange();

@@ -1,9 +1,5 @@
 'use strict';
 
-var _setImmediate2 = require('babel-runtime/core-js/set-immediate');
-
-var _setImmediate3 = _interopRequireDefault(_setImmediate2);
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -52,11 +48,15 @@ var createRoutes = function createRoutes(context) {
     }
   };
 
-  var onRouterChange = function onRouterChange(routes, state, nextState, callback) {
+  var onRouterChange = function onRouterChange(state, nextState, replace, callback) {
     $('.loading').removeClass('hide');
-    (0, _setImmediate3.default)(function () {
+    if (state.location.pathname !== nextState.location.pathname) {
+      setTimeout(function () {
+        callback();
+      }, 300);
+    } else {
       callback();
-    });
+    }
   };
 
   return _react2.default.createElement(

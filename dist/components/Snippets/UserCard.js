@@ -66,13 +66,16 @@ var UserCard = function (_React$Component) {
           fans = _props$user.fans,
           blogs = _props$user.blogs,
           signature = _props$user.signature;
+      var _props = this.props,
+          showSignature = _props.showSignature,
+          showFollow = _props.showFollow;
 
       var focusNum = focuses.length;
       var fansNum = fans.length;
       var blogsNum = blogs.length;
       var cardBgImageStyle = {
         height: '50%',
-        paddingTop: '40px',
+        paddingTop: '13%',
         backgroundImage: 'url(' + background_image_url + ')',
         backgroundSize: 'cover'
       };
@@ -98,16 +101,25 @@ var UserCard = function (_React$Component) {
             ),
             _react2.default.createElement(
               _Layout.Col,
-              { size: '9 pl-0' },
+              { size: '5 pl-0' },
               _react2.default.createElement(
                 'h4',
-                null,
+                { className: 'uc-name' },
                 username
+              )
+            ),
+            showFollow && _react2.default.createElement(
+              _Layout.Col,
+              { size: '4 tar' },
+              _react2.default.createElement(
+                'button',
+                { className: 'follow-btn sm' },
+                'Follow'
               )
             )
           )
         ),
-        _react2.default.createElement(
+        showSignature && _react2.default.createElement(
           'div',
           { className: 'uc-signature tac' },
           _react2.default.createElement(
@@ -118,7 +130,7 @@ var UserCard = function (_React$Component) {
         ),
         _react2.default.createElement(
           _Layout.Row,
-          { className: 'uc-detail' },
+          { className: 'uc-detail ' + (!showSignature && 'mt-20') },
           _react2.default.createElement(
             _Layout.Col,
             { size: '4 u-info', onClick: function onClick() {
@@ -176,7 +188,9 @@ var UserCard = function (_React$Component) {
 
 UserCard.displayName = 'UserCard';
 UserCard.propTypes = {
-  user: _propTypes2.default.object
+  user: _propTypes2.default.object,
+  showSignature: _propTypes2.default.bool,
+  showFollow: _propTypes2.default.bool
 };
 UserCard.contextTypes = {
   router: _reactRouter.routerShape.isRequired

@@ -15,7 +15,8 @@
     "Blob": true,
     "$": true,
     "socket": true,
-    "swal": true
+    "swal": true,
+    "localStorage": true
   },
   "rules": {
     "linebreak-style": "off",

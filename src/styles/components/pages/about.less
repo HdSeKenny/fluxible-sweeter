@@ -3,9 +3,32 @@
     min-height: 150px;
     background-color: #fff;
     margin-bottom: 20px;
-    padding: 1px 20px;
+    padding: 15px 20px;
     .title {
       margin: 10px 0;
+      color: #333;
+      font-weight: 600;
+    }
+    p {
+      font-size: 14px;
+      a {
+        font-weight: 600;
+      }
+    }
+
+    .log-section {
+      .message {
+        &:hover {
+          color: @brand-primary;
+          cursor: pointer;
+        }
+      }
+      .author {
+        margin-left: 20px;
+        font-style: italic;
+        font-size: 13px;
+        color: gray;
+      }
     }
   }
 }

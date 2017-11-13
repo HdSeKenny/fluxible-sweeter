@@ -84,7 +84,7 @@ var MainSliders = function (_React$Component) {
       if (!show || _utils.env.is_server) return _react2.default.createElement('div', null);
       return _react2.default.createElement(
         'div',
-        { className: 'main-sliders mb-15' },
+        { className: 'main-sliders mb-10' },
         this.state.showSlider && _react2.default.createElement(
           _reactSlick2.default,
           sliderSettings,

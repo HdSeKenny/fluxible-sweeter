@@ -92,6 +92,10 @@ var _sharp = require('./plugins/sharp');
 
 var _sharp2 = _interopRequireDefault(_sharp);
 
+var _github = require('./plugins/github');
+
+var _github2 = _interopRequireDefault(_github);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (server) {
@@ -156,6 +160,7 @@ exports.default = function (server) {
   server.use('/api/upload', require('./plugins/upload'));
   server.use('/api/download', _htmlToPdf2.default);
   server.use('/api/resize', _sharp2.default);
+  server.use('/api/github/commits', _github2.default);
 
   server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 

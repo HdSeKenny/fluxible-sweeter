@@ -19,6 +19,24 @@ var animations = {
     main_sliders_did_load: false
   },
 
+  backToTop: function backToTop(element) {
+    var $window = $(window);
+    $window.on('scroll', function () {
+      var navbar = _configs2.default.params.navbar;
+
+      var stickyHeight = navbar.sticky_header_height;
+      if ($window.scrollTop() > stickyHeight) {
+        $(element).fadeIn(200);
+      } else {
+        $(element).fadeOut(200);
+      }
+    });
+    $(element).click(function () {
+      $('body, html').animate({
+        scrollTop: 0
+      }, 500);
+    });
+  },
   sticky_header: function sticky_header(element) {
     if (_env2.default.is_client) {
       var $window = $(window);
@@ -76,64 +94,6 @@ var animations = {
         }
       });
     }
-  },
-  main_sliders: function main_sliders(callback) {
-    jQuery(document).ready(function () {
-      var revol = jQuery('.tp-banner').show().revolution({
-        // dottedOverlay: 'none',
-        delay: 8000,
-        startwidth: 1180,
-        startheight: 430,
-        hideThumbs: 10,
-        fullWidth: 'on',
-        forceFullWidth: 'off',
-        spinner: 'off',
-        navigation: {
-          keyboardNavigation: 'on',
-          keyboard_direction: 'horizontal', //  horizontal - left/right arrows,  vertical - top/bottom arrows
-          mouseScrollNavigation: 'off', // on, off, carousel
-          onHoverStop: 'on', // Stop Banner Timet at Hover on Slide on/off
-
-          touch: {
-            touchenabled: 'off', // Enable Swipe Function : on/off
-            swipe_treshold: 75, // The number of pixels that the user must move their finger by before it is considered a swipe.
-            swipe_min_touches: 1, // Min Finger (touch) used for swipe
-            drag_block_vertical: false, // Prevent Vertical Scroll during Swipe
-            swipe_direction: 'horizontal'
-          },
-          arrows: {
-            style: 'hades',
-            enable: false,
-            hide_onmobile: false,
-            hide_onleave: true,
-            hide_delay: 200,
-            hide_delay_mobile: 1200,
-            hide_under: 0,
-            hide_over: 9999,
-            tmp: '',
-            rtl: false,
-            left: {
-              h_align: 'left',
-              v_align: 'center',
-              h_offset: 20,
-              v_offset: 0,
-              container: 'slider'
-            },
-            right: {
-              h_align: 'right',
-              v_align: 'center',
-              h_offset: 20,
-              v_offset: 0,
-              container: 'slider'
-            }
-          }
-        }
-      });
-
-      if (revol) {
-        callback(revol);
-      }
-    });
   }
 };
 

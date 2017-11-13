@@ -11761,6 +11761,7 @@ body {
   }
 }
 .footer-wrapper {
+  padding: 20px 0;
   height: 100px;
   color: #fff;
   background-color: #333;
@@ -12643,7 +12644,7 @@ License: http://codecanyon.net/licenses
     margin: 0 auto;
   }
   .home-page .main .vbox {
-    min-height: 60em;
+    min-height: 30em;
   }
 }
 .home-page .left {
@@ -12684,57 +12685,13 @@ License: http://codecanyon.net/licenses
   width: 28%;
   float: right;
 }
+.home-page .right .right-login {
+  background-color: #fff;
+  padding: 15px 20px;
+}
 .home-page .right .right-login.current-user {
+  padding: 0;
   height: 200px;
-}
-.home-page .right .login-section {
-  margin-top: 0;
-}
-.home-page .right .login-section .title {
-  margin: 20px 0;
-  color: #00a9da;
-  font-weight: 600;
-}
-.home-page .right .login-section .title .no-account {
-  margin-top: 3px;
-  color: #717171;
-  font-size: 12px;
-  font-weight: normal;
-  float: right;
-}
-.home-page .right .login-section .title .no-account:hover {
-  cursor: pointer;
-  color: #00a9da;
-}
-.home-page .right .login-section .form-group .help-block.text-left {
-  margin: 0;
-  font-size: 12px;
-}
-.home-page .right .login-section .form-group .iconic-input i {
-  margin-top: 10px;
-}
-.home-page .right .login-section .login-options {
-  font-size: 12px;
-}
-.home-page .right .login-section .switchery-small {
-  margin-top: -1px;
-  height: 10px;
-  width: 23px;
-}
-.home-page .right .login-section .switchery-small small {
-  height: 10px;
-  width: 10px;
-}
-.home-page .right .login-section .login-with h5 {
-  margin: 5.5px 0;
-}
-.home-page .right .login-section .other-auths img {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-}
-.home-page .right .login-section .other-auths img:hover {
-  cursor: pointer;
 }
 .home-page .main {
   width: 54%;
@@ -12760,13 +12717,62 @@ License: http://codecanyon.net/licenses
 #loginModal .modal-body form .form-group i {
   margin-top: 10px;
 }
-.login-section {
-  margin: 15px 15px 0 15px;
-}
 .login-section .btn-login,
 .login-section .btn-signup {
   display: block;
   width: 100%;
+}
+.login-section .title {
+  color: #00a9da;
+  font-weight: 600;
+  font-size: 18px;
+}
+.login-section .title .no-account {
+  margin-top: 3px;
+  color: #717171;
+  font-size: 12px;
+  font-weight: normal;
+  float: right;
+}
+.login-section .title .no-account:hover {
+  cursor: pointer;
+  color: #00a9da;
+}
+.login-section .form-group.help-block {
+  margin: 5px 0;
+}
+.login-section .form-group .help-block {
+  margin: 0;
+  font-size: 12px;
+}
+.login-section .form-group .iconic-input i {
+  margin-top: 10px;
+}
+.login-section .login-options {
+  font-size: 12px;
+}
+.login-section .switchery-small {
+  margin-top: -1px;
+  height: 10px;
+  width: 23px;
+}
+.login-section .switchery-small small {
+  height: 10px;
+  width: 10px;
+}
+.login-section .login-with h5 {
+  margin: 5.5px 0;
+}
+.right-login .other-auths img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+.right-login .other-auths img:hover {
+  cursor: pointer;
+}
+.modal-body .login-section {
+  margin: 15px 15px 0 15px;
 }
 .register {
   background-color: #fff;
@@ -13077,6 +13083,33 @@ License: http://codecanyon.net/licenses
 }
 .details-page .comments-page .reply-row .reply-empty {
   margin-right: -30px;
+}
+.about .block {
+  min-height: 150px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+}
+.about .block .title {
+  margin: 10px 0;
+  color: #333;
+  font-weight: 600;
+}
+.about .block p {
+  font-size: 14px;
+}
+.about .block p a {
+  font-weight: 600;
+}
+.about .block .log-section .message:hover {
+  color: #337ab7;
+  cursor: pointer;
+}
+.about .block .log-section .author {
+  margin-left: 20px;
+  font-style: italic;
+  font-size: 13px;
+  color: gray;
 }
 .menuzord-section {
   height: 72px;
@@ -13436,6 +13469,45 @@ License: http://codecanyon.net/licenses
 .RichEditor-activeButton {
   color: #5890ff;
 }
+#return-to-top {
+  position: fixed;
+  bottom: 110px;
+  right: 20px;
+  background: #000000;
+  background: rgba(0, 0, 0, 0.7);
+  width: 50px;
+  height: 50px;
+  display: block;
+  text-decoration: none;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
+  display: none;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#return-to-top i {
+  color: #fff;
+  position: relative;
+  left: 15px;
+  top: 15px;
+  font-size: 20px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#return-to-top:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+#return-to-top:hover i {
+  color: #fff;
+  top: 5px;
+}
 .pin {
   padding: 10px;
   background: #fff;
@@ -13461,15 +13533,18 @@ License: http://codecanyon.net/licenses
 .pin .pin-body .pin-image img:hover {
   cursor: pointer;
 }
-.pin .pin-body .pin-body-text p {
+.pin .pin-body .pin-body-text {
   word-break: break-all;
   font-size: 14px;
 }
-.pin .pin-body .pin-body-text p.article {
+.pin .pin-body .pin-body-text.article {
   min-height: 24px;
 }
-.pin .pin-body .pin-body-text p.moment {
+.pin .pin-body .pin-body-text.moment {
   min-height: 46px;
+}
+.pin .pin-body .pin-body-text:hover {
+  cursor: pointer;
 }
 .pin .pin-body .body-icons {
   margin-top: 10px;
@@ -13537,6 +13612,7 @@ License: http://codecanyon.net/licenses
   width: 235px;
   background: #fff;
   position: absolute;
+  z-index: 1;
   display: none;
   margin-top: -155px;
   margin-left: -65px;
@@ -13808,6 +13884,10 @@ License: http://codecanyon.net/licenses
 }
 .follow-btn:hover {
   background-color: #4CAF50;
+}
+.follow-btn.sm {
+  padding: 3px 10px;
+  font-size: 11px;
 }
 .cancel-follow-btn {
   padding: 6px 20px;
@@ -14530,14 +14610,17 @@ License: http://codecanyon.net/licenses
 .uc-bg img {
   margin-left: 15px;
   padding: 1px;
-  width: 50px;
-  height: 50px;
+  width: 60%;
+  height: 60%;
   border-radius: 5px;
   border: 1px solid #ddd;
   background-color: #f7f7f7;
 }
 .uc-bg img:hover {
   cursor: pointer;
+}
+.uc-bg .uc-name {
+  margin: 4% 0;
 }
 .uc-signature {
   padding: 0 15px;
@@ -14570,12 +14653,31 @@ License: http://codecanyon.net/licenses
   color: gray;
   font-weight: 600;
 }
+.user-list {
+  background-color: #fff;
+  margin: 10px 0 0 0;
+  padding: 15px 20px;
+}
+.user-list .title {
+  margin: 10px 0 20px 0;
+}
+.user-list .user {
+  margin-bottom: 10px;
+}
+.user-list .user img {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+}
+.user-list .user .name {
+  margin: 3px 0 5px 0;
+}
 .right .blog-news {
   background-color: #fff;
   padding: 10px 20px;
 }
 .right .blog-news .title {
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
 }
 .right .blog-news .blog {
   margin: 10px 0;
@@ -14583,5 +14685,23 @@ License: http://codecanyon.net/licenses
 .right .blog-news .blog img {
   width: 100%;
 }
+.right .blog-news .blog .b-title {
+  color: #333;
+  margin: 6px 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.right .blog-news .blog .date {
+  color: gray;
+  font-size: 12px;
+}
+.right .blog-news .blog:hover {
+  cursor: pointer;
+}
+.right .blog-news .blog:hover .b-title {
+  color: #00a9da;
+}
 
-/*# sourceMappingURL=main.4cc342fc21da87a729b4.css.map*/
+/*# sourceMappingURL=main.04370a30570902089baa.css.map*/

@@ -13,7 +13,7 @@ module.exports = {
     left_nav_height: 900,
     fade_speed: 300
   },
-  showUserCard: false,
+  showUserCard: true,
   showEmoji: true,
   emojiConfig: {
     theme: {

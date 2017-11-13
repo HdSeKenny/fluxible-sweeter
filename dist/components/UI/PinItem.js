@@ -48,9 +48,10 @@ var _configs = require('../../configs');
 
 var _Draft = require('../../plugins/Draft');
 
+var _Snippets = require('../Snippets');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable all, camelcase */
 var PinItem = function (_React$Component) {
   (0, _inherits3.default)(PinItem, _React$Component);
 
@@ -170,15 +171,20 @@ var PinItem = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'pin-moment-user' },
-          _react2.default.createElement('div', {
-            className: 'pin-user-card',
-            id: pin.id_str,
-            onMouseEnter: function onMouseEnter() {
-              return _this3.onHoverPinUserImg(pin, true);
+          _react2.default.createElement(
+            'div',
+            {
+              className: 'pin-user-card',
+              id: pin.id_str,
+              onMouseEnter: function onMouseEnter() {
+                return _this3.onHoverPinUserImg(pin, true);
+              },
+              onMouseLeave: function onMouseLeave() {
+                return _this3.onLeavePinUserImg(pin);
+              }
             },
-            onMouseLeave: function onMouseLeave() {
-              return _this3.onLeavePinUserImg(pin);
-            } }),
+            _react2.default.createElement(_Snippets.UserCard, { user: author, showSignature: false, showFollow: true })
+          ),
           _react2.default.createElement(
             'a',
             { className: 'user-img pull-left mr-10', href: '/' + username, target: '_blank' },
@@ -386,7 +392,8 @@ var PinItem = function (_React$Component) {
     }
   }]);
   return PinItem;
-}(_react2.default.Component);
+}(_react2.default.Component); /* eslint-disable all, camelcase */
+
 
 PinItem.displayName = 'PinItem';
 PinItem.contextTypes = {

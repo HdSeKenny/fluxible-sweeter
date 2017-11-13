@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _setImmediate2 = require('babel-runtime/core-js/set-immediate');
-
-var _setImmediate3 = _interopRequireDefault(_setImmediate2);
-
 var _promise = require('babel-runtime/core-js/promise');
 
 var _promise2 = _interopRequireDefault(_promise);
@@ -76,10 +72,8 @@ var Home = (0, _createReactClass2.default)({
     return {
       currentUser: userStore.getCurrentUser(),
       user: userStore.getUserByUsername(username),
-      kenny: userStore.getKennyUser(),
       blogs: blogStore.getAllBlogs(),
-      welcomeText: 'What happened today, Write a blog here !',
-      blogText: '',
+      recommendUsers: userStore.getRecommendUsers(),
       blogTags: ['News', 'Hots', 'Stars', 'Funny', 'social', 'Fashion', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny', 'Funny']
     };
   },
@@ -90,11 +84,7 @@ var Home = (0, _createReactClass2.default)({
 
     var authMessages = ['USER_LOGIN_SUCCESS', 'LOGOUT_SUCCESS'];
 
-    if (res.msg === 'BEFORE_LOGGED_IN') {
-      this.showLoading();
-    }
-
-    if (res.msg === 'AFTER_LOGGED_IN') {
+    if (res.msg === 'BEFORE_LOGGED_IN' || res.msg === 'AFTER_LOGGED_IN') {
       this.showLoading();
     }
 
@@ -121,11 +111,7 @@ var Home = (0, _createReactClass2.default)({
     }
   },
   componentDidUpdate: function componentDidUpdate() {
-    var _this2 = this;
-
-    (0, _setImmediate3.default)(function () {
-      _this2.hideLoading();
-    });
+    this.hideLoading();
   },
   showLoading: function showLoading() {
     $('.loading').removeClass('hide');
@@ -153,13 +139,13 @@ var Home = (0, _createReactClass2.default)({
     };
   },
   _renderHomeLeftTags: function _renderHomeLeftTags(tags, pathname, query) {
-    var _this3 = this;
+    var _this2 = this;
 
     return _react2.default.createElement(
       'ul',
       { className: 'blog-tags' },
       tags.map(function (tag, index) {
-        var _getLinkParams = _this3.getLinkParams(tag, index, pathname, query),
+        var _getLinkParams = _this2.getLinkParams(tag, index, pathname, query),
             classname = _getLinkParams.classname,
             url = _getLinkParams.url;
 
@@ -175,32 +161,14 @@ var Home = (0, _createReactClass2.default)({
       })
     );
   },
-  _renderHomeRightContent: function _renderHomeRightContent(blogs, currentUser, user, pathname) {
-    var _this4 = this;
-
-    var articles = blogs.filter(function (b) {
-      return b.type === 'article';
-    });
-    return _react2.default.createElement(
-      'div',
-      { className: '' },
-      _react2.default.createElement(
-        'div',
-        { className: 'right-login mb-10 ' + (currentUser ? 'current-user' : '') },
-        !currentUser && _react2.default.createElement(_Pages.Login, { isModalLogin: false, openSignupModal: function openSignupModal() {
-            return _this4.openSignupModal();
-          } }),
-        currentUser && _react2.default.createElement(_Snippets.UserCard, { user: currentUser })
-      ),
-      _react2.default.createElement(_Blogs.BlogNews, { blogs: blogs, currentUser: currentUser })
-    );
-  },
   render: function render() {
+    var _this3 = this;
+
     var _state = this.state,
         blogs = _state.blogs,
         currentUser = _state.currentUser,
         blogTags = _state.blogTags,
-        user = _state.user;
+        recommendUsers = _state.recommendUsers;
     var _props$location = this.props.location,
         pathname = _props$location.pathname,
         query = _props$location.query;
@@ -224,7 +192,16 @@ var Home = (0, _createReactClass2.default)({
       _react2.default.createElement(
         'div',
         { className: 'right' },
-        this._renderHomeRightContent(blogs, currentUser, user, pathname)
+        _react2.default.createElement(
+          'div',
+          { className: 'right-login mb-10 ' + (currentUser ? 'current-user' : '') },
+          !currentUser && _react2.default.createElement(_Pages.Login, { isModalLogin: false, openSignupModal: function openSignupModal() {
+              return _this3.openSignupModal();
+            } }),
+          currentUser && _react2.default.createElement(_Snippets.UserCard, { user: currentUser, showSignature: true })
+        ),
+        _react2.default.createElement(_Blogs.BlogNews, { blogs: blogs, currentUser: currentUser }),
+        _react2.default.createElement(_Snippets.UserList, { users: recommendUsers })
       ),
       _react2.default.createElement(
         _Layout.Page,

@@ -34,13 +34,13 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _UI = require('./UI');
 
-var _actions = require('../actions');
-
 var _stores = require('../stores');
 
 var _UserControls = require('./UserControls');
 
 var _Users = require('./Users');
+
+var _utils = require('../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67,6 +67,8 @@ var App = function (_React$Component) {
       $('.loading').addClass('hide');
       socket.emit('users', this.state.usernames);
       this.context.getStore(_stores.UserStore).addChangeListener(this._onStoreChange);
+
+      _utils.animations.backToTop('#return-to-top');
     }
   }, {
     key: 'componentDidUpdate',
@@ -129,6 +131,7 @@ var App = function (_React$Component) {
           { className: 'content-pages' },
           child
         ),
+        _react2.default.createElement(_UserControls.AppTools, null),
         _react2.default.createElement(_Users.Messages, { showMessages: this.state.showMessages, hideMessages: function hideMessages() {
             return _this2.hideMessages();
           } }),

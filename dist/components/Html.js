@@ -83,10 +83,10 @@ var Html = function (_React$Component) {
           _react2.default.createElement('meta', { name: 'author', content: 'Kenny' }),
           _react2.default.createElement('meta', { name: 'viewport', content: 'width=device-width,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1' }),
           stylesheets.map(function (styleUrl) {
-            return _react2.default.createElement('link', { href: styleUrl, rel: 'stylesheet' });
+            return _react2.default.createElement('link', { key: styleUrl, href: styleUrl, rel: 'stylesheet' });
           }),
           scripts.map(function (scriptUrl) {
-            return _react2.default.createElement('script', { src: scriptUrl });
+            return _react2.default.createElement('script', { key: scriptUrl, src: scriptUrl });
           })
         ),
         _react2.default.createElement(

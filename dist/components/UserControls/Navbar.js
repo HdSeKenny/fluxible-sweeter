@@ -266,8 +266,8 @@ var Navbar = (0, _createReactClass2.default)({
                   'li',
                   null,
                   _react2.default.createElement(
-                    'a',
-                    { href: '/' + currentUser.username },
+                    _reactRouter.Link,
+                    { to: '/' + currentUser.username },
                     'User center'
                   )
                 ),
@@ -275,8 +275,8 @@ var Navbar = (0, _createReactClass2.default)({
                   'li',
                   null,
                   _react2.default.createElement(
-                    'a',
-                    { href: '/' + currentUser.username + '/personal' },
+                    _reactRouter.Link,
+                    { to: '/' + currentUser.username + '/personal' },
                     'Settings'
                   )
                 ),

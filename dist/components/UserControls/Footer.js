@@ -58,14 +58,13 @@ var Footer = (0, _createReactClass2.default)({
       _react2.default.createElement(
         _Layout.Row,
         { className: 'footer-content' },
-        _react2.default.createElement(_Layout.Col, { size: '8 p-0' }),
         _react2.default.createElement(
           _Layout.Col,
-          { size: '4 tar p-0' },
+          { size: '8 p-0 tal' },
           _react2.default.createElement(
             'h5',
             null,
-            '\xA9 2016 ',
+            'Copyright \xA9 2017 ',
             _react2.default.createElement(
               'span',
               null,
@@ -74,7 +73,8 @@ var Footer = (0, _createReactClass2.default)({
               kenny.lastName
             )
           )
-        )
+        ),
+        _react2.default.createElement(_Layout.Col, { size: '4 tar p-0' })
       )
     );
   }

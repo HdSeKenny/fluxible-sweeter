@@ -32,7 +32,11 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _reactRouter = require('react-router');
+
 var _Layout = require('../UI/Layout');
+
+var _utils = require('../../utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,11 +49,16 @@ var BlogNews = function (_React$Component) {
   }
 
   (0, _createClass3.default)(BlogNews, [{
+    key: 'showDetails',
+    value: function showDetails(id) {
+      this.context.router.push(id + '/details');
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props = this.props,
-          blogs = _props.blogs,
-          currentUser = _props.currentUser;
+      var _this2 = this;
+
+      var blogs = this.props.blogs;
 
       return _react2.default.createElement(
         'section',
@@ -67,21 +76,24 @@ var BlogNews = function (_React$Component) {
               created_at = blog.created_at,
               images = blog.images;
 
+          var fromNow = _utils.format.fromNow(created_at);
           return _react2.default.createElement(
             _Layout.Row,
-            { key: id_str, className: 'blog' },
+            { key: id_str, className: 'blog', onClick: function onClick() {
+                return _this2.showDetails(id_str);
+              } },
             _react2.default.createElement(
               _Layout.Col,
               { size: '7 p-0' },
               _react2.default.createElement(
                 'h4',
-                null,
-                title || 'hello world'
+                { className: 'b-title' },
+                title
               ),
               _react2.default.createElement(
                 'small',
-                null,
-                created_at
+                { className: 'date' },
+                fromNow
               )
             ),
             _react2.default.createElement(
@@ -99,6 +111,9 @@ var BlogNews = function (_React$Component) {
 
 
 BlogNews.displayName = 'BlogNews';
+BlogNews.contextTypes = {
+  router: _reactRouter.routerShape.isRequired
+};
 BlogNews.propTypes = {
   blogs: _propTypes2.default.array,
   currentUser: _propTypes2.default.object
