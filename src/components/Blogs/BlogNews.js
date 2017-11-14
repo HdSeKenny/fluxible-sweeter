@@ -24,6 +24,7 @@ export default class BlogNews extends React.Component {
 
   render() {
     const { blogs } = this.props;
+    if (!blogs) return <section className="blog-news" />;
     return (
       <section className="blog-news">
         <h3 className="title">Blog News</h3>

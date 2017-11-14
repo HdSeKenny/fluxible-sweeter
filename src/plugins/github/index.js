@@ -11,7 +11,10 @@ export default (req, res) => {
   });
 
   client.get(API, {}, (err, status, body, headers) => {
-    if (err) throw err;
+    if (err) {
+      body = Object.assign(body, { err });
+    }
+
     res.status(200).json(body);
   });
 };

@@ -3,7 +3,23 @@ const params = require('./params');
 const instance = require('./instance');
 
 module.exports = {
-  project: 'Sweeter',
+  project: {
+    name: 'Sweeter',
+    gtihub: 'https://github.com/HdSeKenny/fluxible-sweeter',
+    githubName: 'fluxible-sweeter',
+    commitsUrl: 'https://github.com/HdSeKenny/fluxible-sweeter/commits/master',
+    references: 'All the pictures in this website comes from Google, the Copyright of images belongs to Google'
+  },
+  developer: {
+    image: '/images/kenny.jpg',
+    github: 'https://github.com/HdSeKenny',
+    username: 'Kenny',
+    job: 'Web Developer',
+    email: 'shkuanlu@qq.com',
+    gender: 'Male',
+    birthday: '12/20/1991',
+    description: 'A beginner in web development. ^_^'
+  },
   mongo: {
     session: {
       url: 'mongodb://localhost/sweetersession',

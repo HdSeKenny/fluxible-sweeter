@@ -5,7 +5,7 @@ import { FluxibleMixin } from 'fluxible-addons-react';
 import { Link } from 'react-router';
 import { BlogStore, UserStore } from '../../stores';
 import { UserActions, BlogActions } from '../../actions';
-import { ModalsFactory, MainSliders, Swal } from '../UI';
+import { ModalsFactory, MainSliders } from '../UI';
 import { Page } from '../UI/Layout';
 import { Login, Signup } from '../Pages';
 import { UserCard, UserList } from '../Snippets';
@@ -72,35 +72,52 @@ const Home = CreateReactClass({
       'THUMBS_UP_BLOG_SUCCESS',
       'CANCEL_THUMBS_UP_BLOG_SUCCESS',
       'COMMENT_SUCCESS',
-      'DELETE_COMMENT_SUCCESS'
+      'DELETE_COMMENT_SUCCESS',
+      'LOAD_BLOGS_SUCCESS'
     ];
-
     const authMessages = [
       'USER_LOGIN_SUCCESS',
-      'LOGOUT_SUCCESS'
+      'LOGOUT_SUCCESS',
+      'LOAD_USERS_SUCCESS'
+    ];
+    const loadingMessages = [
+      'BEFORE_LOGGED_IN',
+      'AFTER_LOGGED_IN'
     ];
 
-    if (res.msg === 'BEFORE_LOGGED_IN' ||
-      res.msg === 'AFTER_LOGGED_IN') {
-      this.showLoading();
-    }
+    let result = {};
+
+    if (loadingMessages.includes(res.msg)) this.showLoading();
 
     if (blogMessages.includes(res.msg)) {
-      Swal.success(res.msg, '', false, () => {
-        this.setState({
-          blogs: this.getStore(BlogStore).getAllBlogs()
-        });
+      result = Object.assign(result, {
+        blogs: this.getStore(BlogStore).getAllBlogs()
       });
     }
 
     if (authMessages.includes(res.msg)) {
-      this.setState({
-        currentUser: this.getStore(UserStore).getCurrentUser()
-      });
+      const userStore = this.getStore(UserStore);
+      if (res.msg === 'LOAD_USERS_SUCCESS') {
+        result = Object.assign(result, {
+          recommendUsers: userStore.getRecommendUsers()
+        });
+      } else {
+        result = Object.assign(result, {
+          currentUser: userStore.getCurrentUser()
+        });
+      }
+    }
+
+    if (Object.keys(result).length) {
+      this.setState(result);
     }
   },
 
   componentDidMount() {
+    this.setImageAdjustContent();
+  },
+
+  setImageAdjustContent() {
     // Make blog image height adjust the parent content
     const pinBodyRight = document.querySelectorAll('.pin-right');
     const pinBodyLeft = document.querySelectorAll('.pin-left .pin-image img');
@@ -111,6 +128,7 @@ const Home = CreateReactClass({
 
   componentDidUpdate() {
     this.hideLoading();
+    this.setImageAdjustContent();
   },
 
   showLoading() {
@@ -166,6 +184,7 @@ const Home = CreateReactClass({
         <div className="main">
           {!currentUser && <MainSliders show={showSliders} />}
           <BlogModal currentUser={currentUser} isUserHome={true} />
+
           <BlogSection blogs={blogs} currentUser={currentUser} />
         </div>
         <div className="right">
@@ -175,7 +194,9 @@ const Home = CreateReactClass({
           </div>
 
           <BlogNews blogs={blogs} currentUser={currentUser} />
+
           <UserList users={recommendUsers} />
+
         </div>
         <Page>
           <ModalsFactory

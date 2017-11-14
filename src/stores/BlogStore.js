@@ -38,7 +38,9 @@ const BlogStore = createStore({
 
   loadBlogsSuccess(res) {
     this.blogs = res.data;
-    this.emitChange();
+    this.emitChange({
+      msg: 'LOAD_BLOGS_SUCCESS'
+    });
   },
 
   // Blogs comments

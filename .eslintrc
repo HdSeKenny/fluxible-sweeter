@@ -35,6 +35,7 @@
     "react/jsx-boolean-value": 0,
     "react/self-closing-comp": 0,
     "react/sort-comp": 0,
-    "brace-style": 0
+    "brace-style": 0,
+    "camelcase": 0
   }
 }

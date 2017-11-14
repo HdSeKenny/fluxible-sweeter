@@ -65,6 +65,9 @@ export default class BlogSection extends React.Component {
   render() {
     const { selectedPin, showPinModal } = this.state;
     const { blogs, currentUser } = this.props;
+
+    if (!blogs) return <section className="blog-section" />;
+
     const sortedBlogs = this.sortBlogs(blogs);
     const specialClass = '';
     return (

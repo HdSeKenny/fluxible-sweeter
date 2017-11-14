@@ -3,7 +3,7 @@ import { Route, IndexRoute, History } from 'react-router';
 import config from './configs';
 import Mode from './configs/mode';
 import env from './utils/env';
-import { UserActions } from './actions';
+import { UserActions, BlogActions } from './actions';
 import { UserFollows, UserPhotos } from './components/Users';
 import {
   App,
@@ -38,7 +38,14 @@ const createRoutes = (context) => {
       context.executeAction(UserActions.LoadSessionUser)
         .then(() => cb());
     } else {
-      cb();
+      // if (state.location.pathname !== nextState.location.pathname) {
+      //   context.executeAction(UserActions.LoadKennyUser)
+      //   .then(() => cb());
+      //   context.executeAction(UserActions.LoadSessionUser)
+      //     .then(() => cb());
+      // } else {
+        cb();
+      // }
     }
   };
 

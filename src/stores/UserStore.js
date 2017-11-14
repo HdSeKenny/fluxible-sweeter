@@ -56,7 +56,9 @@ const UserStore = createStore({
 
   loadUsersSuccess(res) {
     this.users = res.data;
-    this.emitChange();
+    this.emitChange({
+      msg: 'LOAD_USERS_SUCCESS'
+    });
   },
 
   getUsernames() {
