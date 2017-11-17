@@ -79,7 +79,7 @@ export default (server) => {
 
   // custom server plugins
   server.use('/api/upload', require('./plugins/upload'));
-  server.use('/api/download', htmlToPdf);
+  server.use('/api/download/pdf', htmlToPdf);
   server.use('/api/resize', sharp);
   server.use('/api/github/commits', github);
 

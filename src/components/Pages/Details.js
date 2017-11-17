@@ -2,9 +2,9 @@ import React from 'react';
 import CreateReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { FluxibleMixin } from 'fluxible-addons-react';
-import { routerShape } from 'react-router';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { BlogStore, UserStore } from '../../stores';
+import { UserActions, BlogActions } from '../../actions';
 import { Comments } from '../Pages';
 import { format } from '../../utils';
 import { Row, Col } from '../UI/Layout';
@@ -15,7 +15,7 @@ const Details = CreateReactClass({
   displayName: 'Details',
 
   contextTypes: {
-    router: routerShape.isRequired,
+    router: PropTypes.object,
     executeAction: PropTypes.func
   },
 
@@ -26,7 +26,15 @@ const Details = CreateReactClass({
   mixins: [FluxibleMixin],
 
   statics: {
-    storeListeners: [BlogStore, UserStore]
+    storeListeners: [BlogStore, UserStore],
+    fetchData: (context, params, query, done) => {
+      Promise.all([
+        context.executeAction(UserActions.LoadUsers, params),
+        context.executeAction(BlogActions.LoadBlogs, params)
+      ]).then(() => {
+        done();
+      });
+    }
   },
 
   getInitialState() {
@@ -43,8 +51,8 @@ const Details = CreateReactClass({
           backgroundColor: 'rgba(0, 0, 0, 0.05)',
           fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
           fontSize: 16,
-          padding: 2,
-        },
+          padding: 2
+        }
       },
       showEditor: false
     };
@@ -74,25 +82,23 @@ const Details = CreateReactClass({
   },
 
   downloadToPdf(blog) {
-    const data = {
-      id_str: blog.id_str,
-      html: document.documentElement.outerHTML
-    };
-
-    $.post('/api/download', data, () => {
-
+    $.post('/api/download/pdf', {
+      bId: blog.id_str
+    }, (res) => {
+      console.log(arguments);
     });
   },
 
-  _renderArticleHeader(blog) {
+  _renderArticleHeader(blog, hideComments) {
     return (
       <div className="article-header">
         <Row className="">
           <Col size="11 title p-0"><p>{blog.title}</p></Col>
           <Col size="1 p-0 tar">
-            <span className="icon" onClick={() => this.downloadToPdf(blog)}>
-              <i className="fa fa-download" aria-hidden="true"></i>
-            </span>
+            {!hideComments &&
+              <span className="icon" onClick={() => this.downloadToPdf(blog)}>
+                <i className="fa fa-download" aria-hidden="true"></i>
+              </span>}
           </Col>
         </Row>
       </div>
@@ -158,12 +164,13 @@ const Details = CreateReactClass({
 
   render() {
     const { styleMap, showEditor, blog, currentUser } = this.state;
+    const { hideComments, showPdfEditors } = this.props;
     return (
       <article className="details-page">
-        {this._renderArticleHeader(blog)}
+        {this._renderArticleHeader(blog, hideComments)}
         {this._renderArticleUserInfo(blog)}
-        {showEditor && this._renderDraftEditorContent(blog, styleMap)}
-        {this._renderArticleComments(blog, currentUser)}
+        {(showEditor || showPdfEditors) && this._renderDraftEditorContent(blog, styleMap)}
+        {!hideComments && this._renderArticleComments(blog, currentUser)}
       </article>
     );
   }

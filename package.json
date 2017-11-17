@@ -7,11 +7,11 @@
     "start": "cross-env NODE_ENV=production node ./dist/bin/server.js",
     "build": "gulp build",
     "prod": "gulp prod",
-    "dev": "gulp dev"
+    "dev": "gulp dev",
+    "debug": "node --inspect .tmp/bin/server.js"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
-    "chrome-remote-interface": "^0.23.0",
     "classnames": "^2.2.5",
     "connect-mongo": "^2.0.0",
     "contra": "^1.8.1",
@@ -46,6 +46,7 @@
     "octonode": "^0.9.1",
     "prop-types": "^15.5.10",
     "pug": "^2.0.0-rc.1",
+    "puppeteer": "^0.13.0",
     "querystring": "^0.2.0",
     "react": "^15.5.4",
     "react-addons-shallow-compare": "^15.4.2",

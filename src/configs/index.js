@@ -59,7 +59,7 @@ module.exports = {
   },
   development: {
     hot_server_host: 'localhost',
-    hot_server_port: 5858
+    hot_server_port: 5757
   },
   userRoles: ['guest', 'user', 'admin'],
   kenny: '583ff3d6a193d70f6946948e',
